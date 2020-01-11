@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MyLibrary.Data.Model;
 
 namespace MyLibrary.Services
 {
@@ -25,6 +27,13 @@ namespace MyLibrary.Services
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.AddJsonFile("appsetting.json");
+
+            var appSettings = configurationBuilder.Build();
+
+            services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(appSettings.GetSection("ConnectionString").Value));
+
             services.AddControllers();
         }
 

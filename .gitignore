@@ -3,3 +3,5 @@ MyLibrary.Services/appsettings.Development.json
 MyLibrary.Services/obj/
 MyLibrary.Services/bin/
 .vs/
+MyLibrary.Data/bin/
+MyLibrary.Data/obj/
