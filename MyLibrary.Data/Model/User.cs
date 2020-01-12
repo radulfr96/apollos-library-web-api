@@ -10,6 +10,7 @@ namespace MyLibrary.Data.Model
         public string Password { get; set; }
         public string Salter { get; set; }
         public bool SetPassword { get; set; }
+        public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

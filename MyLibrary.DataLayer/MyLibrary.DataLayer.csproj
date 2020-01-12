@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
+    <ProjectReference Include="..\MyLibrary.Data\MyLibrary.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,8 @@
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\bin\Debug\netcoreapp3.1\MyLibrary.DTOs.deps.json
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\bin\Debug\netcoreapp3.1\MyLibrary.DTOs.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\bin\Debug\netcoreapp3.1\MyLibrary.DTOs.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\obj\Debug\netcoreapp3.1\MyLibrary.DTOs.csprojAssemblyReference.cache
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\obj\Debug\netcoreapp3.1\MyLibrary.DTOs.AssemblyInfoInputs.cache
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\obj\Debug\netcoreapp3.1\MyLibrary.DTOs.AssemblyInfo.cs
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\obj\Debug\netcoreapp3.1\MyLibrary.DTOs.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.DTOs\obj\Debug\netcoreapp3.1\MyLibrary.DTOs.pdb

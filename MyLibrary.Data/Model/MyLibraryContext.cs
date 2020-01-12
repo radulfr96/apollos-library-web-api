@@ -46,7 +46,7 @@ namespace MyLibrary.Data.Model
                 entity.ToTable("User", "Users");
 
                 entity.HasIndex(e => e.Username)
-                    .HasName("UQ__User__536C85E40210A7AB")
+                    .HasName("UQ__User__536C85E47D270A6C")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

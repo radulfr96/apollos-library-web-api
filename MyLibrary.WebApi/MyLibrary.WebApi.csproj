@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,13 +10,32 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="NLog" Version="4.6.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer\MyLibrary.DataLayer.csproj" />
     <ProjectReference Include="..\MyLibrary.Data\MyLibrary.Data.csproj" />
+    <ProjectReference Include="..\MyLibrary.Services\MyLibrary.Services.csproj" />
+    <ProjectReference Include="..\MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES2015</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 
 </Project>

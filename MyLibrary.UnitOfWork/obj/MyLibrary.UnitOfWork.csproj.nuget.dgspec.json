@@ -1,0 +1,321 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Projects\\MyLibraryWebApi\\MyLibrary.UnitOfWork\\MyLibrary.UnitOfWork.csproj": {}
+  },
+  "projects": {
+    "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Contracts.UnitOfWork\\MyLibrary.UnitOfWork.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Contracts.UnitOfWork\\MyLibrary.UnitOfWork.Contracts.csproj",
+        "projectName": "MyLibrary.UnitOfWork.Contracts",
+        "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Contracts.UnitOfWork\\MyLibrary.UnitOfWork.Contracts.csproj",
+        "packagesPath": "C:\\Users\\wados\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Contracts.UnitOfWork\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\wados\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj": {
+                "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj",
+        "projectName": "MyLibrary.DataLayer.Contracts",
+        "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj",
+        "packagesPath": "C:\\Users\\wados\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\wados\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj": {
+                "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer\\MyLibrary.DataLayer.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer\\MyLibrary.DataLayer.csproj",
+        "projectName": "MyLibrary.DataLayer",
+        "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer\\MyLibrary.DataLayer.csproj",
+        "packagesPath": "C:\\Users\\wados\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\wados\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj": {
+                "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer.Contracts\\MyLibrary.DataLayer.Contracts.csproj"
+              },
+              "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj": {
+                "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj",
+        "projectName": "MyLibrary.Data",
+        "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\MyLibrary.Data.csproj",
+        "packagesPath": "C:\\Users\\wados\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\wados\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Projects\\MyLibraryWebApi\\MyLibrary.UnitOfWork\\MyLibrary.UnitOfWork.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.UnitOfWork\\MyLibrary.UnitOfWork.csproj",
+        "projectName": "MyLibrary.UnitOfWork",
+        "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.UnitOfWork\\MyLibrary.UnitOfWork.csproj",
+        "packagesPath": "C:\\Users\\wados\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.UnitOfWork\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\wados\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Contracts.UnitOfWork\\MyLibrary.UnitOfWork.Contracts.csproj": {
+                "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.Contracts.UnitOfWork\\MyLibrary.UnitOfWork.Contracts.csproj"
+              },
+              "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer\\MyLibrary.DataLayer.csproj": {
+                "projectPath": "D:\\Projects\\MyLibraryWebApi\\MyLibrary.DataLayer\\MyLibrary.DataLayer.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
