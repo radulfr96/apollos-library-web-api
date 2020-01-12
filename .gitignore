@@ -5,3 +5,9 @@ MyLibrary.Services/bin/
 .vs/
 MyLibrary.Data/bin/
 MyLibrary.Data/obj/
+MyLibrary.WebApi/bin/Debug/netcoreapp3.1/it/Microsoft.CodeAnalysis.resources.dll
+MyLibrary.WebApi/bin/Debug/netcoreapp3.1/it/Microsoft.CodeAnalysis.CSharp.resources.dll
+MyLibrary.WebApi/bin/
+MyLibrary.WebApi/obj/
+MyLibrary.DataLayer.Contracts/
+MyLibrary.DataLayer/obj/

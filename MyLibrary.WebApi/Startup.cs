@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MyLibrary.Data.Model;
 
-namespace MyLibrary.Services
+namespace MyLibrary.WebApi
 {
     public class Startup
     {
