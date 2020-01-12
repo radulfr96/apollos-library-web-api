@@ -28,7 +28,7 @@ namespace MyLibrary.Services
         public void ConfigureServices(IServiceCollection services)
         {
             var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.AddJsonFile("appsetting.json");
+            configurationBuilder.AddJsonFile("appsettings.json");
 
             var appSettings = configurationBuilder.Build();
 
