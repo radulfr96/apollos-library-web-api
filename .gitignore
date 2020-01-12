@@ -11,3 +11,4 @@ MyLibrary.WebApi/bin/
 MyLibrary.WebApi/obj/
 MyLibrary.DataLayer.Contracts/
 MyLibrary.DataLayer/obj/
+MyLibrary.Data/ScaffoldDataBase.txt

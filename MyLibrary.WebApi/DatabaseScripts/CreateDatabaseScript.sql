@@ -12,22 +12,27 @@ DECLARE @UserID INT
 
 CREATE TABLE [Users].[User] 
 (
-	[UserID] INT IDENTITY,
-	[Username] VARCHAR(20) UNIQUE,
-	[Password] TEXT,
-	[Salter] TEXT,
-	[SetPassword] BIT,
+	[UserID] INT IDENTITY NOT NULL,
+	[Username] VARCHAR(20) UNIQUE NOT NULL,
+	[Password] TEXT NOT NULL,
+	[Salter] TEXT NOT NULL,
+	[SetPassword] BIT NOT NULL,
+	[IsActive] BIT NOT NULL,
+	[CreatedDate] DATETIME NOT NULL,
+	[CreatedBy] VARCHAR(20) NOT NULL,
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] VARCHAR(20),
 	CONSTRAINT PK_User PRIMARY KEY (UserID)
 )
 
-INSERT INTO [Users].[User] ([Username], [Password], [SetPassword], [Salter])
-VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 0, 'Q3uQu0Nybf8Jpb6suzJPsQ==')
+INSERT INTO [Users].[User] ([Username], [Password], [SetPassword], [Salter], [CreatedDate], [CreatedBy], [IsActive])
+VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 0, 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1)
 
 SELECT @UserID = U.UserID
 FROM Users.[User] U
 WHERE U.Username = 'Radulfr'
 
-CREATE TABLE [Users].[Role] 
+CREATE TABLE [Users].[Role]
 (
 	[RoleID] INT IDENTITY,
 	[Name] VARCHAR(20),

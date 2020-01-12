@@ -46,16 +46,34 @@ namespace MyLibrary.Data.Model
                 entity.ToTable("User", "Users");
 
                 entity.HasIndex(e => e.Username)
-                    .HasName("UQ__User__536C85E4AB738C21")
+                    .HasName("UQ__User__536C85E40210A7AB")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
-                entity.Property(e => e.Password).HasColumnType("text");
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Salter).HasColumnType("text");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                entity.Property(e => e.Salter)
+                    .IsRequired()
+                    .HasColumnType("text");
 
                 entity.Property(e => e.Username)
+                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
             });
