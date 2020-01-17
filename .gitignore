@@ -12,3 +12,10 @@ MyLibrary.WebApi/obj/
 MyLibrary.DataLayer.Contracts/
 MyLibrary.DataLayer/obj/
 MyLibrary.Data/ScaffoldDataBase.txt
+MyLibrary.Services.XUnitTestProject/bin/
+MyLibrary.Services.XUnitTestProject/obj/
+MyLibrary.Mock.DataLayers/obj/
+MyLibrary.Mock.DataLayers/bin/
+MyLibrary.DTOs.DataLayers/obj/
+MyLibrary.UnitOfWork/bin/
+MyLibrary.UnitOfWork/obj/
