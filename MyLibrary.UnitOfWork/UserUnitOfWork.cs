@@ -9,24 +9,13 @@ namespace MyLibrary.UnitOfWork
     public class UserUnitOfWork : IUserUnitOfWork
     {
         private MyLibraryContext _context;
-        private IUserDataLayer _userDataLayer;
 
-        public UserUnitOfWork(MyLibraryContext context)
+        public UserUnitOfWork(IUserDataLayer userDataLayer)
         {
-            _context = context;
+            UserDataLayer = userDataLayer;
         }
 
-        public IUserDataLayer UserDataLayer
-        {
-            get
-            {
-                if (_userDataLayer == null)
-                {
-                    _userDataLayer = new UserDataLayer(_context);
-                }
-                return _userDataLayer;
-            }
-        }
+        public IUserDataLayer UserDataLayer { get; }
 
         public void Commit()
         {

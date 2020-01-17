@@ -32,7 +32,8 @@ namespace MyLibrary.WebApi.Controllers
         {
             try
             {
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(_context);
+                IUserDataLayer userDataLayer = new UserDataLayer(_context);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
 
                 var service = new UserService(userUnitOfWork);
                 var response = service.GetUsers();

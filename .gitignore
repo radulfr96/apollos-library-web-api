@@ -19,3 +19,5 @@ MyLibrary.Mock.DataLayers/bin/
 MyLibrary.DTOs.DataLayers/obj/
 MyLibrary.UnitOfWork/bin/
 MyLibrary.UnitOfWork/obj/
+MyLibrary.DTOs/obj/
+MyLibrary.Contracts.UnitOfWork/obj/
