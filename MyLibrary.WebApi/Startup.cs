@@ -27,12 +27,7 @@ namespace MyLibrary.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.AddJsonFile("appsettings.json");
-
-            var appSettings = configurationBuilder.Build();
-
-            services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(appSettings.GetSection("ConnectionString").Value));
+            services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
 
             services.AddControllers();
         }
