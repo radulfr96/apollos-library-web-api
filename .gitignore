@@ -21,3 +21,9 @@ MyLibrary.UnitOfWork/bin/
 MyLibrary.UnitOfWork/obj/
 MyLibrary.DTOs/obj/
 MyLibrary.Contracts.UnitOfWork/obj/
+MyLibrary.WebApi/appsettings.json
+MyLibrary.DataLayer/bin/
+MyLibrary.DTOs/bin/
+MyLibrary.Contracts.UnitOfWork/bin/
+MyLibrary.Services.Contracts/bin/
+MyLibrary.Services.Contracts/obj/

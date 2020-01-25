@@ -19,9 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.UnitOfWork.Contra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.UnitOfWork", "MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj", "{0CA1A141-9D16-400A-8BED-B24626142F6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibrary.Services.XUnitTestProject", "MyLibrary.Services.XUnitTestProject\MyLibrary.Services.XUnitTestProject.csproj", "{60086900-1F73-483F-876C-EF1FE15189D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Services.XUnitTestProject", "MyLibrary.Services.XUnitTestProject\MyLibrary.Services.XUnitTestProject.csproj", "{60086900-1F73-483F-876C-EF1FE15189D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibrary.Mock.DataLayers", "MyLibrary.Mock.DataLayers\MyLibrary.Mock.DataLayers.csproj", "{488E3425-D9E2-4B27-95EF-96AD0CD31CA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Mock.DataLayers", "MyLibrary.Mock.DataLayers\MyLibrary.Mock.DataLayers.csproj", "{488E3425-D9E2-4B27-95EF-96AD0CD31CA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibrary.Services.Contracts", "MyLibrary.Services.Contracts\MyLibrary.Services.Contracts.csproj", "{2B664884-2A32-45E2-BC55-AA66842B9C5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{488E3425-D9E2-4B27-95EF-96AD0CD31CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{488E3425-D9E2-4B27-95EF-96AD0CD31CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{488E3425-D9E2-4B27-95EF-96AD0CD31CA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B664884-2A32-45E2-BC55-AA66842B9C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B664884-2A32-45E2-BC55-AA66842B9C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B664884-2A32-45E2-BC55-AA66842B9C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B664884-2A32-45E2-BC55-AA66842B9C5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

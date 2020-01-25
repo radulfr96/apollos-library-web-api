@@ -5,6 +5,11 @@ namespace MyLibrary.Data.Model
 {
     public partial class User
     {
+        public User()
+        {
+            UserRole = new HashSet<UserRole>();
+        }
+
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -16,6 +21,6 @@ namespace MyLibrary.Data.Model
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
-        public virtual UserRole UserRole { get; set; }
+        public virtual ICollection<UserRole> UserRole { get; set; }
     }
 }

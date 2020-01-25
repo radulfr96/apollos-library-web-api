@@ -46,7 +46,7 @@ namespace MyLibrary.Data.Model
                 entity.ToTable("User", "Users");
 
                 entity.HasIndex(e => e.Username)
-                    .HasName("UQ__User__536C85E47D270A6C")
+                    .HasName("UQ__User__536C85E4C5443D52")
                     .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -82,9 +82,7 @@ namespace MyLibrary.Data.Model
             {
                 entity.ToTable("UserRole", "Users");
 
-                entity.Property(e => e.UserRoleId)
-                    .HasColumnName("UserRoleID")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
@@ -95,10 +93,9 @@ namespace MyLibrary.Data.Model
                     .HasForeignKey(d => d.RoleId)
                     .HasConstraintName("FK_UserRoleRole");
 
-                entity.HasOne(d => d.UserRoleNavigation)
-                    .WithOne(p => p.UserRole)
-                    .HasForeignKey<UserRole>(d => d.UserRoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserRole)
+                    .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_UserRoleUser");
             });
 

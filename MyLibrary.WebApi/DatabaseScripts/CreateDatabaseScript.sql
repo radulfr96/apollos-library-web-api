@@ -8,7 +8,8 @@ CREATE SCHEMA [Users]
 GO
 
 DECLARE @UserID INT
-, @RoleID INT
+, @AdminRoleID INT
+, @StandardRoleID INT
 
 CREATE TABLE [Users].[User] 
 (
@@ -40,11 +41,15 @@ CREATE TABLE [Users].[Role]
 )
 
 INSERT INTO [Users].[Role] ([Name])
-VALUES ('Admin'), ('Starndar User')
+VALUES ('Admin'), ('Standard User')
 
-SELECT @RoleID = R.RoleID
+SELECT @AdminRoleID = R.RoleID
 FROM Users.[Role] R
 WHERE R.[Name] = 'Admin'
+
+SELECT @StandardRoleID = R.RoleID
+FROM Users.[Role] R
+WHERE R.[Name] = 'Standard User'
 
 CREATE TABLE [Users].[UserRole]
 (
@@ -52,13 +57,26 @@ CREATE TABLE [Users].[UserRole]
 	[UserID] INT,
 	[RoleID] INT,
 	CONSTRAINT PK_UserRole PRIMARY KEY (UserRoleID),
-	CONSTRAINT FK_UserRoleUser FOREIGN KEY (UserRoleID)
+	CONSTRAINT FK_UserRoleUser FOREIGN KEY (UserID)
 	REFERENCES [Users].[User] (UserID),
 	CONSTRAINT FK_UserRoleRole FOREIGN KEY (RoleID)
 	REFERENCES [Users].[Role] (RoleID)
 )
+
+PRINT ('UserID - ' + CONVERT(VARCHAR(5), @UserID))
+
+PRINT ('RoleID - ' + + CONVERT(VARCHAR(5), @StandardRoleID))
+
 INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
-VALUES (@UserID, @RoleID)
+VALUES (@UserID, @StandardRoleID)
+
+PRINT ('UserID - ' + + CONVERT(VARCHAR(5), @UserID))
+
+PRINT ('RoleID - ' + + CONVERT(VARCHAR(5), @AdminRoleID))
+
+INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
+VALUES (@UserID, @AdminRoleID)
+
 
 USE MASTER
 DROP DATABASE MyLibrary

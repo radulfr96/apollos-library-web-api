@@ -5,13 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="3.1.1" />
     <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyLibrary.Contracts.UnitOfWork\MyLibrary.UnitOfWork.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DTOs\MyLibrary.Common.csproj" />
+    <ProjectReference Include="..\MyLibrary.Services.Contracts\MyLibrary.Services.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
