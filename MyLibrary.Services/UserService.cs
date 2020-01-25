@@ -55,7 +55,7 @@ namespace MyLibrary.Services
             return new UserDTO()
             {
                 UserID = user.UserId,
-                IsActive = user.IsActive,
+                IsActive = user.IsActive ? "Active": "Inactive",
                 SetPassword = user.SetPassword,
                 Username = user.Username
             };

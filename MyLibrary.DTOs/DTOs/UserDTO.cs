@@ -7,6 +7,6 @@ namespace MyLibrary.Common.DTOs
         public int UserID { get; set; }
         public string Username { get; set; }
         public bool SetPassword { get; set; }
-        public bool IsActive { get; set; }
+        public string IsActive { get; set; }
     }
 }
