@@ -16,6 +16,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MyLibrary.Data.Model;
+using MyLibrary.DataLayer;
+using MyLibrary.Services;
+using MyLibrary.Services.Contracts;
+using MyLibrary.UnitOfWork;
 
 namespace MyLibrary.WebApi
 {
@@ -54,6 +58,13 @@ namespace MyLibrary.WebApi
                     ValidateAudience = true,
                 };
             });
+
+            services.AddScoped<IUserService, UserService>(serviceProvider =>
+            {
+                UserDataLayer userDataLayer = new UserDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
+                UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer);
+                return new UserService(unitOfWork);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,12 +75,9 @@ namespace MyLibrary.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
