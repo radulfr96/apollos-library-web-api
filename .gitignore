@@ -27,3 +27,4 @@ MyLibrary.DTOs/bin/
 MyLibrary.Contracts.UnitOfWork/bin/
 MyLibrary.Services.Contracts/bin/
 MyLibrary.Services.Contracts/obj/
+*.pfx

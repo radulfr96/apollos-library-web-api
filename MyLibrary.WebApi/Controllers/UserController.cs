@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MyLibrary.Common.Requests;
 using MyLibrary.Common.Responses;
 using MyLibrary.Contracts.UnitOfWork;
@@ -24,10 +25,12 @@ namespace MyLibrary.WebApi.Controllers
     public class UserController : BaseApiController
     {
         private MyLibraryContext _context;
+        private IConfiguration _configuration;
 
-        public UserController(MyLibraryContext context)
+        public UserController(MyLibraryContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpGet("")]
@@ -38,7 +41,7 @@ namespace MyLibrary.WebApi.Controllers
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
                 IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
 
-                var service = new UserService(userUnitOfWork);
+                var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.GetUsers();
 
                 switch (response.StatusCode)
@@ -71,7 +74,7 @@ namespace MyLibrary.WebApi.Controllers
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
                 IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
 
-                var service = new UserService(userUnitOfWork);
+                var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.Login(request);
 
                 switch (response.StatusCode)

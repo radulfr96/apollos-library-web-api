@@ -30,6 +30,8 @@ namespace MyLibrary.WebApi
             Configuration = configuration;
         }
 
+        readonly string MyLibrarySpecificOrigins = "_myLibrarySpecficOrigins";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -54,8 +56,8 @@ namespace MyLibrary.WebApi
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                 };
             });
 
@@ -63,7 +65,7 @@ namespace MyLibrary.WebApi
             {
                 UserDataLayer userDataLayer = new UserDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
                 UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer);
-                return new UserService(unitOfWork);
+                return new UserService(unitOfWork, Configuration);
             });
         }
 
@@ -77,6 +79,13 @@ namespace MyLibrary.WebApi
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

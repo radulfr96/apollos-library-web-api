@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MyLibrary.Common.DTOs;
 using MyLibrary.Common.Requests;
@@ -20,12 +21,14 @@ namespace MyLibrary.Services
     public class UserService : IUserService
     {
         private IUserUnitOfWork _userUnitOfWork;
+        private IConfiguration _configuration;
 
         protected static Logger s_logger = LogManager.GetCurrentClassLogger();
 
-        public UserService(IUserUnitOfWork userUnitOfWork)
+        public UserService(IUserUnitOfWork userUnitOfWork, IConfiguration configuration)
         {
             _userUnitOfWork = userUnitOfWork;
+            _configuration = configuration;
         }
 
         public GetUsersResponse GetUsers()
@@ -105,13 +108,15 @@ namespace MyLibrary.Services
                     claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
                 }
 
+                var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
+
                 var identity = new ClaimsIdentity(claims);
 
                 var tokenDescriptor = new SecurityTokenDescriptor()
                 {
-                    Issuer = "api.mylibrary.com",
                     Subject = identity,
                     Expires = DateTime.Now.AddMonths(3),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 };
 
                 var rawToken = handler.CreateJwtSecurityToken(tokenDescriptor);
