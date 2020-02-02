@@ -21,5 +21,12 @@ namespace MyLibrary.Services.Contracts
         /// <param name="request">The users login information</param>
         /// <returns>The response with the users token</returns>
         public LoginResponse Login(LoginRequest request);
+
+        /// <summary>
+        /// Used to register user 
+        /// </summary>
+        /// <param name="request">The users registration information</param>
+        /// <returns>The response with the users token</returns>
+        public RegisterUserResponse Register(RegisterUserRequest request);
     }
 }

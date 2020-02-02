@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MyLibrary.Services
@@ -144,6 +145,96 @@ namespace MyLibrary.Services
             {
                 s_logger.Error(ex, "Unable to login user.");
                 response = new LoginResponse();
+            }
+
+            return response;
+        }
+
+        public RegisterUserResponse Register(RegisterUserRequest request)
+        {
+            s_logger.Info("Logging in user");
+
+            var response = new RegisterUserResponse();
+
+            try
+            {
+                response = (RegisterUserResponse)request.ValidateRequest(response);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return response;
+
+                var user = _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
+
+                if (user != null)
+                {
+                    s_logger.Warn($"Unable to register as username [ {request.Username} ], was taken.");
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Registration unsuccessful user already exists");
+                    return response;
+                }
+
+                byte[] salt = new byte[128 / 8];
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(salt);
+                }
+                var saltString = Convert.ToBase64String(salt);
+
+                var hashedPass = HashPassword(request.Password, saltString);
+
+                var newUser = new User()
+                {
+                    CreatedBy = request.Username,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = hashedPass,
+                    Salter = saltString,
+                    SetPassword = false,
+                    Username = request.Username
+                };
+
+                newUser.UserRole.Add(new UserRole()
+                {
+                    UserId = newUser.UserId,
+                    RoleId = request.RoleId,
+                });
+
+                _userUnitOfWork.UserDataLayer.AddUser(newUser);
+                _userUnitOfWork.Commit();
+
+                var handler = new JwtSecurityTokenHandler();
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, newUser.Username)
+                };
+
+                foreach (UserRole userRole in _userUnitOfWork.RoleDataLayer.GetUserRoles(newUser.UserId))
+                {
+                    var role = _userUnitOfWork.RoleDataLayer.GetRole(userRole.RoleId);
+
+                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
+                }
+
+                var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
+
+                var identity = new ClaimsIdentity(claims);
+
+                var tokenDescriptor = new SecurityTokenDescriptor()
+                {
+                    Subject = identity,
+                    Expires = DateTime.Now.AddMonths(3),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                };
+
+                var rawToken = handler.CreateJwtSecurityToken(tokenDescriptor);
+                response.Token = handler.WriteToken(rawToken);
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to register user.");
+                response = new RegisterUserResponse();
             }
 
             return response;

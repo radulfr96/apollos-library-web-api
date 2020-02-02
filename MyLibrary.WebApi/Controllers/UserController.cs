@@ -138,5 +138,35 @@ namespace MyLibrary.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpPost("")]
+        public IActionResult RegisterUser(RegisterUserRequest request)
+        {
+            try
+            {
+                IUserDataLayer userDataLayer = new UserDataLayer(_context);
+                IRoleDataLayer roleDataLayer = new RoleDataLayer(_context);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
+
+                var service = new UserService(userUnitOfWork, _configuration);
+                var response = service.Register(request);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to login user.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 }
