@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MyLibrary.Common.Responses
 {
+    /// <summary>
+    /// Used as a base for all reponses so that they all have status codes and status messages
+    /// </summary>
     public class BaseResponse
     {
         public HttpStatusCode StatusCode { get; set; }

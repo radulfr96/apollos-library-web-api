@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace MyLibrary.Common.DTOs
 {
+    /// <summary>
+    /// Data transfer object used to transfer users
+    /// </summary>
     public class UserDTO
     {
         public int UserID { get; set; }

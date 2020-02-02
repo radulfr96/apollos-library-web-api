@@ -20,6 +20,9 @@ using NLog;
 
 namespace MyLibrary.WebApi.Controllers
 {
+    /// <summary>
+    /// Controller used as an endpoint for user functions
+    /// </summary>
     [Authorize]
     [Route("api/user")]
     [ApiController]
@@ -36,6 +39,10 @@ namespace MyLibrary.WebApi.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Used to get all users
+        /// </summary>
+        /// <returns>The get all users response</returns>
         [HttpGet("")]
         public IActionResult GetUsers()
         {
@@ -69,6 +76,11 @@ namespace MyLibrary.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Used to login a user
+        /// </summary>
+        /// <param name="request">The request with the users login information</param>
+        /// <returns>The response containing the users token</returns>
         [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
@@ -103,6 +115,10 @@ namespace MyLibrary.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Used to get information about the calling user
+        /// </summary>
+        /// <returns>The users information</returns>
         [HttpGet("userinfo")]
         public IActionResult GetUserInfo()
         {

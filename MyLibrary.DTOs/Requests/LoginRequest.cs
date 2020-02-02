@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MyLibrary.Common.Requests
 {
+    /// <summary>
+    /// Request used to login a user
+    /// </summary>
     public class LoginRequest : BaseRequest
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide your username to login.")]
