@@ -35,8 +35,8 @@ WHERE U.Username = 'Radulfr'
 
 CREATE TABLE [Users].[Role]
 (
-	[RoleID] INT IDENTITY,
-	[Name] VARCHAR(20),
+	[RoleID] INT IDENTITY NOT NULL,
+	[Name] VARCHAR(20) NOT NULL,
 	CONSTRAINT PK_Role PRIMARY KEY (RoleID)
 )
 
@@ -54,8 +54,8 @@ WHERE R.[Name] = 'Standard User'
 CREATE TABLE [Users].[UserRole]
 (
 	[UserRoleID] INT IDENTITY,
-	[UserID] INT,
-	[RoleID] INT,
+	[UserID] INT NOT NULL,
+	[RoleID] INT NOT NULL,
 	CONSTRAINT PK_UserRole PRIMARY KEY (UserRoleID),
 	CONSTRAINT FK_UserRoleUser FOREIGN KEY (UserID)
 	REFERENCES [Users].[User] (UserID),

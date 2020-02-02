@@ -1,25 +1,25 @@
 ﻿using MyLibrary.Contracts.UnitOfWork;
-using MyLibrary.Data.Model;
-using MyLibrary.DataLayer;
 using MyLibrary.DataLayer.Contracts;
-using System;
 
 namespace MyLibrary.UnitOfWork
 {
     public class UserUnitOfWork : IUserUnitOfWork
     {
-        private MyLibraryContext _context;
 
-        public UserUnitOfWork(IUserDataLayer userDataLayer)
+        public UserUnitOfWork(IUserDataLayer userDataLayer, IRoleDataLayer roleDataLayer)
         {
             UserDataLayer = userDataLayer;
+            RoleDataLayer = roleDataLayer;
         }
 
         public IUserDataLayer UserDataLayer { get; }
 
+        public IRoleDataLayer RoleDataLayer { get; }
+
         public void Commit()
         {
-            _context.SaveChanges();
+            UserDataLayer.Save();
+            RoleDataLayer.Save();
         }
     }
 }

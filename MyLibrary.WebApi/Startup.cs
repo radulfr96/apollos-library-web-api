@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,13 +31,12 @@ namespace MyLibrary.WebApi
             Configuration = configuration;
         }
 
-        readonly string MyLibrarySpecificOrigins = "_myLibrarySpecficOrigins";
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
 
             services.AddControllers();
@@ -64,7 +64,8 @@ namespace MyLibrary.WebApi
             services.AddScoped<IUserService, UserService>(serviceProvider =>
             {
                 UserDataLayer userDataLayer = new UserDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
-                UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer);
+                RoleDataLayer roleDataLayer = new RoleDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
+                UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
                 return new UserService(unitOfWork, Configuration);
             });
         }

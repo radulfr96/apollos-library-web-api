@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,13 +25,15 @@ namespace MyLibrary.WebApi.Controllers
     [ApiController]
     public class UserController : BaseApiController
     {
-        private MyLibraryContext _context;
-        private IConfiguration _configuration;
+        private readonly MyLibraryContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(MyLibraryContext context, IConfiguration configuration)
+        public UserController(MyLibraryContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("")]
@@ -39,7 +42,8 @@ namespace MyLibrary.WebApi.Controllers
             try
             {
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
+                IRoleDataLayer roleDataLayer = new RoleDataLayer(_context);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
 
                 var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.GetUsers();
@@ -72,7 +76,8 @@ namespace MyLibrary.WebApi.Controllers
             try
             {
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
+                IRoleDataLayer roleDataLayer = new RoleDataLayer(_context);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
 
                 var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.Login(request);
@@ -89,6 +94,26 @@ namespace MyLibrary.WebApi.Controllers
                         return StatusCode(StatusCodes.Status500InternalServerError);
                 }
 
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to login user.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("userinfo")]
+        public IActionResult GetUserInfo()
+        {
+            var response = new GetUserInfoResponse();
+
+            try
+            {
+                var user = _httpContextAccessor.HttpContext.User;
+                response.Username = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+                response.Roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+                response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);
             }
             catch (Exception ex)

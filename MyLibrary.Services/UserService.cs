@@ -20,8 +20,8 @@ namespace MyLibrary.Services
 {
     public class UserService : IUserService
     {
-        private IUserUnitOfWork _userUnitOfWork;
-        private IConfiguration _configuration;
+        private readonly IUserUnitOfWork _userUnitOfWork;
+        private readonly IConfiguration _configuration;
 
         protected static Logger s_logger = LogManager.GetCurrentClassLogger();
 
@@ -37,6 +37,7 @@ namespace MyLibrary.Services
             try
             {
                 var users = _userUnitOfWork.UserDataLayer.GetUsers();
+                var roles = _userUnitOfWork.RoleDataLayer.GetRoles();
 
                 if (users.Count == 0)
                 {
@@ -47,7 +48,19 @@ namespace MyLibrary.Services
 
                 foreach (User user in users)
                 {
-                    response.Users.Add(DAO2DTO(user));
+                    var userDto = DAO2DTO(user);
+
+                    foreach (UserRole userRole in _userUnitOfWork.RoleDataLayer.GetUserRoles(user.UserId))
+                    {
+                        var role = _userUnitOfWork.RoleDataLayer.GetRole(userRole.RoleId);
+                        userDto.Roles.Add(new RoleDTO()
+                        {
+                            RoleId = role.RoleId,
+                            Name = role.Name
+                        });
+                    }
+
+                    response.Users.Add(userDto);
                 }
 
                 response.StatusCode = HttpStatusCode.OK;
@@ -82,7 +95,7 @@ namespace MyLibrary.Services
                     return response;
                 }
 
-                var hashedPassword = hashPassword(request.Password, user.Salter);
+                var hashedPassword = HashPassword(request.Password, user.Salter);
 
                 if (user.Password != hashedPassword)
                 {
@@ -100,12 +113,16 @@ namespace MyLibrary.Services
                 var handler = new JwtSecurityTokenHandler();
 
 
-                var claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, user.Username));
-
-                foreach (UserRole userRole in user.UserRole)
+                var claims = new List<Claim>
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+                    new Claim(ClaimTypes.Name, user.Username)
+                };
+
+                foreach (UserRole userRole in _userUnitOfWork.RoleDataLayer.GetUserRoles(user.UserId))
+                {
+                    var role = _userUnitOfWork.RoleDataLayer.GetRole(userRole.RoleId);
+
+                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
                 }
 
                 var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
@@ -143,7 +160,7 @@ namespace MyLibrary.Services
             };
         }
 
-        private string hashPassword(string password, string salt)
+        private string HashPassword(string password, string salt)
         {
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
