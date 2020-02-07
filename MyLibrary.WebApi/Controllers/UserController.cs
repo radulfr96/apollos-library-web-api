@@ -49,8 +49,7 @@ namespace MyLibrary.WebApi.Controllers
             try
             {
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IRoleDataLayer roleDataLayer = new RoleDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
 
                 var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.GetUsers();
@@ -88,8 +87,7 @@ namespace MyLibrary.WebApi.Controllers
             try
             {
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IRoleDataLayer roleDataLayer = new RoleDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
 
                 var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.Login(request);
@@ -145,8 +143,7 @@ namespace MyLibrary.WebApi.Controllers
             try
             {
                 IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IRoleDataLayer roleDataLayer = new RoleDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
 
                 var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.Register(request);

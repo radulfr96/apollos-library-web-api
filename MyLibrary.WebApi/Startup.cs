@@ -65,7 +65,7 @@ namespace MyLibrary.WebApi
             {
                 UserDataLayer userDataLayer = new UserDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
                 RoleDataLayer roleDataLayer = new RoleDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
-                UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer, roleDataLayer);
+                UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer);
                 return new UserService(unitOfWork, Configuration);
             });
         }

@@ -28,5 +28,19 @@ namespace MyLibrary.Services.Contracts
         /// <param name="request">The users registration information</param>
         /// <returns>The response with the users token</returns>
         public RegisterUserResponse Register(RegisterUserRequest request);
+
+        /// <summary>
+        /// Used to get the user by the id
+        /// </summary>
+        /// <param name="userId">The id of the user to be found</param>
+        /// <returns>The response with the user found</returns>
+        public GetUserResponse GetUserById(int userId);
+
+        /// <summary>
+        /// Used to get the user by their username
+        /// </summary>
+        /// <param name="userId">The id of the user to be found</param>
+        /// <returns>The response with the user found</returns>
+        public GetUserResponse GetUserByUsername(string username);
     }
 }

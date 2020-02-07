@@ -14,11 +14,6 @@ namespace MyLibrary.Contracts.UnitOfWork
         IUserDataLayer UserDataLayer { get; }
 
         /// <summary>
-        /// Data layer for user roles
-        /// </summary>
-        public IRoleDataLayer RoleDataLayer { get; }
-
-        /// <summary>
         /// Used to commit changes
         /// </summary>
         void Commit();
