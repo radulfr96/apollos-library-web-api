@@ -53,7 +53,6 @@ namespace MyLibrary.Services.XUnitTestProject
                     IsActive = true,
                     Password = "TestHash",
                     Salter = "TestSalt",
-                    SetPassword = false,
                     UserId = 1,
                     Username = "TestUser",
                     UserRole = userRoles
@@ -86,7 +85,34 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
-        public void GetUserByUsernameSuccess()
+        public void CheckUsernamrExists()
+        {
+            var mockDataLayer = new UserMockDataLayer(
+                new List<User>()
+                {
+                    new User()
+                    {
+                        CreatedBy = "Unit Test",
+                        CreatedDate = DateTime.Now,
+                        IsActive = true,
+                        Password = "TestHash",
+                        Salter = "TestSalt",
+                        UserId = 1,
+                        Username = "TestUser",
+                    }
+                }
+            );
+
+            var unitOfWork = new UserUnitOfWork(mockDataLayer);
+            var service = new UserService(unitOfWork, Configuration);
+            var response = service.UsernameCheck("TestUser");
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(response.Result);
+        }
+
+        [Fact]
+        public void CheckUserByUsernameNotExistsNoUsers()
         {
             var mockDataLayer = new UserMockDataLayer(new List<User>());
             var unitOfWork = new UserUnitOfWork(mockDataLayer);
@@ -98,39 +124,95 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
-        public void GetUserByUsernameNotFound()
+        public void CheckUsernameUnknownUser()
         {
-            var mockDataLayer = new UserMockDataLayer(new List<User>());
+            var mockDataLayer = new UserMockDataLayer(
+                new List<User>()
+                {
+                    new User()
+                    {
+                        CreatedBy = "Unit Test",
+                        CreatedDate = DateTime.Now,
+                        IsActive = true,
+                        Password = "TestHash",
+                        Salter = "TestSalt",
+                        UserId = 1,
+                        Username = "TestUser",
+                    }
+                }
+            );
+
             var unitOfWork = new UserUnitOfWork(mockDataLayer);
             var service = new UserService(unitOfWork, Configuration);
-            var response = service.GetUsers();
+            var response = service.UsernameCheck("TeUser");
 
-            Assert.True(response.StatusCode == HttpStatusCode.NotFound);
-            Assert.True(response.Users.Count == 0);
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.False(response.Result);
         }
 
         [Fact]
         public void GetUserByIdSuccess()
         {
+            var mockDataLayer = new UserMockDataLayer(
+                new List<User>()
+                {
+                    new User()
+                    {
+                        CreatedBy = "Unit Test",
+                        CreatedDate = DateTime.Now,
+                        IsActive = true,
+                        Password = "pkfpaejfoijaoi",
+                        Salter = "wkfqokfpokp",
+                        UserId = 1,
+                        Username = "TestUser",
+                    }
+                }
+            );
+            var unitOfWork = new UserUnitOfWork(mockDataLayer);
+            var service = new UserService(unitOfWork, Configuration);
+            var response = service.GetUserById(1);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(response.User.Username == "TestUser");
+        }
+
+        [Fact]
+        public void GetUserByIdNotFoundNoUsers()
+        {
             var mockDataLayer = new UserMockDataLayer(new List<User>());
             var unitOfWork = new UserUnitOfWork(mockDataLayer);
             var service = new UserService(unitOfWork, Configuration);
-            var response = service.GetUsers();
+            var response = service.GetUserById(-1);
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
-            Assert.True(response.Users.Count == 0);
+            Assert.True(response.User == null);
         }
 
         [Fact]
         public void GetUserByIdNotFound()
         {
-            var mockDataLayer = new UserMockDataLayer(new List<User>());
+            var mockDataLayer = new UserMockDataLayer(
+                new List<User>()
+                {
+                    new User()
+                    {
+                        CreatedBy = "Unit Test",
+                        CreatedDate = DateTime.Now,
+                        IsActive = true,
+                        Password = "pkfpaejfoijaoi",
+                        Salter = "wkfqokfpokp",
+                        UserId = 1,
+                        Username = "Test User",
+                    }
+                }
+            );
+
             var unitOfWork = new UserUnitOfWork(mockDataLayer);
             var service = new UserService(unitOfWork, Configuration);
-            var response = service.GetUsers();
+            var response = service.GetUserById(2);
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
-            Assert.True(response.Users.Count == 0);
+            Assert.True(response.User == null);
         }
 
         [Fact]
@@ -143,7 +225,7 @@ namespace MyLibrary.Services.XUnitTestProject
                 IsActive = true,
                 Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
                 Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                SetPassword = false,
+
                 UserId = 1,
                 Username = "TestUser"
             };
@@ -172,7 +254,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 IsActive = true,
                 Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
                 Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                SetPassword = false,
                 UserId = 1,
                 Username = "TestUser"
             };
@@ -201,7 +282,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 IsActive = true,
                 Password = "U5Suy6J/faf/RV0K/kaknxGiHt8xVNzD9s7w=",
                 Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                SetPassword = false,
                 UserId = 1,
                 Username = "TestUser"
             };
@@ -265,7 +345,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 IsActive = true,
                 Password = "U5Suy6J/faf/RV0K/kaknxGiHt8xVNzD9s7w=",
                 Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                SetPassword = false,
                 UserId = 1,
                 Username = "TestUser"
             };
@@ -278,7 +357,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 ConfirmPassword = "TestPassword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
-                RoleId = 1
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
@@ -297,7 +375,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 ConfirmPassword = "TestPaword1",
                 Username = "",
                 Password = "TestPassword1",
-                RoleId = 1
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
@@ -316,7 +393,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 ConfirmPassword = "TestPaword1",
                 Username = "TestUser",
                 Password = "",
-                RoleId = 1
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
@@ -335,31 +411,11 @@ namespace MyLibrary.Services.XUnitTestProject
                 ConfirmPassword = "",
                 Username = "TestUser",
                 Password = "TestPassword1",
-                RoleId = 1
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
             Assert.True(string.IsNullOrEmpty(response.Token));
             Assert.True(response.Messages[0] == "Please provide your confirmation password");
-        }
-
-        [Fact]
-        public void RegsiterUserFailInvalidRole()
-        {
-            var mockDataLayer = new UserMockDataLayer(new List<User>());
-            var unitOfWork = new UserUnitOfWork(mockDataLayer);
-            var service = new UserService(unitOfWork, Configuration);
-            var response = service.Register(new RegisterUserRequest()
-            {
-                ConfirmPassword = "TestPassword1",
-                Username = "TestUser",
-                Password = "TestPassword1",
-                RoleId = -1
-            });
-
-            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
-            Assert.True(string.IsNullOrEmpty(response.Token));
-            Assert.True(response.Messages[0] == "Invalid role selected");
         }
 
         [Fact]
@@ -373,7 +429,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 ConfirmPassword = "TestPaword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
-                RoleId = 1
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
@@ -392,7 +447,6 @@ namespace MyLibrary.Services.XUnitTestProject
                 ConfirmPassword = "TestPassword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
-                RoleId = 1
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);

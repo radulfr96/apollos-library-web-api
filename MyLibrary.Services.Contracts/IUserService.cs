@@ -37,10 +37,10 @@ namespace MyLibrary.Services.Contracts
         public GetUserResponse GetUserById(int userId);
 
         /// <summary>
-        /// Used to get the user by their username
+        /// Used to check if the username exists
         /// </summary>
-        /// <param name="userId">The id of the user to be found</param>
-        /// <returns>The response with the user found</returns>
-        public GetUserResponse GetUserByUsername(string username);
+        /// <param name="username">The username to be checked</param>
+        /// <returns>The response with the result</returns>
+        public UsernameCheckResponse UsernameCheck(string username);
     }
 }

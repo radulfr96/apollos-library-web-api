@@ -36,7 +36,6 @@ namespace MyLibrary.DataLayer
                 ModifiedDate = u.ModifiedDate,
                 Password = u.Password,
                 Salter = u.Salter,
-                SetPassword = u.SetPassword,
                 UserId = u.UserId,
                 Username = u.Username,
                 UserRole =
@@ -69,7 +68,6 @@ namespace MyLibrary.DataLayer
                 ModifiedDate = u.ModifiedDate,
                 Password = u.Password,
                 Salter = u.Salter,
-                SetPassword = u.SetPassword,
                 UserId = u.UserId,
                 Username = u.Username,
                 UserRole =
@@ -101,7 +99,6 @@ namespace MyLibrary.DataLayer
                     ModifiedDate = u.ModifiedDate,
                     Password = u.Password,
                     Salter = u.Salter,
-                    SetPassword = u.SetPassword,
                     UserId = u.UserId,
                     Username = u.Username,
                     UserRole =

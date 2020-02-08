@@ -16,16 +16,9 @@ namespace MyLibrary.Common.Requests
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide your confirmation password")]
         public string ConfirmPassword { get; set; }
 
-        public int RoleId { get; set; }
-
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
-
-            if (RoleId < 1)
-            {
-                results.Add(new ValidationResult("Invalid role selected"));
-            }
 
             if (Password != ConfirmPassword)
             {

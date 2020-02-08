@@ -19,6 +19,15 @@ namespace MyLibrary.Data.Model
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("server=localhost\\sqlexpress;Database=MyLibrary;Trusted_Connection=True;Integrated Security=True;MultipleActiveResultSets=true");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>(entity =>
@@ -28,6 +37,7 @@ namespace MyLibrary.Data.Model
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
             });
@@ -35,10 +45,6 @@ namespace MyLibrary.Data.Model
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User", "Users");
-
-                entity.HasIndex(e => e.Username)
-                    .HasName("UQ__User__536C85E4C5443D52")
-                    .IsUnique();
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -82,11 +88,13 @@ namespace MyLibrary.Data.Model
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRoleRole");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRoleUser");
             });
 

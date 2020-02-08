@@ -39,6 +39,36 @@ namespace MyLibrary.WebApi.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [AllowAnonymous]
+        [HttpPost("")]
+        public IActionResult RegisterUser(RegisterUserRequest request)
+        {
+            try
+            {
+                IUserDataLayer userDataLayer = new UserDataLayer(_context);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
+
+                var service = new UserService(userUnitOfWork, _configuration);
+                var response = service.Register(request);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to login user.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
         /// <summary>
         /// Used to get all users
         /// </summary>
@@ -53,6 +83,43 @@ namespace MyLibrary.WebApi.Controllers
 
                 var service = new UserService(userUnitOfWork, _configuration);
                 var response = service.GetUsers();
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.NotFound:
+                        return NotFound();
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to retreive users.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Used to check if username is taken
+        /// </summary>
+        /// <returns>The get result</returns>
+        [AllowAnonymous]
+        [HttpGet("{username}")]
+        public IActionResult CheckUsernameTaken(string username)
+        {
+            try
+            {
+                IUserDataLayer userDataLayer = new UserDataLayer(_context);
+                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
+
+                var service = new UserService(userUnitOfWork, _configuration);
+                var response = service.UsernameCheck(username);
 
                 switch (response.StatusCode)
                 {
@@ -135,35 +202,6 @@ namespace MyLibrary.WebApi.Controllers
                 s_logger.Error(ex, "Unable to login user.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-        }
-
-        [HttpPost("")]
-        public IActionResult RegisterUser(RegisterUserRequest request)
-        {
-            try
-            {
-                IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
-
-                var service = new UserService(userUnitOfWork, _configuration);
-                var response = service.Register(request);
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                        return Ok(response);
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(BuildBadRequestMessage(response));
-                    case HttpStatusCode.InternalServerError:
-                        return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, "Unable to login user.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }

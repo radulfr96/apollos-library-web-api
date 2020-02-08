@@ -5,6 +5,7 @@ using MyLibrary.Common.DTOs;
 using MyLibrary.Common.Requests;
 using MyLibrary.Common.Responses;
 using MyLibrary.Contracts.UnitOfWork;
+using MyLibrary.Data.Enums;
 using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.Services.Contracts;
@@ -34,8 +35,6 @@ namespace MyLibrary.Services
 
         public RegisterUserResponse Register(RegisterUserRequest request)
         {
-            s_logger.Info("Logging in user");
-
             var response = new RegisterUserResponse();
 
             try
@@ -71,14 +70,13 @@ namespace MyLibrary.Services
                     IsActive = true,
                     Password = hashedPass,
                     Salter = saltString,
-                    SetPassword = false,
                     Username = request.Username
                 };
 
                 newUser.UserRole.Add(new UserRole()
                 {
                     UserId = newUser.UserId,
-                    RoleId = request.RoleId,
+                    RoleId = (int)RoleEnum.StandardUser
                 });
 
                 _userUnitOfWork.UserDataLayer.AddUser(newUser);
@@ -144,10 +142,60 @@ namespace MyLibrary.Services
             return response;
         }
 
+        public GetUserResponse GetUserById(int id)
+        {
+            var response = new GetUserResponse();
+
+            try
+            {
+                var user = _userUnitOfWork.UserDataLayer.GetUser(id);
+
+                if (user == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Messages.Add($"Unable to finc user with id [{id}]");
+                    return response;
+                }
+
+                response.User = DAO2DTO(user);
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to find user.");
+                response = new GetUserResponse();
+            }
+            return response;
+        }
+
+        public UsernameCheckResponse UsernameCheck(string username)
+        {
+            var response = new UsernameCheckResponse();
+
+            try
+            {
+                var user = _userUnitOfWork.UserDataLayer.GetUserByUsername(username);
+
+                if (user == null)
+                {
+                    response.Result = false;
+                    response.StatusCode = HttpStatusCode.OK;
+                    return response;
+                }
+
+                response.Result = true;
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to find user.");
+                response = new UsernameCheckResponse();
+            }
+            return response;
+        }
+
         public LoginResponse Login(LoginRequest request)
         {
-            s_logger.Info("Logging in user");
-
             var response = new LoginResponse();
 
             try
@@ -175,14 +223,7 @@ namespace MyLibrary.Services
                     return response;
                 }
 
-                if (user.SetPassword)
-                {
-                    response.StatusCode = HttpStatusCode.Accepted;
-                    return response;
-                }
-
                 var handler = new JwtSecurityTokenHandler();
-
 
                 var claims = new List<Claim>
                 {
@@ -235,7 +276,6 @@ namespace MyLibrary.Services
             {
                 UserID = user.UserId,
                 IsActive = user.IsActive ? "Active" : "Inactive",
-                SetPassword = user.SetPassword,
                 Username = user.Username,
                 Roles = roles
             };
