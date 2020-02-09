@@ -11,5 +11,7 @@ namespace MyLibrary.Common.Responses
     {
         public string Username { get; set; }
         public List<string> Roles { get; set; }
+        public int UserID { get; set; }
+        public DateTime JoinDate { get; set; }
     }
 }

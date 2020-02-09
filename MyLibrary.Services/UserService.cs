@@ -86,7 +86,9 @@ namespace MyLibrary.Services
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, newUser.Username)
+                    new Claim(ClaimTypes.Name, newUser.Username),
+                    new Claim(ClaimTypes.Sid, newUser.UserId.ToString()),
+                    new Claim("JoinDate", newUser.CreatedDate.ToString())
                 };
 
                 var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
@@ -227,7 +229,9 @@ namespace MyLibrary.Services
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Sid, user.UserId.ToString()),
+                    new Claim("JoinDate", user.CreatedDate.ToString())
                 };
 
                 foreach (UserRole userRole in user.UserRole)
@@ -263,7 +267,7 @@ namespace MyLibrary.Services
         {
             var roles = new List<RoleDTO>();
 
-            foreach(var userRole in user.UserRole)
+            foreach (var userRole in user.UserRole)
             {
                 roles.Add(new RoleDTO()
                 {

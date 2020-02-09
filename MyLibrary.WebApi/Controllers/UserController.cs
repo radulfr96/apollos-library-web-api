@@ -194,6 +194,27 @@ namespace MyLibrary.WebApi.Controllers
                 var user = _httpContextAccessor.HttpContext.User;
                 response.Username = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
                 response.Roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+                var userID = user.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).FirstOrDefault();
+                if (!string.IsNullOrEmpty(userID))
+                {
+                    if (!int.TryParse(userID, out int userIdInt))
+                    {
+                        s_logger.Error("Unable to get user id from claims");
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                    }
+
+                    response.UserID = userIdInt;
+                }
+
+                var dateString = user.Claims.Where(c => c.Type == "JoinDate").Select(c => c.Value).FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(dateString))
+                {
+                    response.JoinDate = DateTime.Parse(dateString);
+                }
+
+
                 response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);
             }
