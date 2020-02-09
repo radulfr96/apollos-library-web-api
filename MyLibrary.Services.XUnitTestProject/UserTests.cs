@@ -336,6 +336,23 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
+        public void RegsiterUserSuccess()
+        {
+            var mockDataLayer = new UserMockDataLayer(new List<User>());
+            var unitOfWork = new UserUnitOfWork(mockDataLayer);
+            var service = new UserService(unitOfWork, Configuration);
+            var response = service.Register(new RegisterUserRequest()
+            {
+                ConfirmPassword = "TestPassword1",
+                Username = "TestUser",
+                Password = "TestPassword1",
+            });
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.False(string.IsNullOrEmpty(response.Token));
+        }
+
+        [Fact]
         public void RegsiterUserFailUsernameTaken()
         {
             var user = new User()
@@ -437,20 +454,37 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
-        public void RegsiterUserSuccess()
+        public void RegsiterUserFailWeakPasswordTooShort()
         {
             var mockDataLayer = new UserMockDataLayer(new List<User>());
             var unitOfWork = new UserUnitOfWork(mockDataLayer);
             var service = new UserService(unitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword1",
+                ConfirmPassword = "Teord1",
                 Username = "TestUser",
-                Password = "TestPassword1",
+                Password = "Teord1",
             });
 
-            Assert.True(response.StatusCode == HttpStatusCode.OK);
-            Assert.False(string.IsNullOrEmpty(response.Token));
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not strong enough");
+        }
+
+        [Fact]
+        public void RegsiterUserFailWeakPasswordNoNumber()
+        {
+            var mockDataLayer = new UserMockDataLayer(new List<User>());
+            var unitOfWork = new UserUnitOfWork(mockDataLayer);
+            var service = new UserService(unitOfWork, Configuration);
+            var response = service.Register(new RegisterUserRequest()
+            {
+                ConfirmPassword = "TestPassword",
+                Username = "TestUser",
+                Password = "TestPassword",
+            });
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not strong enough");
         }
     }
 }

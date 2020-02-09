@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MyLibrary.Common.Requests
 {
-    public class RegisterUserRequest: BaseRequest
+    public class RegisterUserRequest : BaseRequest
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide a username")]
         public string Username { get; set; }
@@ -19,6 +20,11 @@ namespace MyLibrary.Common.Requests
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
+
+            if (!Regex.IsMatch(Password, "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"))
+            {
+                results.Add(new ValidationResult("Password is not strong enough"));
+            }
 
             if (Password != ConfirmPassword)
             {
