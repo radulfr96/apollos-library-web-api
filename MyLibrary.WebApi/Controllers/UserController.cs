@@ -32,7 +32,7 @@ namespace MyLibrary.WebApi.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
 
-        public UserController(MyLibraryContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public UserController(MyLibraryContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base (configuration)
         {
             _dbContext = dbContext;
             _configuration = configuration;
@@ -73,6 +73,9 @@ namespace MyLibrary.WebApi.Controllers
         [HttpGet("")]
         public IActionResult GetUsers()
         {
+            if (!IsAdmin())
+                return new StatusCodeResult(StatusCodes.Status403Forbidden);
+
             try
             {
                 var response = _userService.GetUsers();
