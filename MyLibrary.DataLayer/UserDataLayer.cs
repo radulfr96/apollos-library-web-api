@@ -103,6 +103,7 @@ namespace MyLibrary.DataLayer
                     UserRole =
                     (from ur in _context.UserRole
                      join r in _context.Role on ur.RoleId equals r.RoleId
+                     where ur.UserId == u.UserId
                      select new UserRole()
                      {
                          RoleId = r.RoleId,

@@ -6,7 +6,7 @@ namespace MyLibrary.Data.Enums
 {
     public enum RoleEnum
     {
-        StandardUser = 1,
-        Admin = 2,
+        StandardUser = 2,
+        Admin = 1,
     }
 }

@@ -80,7 +80,7 @@ namespace MyLibrary.Services
                 });
 
                 _userUnitOfWork.UserDataLayer.AddUser(newUser);
-                _userUnitOfWork.Commit();
+                _userUnitOfWork.Save();
 
                 var handler = new JwtSecurityTokenHandler();
 
