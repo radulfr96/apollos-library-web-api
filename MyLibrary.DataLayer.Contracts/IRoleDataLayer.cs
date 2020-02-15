@@ -35,10 +35,5 @@ namespace MyLibrary.DataLayer.Contracts
         /// <param name="userId">The id of the user whose roles are to be found</param>
         /// <returns>The users roles found</returns>
         public List<UserRole> GetUserRoles(int userId);
-
-        /// <summary>
-        /// Used to save changes to the database
-        /// </summary>
-        public void Save();
     }
 }

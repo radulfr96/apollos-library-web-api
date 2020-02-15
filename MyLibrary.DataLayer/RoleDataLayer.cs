@@ -35,10 +35,5 @@ namespace MyLibrary.DataLayer
         {
             return _context.UserRole.Where(ur => ur.UserId == userId).ToList();
         }
-
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
     }
 }

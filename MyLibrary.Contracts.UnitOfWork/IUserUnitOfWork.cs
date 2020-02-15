@@ -14,6 +14,16 @@ namespace MyLibrary.Contracts.UnitOfWork
         IUserDataLayer UserDataLayer { get; }
 
         /// <summary>
+        /// Used to begin a transaction
+        /// </summary>
+        void Begin();
+
+        /// <summary>
+        /// Used to save data changes
+        /// </summary>
+        void Save();
+
+        /// <summary>
         /// Used to commit changes
         /// </summary>
         void Commit();

@@ -60,14 +60,6 @@ namespace MyLibrary.WebApi
                     ValidateAudience = false,
                 };
             });
-
-            services.AddScoped<IUserService, UserService>(serviceProvider =>
-            {
-                UserDataLayer userDataLayer = new UserDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
-                RoleDataLayer roleDataLayer = new RoleDataLayer((MyLibraryContext)serviceProvider.GetService(typeof(MyLibraryContext)));
-                UserUnitOfWork unitOfWork = new UserUnitOfWork(userDataLayer);
-                return new UserService(unitOfWork, Configuration);
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

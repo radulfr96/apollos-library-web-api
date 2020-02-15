@@ -12,9 +12,8 @@ using MyLibrary.Common.Requests;
 using MyLibrary.Common.Responses;
 using MyLibrary.Contracts.UnitOfWork;
 using MyLibrary.Data.Model;
-using MyLibrary.DataLayer;
-using MyLibrary.DataLayer.Contracts;
 using MyLibrary.Services;
+using MyLibrary.Services.Contracts;
 using MyLibrary.UnitOfWork;
 using NLog;
 
@@ -28,15 +27,17 @@ namespace MyLibrary.WebApi.Controllers
     [ApiController]
     public class UserController : BaseApiController
     {
-        private readonly MyLibraryContext _context;
+        private readonly MyLibraryContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
 
-        public UserController(MyLibraryContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public UserController(MyLibraryContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
+            _dbContext = dbContext;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _userService = new UserService(new UserUnitOfWork(_dbContext), _configuration);
         }
 
         [AllowAnonymous]
@@ -45,11 +46,7 @@ namespace MyLibrary.WebApi.Controllers
         {
             try
             {
-                IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
-
-                var service = new UserService(userUnitOfWork, _configuration);
-                var response = service.Register(request);
+                var response = _userService.Register(request);
 
                 switch (response.StatusCode)
                 {
@@ -78,11 +75,7 @@ namespace MyLibrary.WebApi.Controllers
         {
             try
             {
-                IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
-
-                var service = new UserService(userUnitOfWork, _configuration);
-                var response = service.GetUsers();
+                var response = _userService.GetUsers();
 
                 switch (response.StatusCode)
                 {
@@ -115,11 +108,7 @@ namespace MyLibrary.WebApi.Controllers
         {
             try
             {
-                IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
-
-                var service = new UserService(userUnitOfWork, _configuration);
-                var response = service.UsernameCheck(username);
+                var response = _userService.UsernameCheck(username);
 
                 switch (response.StatusCode)
                 {
@@ -153,11 +142,7 @@ namespace MyLibrary.WebApi.Controllers
         {
             try
             {
-                IUserDataLayer userDataLayer = new UserDataLayer(_context);
-                IUserUnitOfWork userUnitOfWork = new UserUnitOfWork(userDataLayer);
-
-                var service = new UserService(userUnitOfWork, _configuration);
-                var response = service.Login(request);
+                var response = _userService.Login(request);
 
                 switch (response.StatusCode)
                 {

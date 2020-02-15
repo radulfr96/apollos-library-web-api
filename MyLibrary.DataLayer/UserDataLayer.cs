@@ -7,10 +7,9 @@ using System.Linq;
 
 namespace MyLibrary.DataLayer
 {
-    public class UserDataLayer : IUserDataLayer, IDisposable
+    public class UserDataLayer : IUserDataLayer
     {
         private MyLibraryContext _context;
-        private bool disposed = false;
 
         public UserDataLayer(MyLibraryContext context)
         {
@@ -115,35 +114,6 @@ namespace MyLibrary.DataLayer
                          }
                      }).ToList()
                 }).ToList();
-        }
-
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-
-            disposed = true;
-        }
-
-        ~UserDataLayer()
-        {
-            Dispose(false);
         }
     }
 }

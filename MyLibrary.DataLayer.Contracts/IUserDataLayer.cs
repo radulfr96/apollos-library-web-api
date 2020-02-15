@@ -34,10 +34,5 @@ namespace MyLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="user">The user to be added</param>
         public void AddUser(User user);
-
-        /// <summary>
-        /// Used to save any changes made to data
-        /// </summary>
-        public void Save();
     }
 }
