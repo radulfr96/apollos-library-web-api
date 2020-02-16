@@ -144,6 +144,47 @@ namespace MyLibrary.Services
             return response;
         }
 
+        public BaseResponse UpdateUsername(UpdateUsernameRequest request, int userId)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var existingUsername = _userUnitOfWork.UserDataLayer.GetUserByUsername(request.NewUsername);
+
+                if (existingUsername != null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Username already exists");
+                    return response;
+                }
+
+                var user = _userUnitOfWork.UserDataLayer.GetUser(userId);
+
+                if (user == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Messages.Add($"Unable to find user with id [{userId}]");
+                    return response;
+                }
+
+                user.Username = request.NewUsername;
+                user.ModifiedDate = DateTime.Now;
+                user.ModifiedBy = request.NewUsername;
+
+                _userUnitOfWork.Save();
+
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to update username.");
+                response = new GetUserResponse();
+            }
+
+            return response;
+        }
+
         public GetUserResponse GetUserById(int id)
         {
             var response = new GetUserResponse();
