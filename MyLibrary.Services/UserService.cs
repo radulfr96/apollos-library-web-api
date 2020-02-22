@@ -130,6 +130,11 @@ namespace MyLibrary.Services
 
             try
             {
+                response = (UpdateUsernameResponse)request.ValidateRequest(response);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return response;
+
                 var existingUsername = _userUnitOfWork.UserDataLayer.GetUserByUsername(request.NewUsername);
 
                 if (existingUsername != null)
@@ -168,6 +173,50 @@ namespace MyLibrary.Services
             {
                 s_logger.Error(ex, "Unable to update username.");
                 response = new UpdateUsernameResponse();
+            }
+
+            return response;
+        }
+
+        public BaseResponse UpdatePassword(UpdatePasswordRequest request, int userId)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                response = request.ValidateRequest(response);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return response;
+
+                var user = _userUnitOfWork.UserDataLayer.GetUser(userId);
+
+                if (user == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Messages.Add($"Unable to find user with id [{userId}]");
+                    return response;
+                }
+
+                if (user.Password != HashPassword(request.Password, user.Salter))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Password is not correct");
+                    return response;
+                }
+
+                user.Password = HashPassword(request.Password, user.Salter);
+                user.ModifiedDate = DateTime.Now;
+                user.ModifiedBy = user.Username;
+
+                _userUnitOfWork.Save();
+
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to update username.");
+                response = new BaseResponse();
             }
 
             return response;

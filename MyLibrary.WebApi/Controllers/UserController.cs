@@ -40,6 +40,11 @@ namespace MyLibrary.WebApi.Controllers
             _userService = new UserService(new UserUnitOfWork(_dbContext), _configuration);
         }
 
+        /// <summary>
+        /// Used to add a new user to the database
+        /// </summary>
+        /// <param name="request">New user information</param>
+        /// <returns>Response that indicates the result</returns>
         [AllowAnonymous]
         [HttpPost("")]
         public IActionResult RegisterUser(RegisterUserRequest request)
@@ -60,7 +65,7 @@ namespace MyLibrary.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                s_logger.Error(ex, "Unable to login user.");
+                s_logger.Error(ex, "Unable to register user.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             return StatusCode(StatusCodes.Status500InternalServerError);
@@ -99,7 +104,46 @@ namespace MyLibrary.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                s_logger.Error(ex, "Unable to login user.");
+                s_logger.Error(ex, "Unable to update username.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        /// <summary>
+        /// Used to update the users username
+        /// </summary>
+        /// <param name="request">The update information</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPatch("")]
+        public IActionResult UpdatePassword(UpdatePasswordRequest request)
+        {
+            try
+            {
+                var userIdString = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value;
+
+                int? userId = int.Parse(userIdString);
+
+                if (!userId.HasValue)
+                {
+                    return Forbid();
+                }
+
+                var response = _userService.UpdatePassword(request, userId.Value);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to update password.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             return StatusCode(StatusCodes.Status500InternalServerError);
@@ -168,7 +212,7 @@ namespace MyLibrary.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                s_logger.Error(ex, "Unable to retreive users.");
+                s_logger.Error(ex, "Unable to check username.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -246,7 +290,7 @@ namespace MyLibrary.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                s_logger.Error(ex, "Unable to login user.");
+                s_logger.Error(ex, "Unable to get user info.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

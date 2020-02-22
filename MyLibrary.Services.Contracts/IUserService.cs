@@ -50,5 +50,12 @@ namespace MyLibrary.Services.Contracts
         /// <param name="userId">The id of the user to be updated</param>
         /// <returns>The response with the result information</returns>
         public UpdateUsernameResponse UpdateUsername(UpdateUsernameRequest request, int userId);
+
+        /// <summary>
+        /// Used to update to update the users password
+        /// </summary>
+        /// <param name="request">The infomration used to update the password</param>
+        /// <returns>The response used to indicate the result</returns>
+        public BaseResponse UpdatePassword(UpdatePasswordRequest request, int userId);
     }
 }
