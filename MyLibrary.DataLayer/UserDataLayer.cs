@@ -23,35 +23,7 @@ namespace MyLibrary.DataLayer
 
         public User GetUser(int id)
         {
-            return (
-            from u in _context.User
-            where u.UserId == id
-            select new User()
-            {
-                CreatedBy = u.CreatedBy,
-                CreatedDate = u.CreatedDate,
-                IsActive = u.IsActive,
-                ModifiedBy = u.ModifiedBy,
-                ModifiedDate = u.ModifiedDate,
-                Password = u.Password,
-                Salter = u.Salter,
-                UserId = u.UserId,
-                Username = u.Username,
-                UserRole =
-                (from ur in _context.UserRole
-                 join r in _context.Role on ur.RoleId equals r.RoleId
-                 where ur.UserId == u.UserId
-                 select new UserRole()
-                 {
-                     RoleId = r.RoleId,
-                     UserId = u.UserId,
-                     Role = new Role()
-                     {
-                         Name = r.Name,
-                         RoleId = r.RoleId
-                     }
-                 }).ToList()
-            }).FirstOrDefault();
+            return _context.User.Include("UserRole.Role").FirstOrDefault(u => u.UserId == id);
         }
 
         public User GetUserByUsername(string username)

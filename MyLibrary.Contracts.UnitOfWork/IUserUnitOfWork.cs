@@ -14,6 +14,11 @@ namespace MyLibrary.Contracts.UnitOfWork
         IUserDataLayer UserDataLayer { get; }
 
         /// <summary>
+        /// Data layer for roles
+        /// </summary>
+        IRoleDataLayer RoleDataLayer { get; }
+
+        /// <summary>
         /// Used to begin a transaction
         /// </summary>
         void Begin();

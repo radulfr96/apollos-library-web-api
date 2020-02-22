@@ -12,6 +12,7 @@ namespace MyLibrary.UnitOfWork
         private MyLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
         private IUserDataLayer _userDataLayer;
+        private IRoleDataLayer _roleDataLayer;
         private bool disposed = false;
 
         public UserUnitOfWork(MyLibraryContext dbContext)
@@ -28,6 +29,18 @@ namespace MyLibrary.UnitOfWork
                     _userDataLayer = new UserDataLayer(_dbContext);
                 }
                 return _userDataLayer;
+            }
+        }
+
+        public IRoleDataLayer RoleDataLayer
+        {
+            get
+            {
+                if (_roleDataLayer == null)
+                {
+                    _roleDataLayer = new RoleDataLayer(_dbContext);
+                }
+                return _roleDataLayer;
             }
         }
 

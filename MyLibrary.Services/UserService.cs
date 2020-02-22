@@ -76,34 +76,14 @@ namespace MyLibrary.Services
                 newUser.UserRole.Add(new UserRole()
                 {
                     UserId = newUser.UserId,
-                    RoleId = (int)RoleEnum.StandardUser
+                    RoleId = (int)RoleEnum.StandardUser,
+                    Role = _userUnitOfWork.RoleDataLayer.GetRole((int)RoleEnum.StandardUser)
                 });
 
                 _userUnitOfWork.UserDataLayer.AddUser(newUser);
                 _userUnitOfWork.Save();
 
-                var handler = new JwtSecurityTokenHandler();
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, newUser.Username),
-                    new Claim(ClaimTypes.Sid, newUser.UserId.ToString()),
-                    new Claim("JoinDate", newUser.CreatedDate.ToString())
-                };
-
-                var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
-
-                var identity = new ClaimsIdentity(claims);
-
-                var tokenDescriptor = new SecurityTokenDescriptor()
-                {
-                    Subject = identity,
-                    Expires = DateTime.Now.AddMonths(3),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                };
-
-                var rawToken = handler.CreateJwtSecurityToken(tokenDescriptor);
-                response.Token = handler.WriteToken(rawToken);
+                response.Token = GetToken(newUser);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
@@ -144,9 +124,9 @@ namespace MyLibrary.Services
             return response;
         }
 
-        public BaseResponse UpdateUsername(UpdateUsernameRequest request, int userId)
+        public UpdateUsernameResponse UpdateUsername(UpdateUsernameRequest request, int userId)
         {
-            var response = new BaseResponse();
+            var response = new UpdateUsernameResponse();
 
             try
             {
@@ -168,18 +148,26 @@ namespace MyLibrary.Services
                     return response;
                 }
 
+                if (user.Password != HashPassword(request.Password, user.Salter))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Password is not correct");
+                    return response;
+                }
+
                 user.Username = request.NewUsername;
                 user.ModifiedDate = DateTime.Now;
                 user.ModifiedBy = request.NewUsername;
 
                 _userUnitOfWork.Save();
 
+                response.Token = GetToken(user);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
                 s_logger.Error(ex, "Unable to update username.");
-                response = new GetUserResponse();
+                response = new UpdateUsernameResponse();
             }
 
             return response;
@@ -266,33 +254,7 @@ namespace MyLibrary.Services
                     return response;
                 }
 
-                var handler = new JwtSecurityTokenHandler();
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Sid, user.UserId.ToString()),
-                    new Claim("JoinDate", user.CreatedDate.ToString())
-                };
-
-                foreach (UserRole userRole in user.UserRole)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
-                }
-
-                var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
-
-                var identity = new ClaimsIdentity(claims);
-
-                var tokenDescriptor = new SecurityTokenDescriptor()
-                {
-                    Subject = identity,
-                    Expires = DateTime.Now.AddMonths(3),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                };
-
-                var rawToken = handler.CreateJwtSecurityToken(tokenDescriptor);
-                response.Token = handler.WriteToken(rawToken);
+                response.Token = GetToken(user);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
@@ -302,6 +264,32 @@ namespace MyLibrary.Services
             }
 
             return response;
+        }
+
+        private string GetToken(User user)
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Sid, user.UserId.ToString()),
+                    new Claim("JoinDate", user.CreatedDate.ToString())
+                };
+
+            var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
+
+            var identity = new ClaimsIdentity(claims);
+
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = identity,
+                Expires = DateTime.Now.AddMonths(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            };
+
+            var rawToken = handler.CreateJwtSecurityToken(tokenDescriptor);
+            return handler.WriteToken(rawToken);
         }
 
         private UserDTO DAO2DTO(User user)

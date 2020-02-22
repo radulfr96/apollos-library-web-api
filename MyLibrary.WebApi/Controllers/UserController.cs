@@ -67,6 +67,45 @@ namespace MyLibrary.WebApi.Controllers
         }
 
         /// <summary>
+        /// Used to update the users username
+        /// </summary>
+        /// <param name="request">The update information</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPatch("")]
+        public IActionResult UpdateUsername(UpdateUsernameRequest request)
+        {
+            try
+            {
+                var userIdString = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value;
+
+                int? userId = int.Parse(userIdString);
+
+                if (!userId.HasValue)
+                {
+                    return Forbid();
+                }
+
+                var response = _userService.UpdateUsername(request, userId.Value);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                          return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to login user.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        /// <summary>
         /// Used to get all users
         /// </summary>
         /// <returns>The get all users response</returns>
@@ -201,7 +240,6 @@ namespace MyLibrary.WebApi.Controllers
                 {
                     response.JoinDate = DateTime.Parse(dateString);
                 }
-
 
                 response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);

@@ -42,5 +42,13 @@ namespace MyLibrary.Services.Contracts
         /// <param name="username">The username to be checked</param>
         /// <returns>The response with the result</returns>
         public UsernameCheckResponse UsernameCheck(string username);
+
+        /// <summary>
+        /// Used to update the users username
+        /// </summary>
+        /// <param name="request">The update information</param>
+        /// <param name="userId">The id of the user to be updated</param>
+        /// <returns>The response with the result information</returns>
+        public UpdateUsernameResponse UpdateUsername(UpdateUsernameRequest request, int userId);
     }
 }

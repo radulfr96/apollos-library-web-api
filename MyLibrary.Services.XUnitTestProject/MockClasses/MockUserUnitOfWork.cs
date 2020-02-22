@@ -10,11 +10,21 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
     {
         public IUserDataLayer MockUserDataLayer { get; set; }
 
+        public IRoleDataLayer MockRoleDataLayer { get; set; }
+
         public IUserDataLayer UserDataLayer
         {
             get
             {
                 return MockUserDataLayer;
+            }
+        }
+
+        public IRoleDataLayer RoleDataLayer 
+        {
+            get
+            {
+                return MockRoleDataLayer;
             }
         }
 

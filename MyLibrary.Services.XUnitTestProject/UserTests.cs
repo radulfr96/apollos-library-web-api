@@ -357,8 +357,10 @@ namespace MyLibrary.Services.XUnitTestProject
         public void RegsiterUserSuccess()
         {
             var userDataLayer = new MockUserDataLayer();
+            var roleDataLayer = new MockRoleDataLayer();
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
+            mockUserUnitOfWork.MockRoleDataLayer = roleDataLayer;
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
@@ -509,6 +511,181 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
             Assert.True(response.Messages[0] == "Password is not strong enough");
+        }
+
+        [Fact]
+        public void UpdateUsernameFailNewUsernameTaken()
+        {
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var mockUserDataLayer = new MockUserDataLayer();
+            mockUserDataLayer.Users = new List<User>()
+            {
+                new User()
+                {
+                    CreatedBy = "UnitTest",
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = "TestPassword",
+                    Salter = "TestSalt",
+                    UserId = 1,
+                    Username = "OriginalUser"
+                },
+                new User()
+                {
+                    CreatedBy = "UnitTest",
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = "TestPass",
+                    Salter = "TestPast",
+                    UserId = 2,
+                    Username = "TestUser",
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
+            mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var response = service.UpdateUsername(new UpdateUsernameRequest()
+            {
+                NewUsername = "OriginalUser",
+                Password = "TestPass"
+            }, 2);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Username already exists");
+        }
+
+        [Fact]
+        public void UpdateUsernameFailUserNotFound()
+        {
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var mockUserDataLayer = new MockUserDataLayer();
+            mockUserDataLayer.Users = new List<User>()
+            {
+                new User()
+                {
+                    CreatedBy = "UnitTest",
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = "TestPassword",
+                    Salter = "TestSalt",
+                    UserId = 1,
+                    Username = "OriginalUser"
+                },
+                new User()
+                {
+                    CreatedBy = "UnitTest",
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = "TestPass",
+                    Salter = "TestPast",
+                    UserId = 2,
+                    Username = "TestUser",
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
+            mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var response = service.UpdateUsername(new UpdateUsernameRequest()
+            {
+                NewUsername = "NewUsername",
+                Password = "TestPass"
+            }, 4);
+
+            Assert.True(response.StatusCode == HttpStatusCode.NotFound);
+            Assert.True(response.Messages[0] == "Unable to find user with id [4]");
+        }
+
+        [Fact]
+        public void UpdateUsernameFailWrongPassword()
+        {
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var mockUserDataLayer = new MockUserDataLayer();
+            mockUserDataLayer.Users = new List<User>()
+            {
+                new User()
+                {
+                    CreatedBy = "UnitTest",
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = "TestPassword",
+                    Salter = "TestSalt",
+                    UserId = 1,
+                    Username = "OriginalUser"
+                },
+                new User()
+                {
+                    CreatedBy = "UnitTest",
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    Password = "TestPass",
+                    Salter = "TestPast",
+                    UserId = 2,
+                    Username = "TestUser",
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
+            mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var response = service.UpdateUsername(new UpdateUsernameRequest()
+            {
+                NewUsername = "NewUsername",
+                Password = "TestPasscdvd"
+            }, 2);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not correct");
+        }
+
+        [Fact]
+        public void UpdateUsernamePass()
+        {
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var mockUserDataLayer = new MockUserDataLayer();
+
+            var user1 = new User()
+            {
+                CreatedBy = "UnitTest",
+                CreatedDate = DateTime.Now,
+                IsActive = true,
+                Password = "TestPassword",
+                Salter = "TestSalt",
+                UserId = 1,
+                Username = "OriginalUser"
+            };
+
+            var user2 = new User()
+            {
+                CreatedBy = "UnitTest",
+                CreatedDate = DateTime.Now,
+                IsActive = true,
+                Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 2,
+                Username = "TestUser",
+            };
+
+            mockUserDataLayer.Users = new List<User>();
+            mockUserDataLayer.Users.Add(user1);
+            mockUserDataLayer.Users.Add(user2);
+
+            mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
+            mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+
+            var request = new UpdateUsernameRequest()
+            {
+                NewUsername = "NewUsername",
+                Password = "TestPassword1"
+            };
+
+            var response = service.UpdateUsername(request, 2);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(user2.Username == request.NewUsername);
+            Assert.True(user2.ModifiedBy == request.NewUsername);
         }
     }
 }
