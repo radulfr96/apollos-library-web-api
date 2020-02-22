@@ -326,6 +326,11 @@ namespace MyLibrary.Services
                     new Claim("JoinDate", user.CreatedDate.ToString())
                 };
 
+            foreach (var userRole in user.UserRole)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            }
+
             var key = Encoding.ASCII.GetBytes(_configuration.GetValue(typeof(string), "TokenKey").ToString());
 
             var identity = new ClaimsIdentity(claims);

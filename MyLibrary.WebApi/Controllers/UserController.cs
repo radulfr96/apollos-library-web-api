@@ -76,7 +76,7 @@ namespace MyLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">The update information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPatch("")]
+        [HttpPatch("username")]
         public IActionResult UpdateUsername(UpdateUsernameRequest request)
         {
             try
@@ -115,7 +115,7 @@ namespace MyLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">The update information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPatch("")]
+        [HttpPatch("password")]
         public IActionResult UpdatePassword(UpdatePasswordRequest request)
         {
             try
