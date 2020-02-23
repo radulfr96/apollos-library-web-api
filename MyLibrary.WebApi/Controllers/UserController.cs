@@ -188,6 +188,44 @@ namespace MyLibrary.WebApi.Controllers
         }
 
         /// <summary>
+        /// Used to delete a user
+        /// </summary>
+        /// <returns>A response indicating the result</returns>
+        [HttpPatch("deactivate")]
+        public IActionResult DeactivateUser()
+        {
+            try
+            {
+                var userIdString = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value;
+
+                int? userId = int.Parse(userIdString);
+
+                if (!userId.HasValue)
+                {
+                    return Forbid();
+                }
+
+                var response = _userService.DeactivateUser(userId.Value);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to deactive user.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        /// <summary>
         /// Used to get all users
         /// </summary>
         /// <returns>The get all users response</returns>

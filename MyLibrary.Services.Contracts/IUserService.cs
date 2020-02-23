@@ -64,5 +64,12 @@ namespace MyLibrary.Services.Contracts
         /// <param name="id">The id of the user to be deleted</param>
         /// <returns>Response that indicates the result</returns>
         public BaseResponse DeleteUser(int id);
+
+        /// <summary>
+        /// Used to deactive a user
+        /// </summary>
+        /// <param name="id">The id of the user to be deactivated</param>
+        /// <returns>Response that indicates the result</returns>
+        public BaseResponse DeactivateUser(int id);
     }
 }
