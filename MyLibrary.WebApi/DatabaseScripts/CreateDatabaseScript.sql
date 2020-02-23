@@ -18,6 +18,7 @@ CREATE TABLE [Users].[User]
 	[Password] TEXT NOT NULL,
 	[Salter] TEXT NOT NULL,
 	[IsActive] BIT NOT NULL,
+	[IsDeleted] BIT NOT NULL,
 	[CreatedDate] DATETIME NOT NULL,
 	[CreatedBy] VARCHAR(20) NOT NULL,
 	[ModifiedDate] DATETIME,
@@ -25,8 +26,8 @@ CREATE TABLE [Users].[User]
 	CONSTRAINT PK_User PRIMARY KEY (UserID)
 )
 
-INSERT INTO [Users].[User] ([Username], [Password], [Salter], [CreatedDate], [CreatedBy], [IsActive])
-VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1)
+INSERT INTO [Users].[User] ([Username], [Password], [Salter], [CreatedDate], [CreatedBy], [IsActive], [IsDeleted])
+VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1, 1)
 
 SELECT @UserID = U.UserID
 FROM Users.[User] U
@@ -75,7 +76,3 @@ PRINT ('RoleID - ' + + CONVERT(VARCHAR(5), @AdminRoleID))
 
 INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
 VALUES (@UserID, @AdminRoleID)
-
-
-USE MASTER
-DROP DATABASE MyLibrary

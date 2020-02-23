@@ -222,6 +222,37 @@ namespace MyLibrary.Services
             return response;
         }
 
+        public BaseResponse DeleteUser(int id)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var user = _userUnitOfWork.UserDataLayer.GetUser(id);
+
+                if (user == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Messages.Add($"Unable to delete user with id [{id}]");
+                    return response;
+                }
+
+                user.IsDeleted = true;
+                user.Username = "Deleted";
+
+                _userUnitOfWork.Save();
+
+                response.StatusCode = HttpStatusCode.OK; 
+
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to delete user.");
+                response = new BaseResponse();
+            }
+            return response;
+        }
+
         public GetUserResponse GetUserById(int id)
         {
             var response = new GetUserResponse();

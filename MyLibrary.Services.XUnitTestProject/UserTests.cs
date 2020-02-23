@@ -1064,5 +1064,61 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
         }
+
+        [Fact]
+        public void DeleteUserFailNotFound()
+        {
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    new User()
+                    {
+                        CreatedBy = "UnitTest",
+                        CreatedDate = DateTime.Now,
+                        IsActive = true,
+                        Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
+                        Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                        UserId = 1,
+                        Username = "TestUser"
+                    },
+                }
+            };
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var response = service.DeleteUser(2);
+
+            Assert.True(response.StatusCode == HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public void DeleteUserPass()
+        {
+            User user = new User()
+            {
+                CreatedBy = "UnitTest",
+                CreatedDate = DateTime.Now,
+                IsActive = true,
+                Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUser"
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    user,
+                }
+            };
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var response = service.DeleteUser(1);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(user.IsDeleted);
+            Assert.True(user.Username == "Deleted");
+        }
     }
 }
