@@ -37,6 +37,7 @@ namespace MyLibrary.Data.Model
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
             });
@@ -45,17 +46,31 @@ namespace MyLibrary.Data.Model
             {
                 entity.ToTable("User", "Users");
 
-                entity.HasIndex(e => e.Username)
-                    .HasName("UQ__User__536C85E4AB738C21")
-                    .IsUnique();
-
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
-                entity.Property(e => e.Password).HasColumnType("text");
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Salter).HasColumnType("text");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                entity.Property(e => e.Salter)
+                    .IsRequired()
+                    .HasColumnType("text");
 
                 entity.Property(e => e.Username)
+                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
             });
@@ -64,9 +79,7 @@ namespace MyLibrary.Data.Model
             {
                 entity.ToTable("UserRole", "Users");
 
-                entity.Property(e => e.UserRoleId)
-                    .HasColumnName("UserRoleID")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
@@ -75,11 +88,12 @@ namespace MyLibrary.Data.Model
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRoleRole");
 
-                entity.HasOne(d => d.UserRoleNavigation)
-                    .WithOne(p => p.UserRole)
-                    .HasForeignKey<UserRole>(d => d.UserRoleId)
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserRole)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRoleUser");
             });

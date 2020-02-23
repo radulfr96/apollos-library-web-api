@@ -1,0 +1,17 @@
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.deps.json
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.Data.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.DataLayer.Contracts.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.DataLayer.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.Contracts.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.Contracts.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.DataLayer.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.Data.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\bin\Debug\netcoreapp3.1\MyLibrary.DataLayer.Contracts.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.csprojAssemblyReference.cache
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.AssemblyInfoInputs.cache
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.AssemblyInfo.cs
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.csproj.CopyComplete
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.dll
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.pdb
