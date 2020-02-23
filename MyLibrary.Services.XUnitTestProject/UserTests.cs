@@ -222,7 +222,7 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
-        public void LoginUserSuccess()
+        public void LoginUserSuccessActive()
         {
             var userDataLayer = new MockUserDataLayer()
             {
@@ -252,6 +252,41 @@ namespace MyLibrary.Services.XUnitTestProject
             });
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.False(string.IsNullOrEmpty(response.Token));
+        }
+
+        [Fact]
+        public void LoginUserSuccessReActivate()
+        {
+            var userDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    new User()
+                    {
+                        CreatedBy = "Users Unit Test",
+                        CreatedDate = DateTime.Now,
+                        IsActive = false,
+                        Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
+                        Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                        UserId = 1,
+                        Username = "TestUser"
+                    }
+                }
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
+
+            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var response = service.Login(new LoginRequest()
+            {
+                Username = "TestUser",
+                Password = "TestPassword1"
+            });
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(userDataLayer.Users[0].IsActive);
             Assert.False(string.IsNullOrEmpty(response.Token));
         }
 

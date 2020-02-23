@@ -303,6 +303,12 @@ namespace MyLibrary.Services
                     return response;
                 }
 
+                if (!user.IsActive)
+                {
+                    user.IsActive = true;
+                    _userUnitOfWork.Save();
+                }
+
                 response.Token = GetToken(user);
                 response.StatusCode = HttpStatusCode.OK;
             }
