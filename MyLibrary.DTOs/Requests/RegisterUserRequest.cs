@@ -15,7 +15,7 @@ namespace MyLibrary.Common.Requests
         public string Password { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide your confirmation password")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmationPassword { get; set; }
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -26,7 +26,7 @@ namespace MyLibrary.Common.Requests
                 results.Add(new ValidationResult("Password is not strong enough"));
             }
 
-            if (Password != ConfirmPassword)
+            if (Password != ConfirmationPassword)
             {
                 results.Add(new ValidationResult("Password do not match"));
             }
