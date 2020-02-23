@@ -35,6 +35,7 @@ namespace MyLibrary.DataLayer
         {
             return (
                 from u in _context.User
+                where !u.IsDeleted
                 select new User()
                 {
                     CreatedBy = u.CreatedBy,
