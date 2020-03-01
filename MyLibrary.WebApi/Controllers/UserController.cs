@@ -47,7 +47,7 @@ namespace MyLibrary.WebApi.Controllers
         /// <returns>Response that indicates the result</returns>
         [AllowAnonymous]
         [HttpPost("")]
-        public IActionResult RegisterUser(RegisterUserRequest request)
+        public IActionResult RegisterUser([FromBody] RegisterUserRequest request)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace MyLibrary.WebApi.Controllers
         /// <param name="request">The update information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("username")]
-        public IActionResult UpdateUsername(UpdateUsernameRequest request)
+        public IActionResult UpdateUsername([FromBody] UpdateUsernameRequest request)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace MyLibrary.WebApi.Controllers
         /// <param name="request">The update information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("password")]
-        public IActionResult UpdatePassword(UpdatePasswordRequest request)
+        public IActionResult UpdatePassword([FromBody] UpdatePasswordRequest request)
         {
             try
             {
@@ -265,8 +265,8 @@ namespace MyLibrary.WebApi.Controllers
         /// </summary>
         /// <returns>The get result</returns>
         [AllowAnonymous]
-        [HttpGet("{username}")]
-        public IActionResult CheckUsernameTaken(string username)
+        [HttpGet("check/{username}")]
+        public IActionResult CheckUsernameTaken([FromRoute] string username)
         {
             try
             {
@@ -323,6 +323,42 @@ namespace MyLibrary.WebApi.Controllers
             catch (Exception ex)
             {
                 s_logger.Error(ex, "Unable to login user.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Used to get the information of the user with the id received
+        /// </summary>
+        /// <param name="id">the id of the user to be found</param>
+        /// <returns>The response with the result</returns>
+        [HttpGet("{id}")]
+        public IActionResult GetUser([FromRoute] int id)
+        {
+            if (!IsAdmin())
+                return Forbid();
+
+            try
+            {
+                var response = _userService.GetUserById(id);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.NotFound:
+                        return NotFound();
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to find user.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

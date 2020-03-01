@@ -242,7 +242,7 @@ namespace MyLibrary.Services
 
                 _userUnitOfWork.Save();
 
-                response.StatusCode = HttpStatusCode.OK; 
+                response.StatusCode = HttpStatusCode.OK;
 
             }
             catch (Exception ex)
@@ -298,6 +298,15 @@ namespace MyLibrary.Services
                     return response;
                 }
 
+                response.Roles = new List<RoleDTO>();
+                foreach (var role in _userUnitOfWork.RoleDataLayer.GetRoles())
+                {
+                    response.Roles.Add(new RoleDTO()
+                    {
+                        Name = role.Name,
+                        RoleId = role.RoleId
+                    });
+                }
                 response.User = DAO2DTO(user);
                 response.StatusCode = HttpStatusCode.OK;
             }

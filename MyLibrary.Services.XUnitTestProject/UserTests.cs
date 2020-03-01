@@ -398,7 +398,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword1",
+                ConfirmationPassword = "TestPassword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -430,7 +430,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword1",
+                ConfirmationPassword = "TestPassword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -448,7 +448,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPaword1",
+                ConfirmationPassword = "TestPaword1",
                 Username = "",
                 Password = "TestPassword1",
             });
@@ -466,7 +466,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPaword1",
+                ConfirmationPassword = "TestPaword1",
                 Username = "TestUser",
                 Password = "",
             });
@@ -484,7 +484,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "",
+                ConfirmationPassword = "",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -503,7 +503,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPaword1",
+                ConfirmationPassword = "TestPaword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -521,7 +521,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "Teord1",
+                ConfirmationPassword = "Teord1",
                 Username = "TestUser",
                 Password = "Teord1",
             });
@@ -538,7 +538,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var service = new UserService(mockUserUnitOfWork, Configuration);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword",
+                ConfirmationPassword = "TestPassword",
                 Username = "TestUser",
                 Password = "TestPassword",
             });
