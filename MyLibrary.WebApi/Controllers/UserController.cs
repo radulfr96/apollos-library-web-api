@@ -37,7 +37,7 @@ namespace MyLibrary.WebApi.Controllers
             _dbContext = dbContext;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-            _userService = new UserService(new UserUnitOfWork(_dbContext), _configuration);
+            _userService = new UserService(new UserUnitOfWork(_dbContext), _configuration, User);
         }
 
         /// <summary>
