@@ -36,5 +36,10 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
         {
             return Users;
         }
+
+        public void ClearUserRoles(User user)
+        {
+            user.UserRole.Clear();
+        }
     }
 }

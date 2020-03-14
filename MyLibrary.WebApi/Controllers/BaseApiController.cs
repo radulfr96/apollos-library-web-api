@@ -48,7 +48,7 @@ namespace MyLibrary.WebApi.Controllers
             return message;
         }
 
-        protected bool IsAdmin()
+        protected bool UserIsAdmin()
         {
             bool result = false;
             try

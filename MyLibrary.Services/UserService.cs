@@ -25,7 +25,7 @@ namespace MyLibrary.Services
     {
         private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly IConfiguration _configuration;
-        private readonly ClaimsPrincipal _principal; 
+        private readonly ClaimsPrincipal _principal;
 
         protected static Logger s_logger = LogManager.GetCurrentClassLogger();
 
@@ -133,8 +133,19 @@ namespace MyLibrary.Services
 
             try
             {
+                response = request.ValidateRequest(response);
+
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                     return response;
+
+                var userWithUsername = _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
+
+                if (userWithUsername != null && request.UserID != userWithUsername.UserId)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Username is already taken");
+                    return response;
+                }
 
                 var user = _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
 
@@ -147,20 +158,23 @@ namespace MyLibrary.Services
                 }
 
                 user.Username = request.Username;
-                
-                if (!string.IsNullOrEmpty(user.Password))
+
+                if (!string.IsNullOrEmpty(request.Password))
                 {
                     user.Password = HashPassword(request.Password, user.Salter);
                 }
+
                 user.ModifiedBy = _principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
                 user.ModifiedDate = DateTime.Now;
-                
+
+                _userUnitOfWork.UserDataLayer.ClearUserRoles(user);
+
                 foreach (var role in request.Roles)
                 {
                     user.UserRole.Add(new UserRole()
                     {
-                        UserId = request.UserID,
                         RoleId = role.RoleId,
+                        UserId = user.UserId,
                     });
                 }
 

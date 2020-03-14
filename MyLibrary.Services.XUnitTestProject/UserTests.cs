@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
 using MyLibrary.Common.Requests;
 using MyLibrary.Data.Model;
@@ -23,13 +24,15 @@ namespace MyLibrary.Services.XUnitTestProject
 
             var configBuilder = new ConfigurationBuilder().AddInMemoryCollection(new List<KeyValuePair<string, string>>()
             {
-                new KeyValuePair<string, string>("TokenKey", "TestKjKAFOJPF\\466484dsvsfhiuehefhoipjejfopkepojfOPJFAEFJLEAJFMLJ3PR0-OFEikrokdey1"),
+                new KeyValuePair<string, string>("TokenKey", "TestKjKAFOJPF466484dsvsfhiuehefhoipjejfopkepojfOPJFAEFJLEAJFMLJ3PR0-OFEikrokdey1"),
             });
 
             Configuration = configBuilder.Build();
 
-            MockPrincipal = new ClaimsPrincipal();
-            MockPrincipal.Claims.Append(new Claim(ClaimTypes.Name, "Test User"));
+            MockPrincipal = new TestPrincipal(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "Test User"),
+            });
         }
 
         [Fact]
@@ -1046,32 +1049,37 @@ namespace MyLibrary.Services.XUnitTestProject
         [Fact]
         public void UpdatePasswordPass()
         {
+            User testUser = new User()
+            {
+                CreatedBy = "UnitTest",
+                CreatedDate = DateTime.Now,
+                IsActive = true,
+                Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUser"
+            };
+
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
             {
                 Users = new List<User>()
                 {
-                    new User()
-                    {
-                        CreatedBy = "UnitTest",
-                        CreatedDate = DateTime.Now,
-                        IsActive = true,
-                        Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
-                        Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                        UserId = 1,
-                        Username = "TestUser"
-                    },
+                    testUser
                 }
             };
             var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
-            var response = service.UpdatePassword(new UpdatePasswordRequest()
+            var request = new UpdatePasswordRequest()
             {
                 NewPassword = "NewPassword1",
                 NewPasswordConfirmation = "NewPassword1",
                 Password = "TestPassword1",
-            }, 1);
+            };
+
+            var response = service.UpdatePassword(request, 1);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
         }
 
         [Fact]
@@ -1096,8 +1104,8 @@ namespace MyLibrary.Services.XUnitTestProject
                 CreatedDate = new DateTime(),
                 IsActive = true,
                 IsDeleted = false,
-                Password = "TestPassword1",
-                Salter = "TestSalt12345",
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
                 UserId = 1,
                 Username = "TestUsr",
                 UserRole = new List<UserRole>()
@@ -1141,10 +1149,586 @@ namespace MyLibrary.Services.XUnitTestProject
             var response = service.UpdateUser(request);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
-            Assert.True(testUser.Password != request.Password);
+            Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
             Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
             Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
+        }
 
+        [Fact]
+        public void UpdateUserSuccessSameUsername()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUser",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
+            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
+        }
+
+        [Fact]
+        public void UpdateUserSuccessNoPasswordChange()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUsr",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
+        }
+
+        [Fact]
+        public void UpdateUserFailNoUsername()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "User must have a username");
+        }
+
+        [Fact]
+        public void UpdateUserFailUsernameTaken()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            var testUser2 = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername2",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole2
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                    testUser2,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "Testusername2",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Username is already taken");
+        }
+
+        [Fact]
+        public void UpdateUserFailNoRole()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUsername",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "User must have a role");
+        }
+
+        [Fact]
+        public void UpdateUserFailWeakPasswordNoNumbers()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "TestPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword",
+                Password = "TestPassword",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not strong enough");
+        }
+
+        [Fact]
+        public void UpdateUserFailWeakPasswordTooShort()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "TestPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "Pwrd1",
+                Password = "Pwrd1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not strong enough");
+        }
+
+        [Fact]
+        public void UpdateUserFailPasswordMismatch()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "TestPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword2",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password do not match");
         }
 
         [Fact]
@@ -1256,6 +1840,16 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.False(user.IsActive);
+        }
+
+        private string HashPassword(string password, string salt)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: Convert.FromBase64String(salt),
+                prf: KeyDerivationPrf.HMACSHA512,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
         }
     }
 }

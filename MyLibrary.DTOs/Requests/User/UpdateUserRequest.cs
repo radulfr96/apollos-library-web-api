@@ -17,6 +17,11 @@ namespace MyLibrary.Common.Requests
         [MinLength(1, ErrorMessage = "User must have a role")]
         public List<RoleDTO> Roles { get; set; }
 
+        public UpdateUserRequest()
+        {
+            Roles = new List<RoleDTO>();
+        }
+
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();

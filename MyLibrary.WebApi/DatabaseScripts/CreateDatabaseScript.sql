@@ -1,3 +1,7 @@
+USE [master]
+
+DROP DATABASE MyLibrary
+
 CREATE DATABASE MyLibrary
 GO
 
@@ -76,3 +80,39 @@ PRINT ('RoleID - ' + + CONVERT(VARCHAR(5), @AdminRoleID))
 
 INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
 VALUES (@UserID, @AdminRoleID)
+GO
+
+CREATE SCHEMA [Genre]
+GO
+
+CREATE TABLE [Genre].[Genre]
+(
+	[GenreID] INT IDENTITY,
+	[Name] VARCHAR(50) NOT NULL,
+	[CreateDate] DATETIME NOT NULL,
+	[CreatedBy] VARCHAR(500),
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] VARCHAR(500),
+	CONSTRAINT PK_Genre PRIMARY KEY (GenreID),
+)
+GO
+
+CREATE SCHEMA [Book]
+GO
+
+CREATE TABLE [Book].[Book]
+(
+	[ISBN] VARCHAR(12) PRIMARY KEY,
+	[Name] VARCHAR(200) NOT NULL,
+)
+
+CREATE TABLE [Book].[BookGenre]
+(
+	[GenreID] INT,
+	ISBN VARCHAR(12),
+	CONSTRAINT PK_BookGenre PRIMARY KEY (GenreID, ISBN),
+	CONSTRAINT FK_BookGenreGenre FOREIGN KEY (GenreID)
+	REFERENCES [Genre].[Genre] (GenreID),
+	CONSTRAINT FK_BookGenreBook FOREIGN KEY (ISBN)
+	REFERENCES [Book].[Book] (ISBN)
+)
