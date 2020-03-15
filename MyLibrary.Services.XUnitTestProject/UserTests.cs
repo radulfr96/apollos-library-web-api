@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
 using MyLibrary.Common.Requests;
 using MyLibrary.Data.Model;
@@ -5,7 +6,9 @@ using MyLibrary.Services.XUnitTestProject.MockClasses;
 using MyLibrary.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using Xunit;
 
 namespace MyLibrary.Services.XUnitTestProject
@@ -14,15 +17,22 @@ namespace MyLibrary.Services.XUnitTestProject
     {
         private IConfiguration Configuration { get; set; }
 
+        private ClaimsPrincipal MockPrincipal;
+
         public UserTests()
         {
 
             var configBuilder = new ConfigurationBuilder().AddInMemoryCollection(new List<KeyValuePair<string, string>>()
             {
-                new KeyValuePair<string, string>("TokenKey", "TestKjKAFOJPF\\466484dsvsfhiuehefhoipjejfopkepojfOPJFAEFJLEAJFMLJ3PR0-OFEikrokdey1"),
+                new KeyValuePair<string, string>("TokenKey", "TestKjKAFOJPF466484dsvsfhiuehefhoipjejfopkepojfOPJFAEFJLEAJFMLJ3PR0-OFEikrokdey1"),
             });
 
             Configuration = configBuilder.Build();
+
+            MockPrincipal = new TestPrincipal(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "Test User"),
+            });
         }
 
         [Fact]
@@ -62,7 +72,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = dataLayer;
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
 
             var response = service.GetUsers();
 
@@ -77,7 +87,7 @@ namespace MyLibrary.Services.XUnitTestProject
         public void GetUsersNotFound()
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
             var response = service.GetUsers();
 
@@ -107,7 +117,7 @@ namespace MyLibrary.Services.XUnitTestProject
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
 
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UsernameCheck("TestUser");
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
@@ -119,7 +129,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.GetUsers();
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
@@ -147,7 +157,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UsernameCheck("TeUser");
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
@@ -158,6 +168,7 @@ namespace MyLibrary.Services.XUnitTestProject
         public void GetUserByIdSuccess()
         {
             var userDataLayer = new MockUserDataLayer();
+            var roleDataLayer = new MockRoleDataLayer();
             userDataLayer.Users = new List<User>()
             {
                 new User()
@@ -174,8 +185,9 @@ namespace MyLibrary.Services.XUnitTestProject
 
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
+            mockUserUnitOfWork.MockRoleDataLayer = roleDataLayer;
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.GetUserById(1);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
@@ -187,7 +199,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.GetUserById(-1);
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
@@ -214,7 +226,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.GetUserById(2);
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
@@ -244,7 +256,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Login(new LoginRequest()
             {
                 Username = "TestUser",
@@ -278,7 +290,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Login(new LoginRequest()
             {
                 Username = "TestUser",
@@ -310,7 +322,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = dataLayer;
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Login(new LoginRequest()
             {
                 Username = "TestUse",
@@ -342,7 +354,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = dataLayer;
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Login(new LoginRequest()
             {
                 Username = "TestUse",
@@ -357,7 +369,7 @@ namespace MyLibrary.Services.XUnitTestProject
         public void LoginUserFailMissingUsername()
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Login(new LoginRequest()
             {
                 Username = "",
@@ -375,7 +387,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var userDataLayer = new MockUserDataLayer();
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Login(new LoginRequest()
             {
                 Username = "TestUsername1",
@@ -395,10 +407,10 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = roleDataLayer;
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword1",
+                ConfirmationPassword = "TestPassword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -427,10 +439,10 @@ namespace MyLibrary.Services.XUnitTestProject
 
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = userDataLayer;
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword1",
+                ConfirmationPassword = "TestPassword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -445,10 +457,10 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPaword1",
+                ConfirmationPassword = "TestPaword1",
                 Username = "",
                 Password = "TestPassword1",
             });
@@ -463,10 +475,10 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPaword1",
+                ConfirmationPassword = "TestPaword1",
                 Username = "TestUser",
                 Password = "",
             });
@@ -481,10 +493,10 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "",
+                ConfirmationPassword = "",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -500,10 +512,10 @@ namespace MyLibrary.Services.XUnitTestProject
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
 
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPaword1",
+                ConfirmationPassword = "TestPaword1",
                 Username = "TestUser",
                 Password = "TestPassword1",
             });
@@ -518,10 +530,10 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "Teord1",
+                ConfirmationPassword = "Teord1",
                 Username = "TestUser",
                 Password = "Teord1",
             });
@@ -535,10 +547,10 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.Register(new RegisterUserRequest()
             {
-                ConfirmPassword = "TestPassword",
+                ConfirmationPassword = "TestPassword",
                 Username = "TestUser",
                 Password = "TestPassword",
             });
@@ -578,7 +590,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdateUsername(new UpdateUsernameRequest()
             {
                 Password = "TestPass"
@@ -628,7 +640,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdateUsername(new UpdateUsernameRequest()
             {
                 NewUsername = "NewUser"
@@ -677,7 +689,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdateUsername(new UpdateUsernameRequest()
             {
                 NewUsername = "OriginalUser",
@@ -719,7 +731,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdateUsername(new UpdateUsernameRequest()
             {
                 NewUsername = "NewUsername",
@@ -761,7 +773,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdateUsername(new UpdateUsernameRequest()
             {
                 NewUsername = "NewUsername",
@@ -806,7 +818,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
 
             var request = new UpdateUsernameRequest()
             {
@@ -855,7 +867,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
 
             var request = new UpdatePasswordRequest()
             {
@@ -909,7 +921,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
 
             var request = new UpdatePasswordRequest()
             {
@@ -963,7 +975,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
 
             var request = new UpdatePasswordRequest()
             {
@@ -988,7 +1000,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdatePassword(new UpdatePasswordRequest()
             {
                 NewPasswordConfirmation = "Pass1",
@@ -1005,7 +1017,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdatePassword(new UpdatePasswordRequest()
             {
                 NewPassword = "NewPassword",
@@ -1022,7 +1034,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer();
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.UpdatePassword(new UpdatePasswordRequest()
             {
                 NewPassword = "NewPassword1",
@@ -1037,32 +1049,686 @@ namespace MyLibrary.Services.XUnitTestProject
         [Fact]
         public void UpdatePasswordPass()
         {
+            User testUser = new User()
+            {
+                CreatedBy = "UnitTest",
+                CreatedDate = DateTime.Now,
+                IsActive = true,
+                Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUser"
+            };
+
             var mockUserUnitOfWork = new MockUserUnitOfWork();
             mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
             {
                 Users = new List<User>()
                 {
-                    new User()
-                    {
-                        CreatedBy = "UnitTest",
-                        CreatedDate = DateTime.Now,
-                        IsActive = true,
-                        Password = "U5Suy6JmLuYeztykx//RV0K/kaknxGiHt8xVNzD9s7w=",
-                        Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                        UserId = 1,
-                        Username = "TestUser"
-                    },
+                    testUser
                 }
             };
-            var service = new UserService(mockUserUnitOfWork, Configuration);
-            var response = service.UpdatePassword(new UpdatePasswordRequest()
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+            var request = new UpdatePasswordRequest()
             {
                 NewPassword = "NewPassword1",
                 NewPasswordConfirmation = "NewPassword1",
                 Password = "TestPassword1",
-            }, 1);
+            };
+
+            var response = service.UpdatePassword(request, 1);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
+        }
+
+        [Fact]
+        public void UpdateUserSuccess()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUsr",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
+            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
+        }
+
+        [Fact]
+        public void UpdateUserSuccessSameUsername()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUser",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
+            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
+        }
+
+        [Fact]
+        public void UpdateUserSuccessNoPasswordChange()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "TestUsr",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.OK);
+            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
+        }
+
+        [Fact]
+        public void UpdateUserFailNoUsername()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "User must have a username");
+        }
+
+        [Fact]
+        public void UpdateUserFailUsernameTaken()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            var testUser2 = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername2",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole2
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                    testUser2,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "Testusername2",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Username is already taken");
+        }
+
+        [Fact]
+        public void UpdateUserFailNoRole()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "T3stPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUsername",
+                ConfirmationPassword = "TestPassword1",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "User must have a role");
+        }
+
+        [Fact]
+        public void UpdateUserFailWeakPasswordNoNumbers()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "TestPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword",
+                Password = "TestPassword",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not strong enough");
+        }
+
+        [Fact]
+        public void UpdateUserFailWeakPasswordTooShort()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "TestPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "Pwrd1",
+                Password = "Pwrd1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password is not strong enough");
+        }
+
+        [Fact]
+        public void UpdateUserFailPasswordMismatch()
+        {
+            var testRole1 = new Role()
+            {
+                Name = "Test Role 1",
+                RoleId = 1,
+            };
+
+            var testRole2 = new Role()
+            {
+                RoleId = 2,
+                Name = "Test Role 2",
+            };
+
+            var mockUserUnitOfWork = new MockUserUnitOfWork();
+            var testUser = new User
+            {
+                CreatedBy = "Unit Test",
+                CreatedDate = new DateTime(),
+                IsActive = true,
+                IsDeleted = false,
+                Password = "TestPassword1",
+                Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
+                UserId = 1,
+                Username = "Testusername",
+                UserRole = new List<UserRole>()
+                {
+                    new UserRole()
+                    {
+                        UserId = 1,
+                        RoleId = 1,
+                        UserRoleId = 1,
+                        Role = testRole1
+                    }
+                }
+            };
+
+            mockUserUnitOfWork.MockUserDataLayer = new MockUserDataLayer()
+            {
+                Users = new List<User>()
+                {
+                    testUser,
+                }
+            };
+
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
+
+            var request = new UpdateUserRequest()
+            {
+                UserID = 1,
+                Username = "TestUser",
+                ConfirmationPassword = "TestPassword2",
+                Password = "TestPassword1",
+                Roles = new List<Common.DTOs.RoleDTO>()
+                {
+                    new Common.DTOs.RoleDTO()
+                    {
+                        Name = testRole2.Name,
+                        RoleId = testRole2.RoleId,
+                    }
+                }
+            };
+
+            var response = service.UpdateUser(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "Password do not match");
         }
 
         [Fact]
@@ -1085,7 +1751,7 @@ namespace MyLibrary.Services.XUnitTestProject
                     },
                 }
             };
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.DeleteUser(2);
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
@@ -1113,7 +1779,7 @@ namespace MyLibrary.Services.XUnitTestProject
                     user,
                 }
             };
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.DeleteUser(1);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
@@ -1141,7 +1807,7 @@ namespace MyLibrary.Services.XUnitTestProject
                     },
                 }
             };
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.DeactivateUser(2);
 
             Assert.True(response.StatusCode == HttpStatusCode.NotFound);
@@ -1169,11 +1835,21 @@ namespace MyLibrary.Services.XUnitTestProject
                     user,
                 }
             };
-            var service = new UserService(mockUserUnitOfWork, Configuration);
+            var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
             var response = service.DeactivateUser(1);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.False(user.IsActive);
+        }
+
+        private string HashPassword(string password, string salt)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: Convert.FromBase64String(salt),
+                prf: KeyDerivationPrf.HMACSHA512,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
         }
     }
 }

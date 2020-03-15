@@ -3,12 +3,22 @@ using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MyLibrary.Services.XUnitTestProject.MockClasses
 {
     public class MockRoleDataLayer : IRoleDataLayer
     {
+        public List<UserRole> UserRoles { get; set; }
+        public List<Role> Roles { get; set; }
+
+        public MockRoleDataLayer()
+        {
+            UserRoles = new List<UserRole>();
+            Roles = new List<Role>();
+        }
+
         public void AddRole(Role role)
         {
             throw new NotImplementedException();
@@ -36,12 +46,12 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
 
         public List<Role> GetRoles()
         {
-            throw new NotImplementedException();
+            return Roles.ToList();
         }
 
         public List<UserRole> GetUserRoles(int userId)
         {
-            throw new NotImplementedException();
+            return UserRoles.Where(r => r.UserId == userId).ToList();
         }
     }
 }

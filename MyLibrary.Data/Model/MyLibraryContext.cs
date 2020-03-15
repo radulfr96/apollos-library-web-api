@@ -15,6 +15,9 @@ namespace MyLibrary.Data.Model
         {
         }
 
+        public virtual DbSet<Book> Book { get; set; }
+        public virtual DbSet<BookGenre> BookGenre { get; set; }
+        public virtual DbSet<Genre> Genre { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
@@ -30,6 +33,74 @@ namespace MyLibrary.Data.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Book>(entity =>
+            {
+                entity.HasKey(e => e.Isbn)
+                    .HasName("PK__Book__447D36EBC5FF5D55");
+
+                entity.ToTable("Book", "Book");
+
+                entity.Property(e => e.Isbn)
+                    .HasColumnName("ISBN")
+                    .HasMaxLength(12)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<BookGenre>(entity =>
+            {
+                entity.HasKey(e => new { e.GenreId, e.Isbn });
+
+                entity.ToTable("BookGenre", "Book");
+
+                entity.Property(e => e.GenreId).HasColumnName("GenreID");
+
+                entity.Property(e => e.Isbn)
+                    .HasColumnName("ISBN")
+                    .HasMaxLength(12)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Genre)
+                    .WithMany(p => p.BookGenre)
+                    .HasForeignKey(d => d.GenreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookGenreGenre");
+
+                entity.HasOne(d => d.IsbnNavigation)
+                    .WithMany(p => p.BookGenre)
+                    .HasForeignKey(d => d.Isbn)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookGenreBook");
+            });
+
+            modelBuilder.Entity<Genre>(entity =>
+            {
+                entity.ToTable("Genre", "Genre");
+
+                entity.Property(e => e.GenreId).HasColumnName("GenreID");
+
+                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.ToTable("Role", "Users");

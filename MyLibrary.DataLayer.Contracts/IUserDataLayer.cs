@@ -34,5 +34,11 @@ namespace MyLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="user">The user to be added</param>
         void AddUser(User user);
+
+        /// <summary>
+        /// Used to clear the roles of a user
+        /// </summary>
+        /// <param name="user">The user whose roles need to be cleared</param>
+        void ClearUserRoles(User user);
     }
 }

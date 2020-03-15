@@ -21,6 +21,12 @@ namespace MyLibrary.DataLayer
             _context.User.Add(user);
         }
 
+        public void ClearUserRoles(User user)
+        {
+            _context.UserRole.RemoveRange(user.UserRole);
+            user.UserRole.Clear();
+        }
+
         public User GetUser(int id)
         {
             return _context.User.Include("UserRole.Role").FirstOrDefault(u => u.UserId == id);
