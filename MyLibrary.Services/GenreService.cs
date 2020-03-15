@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MyLibrary.Common.DTOs;
 using MyLibrary.Common.Requests;
 using MyLibrary.Common.Responses;
 using MyLibrary.Data.Model;
@@ -86,7 +87,26 @@ namespace MyLibrary.Services
 
         public GetGenreResponse GetGenre(int id)
         {
-            throw new NotImplementedException();
+            var response = new GetGenreResponse();
+            try
+            {
+                var genre = _genreUnitOfWork.GenreDataLayer.GetGenre(id);
+
+                if (genre == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return response;
+                }
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Genre = DAO2DTO(genre);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to find genre.");
+                response = new GetGenreResponse();
+            }
+            return response;
         }
 
         public GetGenresResponse GetGenres()
@@ -97,6 +117,15 @@ namespace MyLibrary.Services
         public BaseResponse UpdateGenre(UpdateGenreRequest request)
         {
             throw new NotImplementedException();
+        }
+
+        private GenreDTO DAO2DTO(Genre genre)
+        {
+            return new GenreDTO()
+            {
+                GenreId = genre.GenreId,
+                Name = genre.Name,
+            };
         }
     }
 }
