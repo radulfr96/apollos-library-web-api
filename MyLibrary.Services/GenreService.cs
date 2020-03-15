@@ -98,8 +98,8 @@ namespace MyLibrary.Services
                     return response;
                 }
 
-                response.StatusCode = HttpStatusCode.OK;
                 response.Genre = DAO2DTO(genre);
+                response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
@@ -111,12 +111,66 @@ namespace MyLibrary.Services
 
         public GetGenresResponse GetGenres()
         {
-            throw new NotImplementedException();
+            var response = new GetGenresResponse();
+            try
+            {
+                var genres = _genreUnitOfWork.GenreDataLayer.GetGenres();
+
+                if (genres.Count == 0)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return response;
+                }
+
+                foreach (var genre in genres)
+                {
+                    response.Genres.Add(DAO2DTO(genre));
+                }
+
+                response.StatusCode = HttpStatusCode.OK; 
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to find genres.");
+                response = new GetGenresResponse();
+            }
+            return response;
         }
 
         public BaseResponse UpdateGenre(UpdateGenreRequest request)
         {
-            throw new NotImplementedException();
+            var response = new BaseResponse();
+
+            try
+            {
+                response = request.ValidateRequest(response);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return response;
+
+                var genre = _genreUnitOfWork.GenreDataLayer.GetGenre(request.GenreID);
+
+                if (genre == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return response;
+                }
+
+                genre.Name = request.Name;
+                genre.ModifiedBy = _principal.Identity.Name;
+                genre.ModifiedDate = DateTime.Now;
+
+                _genreUnitOfWork.Save();
+
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to update genre.");
+                response = new GetGenresResponse();
+            }
+
+            return response;
         }
 
         private GenreDTO DAO2DTO(Genre genre)

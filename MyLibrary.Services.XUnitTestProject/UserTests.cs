@@ -1411,7 +1411,7 @@ namespace MyLibrary.Services.XUnitTestProject
                 IsDeleted = false,
                 Password = "T3stPassword1",
                 Salter = "lXCaZkEU8/CyYuvmSs2P2g==",
-                UserId = 1,
+                UserId = 2,
                 Username = "Testusername2",
                 UserRole = new List<UserRole>()
                 {

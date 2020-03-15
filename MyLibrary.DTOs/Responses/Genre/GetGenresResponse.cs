@@ -8,5 +8,10 @@ namespace MyLibrary.Common.Responses
     public class GetGenresResponse : BaseResponse
     {
         public List<GenreDTO> Genres { get; set; }
+
+        public GetGenresResponse()
+        {
+            Genres = new List<GenreDTO>();
+        }
     }
 }
