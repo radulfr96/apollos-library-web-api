@@ -41,7 +41,7 @@ namespace MyLibrary.WebApi.Controllers
         }
 
         /// <summary>
-        /// Used to add a new user to the database
+        /// Used to add a new user to the system
         /// </summary>
         /// <param name="request">New user information</param>
         /// <returns>Response that indicates the result</returns>
