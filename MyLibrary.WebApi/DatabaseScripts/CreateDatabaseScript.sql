@@ -31,7 +31,7 @@ CREATE TABLE [Users].[User]
 )
 
 INSERT INTO [Users].[User] ([Username], [Password], [Salter], [CreatedDate], [CreatedBy], [IsActive], [IsDeleted])
-VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1, 1)
+VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1, 0)
 
 SELECT @UserID = U.UserID
 FROM Users.[User] U
