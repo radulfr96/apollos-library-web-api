@@ -11,3 +11,4 @@ D:\Projects\MyLibraryWebApi\MyLibrary.Contracts.UnitOfWork\obj\Debug\netcoreapp3
 D:\Projects\MyLibraryWebApi\MyLibrary.Contracts.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.Contracts.csproj.CopyComplete
 D:\Projects\MyLibraryWebApi\MyLibrary.Contracts.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.Contracts.dll
 D:\Projects\MyLibraryWebApi\MyLibrary.Contracts.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.Contracts.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.Contracts.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.Contracts.csproj.CoreCompileInputs.cache

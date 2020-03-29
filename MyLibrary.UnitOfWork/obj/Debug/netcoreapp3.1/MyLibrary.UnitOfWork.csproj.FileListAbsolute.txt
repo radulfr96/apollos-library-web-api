@@ -15,3 +15,4 @@ D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibra
 D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.csproj.CopyComplete
 D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.dll
 D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.pdb
+D:\Projects\MyLibraryWebApi\MyLibrary.UnitOfWork\obj\Debug\netcoreapp3.1\MyLibrary.UnitOfWork.csproj.CoreCompileInputs.cache

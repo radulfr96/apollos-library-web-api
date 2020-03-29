@@ -164,7 +164,7 @@ namespace MyLibrary.Services
                     user.Password = HashPassword(request.Password, user.Salter);
                 }
 
-                user.ModifiedBy = _principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
                 user.ModifiedDate = DateTime.Now;
 
                 _userUnitOfWork.UserDataLayer.ClearUserRoles(user);
@@ -228,7 +228,7 @@ namespace MyLibrary.Services
 
                 user.Username = request.NewUsername;
                 user.ModifiedDate = DateTime.Now;
-                user.ModifiedBy = request.NewUsername;
+                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
 
                 _userUnitOfWork.Save();
 
@@ -273,7 +273,7 @@ namespace MyLibrary.Services
 
                 user.Password = HashPassword(request.Password, user.Salter);
                 user.ModifiedDate = DateTime.Now;
-                user.ModifiedBy = user.Username;
+                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
 
                 _userUnitOfWork.Save();
 

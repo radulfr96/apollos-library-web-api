@@ -17,7 +17,7 @@ namespace MyLibrary.Services.XUnitTestProject
     {
         private IConfiguration Configuration { get; set; }
 
-        private ClaimsPrincipal MockPrincipal;
+        private readonly ClaimsPrincipal MockPrincipal;
 
         public UserTests()
         {
@@ -32,6 +32,7 @@ namespace MyLibrary.Services.XUnitTestProject
             MockPrincipal = new TestPrincipal(new Claim[]
             {
                 new Claim(ClaimTypes.Name, "Test User"),
+                new Claim(ClaimTypes.Sid, "1"),
             });
         }
 
@@ -54,8 +55,9 @@ namespace MyLibrary.Services.XUnitTestProject
                 }
             };
 
-            var dataLayer = new MockUserDataLayer();
-            dataLayer.Users = new List<User>()
+            var dataLayer = new MockUserDataLayer
+            {
+                Users = new List<User>()
             {
                 new User()
                 {
@@ -68,10 +70,13 @@ namespace MyLibrary.Services.XUnitTestProject
                     Username = "TestUser",
                     UserRole = userRoles
                 }
+            }
             };
 
-            var mockUserUnitOfWork = new MockUserUnitOfWork();
-            mockUserUnitOfWork.MockUserDataLayer = dataLayer;
+            var mockUserUnitOfWork = new MockUserUnitOfWork
+            {
+                MockUserDataLayer = dataLayer
+            };
             var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
 
             var response = service.GetUsers();
@@ -98,8 +103,9 @@ namespace MyLibrary.Services.XUnitTestProject
         [Fact]
         public void CheckUsernamrExists()
         {
-            var mockUserDataLayer = new MockUserDataLayer();
-            mockUserDataLayer.Users = new List<User>()
+            var mockUserDataLayer = new MockUserDataLayer
+            {
+                Users = new List<User>()
                 {
                     new User()
                     {
@@ -111,10 +117,13 @@ namespace MyLibrary.Services.XUnitTestProject
                         UserId = 1,
                         Username = "TestUser",
                     }
-                };
+                }
+            };
 
-            var mockUserUnitOfWork = new MockUserUnitOfWork();
-            mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
+            var mockUserUnitOfWork = new MockUserUnitOfWork
+            {
+                MockUserDataLayer = mockUserDataLayer
+            };
 
 
             var service = new UserService(mockUserUnitOfWork, Configuration, MockPrincipal);
@@ -830,7 +839,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.True(user2.Username == request.NewUsername);
-            Assert.True(user2.ModifiedBy == request.NewUsername);
+            Assert.True(user2.ModifiedBy == int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value));
         }
 
         [Fact]
@@ -915,9 +924,11 @@ namespace MyLibrary.Services.XUnitTestProject
                 Username = "TestUser",
             };
 
-            mockUserDataLayer.Users = new List<User>();
-            mockUserDataLayer.Users.Add(user1);
-            mockUserDataLayer.Users.Add(user2);
+            mockUserDataLayer.Users = new List<User>
+            {
+                user1,
+                user2
+            };
 
             mockUserUnitOfWork.MockUserDataLayer = mockUserDataLayer;
             mockUserUnitOfWork.MockRoleDataLayer = new MockRoleDataLayer();
@@ -1150,7 +1161,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
-            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.ModifiedBy == int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value));
             Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
         }
 
@@ -1222,7 +1233,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.True(testUser.Password == HashPassword(request.Password, testUser.Salter));
-            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.ModifiedBy == int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value));
             Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
         }
 
@@ -1291,7 +1302,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var response = service.UpdateUser(request);
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
-            Assert.True(testUser.ModifiedBy == MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value);
+            Assert.True(testUser.ModifiedBy == int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value));
             Assert.True(testUser.UserRole.FirstOrDefault().RoleId == testRole2.RoleId);
         }
 
@@ -1465,12 +1476,6 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 Name = "Test Role 1",
                 RoleId = 1,
-            };
-
-            var testRole2 = new Role()
-            {
-                RoleId = 2,
-                Name = "Test Role 2",
             };
 
             var mockUserUnitOfWork = new MockUserUnitOfWork();

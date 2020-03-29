@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using MyLibrary.Data.Model;
-using MyLibrary.DataLayer;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.DataLayer;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -9,27 +9,27 @@ using System.Text;
 
 namespace MyLibrary.UnitOfWork
 {
-    public class GenreUnitOfWork : IGenreUnitOfWork, IDisposable
+    class PublisherUnitOfWork : IPublisherUnitOfWork, IDisposable
     {
-        private readonly MyLibraryContext _dbContext;
+        private IPublisherDataLayer _publisherDataLayer;
+        private MyLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
-        private IGenreDataLayer _genreDataLayer;
         private bool disposed = false;
 
-        public GenreUnitOfWork(MyLibraryContext dbContext)
+        public PublisherUnitOfWork(MyLibraryContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IGenreDataLayer GenreDataLayer
+        public IPublisherDataLayer PublisherDataLayer
         {
             get
             {
-                if (_genreDataLayer == null)
+                if (_publisherDataLayer == null)
                 {
-                    _genreDataLayer = new GenreDataLayer(_dbContext);
+                    _publisherDataLayer = new PublisherDataLayer(_dbContext);
                 }
-                return _genreDataLayer;
+                return _publisherDataLayer;
             }
         }
 
@@ -71,7 +71,7 @@ namespace MyLibrary.UnitOfWork
             _dbContext.SaveChanges();
         }
 
-        ~GenreUnitOfWork()
+        ~PublisherUnitOfWork()
         {
             Dispose(false);
         }

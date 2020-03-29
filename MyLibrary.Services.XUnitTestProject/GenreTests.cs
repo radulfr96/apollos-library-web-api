@@ -17,23 +17,15 @@ namespace MyLibrary.Services.XUnitTestProject
 {
     public class GenreTests
     {
-        private IConfiguration Configuration { get; set; }
 
-        private ClaimsPrincipal MockPrincipal;
+        private readonly ClaimsPrincipal MockPrincipal;
 
         public GenreTests()
         {
-
-            var configBuilder = new ConfigurationBuilder().AddInMemoryCollection(new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("TokenKey", "TestKjKAFOJPF466484dsvsfhiuehefhoipjejfopkepojfOPJFAEFJLEAJFMLJ3PR0-OFEikrokdey1"),
-            });
-
-            Configuration = configBuilder.Build();
-
             MockPrincipal = new TestPrincipal(new Claim[]
             {
                 new Claim(ClaimTypes.Name, "Test User"),
+                new Claim(ClaimTypes.Sid, "1")
             });
         }
 
@@ -115,7 +107,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 GenreId = 1,
                 CreateDate = DateTime.Now,
-                CreatedBy = MockPrincipal.Identity.Name,
+                CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre"
             };
 
@@ -123,7 +115,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 GenreId = 2,
                 CreateDate = DateTime.Now,
-                CreatedBy = MockPrincipal.Identity.Name,
+                CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre 2"
             };
 
@@ -177,7 +169,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 GenreId = 1,
                 CreateDate = DateTime.Now,
-                CreatedBy = MockPrincipal.Identity.Name,
+                CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre"
             };
 
@@ -185,7 +177,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 GenreId = 2,
                 CreateDate = DateTime.Now,
-                CreatedBy = MockPrincipal.Identity.Name,
+                CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre 2"
             };
 
@@ -219,7 +211,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 GenreId = 1,
                 CreateDate = DateTime.Now,
-                CreatedBy = MockPrincipal.Identity.Name,
+                CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre"
             };
 
@@ -242,7 +234,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.Equal(request.Name, genre1.Name);
-            Assert.True(genre1.ModifiedBy == MockPrincipal.Identity.Name);
+            Assert.True(genre1.ModifiedBy == int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value));
         }
 
         [Fact]
@@ -312,7 +304,7 @@ namespace MyLibrary.Services.XUnitTestProject
                 return new Genre()
                 {
                     CreateDate = DateTime.Now,
-                    CreatedBy = MockPrincipal.Identity.Name,
+                    CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                     Name = "Test Genre",
                     GenreId = 1
                 };
