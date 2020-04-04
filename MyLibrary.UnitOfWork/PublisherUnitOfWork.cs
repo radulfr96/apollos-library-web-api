@@ -9,7 +9,7 @@ using System.Text;
 
 namespace MyLibrary.UnitOfWork
 {
-    class PublisherUnitOfWork : IPublisherUnitOfWork, IDisposable
+    public class PublisherUnitOfWork : IPublisherUnitOfWork, IDisposable
     {
         private IPublisherDataLayer _publisherDataLayer;
         private MyLibraryContext _dbContext;
