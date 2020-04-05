@@ -34,7 +34,6 @@ namespace MyLibrary.WebApi.Controllers
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _genreService = new GenreService(new GenreUnitOfWork(_dbContext), _httpContextAccessor.HttpContext.User);
-
         }
 
         /// <summary>

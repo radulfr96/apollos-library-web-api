@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MyLibrary.DataLayer
 {
-    class ReferenceDataLayer : IReferenceDataLayer
+    public class ReferenceDataLayer : IReferenceDataLayer
     {
         private MyLibraryContext _context;
 
