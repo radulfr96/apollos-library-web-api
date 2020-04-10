@@ -139,7 +139,12 @@ namespace MyLibrary.Services
                 }
                 else
                 {
-                    response.Publishers = publishers.Select(p => DAO2DTO(p)).ToList();
+                    response.Publishers = publishers.Select(p => new PublisherListItemDTO()
+                    {
+                        Country = p.Country.Name,
+                        Name = p.Name,
+                        PublisherId = p.PublisherId
+                    }).ToList();
                     response.StatusCode = HttpStatusCode.OK;
                 }
             }
@@ -201,11 +206,11 @@ namespace MyLibrary.Services
                 Country = new CountryDTO()
                 {
                     CountryID = publisher.Country.CountryId,
-                    Name = publisher.Name,
+                    Name = publisher.Country.Name,
                 },
                 Name = publisher.Name,
                 Postcode = publisher.Postcode,
-                PublisherID = publisher.PublisherId,
+                PublisherId = publisher.PublisherId,
                 State = publisher.State,
                 StreetAddress = publisher.StreetAddress,
                 Website = publisher.Website,

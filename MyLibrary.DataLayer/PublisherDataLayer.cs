@@ -29,7 +29,7 @@ namespace MyLibrary.DataLayer
 
         public List<Publisher> GetPublishers()
         {
-            return _context.Publisher.ToList();
+            return _context.Publisher.Include("Country").Where(p => p.IsDeleted == null || p.IsDeleted == false).ToList();
         }
     }
 }

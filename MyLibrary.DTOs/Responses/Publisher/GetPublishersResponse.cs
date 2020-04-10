@@ -7,11 +7,11 @@ namespace MyLibrary.Common.Responses
 {
     public class GetPublishersResponse : BaseResponse
     {
-        public List<PublisherDTO> Publishers { get; set; }
+        public List<PublisherListItemDTO> Publishers { get; set; }
 
         public GetPublishersResponse()
         {
-            Publishers = new List<PublisherDTO>();
+            Publishers = new List<PublisherListItemDTO>();
         }
     }
 }

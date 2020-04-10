@@ -6,7 +6,7 @@ namespace MyLibrary.Common.DTOs
 {
     public class PublisherDTO
     {
-        public int PublisherID { get; set; }
+        public int PublisherId { get; set; }
         public string Name { get; set; }
         public string StreetAddress { get; set; }
         public string City { get; set; }

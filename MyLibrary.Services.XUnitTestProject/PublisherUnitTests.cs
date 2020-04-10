@@ -60,7 +60,8 @@ namespace MyLibrary.Services.XUnitTestProject
             var request = new AddPublisherRequest()
             {
                 Name = "Test Publisher",
-                Website = "http://www.example.com/"
+                Website = "http://www.example.com/",
+                CountryID = "AU"
             };
 
             var mockPublisherDataLayer = new Mock<IPublisherDataLayer>();
@@ -105,6 +106,30 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
+        public void CreatePublisherWebsiteOnlyNoCountryFail()
+        {
+            var request = new AddPublisherRequest()
+            {
+                Name = "Test Publisher",
+                Website = "http://www.example.com/",
+            };
+
+            var mockPublisherDataLayer = new Mock<IPublisherDataLayer>();
+
+            mockPublisherDataLayer.Setup(layer => layer.AddPublisher(It.IsAny<Publisher>()));
+
+            var unitOfWork = new Mock<IPublisherUnitOfWork>();
+            unitOfWork.Setup(u => u.PublisherDataLayer).Returns(mockPublisherDataLayer.Object);
+
+            var service = new PublisherService(unitOfWork.Object, MockPrincipal);
+
+            var response = service.AddPublisher(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "You must provide a country");
+        }
+
+        [Fact]
         public void CreatePublisherFailNoName()
         {
             var request = new AddPublisherRequest()
@@ -145,7 +170,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 Name = "Test Publisher",
                 City = null,
-                CountryID = null,
+                CountryID = "AU",
                 Postcode = null,
                 State = null,
                 StreetAddress = null,
@@ -165,7 +190,6 @@ namespace MyLibrary.Services.XUnitTestProject
             Assert.True(response.Messages[0] == "You must provide the publisher address or website.");
 
             request.City = "";
-            request.CountryID = "";
             request.Postcode = "";
             request.State = "";
             request.StreetAddress = "";
@@ -178,13 +202,13 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
-        public void CreatePublisherFailBadAddressOnlyCity()
+        public void CreatePublisherFailBadAddressOnlyCityAndCountry()
         {
             var request = new AddPublisherRequest()
             {
                 Name = "Test Publisher",
                 City = "Melbourne",
-                CountryID = null,
+                CountryID = "AU",
                 Postcode = null,
                 State = null,
                 StreetAddress = null,
@@ -203,7 +227,6 @@ namespace MyLibrary.Services.XUnitTestProject
             Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
             Assert.True(response.Messages[0] == "You must provide a full address.");
 
-            request.CountryID = "";
             request.Postcode = "";
             request.State = "";
             request.StreetAddress = "";
@@ -396,8 +419,8 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.True(response.Publishers.Count == 2);
-            Assert.True(response.Publishers[0].PublisherID == 1);
-            Assert.True(response.Publishers[1].PublisherID == 2);
+            Assert.True(response.Publishers[0].PublisherId == 1);
+            Assert.True(response.Publishers[1].PublisherId == 2);
         }
 
         [Fact]
