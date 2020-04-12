@@ -24,7 +24,7 @@ namespace MyLibrary.DataLayer
 
         public Publisher GetPublisher(int id)
         {
-            return _context.Publisher.Include("Country").FirstOrDefault(p => p.PublisherId == id);
+            return _context.Publisher.FirstOrDefault(p => p.PublisherId == id);
         }
 
         public List<Publisher> GetPublishers()

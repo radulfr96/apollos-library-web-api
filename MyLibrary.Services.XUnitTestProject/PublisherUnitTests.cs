@@ -510,7 +510,7 @@ namespace MyLibrary.Services.XUnitTestProject
             Assert.NotNull(response.Publisher);
             Assert.True(response.Publisher.Name == publisher2.Name);
             Assert.True(response.Publisher.City == publisher2.City);
-            Assert.True(response.Publisher.Country.CountryID == publisher2.CountryId);
+            Assert.True(response.Publisher.Country == publisher2.CountryId);
             Assert.True(response.Publisher.Postcode == publisher2.Postcode);
             Assert.True(response.Publisher.State == publisher2.State);
             Assert.True(response.Publisher.StreetAddress == publisher2.StreetAddress);
@@ -593,7 +593,8 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 PublisherID = 1,
                 Name = "Test Genre 1",
-                Website = "https://www.example.com"
+                Website = "https://www.example.com",
+                CountryID = "AU"
             };
 
             var response = service.UpdatePublisher(request);
@@ -636,7 +637,7 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
-        public void UpdatePublisherBadRequestNoAddressOrWebsite()
+        public void UpdatePublisherBadRequestNoCountry()
         {
             var mockPublisherDataLayer = new Mock<IPublisherDataLayer>();
             var unitOfWork = new Mock<IPublisherUnitOfWork>();
@@ -653,6 +654,50 @@ namespace MyLibrary.Services.XUnitTestProject
                 Postcode = null,
                 State = null,
                 StreetAddress = null,
+                Website = "https://www.example.com"
+            };
+
+            var response = service.UpdatePublisher(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "You must select a country");
+
+            request = new UpdatePublisherRequest()
+            {
+                PublisherID = 1,
+                Name = "TestPublisher",
+                City = "",
+                CountryID = "",
+                Postcode = "",
+                State = "",
+                StreetAddress = "",
+                Website = "https://www.example.com"
+            };
+
+            response = service.UpdatePublisher(request);
+
+            Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
+            Assert.True(response.Messages[0] == "You must select a country");
+        }
+
+        [Fact]
+        public void UpdatePublisherBadRequestNoAddressOrWebsite()
+        {
+            var mockPublisherDataLayer = new Mock<IPublisherDataLayer>();
+            var unitOfWork = new Mock<IPublisherUnitOfWork>();
+            unitOfWork.Setup(u => u.PublisherDataLayer).Returns(mockPublisherDataLayer.Object);
+
+            var service = new PublisherService(unitOfWork.Object, MockPrincipal);
+
+            var request = new UpdatePublisherRequest()
+            {
+                PublisherID = 1,
+                Name = "TestPublisher",
+                City = null,
+                CountryID = "AU",
+                Postcode = null,
+                State = null,
+                StreetAddress = null,
                 Website = null
             };
 
@@ -666,7 +711,7 @@ namespace MyLibrary.Services.XUnitTestProject
                 PublisherID = 1,
                 Name = "TestPublisher",
                 City = "",
-                CountryID = "",
+                CountryID = "AU",
                 Postcode = "",
                 State = "",
                 StreetAddress = "",
@@ -693,7 +738,7 @@ namespace MyLibrary.Services.XUnitTestProject
                 PublisherID = 1,
                 Name = "TestPublisher",
                 City = "Melbourne",
-                CountryID = null,
+                CountryID = "AU",
                 Postcode = null,
                 State = null,
                 StreetAddress = null,
@@ -710,7 +755,7 @@ namespace MyLibrary.Services.XUnitTestProject
                 PublisherID = 1,
                 Name = "TestPublisher",
                 City = "Melbourne",
-                CountryID = "",
+                CountryID = "AU",
                 Postcode = "",
                 State = "",
                 StreetAddress = "",

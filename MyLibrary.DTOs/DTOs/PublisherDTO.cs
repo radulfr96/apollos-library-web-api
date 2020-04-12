@@ -12,7 +12,7 @@ namespace MyLibrary.Common.DTOs
         public string City { get; set; }
         public string Postcode { get; set; }
         public string State { get; set; }
-        public CountryDTO Country { get; set; }
+        public string Country { get; set; }
         public string Website { get; set; }
     }
 }

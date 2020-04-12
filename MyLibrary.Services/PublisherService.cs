@@ -178,7 +178,7 @@ namespace MyLibrary.Services
 
                 publisher.City = request.City;
                 publisher.CountryId = request.CountryID;
-                publisher.IsDeleted = true;
+                publisher.IsDeleted = false;
                 publisher.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
                 publisher.ModifiedDate = DateTime.Now;
                 publisher.Name = request.Name;
@@ -203,11 +203,7 @@ namespace MyLibrary.Services
             return new PublisherDTO()
             {
                 City = publisher.City,
-                Country = new CountryDTO()
-                {
-                    CountryID = publisher.Country.CountryId,
-                    Name = publisher.Country.Name,
-                },
+                Country = publisher.CountryId,
                 Name = publisher.Name,
                 Postcode = publisher.Postcode,
                 PublisherId = publisher.PublisherId,
