@@ -89,7 +89,7 @@ CREATE TABLE [Genre].[Genre]
 (
 	[GenreID] INT IDENTITY NOT NULL,
 	[Name] VARCHAR(50) NOT NULL,
-	[CreateDate] DATETIME NOT NULL,
+	[CreatedDate] DATETIME NOT NULL,
 	[CreatedBy] INT,
 	[ModifiedDate] DATETIME,
 	[ModifiedBy] INT,
@@ -388,7 +388,7 @@ CREATE TABLE [Publisher].[Publisher]
 	[State] VARCHAR(50) NOT NULL,
 	[CountryID] CHAR(2) NOT NULL,
 	[IsDeleted] BIT,
-	[CreateDate] DATETIME NOT NULL,
+	[CreatedDate] DATETIME NOT NULL,
 	[CreatedBy] INT,
 	[ModifiedDate] DATETIME,
 	[ModifiedBy] INT,
@@ -398,4 +398,24 @@ CREATE TABLE [Publisher].[Publisher]
 	FOREIGN KEY (CreatedBy) REFERENCES [Users].[User] (UserID),
 	CONSTRAINT FK_PublisherUserModified
 	FOREIGN KEY (ModifiedBy) REFERENCES [Users].[User] (UserID)
+)
+GO
+
+CREATE SCHEMA [Author]
+GO
+
+CREATE TABLE [Author].[Author]
+(
+	[AuthorID] INT PRIMARY KEY IDENTITY NOT NULL,
+	[FirstName] VARCHAR(50) NOT NULL,
+	[MiddleName] VARCHAR(50),
+	[LastName] VARCHAR(50),
+	[Description] VARCHAR(2000),
+	[CountryID] CHAR(2) NOT NULL,
+	[CreatedDate] DATETIME NOT NULL,
+	[CreatedBy] INT NOT NULL,
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] INT,
+	CONSTRAINT FK_AuthorCountry
+	FOREIGN KEY (CountryID) REFERENCES [dbo].[Country] (CountryID) 
 )

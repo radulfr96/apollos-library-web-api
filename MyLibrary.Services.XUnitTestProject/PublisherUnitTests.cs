@@ -365,7 +365,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var publisher1 = new Publisher()
             {
                 PublisherId = 1,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Publisher 1",
                 City = "Melbourne",
@@ -385,7 +385,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var publisher2 = new Publisher()
             {
                 PublisherId = 2,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Publisher 2",
                 City = "Central Brooklyn",
@@ -451,7 +451,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var publisher1 = new Publisher()
             {
                 PublisherId = 1,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Publisher 1",
                 City = "Melbourne",
@@ -471,7 +471,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var publisher2 = new Publisher()
             {
                 PublisherId = 2,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Publisher 2",
                 City = "Central Brooklyn",
@@ -510,7 +510,7 @@ namespace MyLibrary.Services.XUnitTestProject
             Assert.NotNull(response.Publisher);
             Assert.True(response.Publisher.Name == publisher2.Name);
             Assert.True(response.Publisher.City == publisher2.City);
-            Assert.True(response.Publisher.Country == publisher2.CountryId);
+            Assert.True(response.Publisher.CountryID == publisher2.CountryId);
             Assert.True(response.Publisher.Postcode == publisher2.Postcode);
             Assert.True(response.Publisher.State == publisher2.State);
             Assert.True(response.Publisher.StreetAddress == publisher2.StreetAddress);
@@ -523,7 +523,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var publisher1 = new Publisher()
             {
                 PublisherId = 1,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Publishr 1",
                 City = "Melbourn",
@@ -905,7 +905,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var publisher = new Publisher()
             {
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre",
                 PublisherId = 1,

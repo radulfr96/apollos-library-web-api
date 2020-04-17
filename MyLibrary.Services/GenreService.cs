@@ -42,7 +42,7 @@ namespace MyLibrary.Services
                 var genre = new Genre()
                 {
                     Name = request.Name,
-                    CreateDate = DateTime.Now,
+                    CreatedDate = DateTime.Now,
                     CreatedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 };
 

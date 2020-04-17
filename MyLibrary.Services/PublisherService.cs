@@ -39,7 +39,7 @@ namespace MyLibrary.Services
                 var publisher = new Publisher()
                 {
                     CreatedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
-                    CreateDate = DateTime.Now,
+                    CreatedDate = DateTime.Now,
                     City = request.City,
                     CountryId = request.CountryID,
                     IsDeleted = false,
@@ -203,7 +203,7 @@ namespace MyLibrary.Services
             return new PublisherDTO()
             {
                 City = publisher.City,
-                Country = publisher.CountryId,
+                CountryID = publisher.CountryId,
                 Name = publisher.Name,
                 Postcode = publisher.Postcode,
                 PublisherId = publisher.PublisherId,

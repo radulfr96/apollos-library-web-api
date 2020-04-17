@@ -106,7 +106,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var genre1 = new Genre()
             {
                 GenreId = 1,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre"
             };
@@ -114,7 +114,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var genre2 = new Genre()
             {
                 GenreId = 2,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre 2"
             };
@@ -168,7 +168,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var genre1 = new Genre()
             {
                 GenreId = 1,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre"
             };
@@ -176,7 +176,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var genre2 = new Genre()
             {
                 GenreId = 2,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre 2"
             };
@@ -210,7 +210,7 @@ namespace MyLibrary.Services.XUnitTestProject
             var genre1 = new Genre()
             {
                 GenreId = 1,
-                CreateDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 Name = "Test Genre"
             };
@@ -303,7 +303,7 @@ namespace MyLibrary.Services.XUnitTestProject
             {
                 return new Genre()
                 {
-                    CreateDate = DateTime.Now,
+                    CreatedDate = DateTime.Now,
                     CreatedBy = int.Parse(MockPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                     Name = "Test Genre",
                     GenreId = 1

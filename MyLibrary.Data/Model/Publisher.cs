@@ -14,7 +14,7 @@ namespace MyLibrary.Data.Model
         public string State { get; set; }
         public string CountryId { get; set; }
         public bool? IsDeleted { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public int? ModifiedBy { get; set; }
