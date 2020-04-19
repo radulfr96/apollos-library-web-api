@@ -16,6 +16,11 @@ namespace MyLibrary.UnitOfWork
         private IAuthorDataLayer _authorDataLayer;
         private bool disposed = false;
 
+        public AuthorUnitOfWork(MyLibraryContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public IAuthorDataLayer AuthorDataLayer
         {
             get
