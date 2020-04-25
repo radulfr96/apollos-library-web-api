@@ -31,9 +31,9 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var request = new AddAuthorRequest()
             {
-                FirstName = "Wade",
-                MiddleName = "James",
-                LastName = "Russell",
+                Firstname = "Wade",
+                Middlename = "James",
+                Lastname = "Russell",
                 CountryID = "AU",
                 Description = "This is a test author"
             };
@@ -61,7 +61,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var request = new AddAuthorRequest()
             {
-                FirstName = "Wade",
+                Firstname = "Wade",
                 CountryID = "AU",
             };
 
@@ -88,7 +88,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var request = new AddAuthorRequest()
             {
-                FirstName = null,
+                Firstname = null,
                 CountryID = "AU",
             };
 
@@ -110,7 +110,7 @@ namespace MyLibrary.Services.XUnitTestProject
             Assert.True(response.Messages.Count == 1);
             Assert.True(response.Messages[0] == "You must supply a first name or an alias");
 
-            request.FirstName = "";
+            request.Firstname = "";
 
             response = service.AddAuthor(request);
 
@@ -124,7 +124,7 @@ namespace MyLibrary.Services.XUnitTestProject
         {
             var request = new AddAuthorRequest()
             {
-                FirstName = "Wade",
+                Firstname = "Wade",
                 CountryID = null,
             };
 

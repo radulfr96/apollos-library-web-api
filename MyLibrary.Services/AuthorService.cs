@@ -40,9 +40,9 @@ namespace MyLibrary.Services
 
                 var author = new Author()
                 {
-                    FirstName = request.FirstName,
-                    MiddleName = request.MiddleName,
-                    LastName = request.LastName,
+                    FirstName = request.Firstname,
+                    MiddleName = request.Middlename,
+                    LastName = request.Lastname,
                     CountryId = request.CountryID,
                     Description = request.Description,
                     CreatedDate = DateTime.Now,
