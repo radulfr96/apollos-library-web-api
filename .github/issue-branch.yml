@@ -1,3 +1,4 @@
+mode: chatops
 branches:
   - label: enhancement
     name: develop
