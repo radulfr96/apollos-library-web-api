@@ -1,4 +1,5 @@
-﻿using MyLibrary.Data.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
@@ -30,12 +31,12 @@ namespace MyLibrary.DataLayer
 
         public Author GetAuthor(int id)
         {
-            return _context.Author.FirstOrDefault(a => a.AuthorId == id);
+            return _context.Author.Include("Country").FirstOrDefault(a => a.AuthorId == id);
         }
 
         public List<Author> GetAuthors()
         {
-            return _context.Author.ToList();
+            return _context.Author.Include("Country").ToList();
         }
     }
 }

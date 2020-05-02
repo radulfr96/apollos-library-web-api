@@ -220,8 +220,8 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.True(response.Authors.Count == 2);
-            Assert.True(response.Authors[0].AuthorID == 1);
-            Assert.True(response.Authors[1].AuthorID == 2);
+            Assert.True(response.Authors[0].AuthorId == 1);
+            Assert.True(response.Authors[1].AuthorId == 2);
         }
 
         [Fact]
@@ -296,7 +296,7 @@ namespace MyLibrary.Services.XUnitTestProject
 
             Assert.True(response.StatusCode == HttpStatusCode.OK);
             Assert.NotNull(response.Author);
-            Assert.True(response.Author.FirstName == author2.FirstName);
+            Assert.True(response.Author.Firstname == author2.FirstName);
         }
 
         [Fact]

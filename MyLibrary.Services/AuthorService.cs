@@ -182,11 +182,11 @@ namespace MyLibrary.Services
             return new AuthorDTO()
             {
                 AuthorID = author.AuthorId,
-                FirstName = author.FirstName,
+                Firstname = author.FirstName,
                 Description = author.Description,
                 CountryID = author.CountryId,
-                LastName = author.LastName,
-                MiddleName = author.MiddleName
+                Lastname = author.LastName,
+                Middlename = author.MiddleName
             };
         }
 
@@ -194,7 +194,7 @@ namespace MyLibrary.Services
         {
             return new AuthorListItemDTO()
             {
-                AuthorID = author.AuthorId,
+                AuthorId = author.AuthorId,
                 Country = author.Country.Name,
                 Name = ($"{author.FirstName} {author.MiddleName} {author.LastName}").Trim(),
             };

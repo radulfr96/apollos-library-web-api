@@ -104,21 +104,73 @@ GO
 CREATE SCHEMA [Book]
 GO
 
+CREATE TABLE [Book].[Series]
+(
+	[SeriesID] INT IDENTITY NOT NULL,
+	[Name] VARCHAR(200)
+)
+
+CREATE TABLE [Book].[PublicationFormat]
+(
+	TypeID INT IDENTITY NOT NULL,
+	[Name] VARCHAR(20) NOT NULL,
+	CONSTRAINT PK_PublicationFormat PRIMARY KEY (TypeID)
+)
+
+INSERT INTO [Book].PublicationFormat ([Name])
+VALUES ('Printed'), ('eBook'), ('Audio Book')
+
+CREATE TABLE [Book].[FictionType]
+(
+	[TypeID] INT IDENTITY NOT NULL,
+	[Name] VARCHAR(20) NOT NULL,
+	CONSTRAINT PK_FictionType PRIMARY KEY (TypeID)
+)
+
+INSERT INTO [Book].FictionType ([Name])
+VALUES ('Fiction'), ('Non-fiction')
+
+CREATE TABLE [Book].[FormType]
+(
+	[TypeID] INT IDENTITY NOT NULL,
+	[Name] VARCHAR(20) NOT NULL,
+	CONSTRAINT PK_FormType PRIMARY KEY (TypeID)
+)
+
+INSERT INTO [Book].FormType ([Name])
+VALUES ('Novel'), ('Novella'), ('Screenplay'), ('Manuscript'), ('Poem'), ('Text Book')
+
 CREATE TABLE [Book].[Book]
 (
-	[ISBN] VARCHAR(12) PRIMARY KEY NOT NULL,
-	[Name] VARCHAR(200) NOT NULL,
+	[BookID] INT IDENTITY NOT NULL,
+	[ISBN] VARCHAR(12),
+	[eISBN] VARCHAR(12),
+	[Title] VARCHAR(200) NOT NULL,
+	[Subtitle] VARCHAR(200) NOT NULL,
+	[SeriesID] INT,
+	[NumberInSeries] INT,
+	[Edition] INT,
+	[PublicationFormatID] INT NOT NULL,
+	[FictionTypeID] INT NOT NULL,
+	[FormTypeID] INT NOT NULL,
+	CONSTRAINT PK_Book PRIMARY KEY (BookID),
+	CONSTRAINT FK_PublicationFormatBook
+	FOREIGN KEY ([PublicationFormatID]) REFERENCES [Book].[PublicationFormat] (TypeID),
+	CONSTRAINT FK_FictionTypeBook
+	FOREIGN KEY ([FictionTypeID]) REFERENCES [Book].[FictionType] (TypeID),
+	CONSTRAINT FK_FormTypeBook
+	FOREIGN KEY ([FormTypeID]) REFERENCES [Book].[FormType] (TypeID),
 )
 
 CREATE TABLE [Book].[BookGenre]
 (
 	[GenreID] INT NOT NULL,
-	ISBN VARCHAR(12) NOT NULL,
-	CONSTRAINT PK_BookGenre PRIMARY KEY (GenreID, ISBN),
+	BookID INT NOT NULL,
+	CONSTRAINT PK_BookGenre PRIMARY KEY (GenreID, BookID),
 	CONSTRAINT FK_BookGenreGenre FOREIGN KEY (GenreID)
 	REFERENCES [Genre].[Genre] (GenreID),
-	CONSTRAINT FK_BookGenreBook FOREIGN KEY (ISBN)
-	REFERENCES [Book].[Book] (ISBN)
+	CONSTRAINT FK_BookGenreBook FOREIGN KEY (BookID)
+	REFERENCES [Book].[Book] (BookID)
 )
 
 CREATE TABLE [dbo].[Country]
