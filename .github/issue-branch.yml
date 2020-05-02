@@ -1,5 +1,6 @@
 branches:
   - label: enhancement
     name: develop
+    prefix: feature/
   - label: bug
-    name: develop
+    name: bugfix/
