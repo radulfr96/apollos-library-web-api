@@ -4,4 +4,8 @@ branches:
     name: develop
     prefix: feature/
   - label: bug
-    name: bugfix/
+    name: develop
+    prefix: bugfix/
+  - label: urgent bug
+    name: master
+    prefix: hotfix/
