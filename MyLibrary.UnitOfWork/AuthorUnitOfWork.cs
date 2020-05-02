@@ -9,27 +9,27 @@ using System.Text;
 
 namespace MyLibrary.UnitOfWork
 {
-    public class GenreUnitOfWork : IGenreUnitOfWork, IDisposable
+    public class AuthorUnitOfWork : IAuthorUnitOfWork, IDisposable
     {
         private readonly MyLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
-        private IGenreDataLayer _genreDataLayer;
+        private IAuthorDataLayer _authorDataLayer;
         private bool disposed = false;
 
-        public GenreUnitOfWork(MyLibraryContext dbContext)
+        public AuthorUnitOfWork(MyLibraryContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IGenreDataLayer GenreDataLayer
+        public IAuthorDataLayer AuthorDataLayer
         {
             get
             {
-                if (_genreDataLayer == null)
+                if (_authorDataLayer == null)
                 {
-                    _genreDataLayer = new GenreDataLayer(_dbContext);
+                    _authorDataLayer = new AuthorDataLayer(_dbContext);
                 }
-                return _genreDataLayer;
+                return _authorDataLayer;
             }
         }
 
@@ -71,7 +71,7 @@ namespace MyLibrary.UnitOfWork
             _dbContext.SaveChanges();
         }
 
-        ~GenreUnitOfWork()
+        ~AuthorUnitOfWork()
         {
             Dispose(false);
         }

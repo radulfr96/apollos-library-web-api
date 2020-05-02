@@ -8,6 +8,7 @@ using MyLibrary.UnitOfWork.Contracts;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -41,8 +42,8 @@ namespace MyLibrary.Services
                 var genre = new Genre()
                 {
                     Name = request.Name,
-                    CreateDate = DateTime.Now,
-                    CreatedBy = _principal.Identity.Name,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
                 };
 
                 _genreUnitOfWork.GenreDataLayer.AddGenre(genre);
@@ -157,7 +158,7 @@ namespace MyLibrary.Services
                 }
 
                 genre.Name = request.Name;
-                genre.ModifiedBy = _principal.Identity.Name;
+                genre.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
                 genre.ModifiedDate = DateTime.Now;
 
                 _genreUnitOfWork.Save();
