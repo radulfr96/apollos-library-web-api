@@ -1,0 +1,5 @@
+branches:
+  - label: enhancement
+    name: develop
+  - label: bug
+    name: develop
