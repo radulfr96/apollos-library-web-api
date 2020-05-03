@@ -153,6 +153,7 @@ CREATE TABLE [Book].[Book]
 	[PublicationFormatID] INT NOT NULL,
 	[FictionTypeID] INT NOT NULL,
 	[FormTypeID] INT NOT NULL,
+	[CoverImage] TEXT,
 	CONSTRAINT PK_Book PRIMARY KEY (BookID),
 	CONSTRAINT FK_PublicationFormatBook
 	FOREIGN KEY ([PublicationFormatID]) REFERENCES [Book].[PublicationFormat] (TypeID),
