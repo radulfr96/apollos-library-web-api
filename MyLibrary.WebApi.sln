@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.WebApi", "MyLibra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Services", "MyLibrary.Services\MyLibrary.Services.csproj", "{B5D7BE54-8F45-4BB2-8635-7A1AE5CC9B79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Common", "MyLibrary.DTOs\MyLibrary.Common.csproj", "{99E6D437-B23D-422D-86E2-221814175A0F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.UnitOfWork.Contracts", "MyLibrary.Contracts.UnitOfWork\MyLibrary.UnitOfWork.Contracts.csproj", "{50E0C55C-D27C-4531-9AE4-663CA824287C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.UnitOfWork", "MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj", "{0CA1A141-9D16-400A-8BED-B24626142F6C}"
@@ -49,10 +47,6 @@ Global
 		{B5D7BE54-8F45-4BB2-8635-7A1AE5CC9B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5D7BE54-8F45-4BB2-8635-7A1AE5CC9B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5D7BE54-8F45-4BB2-8635-7A1AE5CC9B79}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99E6D437-B23D-422D-86E2-221814175A0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99E6D437-B23D-422D-86E2-221814175A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99E6D437-B23D-422D-86E2-221814175A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99E6D437-B23D-422D-86E2-221814175A0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{50E0C55C-D27C-4531-9AE4-663CA824287C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50E0C55C-D27C-4531-9AE4-663CA824287C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50E0C55C-D27C-4531-9AE4-663CA824287C}.Release|Any CPU.ActiveCfg = Release|Any CPU
