@@ -13,6 +13,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -24,13 +25,15 @@ namespace MyLibrary.Services
     {
         private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly IConfiguration _configuration;
+        private readonly ClaimsPrincipal _principal;
 
         protected static Logger s_logger = LogManager.GetCurrentClassLogger();
 
-        public UserService(IUserUnitOfWork userUnitOfWork, IConfiguration configuration)
+        public UserService(IUserUnitOfWork userUnitOfWork, IConfiguration configuration, ClaimsPrincipal principal)
         {
             _userUnitOfWork = userUnitOfWork;
             _configuration = configuration;
+            _principal = principal;
         }
 
         public RegisterUserResponse Register(RegisterUserRequest request)
@@ -124,6 +127,69 @@ namespace MyLibrary.Services
             return response;
         }
 
+        public BaseResponse UpdateUser(UpdateUserRequest request)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                response = request.ValidateRequest(response);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return response;
+
+                var userWithUsername = _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
+
+                if (userWithUsername != null && request.UserID != userWithUsername.UserId)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Username is already taken");
+                    return response;
+                }
+
+                var user = _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
+
+                if (user == null)
+                {
+                    s_logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Messages.Add("Update unsuccessful user not found");
+                    return response;
+                }
+
+                user.Username = request.Username;
+
+                if (!string.IsNullOrEmpty(request.Password))
+                {
+                    user.Password = HashPassword(request.Password, user.Salter);
+                }
+
+                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+                user.ModifiedDate = DateTime.Now;
+
+                _userUnitOfWork.UserDataLayer.ClearUserRoles(user);
+
+                foreach (var role in request.Roles)
+                {
+                    user.UserRole.Add(new UserRole()
+                    {
+                        RoleId = role.RoleId,
+                        UserId = user.UserId,
+                    });
+                }
+
+                _userUnitOfWork.Save();
+
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to update user.");
+                response = new BaseResponse();
+            }
+            return response;
+        }
+
         public UpdateUsernameResponse UpdateUsername(UpdateUsernameRequest request, int userId)
         {
             var response = new UpdateUsernameResponse();
@@ -162,7 +228,7 @@ namespace MyLibrary.Services
 
                 user.Username = request.NewUsername;
                 user.ModifiedDate = DateTime.Now;
-                user.ModifiedBy = request.NewUsername;
+                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
 
                 _userUnitOfWork.Save();
 
@@ -207,7 +273,7 @@ namespace MyLibrary.Services
 
                 user.Password = HashPassword(request.Password, user.Salter);
                 user.ModifiedDate = DateTime.Now;
-                user.ModifiedBy = user.Username;
+                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
 
                 _userUnitOfWork.Save();
 
@@ -242,7 +308,7 @@ namespace MyLibrary.Services
 
                 _userUnitOfWork.Save();
 
-                response.StatusCode = HttpStatusCode.OK; 
+                response.StatusCode = HttpStatusCode.OK;
 
             }
             catch (Exception ex)
@@ -298,6 +364,15 @@ namespace MyLibrary.Services
                     return response;
                 }
 
+                response.Roles = new List<RoleDTO>();
+                foreach (var role in _userUnitOfWork.RoleDataLayer.GetRoles())
+                {
+                    response.Roles.Add(new RoleDTO()
+                    {
+                        Name = role.Name,
+                        RoleId = role.RoleId
+                    });
+                }
                 response.User = DAO2DTO(user);
                 response.StatusCode = HttpStatusCode.OK;
             }
