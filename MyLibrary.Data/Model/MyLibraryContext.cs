@@ -19,9 +19,13 @@ namespace MyLibrary.Data.Model
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<BookGenre> BookGenre { get; set; }
         public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<FictionType> FictionType { get; set; }
+        public virtual DbSet<FormType> FormType { get; set; }
         public virtual DbSet<Genre> Genre { get; set; }
+        public virtual DbSet<PublicationFormat> PublicationFormat { get; set; }
         public virtual DbSet<Publisher> Publisher { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<Series> Series { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
 
@@ -79,46 +83,80 @@ namespace MyLibrary.Data.Model
 
             modelBuilder.Entity<Book>(entity =>
             {
-                entity.HasKey(e => e.Isbn)
-                    .HasName("PK__Book__447D36EB8724FE6B");
-
                 entity.ToTable("Book", "Book");
+
+                entity.Property(e => e.BookId).HasColumnName("BookID");
+
+                entity.Property(e => e.CoverImage).HasColumnType("text");
+
+                entity.Property(e => e.EIsbn)
+                    .HasColumnName("eISBN")
+                    .HasMaxLength(12)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FictionTypeId).HasColumnName("FictionTypeID");
+
+                entity.Property(e => e.FormTypeId).HasColumnName("FormTypeID");
 
                 entity.Property(e => e.Isbn)
                     .HasColumnName("ISBN")
                     .HasMaxLength(12)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.PublicationFormatId).HasColumnName("PublicationFormatID");
+
+                entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
+
+                entity.Property(e => e.Subtitle)
                     .IsRequired()
                     .HasMaxLength(200)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.FictionType)
+                    .WithMany(p => p.Book)
+                    .HasForeignKey(d => d.FictionTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FictionTypeBook");
+
+                entity.HasOne(d => d.FormType)
+                    .WithMany(p => p.Book)
+                    .HasForeignKey(d => d.FormTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FormTypeBook");
+
+                entity.HasOne(d => d.PublicationFormat)
+                    .WithMany(p => p.Book)
+                    .HasForeignKey(d => d.PublicationFormatId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PublicationFormatBook");
             });
 
             modelBuilder.Entity<BookGenre>(entity =>
             {
-                entity.HasKey(e => new { e.GenreId, e.Isbn });
+                entity.HasKey(e => new { e.GenreId, e.BookId });
 
                 entity.ToTable("BookGenre", "Book");
 
                 entity.Property(e => e.GenreId).HasColumnName("GenreID");
 
-                entity.Property(e => e.Isbn)
-                    .HasColumnName("ISBN")
-                    .HasMaxLength(12)
-                    .IsUnicode(false);
+                entity.Property(e => e.BookId).HasColumnName("BookID");
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.BookGenre)
+                    .HasForeignKey(d => d.BookId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookGenreBook");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.BookGenre)
                     .HasForeignKey(d => d.GenreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookGenreGenre");
-
-                entity.HasOne(d => d.IsbnNavigation)
-                    .WithMany(p => p.BookGenre)
-                    .HasForeignKey(d => d.Isbn)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_BookGenreBook");
             });
 
             modelBuilder.Entity<Country>(entity =>
@@ -132,6 +170,34 @@ namespace MyLibrary.Data.Model
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(80)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<FictionType>(entity =>
+            {
+                entity.HasKey(e => e.TypeId);
+
+                entity.ToTable("FictionType", "Book");
+
+                entity.Property(e => e.TypeId).HasColumnName("TypeID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<FormType>(entity =>
+            {
+                entity.HasKey(e => e.TypeId);
+
+                entity.ToTable("FormType", "Book");
+
+                entity.Property(e => e.TypeId).HasColumnName("TypeID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(20)
                     .IsUnicode(false);
             });
 
@@ -159,6 +225,20 @@ namespace MyLibrary.Data.Model
                     .WithMany(p => p.GenreModifiedByNavigation)
                     .HasForeignKey(d => d.ModifiedBy)
                     .HasConstraintName("FK_GenreUserModified");
+            });
+
+            modelBuilder.Entity<PublicationFormat>(entity =>
+            {
+                entity.HasKey(e => e.TypeId);
+
+                entity.ToTable("PublicationFormat", "Book");
+
+                entity.Property(e => e.TypeId).HasColumnName("TypeID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Publisher>(entity =>
@@ -235,6 +315,21 @@ namespace MyLibrary.Data.Model
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Series>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Series", "Book");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SeriesId)
+                    .HasColumnName("SeriesID")
+                    .ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<User>(entity =>
