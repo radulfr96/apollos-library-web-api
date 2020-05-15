@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.DTOs\MyLibrary.Common.csproj" />
+    <PackageReference Include="my-library-common" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
