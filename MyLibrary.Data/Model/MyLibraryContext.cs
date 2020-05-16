@@ -29,6 +29,15 @@ namespace MyLibrary.Data.Model
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("server=localhost\\sqlexpress;Database=MyLibrary;Trusted_Connection=True;Integrated Security=True;MultipleActiveResultSets=true");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Author>(entity =>
@@ -80,6 +89,8 @@ namespace MyLibrary.Data.Model
 
                 entity.Property(e => e.CoverImage).HasColumnType("text");
 
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.EIsbn)
                     .HasColumnName("eISBN")
                     .HasMaxLength(12)
@@ -94,7 +105,11 @@ namespace MyLibrary.Data.Model
                     .HasMaxLength(12)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.PublicationFormatId).HasColumnName("PublicationFormatID");
+
+                entity.Property(e => e.PublisherId).HasColumnName("PublisherID");
 
                 entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
 
@@ -108,6 +123,12 @@ namespace MyLibrary.Data.Model
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.BookCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Book__CreatedBy__571DF1D5");
+
                 entity.HasOne(d => d.FictionType)
                     .WithMany(p => p.Book)
                     .HasForeignKey(d => d.FictionTypeId)
@@ -120,11 +141,23 @@ namespace MyLibrary.Data.Model
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FormTypeBook");
 
+                entity.HasOne(d => d.ModifiedByNavigation)
+                    .WithMany(p => p.BookModifiedByNavigation)
+                    .HasForeignKey(d => d.ModifiedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PublisherUserModified");
+
                 entity.HasOne(d => d.PublicationFormat)
                     .WithMany(p => p.Book)
                     .HasForeignKey(d => d.PublicationFormatId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PublicationFormatBook");
+
+                entity.HasOne(d => d.Publisher)
+                    .WithMany(p => p.Book)
+                    .HasForeignKey(d => d.PublisherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookPublisher");
             });
 
             modelBuilder.Entity<BookGenre>(entity =>

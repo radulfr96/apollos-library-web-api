@@ -5,6 +5,11 @@ namespace MyLibrary.Data.Model
 {
     public partial class Publisher
     {
+        public Publisher()
+        {
+            Book = new HashSet<Book>();
+        }
+
         public int PublisherId { get; set; }
         public string Name { get; set; }
         public string Website { get; set; }
@@ -22,5 +27,6 @@ namespace MyLibrary.Data.Model
         public virtual Country Country { get; set; }
         public virtual User CreatedByNavigation { get; set; }
         public virtual User ModifiedByNavigation { get; set; }
+        public virtual ICollection<Book> Book { get; set; }
     }
 }
