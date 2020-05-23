@@ -16,7 +16,7 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public Book GetAuthor(int id)
+        public Book GetBook(int id)
         {
             return _context.Book.FirstOrDefault(b => b.BookId == id);
         }

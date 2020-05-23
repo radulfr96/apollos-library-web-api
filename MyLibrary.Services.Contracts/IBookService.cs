@@ -15,6 +15,6 @@ namespace MyLibrary.Services.Contracts
         /// </summary>
         /// <param name="id">The id of the book to be found</param>
         /// <returns>The response indicating the result</returns>
-        GetAuthorResponse GetBook(int id);
+        GetBookResponse GetBook(int id);
     }
 }

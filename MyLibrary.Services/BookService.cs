@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using MyLibrary.Common.DTOs;
 using MyLibrary.Common.Responses;
+using MyLibrary.Data.Model;
 using MyLibrary.Services.Contracts;
 using MyLibrary.UnitOfWork.Contracts;
 using NLog;
@@ -24,12 +26,12 @@ namespace MyLibrary.Services
             _principal = principal;
         }
 
-        public GetAuthorResponse GetBook(int id)
+        public GetBookResponse GetBook(int id)
         {
-            var response = new GetGenreResponse();
+            var response = new GetBookResponse();
             try
             {
-                var genre = _bookUnitOfWork.GenreDataLayer.GetGenre(id);
+                var genre = _bookUnitOfWork.BookDataLayer.GetBook(id);
 
                 if (genre == null)
                 {
@@ -37,15 +39,35 @@ namespace MyLibrary.Services
                     return response;
                 }
 
-                response.Genre = DAO2DTO(genre);
+                response.Book = DAO2DTO(genre);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
                 s_logger.Error(ex, "Unable to find book.");
-                response = new GetGenreResponse();
+                response = new GetBookResponse();
             }
             return response;
+        }
+
+        public BookDTO DAO2DTO(Book book)
+        {
+            return new BookDTO()
+            {
+                BookID = book.BookId,
+                CoverImage = Encoding.ASCII.GetBytes(book.CoverImage),
+                Edition = book.Edition,
+                eISBN = book.EIsbn,
+                FictionType = book.FictionTypeId,
+                FormType = book.FormTypeId,
+                ISBN = book.Isbn,
+                NumberInSeries = book.NumberInSeries,
+                PublicationFormat = book.PublicationFormatId,
+                Publisher = book.PublisherId,
+                SeriesID = book.SeriesId,
+                Subtitle = book.Subtitle,
+                Title = book.Title,
+            };
         }
     }
 }
