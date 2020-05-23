@@ -55,7 +55,7 @@ namespace MyLibrary.Services
             return new BookDTO()
             {
                 BookID = book.BookId,
-                CoverImage = Encoding.ASCII.GetBytes(book.CoverImage),
+                CoverImage = book.CoverImage == null ? null : Encoding.ASCII.GetBytes(book.CoverImage),
                 Edition = book.Edition,
                 eISBN = book.EIsbn,
                 FictionType = book.FictionTypeId,
