@@ -61,7 +61,23 @@ namespace MyLibrary.Services.XUnitTestProject
                 PublisherId = 1,
                 SeriesId = 1,
                 Subtitle = "Book For Testing",
-                Title = "Test Book"
+                Title = "Test Book",
+                BookAuthor = new List<BookAuthor>()
+                {
+                    new BookAuthor()
+                    {
+                        AuthorId = 1,
+                        BookId = 1
+                    }
+                },
+                BookGenre = new List<BookGenre>()
+                {
+                    new BookGenre()
+                    {
+                        GenreId = 1,
+                        BookId = 1,
+                    }
+                }
             });
             uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
 
@@ -70,7 +86,19 @@ namespace MyLibrary.Services.XUnitTestProject
             var response = service.GetBook(1);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
+            Assert.Equal(1, response.Book.BookID);
+            Assert.True(response.Book.Authors.Count == 1);
+            Assert.True(response.Book.Genres.Count == 1);
+            Assert.Equal(1, response.Book.Edition);
+            Assert.Equal("465564654646546", response.Book.eISBN);
+            Assert.Equal(1, response.Book.FictionType);
+            Assert.Equal(1, response.Book.FormType);
+            Assert.Equal(1, response.Book.NumberInSeries);
+            Assert.Equal(1, response.Book.PublicationFormat);
+            Assert.Equal(1, response.Book.Publisher);
+            Assert.Equal(1, response.Book.SeriesID);
+            Assert.Equal("Book For Testing", response.Book.Subtitle);
+            Assert.Equal("Test Book", response.Book.Title);
         }
     }
 }

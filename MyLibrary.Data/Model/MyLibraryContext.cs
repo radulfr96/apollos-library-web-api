@@ -17,6 +17,7 @@ namespace MyLibrary.Data.Model
 
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Book> Book { get; set; }
+        public virtual DbSet<BookAuthor> BookAuthor { get; set; }
         public virtual DbSet<BookGenre> BookGenre { get; set; }
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<FictionType> FictionType { get; set; }
@@ -158,6 +159,29 @@ namespace MyLibrary.Data.Model
                     .HasForeignKey(d => d.PublisherId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookPublisher");
+            });
+
+            modelBuilder.Entity<BookAuthor>(entity =>
+            {
+                entity.HasKey(e => new { e.AuthorId, e.BookId });
+
+                entity.ToTable("BookAuthor", "Book");
+
+                entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
+
+                entity.Property(e => e.BookId).HasColumnName("BookID");
+
+                entity.HasOne(d => d.Author)
+                    .WithMany(p => p.BookAuthor)
+                    .HasForeignKey(d => d.AuthorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookAuthorAuthor");
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.BookAuthor)
+                    .HasForeignKey(d => d.BookId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BookAuthorBook");
             });
 
             modelBuilder.Entity<BookGenre>(entity =>

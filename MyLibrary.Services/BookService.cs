@@ -7,6 +7,7 @@ using MyLibrary.UnitOfWork.Contracts;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -67,6 +68,8 @@ namespace MyLibrary.Services
                 SeriesID = book.SeriesId,
                 Subtitle = book.Subtitle,
                 Title = book.Title,
+                Authors = book.BookAuthor.Select(ba => ba.AuthorId).ToList(),
+                Genres = book.BookGenre.Select(bg => bg.GenreId).ToList(),
             };
         }
     }

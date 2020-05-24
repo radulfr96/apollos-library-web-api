@@ -155,7 +155,7 @@ CREATE TABLE [Book].[Book]
 	[Subtitle] VARCHAR(200) NOT NULL,
 	[SeriesID] INT,
 	[NumberInSeries] INT,
-	[Edition] VARCHAR(200),
+	[Edition] INT,
 	[PublicationFormatID] INT NOT NULL,
 	[FictionTypeID] INT NOT NULL,
 	[FormTypeID] INT NOT NULL,
@@ -196,6 +196,16 @@ CREATE TABLE [Book].[BookGenre]
 	REFERENCES [Book].[Book] (BookID)
 )
 
+CREATE TABLE [Book].[BookAuthor]
+(
+	[AuthorID] INT NOT NULL,
+	BookID INT NOT NULL,
+	CONSTRAINT PK_BookAuthor PRIMARY KEY (AuthorID, BookID),
+	CONSTRAINT FK_BookAuthorAuthor FOREIGN KEY (AuthorID)
+	REFERENCES [Author].[Author] (AuthorID),
+	CONSTRAINT FK_BookAuthorBook FOREIGN KEY (BookID)
+	REFERENCES [Book].[Book] (BookID)
+)
 
 DECLARE @UserID INT
 , @AdminRoleID INT

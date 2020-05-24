@@ -18,7 +18,22 @@ namespace MyLibrary.DataLayer
 
         public Book GetBook(int id)
         {
-            return _context.Book.FirstOrDefault(b => b.BookId == id);
+            var book = (from b in _context.Book
+                    where b.BookId == id
+                    select b).FirstOrDefault();
+
+            if (book != null)
+            {
+                book.BookGenre = (from bg in _context.BookGenre
+                                  where bg.BookId == id
+                                  select bg).ToList();
+
+                book.BookAuthor = (from ba in _context.BookAuthor
+                                   where ba.BookId == id
+                                   select ba).ToList();
+            }
+
+            return book;
         }
     }
 }

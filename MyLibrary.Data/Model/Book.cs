@@ -7,6 +7,7 @@ namespace MyLibrary.Data.Model
     {
         public Book()
         {
+            BookAuthor = new HashSet<BookAuthor>();
             BookGenre = new HashSet<BookGenre>();
         }
 
@@ -34,6 +35,7 @@ namespace MyLibrary.Data.Model
         public virtual User ModifiedByNavigation { get; set; }
         public virtual PublicationFormat PublicationFormat { get; set; }
         public virtual Publisher Publisher { get; set; }
+        public virtual ICollection<BookAuthor> BookAuthor { get; set; }
         public virtual ICollection<BookGenre> BookGenre { get; set; }
     }
 }
