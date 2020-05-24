@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace MyLibrary.Data.Model
 {
-    public partial class BookGenre
+    public partial class BookAuthor
     {
-        public int GenreId { get; set; }
+        public int AuthorId { get; set; }
         public int BookId { get; set; }
 
+        public virtual Author Author { get; set; }
         public virtual Book Book { get; set; }
-        public virtual Genre Genre { get; set; }
     }
 }
