@@ -26,6 +26,92 @@ namespace MyLibrary.Services.XUnitTestProject
         }
 
         [Fact]
+        public void GetBooksFailNotFound()
+        {
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var response = service.GetBooks();
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public void GetBooksSuccess()
+        {
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            dataLayer.Setup(b => b.GetBooks()).Returns(new List<Book>()
+            {
+                new Book()
+                {
+                    CreatedDate = DateTime.Now,
+                    BookId = 1,
+                    CoverImage = null,
+                    CreatedBy = 1,
+                    Edition = 1,
+                    EIsbn = "465564654646546",
+                    FictionTypeId = 1,
+                    FictionType = new FictionType()
+                    {
+                        TypeId = 1,
+                        Name = "Test Fiction Type",
+                    },
+                    FormTypeId = 1,
+                    NumberInSeries = 1,
+                    PublicationFormatId = 1,
+                    PublicationFormat = new PublicationFormat()
+                    {
+                        TypeId = 1,
+                        Name = "Test Publication Format"
+                    },
+                    FormType = new FormType()
+                    {
+                        TypeId = 1,
+                        Name = "Test Format Type"
+                    },
+                    PublisherId = 1,
+                    SeriesId = 1,
+                    Subtitle = "Book For Testing",
+                    Title = "Test Book",
+                    BookAuthor = new List<BookAuthor>()
+                    {
+                        new BookAuthor()
+                        {
+                            AuthorId = 1,
+                            BookId = 1
+                        }
+                    },
+                    BookGenre = new List<BookGenre>()
+                    {
+                        new BookGenre()
+                        {
+                            GenreId = 1,
+                            BookId = 1,
+                        }
+                    }
+                }
+            });
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var response = service.GetBooks();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(1, response.Books[0].BookID);
+            Assert.Equal("465564654646546", response.Books[0].eISBN);
+            Assert.Equal("Test Fiction Type", response.Books[0].FictionType);
+            Assert.Equal("Test Format Type", response.Books[0].FormatType);
+            Assert.Equal("Test Book", response.Books[0].Title);
+        }
+
+        [Fact]
         public void GetBookFailNotFound()
         {
             var dataLayer = new Mock<IBookDataLayer>();

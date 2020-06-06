@@ -63,5 +63,37 @@ namespace MyLibrary.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        /// <summary>
+        /// Used to get a books
+        /// </summary>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("")]
+        public IActionResult GetBooks()
+        {
+            try
+            {
+                var response = _bookService.GetBooks();
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.NotFound:
+                        return NotFound();
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, $"Unable to retreive books.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

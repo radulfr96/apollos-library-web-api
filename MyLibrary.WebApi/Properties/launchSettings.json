@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MyLibrary.Services": {
+    "MyLibrary.WebApi": {
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
