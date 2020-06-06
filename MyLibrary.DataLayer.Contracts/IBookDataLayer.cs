@@ -16,5 +16,11 @@ namespace MyLibrary.DataLayer.Contracts
         /// <param name="id">The id of the book to be found</param>
         /// <returns>The book with the id received</returns>
         Book GetBook(int id);
+
+        /// <summary>
+        /// Used to get a books
+        /// </summary>
+        /// <returns>The books</returns>
+        List<Book> GetBooks();
     }
 }

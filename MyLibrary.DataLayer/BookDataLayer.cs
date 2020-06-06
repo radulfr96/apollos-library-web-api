@@ -35,5 +35,17 @@ namespace MyLibrary.DataLayer
 
             return book;
         }
+
+        public List<Book> GetBooks()
+        {
+            var books = _context.Book.ToList();
+
+            foreach (var book in books)
+            {
+                book.FictionType = _context.FictionType.FirstOrDefault(f => f.TypeId == book.FictionTypeId);
+            }    
+
+            return books;
+        }
     }
 }

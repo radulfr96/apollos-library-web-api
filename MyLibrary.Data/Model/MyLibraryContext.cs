@@ -115,7 +115,6 @@ namespace MyLibrary.Data.Model
                 entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
 
                 entity.Property(e => e.Subtitle)
-                    .IsRequired()
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
@@ -145,7 +144,6 @@ namespace MyLibrary.Data.Model
                 entity.HasOne(d => d.ModifiedByNavigation)
                     .WithMany(p => p.BookModifiedByNavigation)
                     .HasForeignKey(d => d.ModifiedBy)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PublisherUserModified");
 
                 entity.HasOne(d => d.PublicationFormat)

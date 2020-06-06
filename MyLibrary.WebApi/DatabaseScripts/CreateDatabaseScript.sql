@@ -152,7 +152,7 @@ CREATE TABLE [Book].[Book]
 	[ISBN] VARCHAR(12),
 	[eISBN] VARCHAR(12),
 	[Title] VARCHAR(200) NOT NULL,
-	[Subtitle] VARCHAR(200) NOT NULL,
+	[Subtitle] VARCHAR(200),
 	[SeriesID] INT,
 	[NumberInSeries] INT,
 	[Edition] INT,
@@ -163,8 +163,8 @@ CREATE TABLE [Book].[Book]
 	[CoverImage] TEXT,
 	[CreatedDate] DATETIME NOT NULL,
 	[CreatedBy] INT NOT NULL,
-	[ModifiedDate] DATETIME NOT NULL,
-	[ModifiedBy] INT NOT NULL,
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] INT,
 	CONSTRAINT PK_Book PRIMARY KEY (BookID),
 	CONSTRAINT FK_PublicationFormatBook
 	FOREIGN KEY ([PublicationFormatID]) 
