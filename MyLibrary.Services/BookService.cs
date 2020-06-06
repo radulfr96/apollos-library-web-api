@@ -58,7 +58,7 @@ namespace MyLibrary.Services
             {
                 var books = _bookUnitOfWork.BookDataLayer.GetBooks();
 
-                if (books == null)
+                if (books == null || books.Count == 0)
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
                     return response;

@@ -43,6 +43,8 @@ namespace MyLibrary.DataLayer
             foreach (var book in books)
             {
                 book.FictionType = _context.FictionType.FirstOrDefault(f => f.TypeId == book.FictionTypeId);
+
+                book.FormType = _context.FormType.FirstOrDefault(p => p.TypeId == book.FormTypeId);
             }    
 
             return books;
