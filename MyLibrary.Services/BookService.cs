@@ -32,21 +32,53 @@ namespace MyLibrary.Services
             var response = new GetBookResponse();
             try
             {
-                var genre = _bookUnitOfWork.BookDataLayer.GetBook(id);
+                var book = _bookUnitOfWork.BookDataLayer.GetBook(id);
 
-                if (genre == null)
+                if (book == null)
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
                     return response;
                 }
 
-                response.Book = DAO2DTO(genre);
+                response.Book = DAO2DTO(book);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
                 s_logger.Error(ex, "Unable to find book.");
                 response = new GetBookResponse();
+            }
+            return response;
+        }
+
+        public GetBooksResponse GetBooks()
+        {
+            var response = new GetBooksResponse();
+            try
+            {
+                var books = _bookUnitOfWork.BookDataLayer.GetBooks();
+
+                if (books == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return response;
+                }
+
+                response.Books = books.Select(b => new BookListItemDTO()
+                {
+                    BookID = b.BookId,
+                    eISBN = b.EIsbn,
+                    FictionType = b.FictionType.Name,
+                    ISBN = b.Isbn,
+                    FormatType = b.FormType.Name,
+                    Title = b.Title
+                }).ToList();
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, "Unable to find books.");
+                response = new GetBooksResponse();
             }
             return response;
         }

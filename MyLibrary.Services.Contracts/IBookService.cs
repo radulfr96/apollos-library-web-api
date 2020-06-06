@@ -16,5 +16,11 @@ namespace MyLibrary.Services.Contracts
         /// <param name="id">The id of the book to be found</param>
         /// <returns>The response indicating the result</returns>
         GetBookResponse GetBook(int id);
+
+        /// <summary>
+        /// Used to get a books
+        /// </summary>
+        /// <returns>The response indicating the result</returns>
+        GetBooksResponse GetBooks();
     }
 }
