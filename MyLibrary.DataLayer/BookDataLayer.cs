@@ -16,6 +16,21 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
+        public void AddBook(Book book)
+        {
+            _context.Book.Add(book);
+        }
+
+        public void AddBookAuthor(BookAuthor bookAuthor)
+        {
+            _context.BookAuthor.Add(bookAuthor);
+        }
+
+        public void AddBookGenre(BookGenre bookGenre)
+        {
+            _context.BookGenre.Add(bookGenre);
+        }
+
         public Book GetBook(int id)
         {
             var book = (from b in _context.Book

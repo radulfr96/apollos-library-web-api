@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MyLibrary.Common.DTOs;
+using MyLibrary.Common.Requests;
 using MyLibrary.Common.Responses;
 using MyLibrary.Data.Model;
 using MyLibrary.Services.Contracts;
@@ -25,6 +26,11 @@ namespace MyLibrary.Services
         {
             _bookUnitOfWork = bookUnitOfWork;
             _principal = principal;
+        }
+
+        public AddBookResponse GetBook(AddBookRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public GetBookResponse GetBook(int id)
