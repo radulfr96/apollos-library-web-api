@@ -16,7 +16,7 @@ namespace MyLibrary.Services.Contracts
         /// </summary>
         /// <param name="request">the request with the book information</param>
         /// <returns>the response indicating the result and the book id if added</returns>
-        AddBookResponse GetBook(AddBookRequest request);
+        AddBookResponse AddBook(AddBookRequest request);
 
         /// <summary>
         /// Used to get a book

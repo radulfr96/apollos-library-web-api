@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyLibrary.Common.Requests;
 using MyLibrary.Data.Model;
 using MyLibrary.Services;
 using MyLibrary.Services.Contracts;
@@ -29,6 +30,39 @@ namespace MyLibrary.WebApi.Controllers
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _bookService = new BookService(new BookUnitOfWork(_dbContext), _httpContextAccessor.HttpContext.User);
+        }
+
+        /// <summary>
+        /// Used to add a book
+        /// </summary>
+        /// <param name="request">the request with the book information</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPost("")]
+        public IActionResult AddBook(AddBookRequest request)
+        {
+            try
+            {
+                var response = _bookService.AddBook(request);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.NotFound:
+                        return NotFound();
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, $"Unable to add book.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>

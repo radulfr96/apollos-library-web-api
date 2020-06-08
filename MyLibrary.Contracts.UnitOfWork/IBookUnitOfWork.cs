@@ -26,5 +26,10 @@ namespace MyLibrary.UnitOfWork.Contracts
         /// Used to commit changes
         /// </summary>
         void Commit();
+
+        /// <summary>
+        /// Used to reverse changes in a transaction
+        /// </summary>
+        void Rollback();
     }
 }

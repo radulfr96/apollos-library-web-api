@@ -13,7 +13,6 @@ namespace MyLibrary.UnitOfWork
     {
         private IBookDataLayer _bookDataLayer;
         private readonly MyLibraryContext _context;
-        private IDbContextTransaction _transaction;
         private bool disposed = false;
 
         public BookUnitOfWork(MyLibraryContext context)
@@ -35,12 +34,20 @@ namespace MyLibrary.UnitOfWork
 
         public void Begin()
         {
-            _transaction = _context.Database.BeginTransaction();
+            _context.Database.BeginTransaction();
         }
 
         public void Commit()
         {
-            _transaction.Commit();
+            _context.Database.CommitTransaction();
+        }
+
+        public void Rollback()
+        {
+            if (_context.Database.CurrentTransaction != null)
+            {
+                _context.Database.RollbackTransaction();
+            }
         }
 
         public void Dispose()
@@ -56,10 +63,6 @@ namespace MyLibrary.UnitOfWork
 
             if (disposing)
             {
-                if (_transaction != null)
-                {
-                    _transaction.Dispose();
-                }
                 _context.Dispose();
             }
 
