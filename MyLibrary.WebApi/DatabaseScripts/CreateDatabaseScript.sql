@@ -11,9 +11,17 @@ GO
 CREATE SCHEMA [Users]
 GO
 
-DECLARE @UserID INT
-, @AdminRoleID INT
-, @StandardRoleID INT
+CREATE SCHEMA [Genre]
+GO
+
+CREATE SCHEMA [Book]
+GO
+
+CREATE SCHEMA [Publisher]
+GO
+
+CREATE SCHEMA [Author]
+GO
 
 CREATE TABLE [Users].[User] 
 (
@@ -30,30 +38,12 @@ CREATE TABLE [Users].[User]
 	CONSTRAINT PK_User PRIMARY KEY (UserID)
 )
 
-INSERT INTO [Users].[User] ([Username], [Password], [Salter], [CreatedDate], [CreatedBy], [IsActive], [IsDeleted])
-VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1, 0)
-
-SELECT @UserID = U.UserID
-FROM Users.[User] U
-WHERE U.Username = 'Radulfr'
-
 CREATE TABLE [Users].[Role]
 (
 	[RoleID] INT IDENTITY NOT NULL,
 	[Name] VARCHAR(20) NOT NULL,
 	CONSTRAINT PK_Role PRIMARY KEY (RoleID)
 )
-
-INSERT INTO [Users].[Role] ([Name])
-VALUES ('Admin'), ('Standard User')
-
-SELECT @AdminRoleID = R.RoleID
-FROM Users.[Role] R
-WHERE R.[Name] = 'Admin'
-
-SELECT @StandardRoleID = R.RoleID
-FROM Users.[Role] R
-WHERE R.[Name] = 'Standard User'
 
 CREATE TABLE [Users].[UserRole]
 (
@@ -66,24 +56,6 @@ CREATE TABLE [Users].[UserRole]
 	CONSTRAINT FK_UserRoleRole FOREIGN KEY (RoleID)
 	REFERENCES [Users].[Role] (RoleID)
 )
-
-PRINT ('UserID - ' + CONVERT(VARCHAR(5), @UserID))
-
-PRINT ('RoleID - ' + + CONVERT(VARCHAR(5), @StandardRoleID))
-
-INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
-VALUES (@UserID, @StandardRoleID)
-
-PRINT ('UserID - ' + + CONVERT(VARCHAR(5), @UserID))
-
-PRINT ('RoleID - ' + + CONVERT(VARCHAR(5), @AdminRoleID))
-
-INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
-VALUES (@UserID, @AdminRoleID)
-GO
-
-CREATE SCHEMA [Genre]
-GO
 
 CREATE TABLE [Genre].[Genre]
 (
@@ -101,9 +73,6 @@ CREATE TABLE [Genre].[Genre]
 )
 GO
 
-CREATE SCHEMA [Book]
-GO
-
 CREATE TABLE [Book].[Series]
 (
 	[SeriesID] INT IDENTITY NOT NULL,
@@ -117,18 +86,12 @@ CREATE TABLE [Book].[PublicationFormat]
 	CONSTRAINT PK_PublicationFormat PRIMARY KEY (TypeID)
 )
 
-INSERT INTO [Book].PublicationFormat ([Name])
-VALUES ('Printed'), ('eBook'), ('Audio Book')
-
 CREATE TABLE [Book].[FictionType]
 (
 	[TypeID] INT IDENTITY NOT NULL,
 	[Name] VARCHAR(20) NOT NULL,
 	CONSTRAINT PK_FictionType PRIMARY KEY (TypeID)
 )
-
-INSERT INTO [Book].FictionType ([Name])
-VALUES ('Fiction'), ('Non-fiction')
 
 CREATE TABLE [Book].[FormType]
 (
@@ -137,8 +100,51 @@ CREATE TABLE [Book].[FormType]
 	CONSTRAINT PK_FormType PRIMARY KEY (TypeID)
 )
 
-INSERT INTO [Book].FormType ([Name])
-VALUES ('Novel'), ('Novella'), ('Screenplay'), ('Manuscript'), ('Poem'), ('Text Book')
+CREATE TABLE [dbo].[Country]
+(
+	[CountryID] CHAR(2) NOT NULL PRIMARY KEY,
+	[Name] VARCHAR(80) NOT NULL,
+)
+
+CREATE TABLE [Publisher].[Publisher]
+(
+	[PublisherID] INT PRIMARY KEY IDENTITY NOT NULL,
+	[Name] VARCHAR(200) NOT NULL,
+	[Website] VARCHAR(200),
+	[Street Address] VARCHAR(100) NOT NULL,
+	[City] VARCHAR(100) NOT NULL,
+	[Postcode] VARCHAR(5) NOT NULL,
+	[State] VARCHAR(50) NOT NULL,
+	[CountryID] CHAR(2) NOT NULL,
+	[IsDeleted] BIT,
+	[CreatedDate] DATETIME NOT NULL,
+	[CreatedBy] INT,
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] INT,
+	CONSTRAINT FK_PublisherCountry
+	FOREIGN KEY ([CountryID]) REFERENCES [dbo].[Country] (CountryID),
+	CONSTRAINT FK_PublisherUser
+	FOREIGN KEY (CreatedBy) REFERENCES [Users].[User] (UserID),
+	CONSTRAINT FK_PublisherUserModified
+	FOREIGN KEY (ModifiedBy) REFERENCES [Users].[User] (UserID)
+)
+GO
+
+CREATE TABLE [Author].[Author]
+(
+	[AuthorID] INT PRIMARY KEY IDENTITY NOT NULL,
+	[FirstName] VARCHAR(50) NOT NULL,
+	[MiddleName] VARCHAR(50),
+	[LastName] VARCHAR(50),
+	[Description] VARCHAR(2000),
+	[CountryID] CHAR(2) NOT NULL,
+	[CreatedDate] DATETIME NOT NULL,
+	[CreatedBy] INT NOT NULL,
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] INT,
+	CONSTRAINT FK_AuthorCountry
+	FOREIGN KEY (CountryID) REFERENCES [dbo].[Country] (CountryID) 
+)
 
 CREATE TABLE [Book].[Book]
 (
@@ -146,20 +152,37 @@ CREATE TABLE [Book].[Book]
 	[ISBN] VARCHAR(12),
 	[eISBN] VARCHAR(12),
 	[Title] VARCHAR(200) NOT NULL,
-	[Subtitle] VARCHAR(200) NOT NULL,
+	[Subtitle] VARCHAR(200),
 	[SeriesID] INT,
 	[NumberInSeries] INT,
 	[Edition] INT,
 	[PublicationFormatID] INT NOT NULL,
 	[FictionTypeID] INT NOT NULL,
 	[FormTypeID] INT NOT NULL,
+	[PublisherID] INT NOT NULL,
+	[CoverImage] TEXT,
+	[CreatedDate] DATETIME NOT NULL,
+	[CreatedBy] INT NOT NULL,
+	[ModifiedDate] DATETIME,
+	[ModifiedBy] INT,
 	CONSTRAINT PK_Book PRIMARY KEY (BookID),
 	CONSTRAINT FK_PublicationFormatBook
-	FOREIGN KEY ([PublicationFormatID]) REFERENCES [Book].[PublicationFormat] (TypeID),
+	FOREIGN KEY ([PublicationFormatID]) 
+	REFERENCES [Book].[PublicationFormat] (TypeID),
 	CONSTRAINT FK_FictionTypeBook
-	FOREIGN KEY ([FictionTypeID]) REFERENCES [Book].[FictionType] (TypeID),
+	FOREIGN KEY ([FictionTypeID])
+	REFERENCES [Book].[FictionType] (TypeID),
 	CONSTRAINT FK_FormTypeBook
-	FOREIGN KEY ([FormTypeID]) REFERENCES [Book].[FormType] (TypeID),
+	FOREIGN KEY ([FormTypeID]) 
+	REFERENCES [Book].[FormType] (TypeID),
+	CONSTRAINT FK_BookPublisher
+	FOREIGN KEY (PublisherID)
+	REFERENCES Publisher.Publisher (PublisherID),
+	FOREIGN KEY (CreatedBy)
+	REFERENCES [Users].[User] (UserID),
+	CONSTRAINT FK_PublisherUserModified
+	FOREIGN KEY (ModifiedBy) 
+	REFERENCES [Users].[User] (UserID)
 )
 
 CREATE TABLE [Book].[BookGenre]
@@ -173,11 +196,55 @@ CREATE TABLE [Book].[BookGenre]
 	REFERENCES [Book].[Book] (BookID)
 )
 
-CREATE TABLE [dbo].[Country]
+CREATE TABLE [Book].[BookAuthor]
 (
-	[CountryID] CHAR(2) NOT NULL PRIMARY KEY,
-	[Name] VARCHAR(80) NOT NULL,
+	[AuthorID] INT NOT NULL,
+	BookID INT NOT NULL,
+	CONSTRAINT PK_BookAuthor PRIMARY KEY (AuthorID, BookID),
+	CONSTRAINT FK_BookAuthorAuthor FOREIGN KEY (AuthorID)
+	REFERENCES [Author].[Author] (AuthorID),
+	CONSTRAINT FK_BookAuthorBook FOREIGN KEY (BookID)
+	REFERENCES [Book].[Book] (BookID)
 )
+
+DECLARE @UserID INT
+, @AdminRoleID INT
+, @StandardRoleID INT
+
+
+INSERT INTO [Users].[User] ([Username], [Password], [Salter], [CreatedDate], [CreatedBy], [IsActive], [IsDeleted])
+VALUES ('Radulfr', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', 'Q3uQu0Nybf8Jpb6suzJPsQ==', GETDATE(), 'Radulfr', 1, 0)
+
+SELECT @UserID = U.UserID
+FROM Users.[User] U
+WHERE U.Username = 'Radulfr'
+
+INSERT INTO [Users].[Role] ([Name])
+VALUES ('Admin'), ('Standard User')
+
+SELECT @AdminRoleID = R.RoleID
+FROM Users.[Role] R
+WHERE R.[Name] = 'Admin'
+
+SELECT @StandardRoleID = R.RoleID
+FROM Users.[Role] R
+WHERE R.[Name] = 'Standard User'
+
+INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
+VALUES (@UserID, @StandardRoleID)
+
+INSERT INTO [Users].[UserRole] ([UserID], [RoleID])
+VALUES (@UserID, @AdminRoleID)
+GO
+
+INSERT INTO [Book].PublicationFormat ([Name])
+VALUES ('Printed'), ('eBook'), ('Audio Book')
+
+INSERT INTO [Book].FictionType ([Name])
+VALUES ('Fiction'), ('Non-fiction')
+
+INSERT INTO [Book].FormType ([Name])
+VALUES ('Novel'), ('Novella'), ('Screenplay'), ('Manuscript'), ('Poem'), ('Text Book')
 
 INSERT INTO [dbo].[Country] VALUES ('AD','Andorra')
 INSERT INTO [dbo].[Country] VALUES ('AE','United Arab Emirates')
@@ -422,52 +489,6 @@ INSERT INTO [dbo].[Country] VALUES ('XK','Kosovo')
 INSERT INTO [dbo].[Country] VALUES ('YE','Yemen')
 INSERT INTO [dbo].[Country] VALUES ('ZA','South Africa')
 INSERT INTO [dbo].[Country] VALUES ('ZM','Zambia')
-INSERT INTO [dbo].[Country] VALUES ('ZR','Zaire')
+INSERT INTO [dbo].	[Country] VALUES ('ZR','Zaire')
 INSERT INTO [dbo].[Country] VALUES ('ZW','Zimbabwe')
 GO
-
-CREATE SCHEMA [Publisher]
-GO
-
-CREATE TABLE [Publisher].[Publisher]
-(
-	[PublisherID] INT PRIMARY KEY IDENTITY NOT NULL,
-	[Name] VARCHAR(200) NOT NULL,
-	[Website] VARCHAR(200),
-	[Street Address] VARCHAR(100) NOT NULL,
-	[City] VARCHAR(100) NOT NULL,
-	[Postcode] VARCHAR(5) NOT NULL,
-	[State] VARCHAR(50) NOT NULL,
-	[CountryID] CHAR(2) NOT NULL,
-	[IsDeleted] BIT,
-	[CreatedDate] DATETIME NOT NULL,
-	[CreatedBy] INT,
-	[ModifiedDate] DATETIME,
-	[ModifiedBy] INT,
-	CONSTRAINT FK_PublisherCountry
-	FOREIGN KEY ([CountryID]) REFERENCES [dbo].[Country] (CountryID),
-	CONSTRAINT FK_PublisherUser
-	FOREIGN KEY (CreatedBy) REFERENCES [Users].[User] (UserID),
-	CONSTRAINT FK_PublisherUserModified
-	FOREIGN KEY (ModifiedBy) REFERENCES [Users].[User] (UserID)
-)
-GO
-
-CREATE SCHEMA [Author]
-GO
-
-CREATE TABLE [Author].[Author]
-(
-	[AuthorID] INT PRIMARY KEY IDENTITY NOT NULL,
-	[FirstName] VARCHAR(50) NOT NULL,
-	[MiddleName] VARCHAR(50),
-	[LastName] VARCHAR(50),
-	[Description] VARCHAR(2000),
-	[CountryID] CHAR(2) NOT NULL,
-	[CreatedDate] DATETIME NOT NULL,
-	[CreatedBy] INT NOT NULL,
-	[ModifiedDate] DATETIME,
-	[ModifiedBy] INT,
-	CONSTRAINT FK_AuthorCountry
-	FOREIGN KEY (CountryID) REFERENCES [dbo].[Country] (CountryID) 
-)

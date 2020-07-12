@@ -5,6 +5,11 @@ namespace MyLibrary.Data.Model
 {
     public partial class Author
     {
+        public Author()
+        {
+            BookAuthor = new HashSet<BookAuthor>();
+        }
+
         public int AuthorId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -17,5 +22,6 @@ namespace MyLibrary.Data.Model
         public int? ModifiedBy { get; set; }
 
         public virtual Country Country { get; set; }
+        public virtual ICollection<BookAuthor> BookAuthor { get; set; }
     }
 }
