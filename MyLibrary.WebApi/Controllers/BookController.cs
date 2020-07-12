@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyLibrary.Common.Requests;
+using MyLibrary.Common.Requests.Book;
 using MyLibrary.Data.Model;
 using MyLibrary.Services;
 using MyLibrary.Services.Contracts;
@@ -126,6 +127,39 @@ namespace MyLibrary.WebApi.Controllers
             catch (Exception ex)
             {
                 s_logger.Error(ex, $"Unable to retreive books.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Used to update a book
+        /// </summary>
+        /// <param name="request">the request with the book information</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPatch("")]
+        public IActionResult UpdateBook(UpdateBookRequest request)
+        {
+            try
+            {
+                var response = _bookService.UpdateBook(request);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return Ok(response);
+                    case HttpStatusCode.BadRequest:
+                        return BadRequest(BuildBadRequestMessage(response));
+                    case HttpStatusCode.NotFound:
+                        return NotFound();
+                    case HttpStatusCode.InternalServerError:
+                        return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                s_logger.Error(ex, $"Unable to update book.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
