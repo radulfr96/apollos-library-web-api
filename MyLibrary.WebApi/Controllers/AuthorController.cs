@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +14,6 @@ using MyLibrary.UnitOfWork;
 
 namespace MyLibrary.WebApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class AuthorController : BaseApiController
     {

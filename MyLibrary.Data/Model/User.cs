@@ -7,8 +7,6 @@ namespace MyLibrary.Data.Model
     {
         public User()
         {
-            BookCreatedByNavigation = new HashSet<Book>();
-            BookModifiedByNavigation = new HashSet<Book>();
             GenreCreatedByNavigation = new HashSet<Genre>();
             GenreModifiedByNavigation = new HashSet<Genre>();
             PublisherCreatedByNavigation = new HashSet<Publisher>();
@@ -27,8 +25,6 @@ namespace MyLibrary.Data.Model
         public DateTime? ModifiedDate { get; set; }
         public int? ModifiedBy { get; set; }
 
-        public virtual ICollection<Book> BookCreatedByNavigation { get; set; }
-        public virtual ICollection<Book> BookModifiedByNavigation { get; set; }
         public virtual ICollection<Genre> GenreCreatedByNavigation { get; set; }
         public virtual ICollection<Genre> GenreModifiedByNavigation { get; set; }
         public virtual ICollection<Publisher> PublisherCreatedByNavigation { get; set; }
