@@ -29,6 +29,20 @@ namespace MyLibrary.DataLayer.Contracts
         void AddBookGenre(BookGenre bookGenre);
 
         /// <summary>
+        /// Used to get a book by its ISBN
+        /// </summary>
+        /// <param name="isbn">The ISBN of the book to be found</param>
+        /// <returns>The book with the ISBN received</returns>
+        Book GetBookByISBN(string isbn);
+
+        /// <summary>
+        /// Used to get a book by its eISBN
+        /// </summary>
+        /// <param name="isbn">The eISBN of the book to be found</param>
+        /// <returns>The book with the eISBN received</returns>
+        Book GetBookByeISBN(string eisbn);
+
+        /// <summary>
         /// Used to get a book by its id
         /// </summary>
         /// <param name="id">The id of the book to be found</param>
@@ -40,5 +54,17 @@ namespace MyLibrary.DataLayer.Contracts
         /// </summary>
         /// <returns>The books</returns>
         List<Book> GetBooks();
+
+        /// <summary>
+        /// Used to delete a books genre relationships
+        /// </summary>
+        /// <param name="bookId">The book id of the relationships to delete</param>
+        void DeleteBookGenreRelationships(int bookId);
+
+        /// <summary>
+        /// Used to delete a books author relationships
+        /// </summary>
+        /// <param name="bookId">The book id of the relationships to delete</param>
+        void DeleteBookAuthorRelationships(int bookId);
     }
 }

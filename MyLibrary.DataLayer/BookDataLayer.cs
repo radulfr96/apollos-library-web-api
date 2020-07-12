@@ -51,18 +51,49 @@ namespace MyLibrary.DataLayer
             return book;
         }
 
+        public Book GetBookByeISBN(string eisbn)
+        {
+            return (from b in _context.Book
+                    where b.EIsbn == eisbn
+                    select b).FirstOrDefault();
+        }
+
+        public Book GetBookByISBN(string isbn)
+        {
+            return (from b in _context.Book
+                    where b.Isbn == isbn
+                    select b).FirstOrDefault();
+        }
+
         public List<Book> GetBooks()
         {
             var books = _context.Book.ToList();
 
+            var fictionTypes = _context.FictionType.ToList();
+            var formTypes = _context.FormType.ToList();
+
             foreach (var book in books)
             {
-                book.FictionType = _context.FictionType.FirstOrDefault(f => f.TypeId == book.FictionTypeId);
+                book.FictionType = fictionTypes.FirstOrDefault(f => f.TypeId == book.FictionTypeId);
 
-                book.FormType = _context.FormType.FirstOrDefault(p => p.TypeId == book.FormTypeId);
+                book.FormType = formTypes.FirstOrDefault(p => p.TypeId == book.FormTypeId);
             }    
 
             return books;
+        }
+
+        public void DeleteBookAuthorRelationships(int bookId)
+        {
+            var bookAuthors = _context.BookAuthor.Where(b => b.BookId == bookId);
+
+            _context.BookAuthor.RemoveRange(bookAuthors);
+        }
+
+        public void DeleteBookGenreRelationships(int bookId)
+        {
+            var bookGenres = _context.BookGenre.Where(b => b.BookId == bookId);
+
+            _context.BookGenre.RemoveRange(bookGenres);
         }
     }
 }
