@@ -28,3 +28,4 @@ MyLibrary.Contracts.UnitOfWork/bin/
 MyLibrary.Services.Contracts/bin/
 MyLibrary.Services.Contracts/obj/
 *.pfx
+packages-microsoft-prod.deb

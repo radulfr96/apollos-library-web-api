@@ -1,4 +1,5 @@
 ﻿using Moq;
+using MyLibrary.Common.Requests;
 using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.UnitOfWork;
@@ -23,6 +24,210 @@ namespace MyLibrary.Services.XUnitTestProject
                 new Claim(ClaimTypes.Name, "Test User"),
                 new Claim(ClaimTypes.Sid, "1")
             });
+        }
+
+        [Fact]
+        public void AddBookFailNoTitle()
+        {
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            dataLayer.Setup(b => b.AddBook(It.IsAny<Book>())).Callback((Book book) =>
+            {
+                book.BookId = 1;
+            });
+
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var request = new AddBookRequest();
+
+            var response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("You must provide a title", response.Messages[0]);
+
+            request.Title = "";
+
+            response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("You must provide a title", response.Messages[0]);
+        }
+
+        [Fact]
+        public void AddBookFailNoISBNOrEISBN()
+        {
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            dataLayer.Setup(b => b.AddBook(It.IsAny<Book>())).Callback((Book book) =>
+            {
+                book.BookId = 1;
+            });
+
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var request = new AddBookRequest()
+            {
+                Title = "Test title"
+            };
+
+            var response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("You must provide a ISBN or an eISBN", response.Messages[0]);
+
+            request.ISBN = "";
+            request.eISBN = "";
+
+            response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("You must provide a ISBN or an eISBN", response.Messages[0]);
+        }
+
+        [Fact]
+        public void AddBookSuccessMinDataEISBN()
+        {
+            var books = new List<Book>();
+
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            dataLayer.Setup(b => b.AddBook(It.IsAny<Book>())).Callback((Book book) =>
+            {
+                book.BookId = 1;
+                books.Add(book);
+            });
+
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var request = new AddBookRequest()
+            {
+                Title = "Test title",
+                eISBN = "4564654646646"
+            };
+
+            var response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(1, response.BookID);
+            Assert.Equal(1, books[0].BookId);
+            Assert.Equal("4564654646646", books[0].EIsbn);
+            Assert.Equal("Test title", books[0].Title);
+        }
+
+        [Fact]
+        public void AddBookSuccessMinDataISBN()
+        {
+            var books = new List<Book>();
+
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            dataLayer.Setup(b => b.AddBook(It.IsAny<Book>())).Callback((Book book) =>
+            {
+                book.BookId = 1;
+                books.Add(book);
+            });
+
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var request = new AddBookRequest()
+            {
+                Title = "Test title",
+                ISBN = "554156566",
+            };
+
+            var response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(1, response.BookID);
+            Assert.Equal(1, books[0].BookId);
+            Assert.Equal("554156566", books[0].Isbn);
+            Assert.Equal("Test title", books[0].Title);
+        }
+
+        [Fact]
+        public void AddBookSuccess()
+        {
+            var books = new List<Book>();
+            var bookAuthors = new List<BookAuthor>();
+            var bookGenres = new List<BookGenre>();
+
+            var dataLayer = new Mock<IBookDataLayer>();
+            var uow = new Mock<IBookUnitOfWork>();
+
+            dataLayer.Setup(b => b.AddBook(It.IsAny<Book>())).Callback((Book book) =>
+            {
+                book.BookId = 1;
+                books.Add(book);
+            });
+
+            dataLayer.Setup(b => b.AddBookAuthor(It.IsAny<BookAuthor>())).Callback((BookAuthor bookAuthor) =>
+            {
+                bookAuthors.Add(bookAuthor);
+            });
+
+            dataLayer.Setup(b => b.AddBookGenre(It.IsAny<BookGenre>())).Callback((BookGenre bookGenre) =>
+            {
+                bookGenres.Add(bookGenre);
+            });
+
+            uow.Setup(b => b.BookDataLayer).Returns(dataLayer.Object);
+
+            var service = new BookService(uow.Object, MockPrincipal);
+
+            var request = new AddBookRequest()
+            {
+                Title = "Test title",
+                ISBN = "554156566",
+                Authors = new List<int>()
+                {
+                    2,
+                },
+                CoverImage = new byte[100],
+                Edition = 1,
+                eISBN = "4646464660",
+                FictionTypeID = 1,
+                FormTypeID = 4,
+                Genres = new List<int>()
+                {
+                    4,
+                },
+                PublicationFormatID = 1,
+                NumberInSeries = 2,
+                PublisherIDs = 9,
+                SeriesID = 85,
+                Subtitle = "Test Subtitle"
+            };
+
+            var response = service.AddBook(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(1, response.BookID);
+            Assert.Equal(1, books[0].BookId);
+            Assert.Equal("554156566", books[0].Isbn);
+            Assert.Equal("Test title", books[0].Title);
+            Assert.Equal(2, bookAuthors[0].AuthorId);
+            Assert.Equal(1, bookAuthors[0].BookId);
+            Assert.Equal(1, books[0].Edition);
+            Assert.Equal("4646464660", books[0].EIsbn);
+            Assert.Equal(1, books[0].FictionTypeId);
+            Assert.Equal(4, books[0].FormTypeId);
+            Assert.Equal(2, books[0].NumberInSeries);
+            Assert.Equal(1, books[0].PublicationFormatId);
+            Assert.Equal(85, books[0].SeriesId);
+            Assert.Equal(9, books[0].PublisherId);
+            Assert.Equal("Test Subtitle", books[0].Subtitle);
         }
 
         [Fact]

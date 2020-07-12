@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MyLibrary.Common.DTOs;
+using MyLibrary.Common.Requests;
 using MyLibrary.Common.Responses;
 using MyLibrary.Data.Model;
 using MyLibrary.Services.Contracts;
@@ -25,6 +26,73 @@ namespace MyLibrary.Services
         {
             _bookUnitOfWork = bookUnitOfWork;
             _principal = principal;
+        }
+
+        public AddBookResponse AddBook(AddBookRequest request)
+        {
+            var response = new AddBookResponse();
+
+            try
+            {
+                response = (AddBookResponse)request.ValidateRequest(response);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    return response;
+
+                var book = new Book()
+                {
+                    CoverImage = request.CoverImage == null ? null : Convert.ToBase64String(request.CoverImage),
+                    CreatedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
+                    CreatedDate = DateTime.Now,
+                    Edition = request.Edition,
+                    EIsbn = request.eISBN,
+                    FictionTypeId = request.FictionTypeID,
+                    FormTypeId = request.FormTypeID,
+                    Isbn = request.ISBN,
+                    NumberInSeries = request.NumberInSeries,
+                    PublicationFormatId = request.PublicationFormatID,
+                    PublisherId = request.PublisherIDs,
+                    SeriesId = request.SeriesID,
+                    Subtitle = request.Subtitle,
+                    Title = request.Title,
+                };
+
+                _bookUnitOfWork.Begin();
+
+                _bookUnitOfWork.BookDataLayer.AddBook(book);
+
+                foreach (int authorId in request.Authors)
+                {
+                    _bookUnitOfWork.BookDataLayer.AddBookAuthor(new BookAuthor()
+                    {
+                        AuthorId = authorId,
+                        BookId = book.BookId,
+                    });
+                }
+
+                foreach (int genreId in request.Genres)
+                {
+                    _bookUnitOfWork.BookDataLayer.AddBookGenre(new BookGenre()
+                    {
+                        GenreId = genreId,
+                        BookId = book.BookId,
+                    });
+                }
+
+                _bookUnitOfWork.Save();
+                _bookUnitOfWork.Commit();
+
+                response.BookID = book.BookId;
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                _bookUnitOfWork.Rollback();
+                s_logger.Error(ex, "Unable to add book.");
+                response = new AddBookResponse();
+            }
+
+            return response;
         }
 
         public GetBookResponse GetBook(int id)
