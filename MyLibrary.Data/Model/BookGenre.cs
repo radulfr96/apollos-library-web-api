@@ -6,9 +6,9 @@ namespace MyLibrary.Data.Model
     public partial class BookGenre
     {
         public int GenreId { get; set; }
-        public int BookId { get; set; }
+        public string Isbn { get; set; }
 
-        public virtual Book Book { get; set; }
         public virtual Genre Genre { get; set; }
+        public virtual Book IsbnNavigation { get; set; }
     }
 }

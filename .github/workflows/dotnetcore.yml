@@ -2,9 +2,9 @@ name: .NET Core
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -12,12 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore
