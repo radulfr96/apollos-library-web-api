@@ -8,8 +8,6 @@
     <Folder Include="Author\Commands\" />
     <Folder Include="Author\Queries\" />
     <Folder Include="Book\Commands\" />
-    <Folder Include="Book\Queries\" />
-    <Folder Include="Common\" />
     <Folder Include="Genre\Commands\" />
     <Folder Include="Genre\Queries\" />
     <Folder Include="Interfaces\" />

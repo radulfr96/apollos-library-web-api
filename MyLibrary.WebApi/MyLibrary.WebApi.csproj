@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyLibrary.Application\MyLibrary.Application.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer\MyLibrary.DataLayer.csproj" />
     <ProjectReference Include="..\MyLibrary.Persistence\MyLibrary.Persistence.csproj" />
