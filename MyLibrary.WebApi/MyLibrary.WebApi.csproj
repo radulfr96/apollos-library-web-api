@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
@@ -17,7 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer\MyLibrary.DataLayer.csproj" />
-    <ProjectReference Include="..\MyLibrary.Data\MyLibrary.Data.csproj" />
+    <ProjectReference Include="..\MyLibrary.Persistence\MyLibrary.Persistence.csproj" />
     <ProjectReference Include="..\MyLibrary.Services\MyLibrary.Services.csproj" />
     <ProjectReference Include="..\MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj" />
   </ItemGroup>
