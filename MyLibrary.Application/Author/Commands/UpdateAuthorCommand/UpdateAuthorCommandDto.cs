@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Book.Queries
+namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
 {
-    public class GetBooksQueryDto
+    public class UpdateAuthorCommandDto
     {
     }
 }

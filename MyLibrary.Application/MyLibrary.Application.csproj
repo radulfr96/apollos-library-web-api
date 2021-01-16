@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Author\Commands\" />
-    <Folder Include="Author\Queries\" />
-    <Folder Include="Book\Commands\" />
     <Folder Include="Genre\Commands\" />
     <Folder Include="Genre\Queries\" />
     <Folder Include="Interfaces\" />

@@ -34,3 +34,5 @@ MyLibrary.Infrastructure/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.Assemb
 MyLibrary.Infrastructure/obj/project.assets.json
 MyLibrary.Infrastructure/obj/
 MyLibrary.Application/obj/
+MyLibrary.Common/bin/
+MyLibrary.Common/obj/
