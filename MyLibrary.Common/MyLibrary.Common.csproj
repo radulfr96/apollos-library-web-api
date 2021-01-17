@@ -10,4 +10,8 @@
     <RepositoryUrl>https://github.com/mylibrary-com/my-library-common</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Responses\User\" />
+  </ItemGroup>
+
 </Project>
