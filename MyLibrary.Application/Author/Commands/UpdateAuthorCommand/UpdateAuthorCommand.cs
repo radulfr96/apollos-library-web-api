@@ -24,11 +24,13 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
     {
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
         private readonly IUserService _userService;
+        private readonly IDateTimeService _dateTimeService;
 
-        public UpdateAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService)
+        public UpdateAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
             _authorUnitOfWork = authorUnitOfWork;
             _userService = userService;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task<UpdateAuthorCommandDto> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
@@ -43,7 +45,7 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
             author.CountryId = command.CountryID;
             author.Description = command.Description;
             author.ModifiedBy = _userService.GetUserId();
-            author.ModifiedDate = DateTime.Now;
+            author.ModifiedDate = _dateTimeService.Now;
 
             await _authorUnitOfWork.Save();
 

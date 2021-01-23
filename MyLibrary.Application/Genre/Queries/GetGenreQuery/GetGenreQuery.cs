@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,33 @@ namespace MyLibrary.Application.Genre.Queries.GetGenreQuery
 {
     public class GetGenreQuery : IRequest<GetGenreQueryDto>
     {
+        public int GenreId { get; set; }
     }
 
     public class GetGenreQueryHandler : IRequestHandler<GetGenreQuery, GetGenreQueryDto>
     {
-        public Task<GetGenreQueryDto> Handle(GetGenreQuery query, CancellationToken cancellationToken)
+        private readonly IGenreUnitOfWork _genreUnitOfWork;
+
+        public GetGenreQueryHandler(IGenreUnitOfWork genreUnitOfWork)
         {
-            throw new NotImplementedException();
+            _genreUnitOfWork = genreUnitOfWork;
+        }
+
+        public async Task<GetGenreQueryDto> Handle(GetGenreQuery query, CancellationToken cancellationToken)
+        {
+            var response = new GetGenreQueryDto();
+
+            var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(query.GenreId);
+
+            if (genre == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+
+            response.GenreId = genre.GenreId;
+            response.Name = genre.Name;
+            return response;
         }
     }
 }

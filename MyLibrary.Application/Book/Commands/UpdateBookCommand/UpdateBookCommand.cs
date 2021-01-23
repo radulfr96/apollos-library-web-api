@@ -47,11 +47,13 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
     {
         private readonly IBookUnitOfWork _bookUnitOfWork;
         private readonly IUserService _userService;
+        private readonly IDateTimeService _dateTimeService;
 
-        public UpdateBookCommandHandler(IBookUnitOfWork bookUnitOfWork, IUserService userService)
+        public UpdateBookCommandHandler(IBookUnitOfWork bookUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
             _bookUnitOfWork = bookUnitOfWork;
             _userService = userService;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task<UpdateBookCommandDto> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
@@ -95,7 +97,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
 
             book.CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage);
             book.CreatedBy = _userService.GetUserId();
-            book.CreatedDate = DateTime.Now;
+            book.CreatedDate = _dateTimeService.Now;
             book.Edition = command.Edition;
             book.EIsbn = command.eISBN;
             book.FictionTypeId = command.FictionTypeID;

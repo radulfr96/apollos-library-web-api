@@ -24,11 +24,13 @@ namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
     {
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
         private readonly IUserService _userService;
+        private readonly IDateTimeService _dateTimeService;
 
-        public AddAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService)
+        public AddAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
             _authorUnitOfWork = authorUnitOfWork;
             _userService = userService;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task<AddAuthorCommandDto> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
@@ -42,7 +44,7 @@ namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
                 LastName = request.Lastname,
                 CountryId = request.CountryID,
                 Description = request.Description,
-                CreatedDate = DateTime.Now,
+                CreatedDate = _dateTimeService.Now,
                 CreatedBy = _userService.GetUserId(),
             };
 

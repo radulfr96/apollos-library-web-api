@@ -46,11 +46,13 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
     {
         private readonly IBookUnitOfWork _bookUnitOfWork;
         private readonly IUserService _userService;
+        private readonly IDateTimeService _dateTimeService;
 
-        public AddBookCommandHandler(IBookUnitOfWork bookUnitOfWork, IUserService userService)
+        public AddBookCommandHandler(IBookUnitOfWork bookUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
             _bookUnitOfWork = bookUnitOfWork;
             _userService = userService;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task<AddBookCommandDto> Handle(AddBookCommand request, CancellationToken cancellationToken)
@@ -83,11 +85,11 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             }
 
-            var book = new Book()
+            var book = new Persistence.Model.Book()
             {
                 CoverImage = request.CoverImage == null ? null : Convert.ToBase64String(request.CoverImage),
-                CreatedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
-                CreatedDate = DateTime.Now,
+                CreatedBy = _userService.GetUserId(),
+                CreatedDate = _dateTimeService.Now,
                 Edition = request.Edition,
                 EIsbn = request.eISBN,
                 FictionTypeId = request.FictionTypeID,
@@ -107,7 +109,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             foreach (int authorId in request.Authors)
             {
-                _bookUnitOfWork.BookDataLayer.AddBookAuthor(new BookAuthor()
+                await _bookUnitOfWork.BookDataLayer.AddBookAuthor(new BookAuthor()
                 {
                     AuthorId = authorId,
                     BookId = book.BookId,
@@ -116,7 +118,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             foreach (int genreId in request.Genres)
             {
-                _bookUnitOfWork.BookDataLayer.AddBookGenre(new BookGenre()
+                await _bookUnitOfWork.BookDataLayer.AddBookGenre(new BookGenre()
                 {
                     GenreId = genreId,
                     BookId = book.BookId,

@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +19,36 @@ namespace MyLibrary.Application.Genre.Commands.UpdateGenreCommand
 
     public class UpdateGenreCommandHandler : IRequestHandler<UpdateGenreCommand, UpdateGenreCommandDto>
     {
-        public Task<UpdateGenreCommandDto> Handle(UpdateGenreCommand command, CancellationToken cancellationToken)
+        private readonly IGenreUnitOfWork _genreUnitOfWork;
+        private readonly IUserService _userService;
+        private readonly IDateTimeService _dateTimeService;
+
+        public UpdateGenreCommandHandler(IGenreUnitOfWork genreUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
-            throw new NotImplementedException();
+            _genreUnitOfWork = genreUnitOfWork;
+            _userService = userService;
+            _dateTimeService = dateTimeService;
+        }
+
+        public async Task<UpdateGenreCommandDto> Handle(UpdateGenreCommand command, CancellationToken cancellationToken)
+        {
+            var response = new UpdateGenreCommandDto();
+
+            var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(command.GenreID);
+
+            if (genre == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+
+            genre.Name = command.Name;
+            genre.ModifiedBy = _userService.GetUserId();
+            genre.ModifiedDate = _dateTimeService.Now;
+
+            await _genreUnitOfWork.Save();
+
+            return response;
         }
     }
 }
