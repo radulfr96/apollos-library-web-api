@@ -1,9 +1,11 @@
-﻿using MyLibrary.Data.Model;
+﻿using Microsoft.EntityFrameworkCore;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer
 {
@@ -16,28 +18,28 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public void AddGenre(Genre genre)
+        public async Task AddGenre(Genre genre)
         {
-            _context.Add(genre);
+            await _context.AddAsync(genre);
         }
 
-        public void DeleteGenre(int id)
+        public async Task DeleteGenre(int id)
         {
-            var bookGenres = _context.BookGenre.Where(bg => bg.GenreId == id).ToList();
+            var bookGenres = await _context.BookGenre.Where(bg => bg.GenreId == id).ToListAsync();
 
             _context.BookGenre.RemoveRange(bookGenres);
 
-            _context.Genre.Remove(_context.Genre.FirstOrDefault(g => g.GenreId == id));
+            _context.Genre.Remove(await _context.Genre.FirstOrDefaultAsync(g => g.GenreId == id));
         }
 
-        public Genre GetGenre(int id)
+        public async Task<Genre> GetGenre(int id)
         {
-            return _context.Genre.FirstOrDefault(g => g.GenreId == id);
+            return await _context.Genre.FirstOrDefaultAsync(g => g.GenreId == id);
         }
 
-        public List<Genre> GetGenres()
+        public async Task<List<Genre>> GetGenres()
         {
-            return _context.Genre.ToList();
+            return await _context.Genre.ToListAsync();
         }
     }
 }

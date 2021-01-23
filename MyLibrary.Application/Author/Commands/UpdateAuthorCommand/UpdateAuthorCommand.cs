@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +13,41 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
     public class UpdateAuthorCommand : IRequest<UpdateAuthorCommandDto>
     {
         public int AuthorID { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must supply a first name or an alias")]
-        public string FirstName { get; set; }
+        public string Firstname { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must select a country of origin")]
         public string CountryID { get; set; }
         public string Description { get; set; }
     }
 
     public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, UpdateAuthorCommandDto>
     {
-        public Task<UpdateAuthorCommandDto> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
+        private readonly IAuthorUnitOfWork _authorUnitOfWork;
+        private readonly IUserService _userService;
+
+        public UpdateAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService)
         {
-            throw new NotImplementedException();
+            _authorUnitOfWork = authorUnitOfWork;
+            _userService = userService;
+        }
+
+        public async Task<UpdateAuthorCommandDto> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
+        {
+            var response = new UpdateAuthorCommandDto();
+
+            var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(command.AuthorID);
+
+            author.FirstName = command.Firstname;
+            author.MiddleName = command.MiddleName;
+            author.LastName = command.LastName;
+            author.CountryId = command.CountryID;
+            author.Description = command.Description;
+            author.ModifiedBy = _userService.GetUserId();
+            author.ModifiedDate = DateTime.Now;
+
+            await _authorUnitOfWork.Save();
+
+            return response;
         }
     }
 }

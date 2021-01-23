@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mylibrary.Common" Version="1.0.11" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyLibrary.Contracts.UnitOfWork\MyLibrary.UnitOfWork.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer\MyLibrary.DataLayer.csproj" />
   </ItemGroup>

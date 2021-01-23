@@ -1,9 +1,11 @@
-﻿using MyLibrary.Data.Model;
+﻿using MyLibrary.Persistence.Model;
 using MyLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyLibrary.DataLayer
 {
@@ -16,61 +18,61 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public void AddBook(Book book)
+        public async Task AddBook(Book book)
         {
-            _context.Book.Add(book);
+            await _context.Book.AddAsync(book);
         }
 
-        public void AddBookAuthor(BookAuthor bookAuthor)
+        public async Task AddBookAuthor(BookAuthor bookAuthor)
         {
-            _context.BookAuthor.Add(bookAuthor);
+            await _context.BookAuthor.AddAsync(bookAuthor);
         }
 
-        public void AddBookGenre(BookGenre bookGenre)
+        public async Task AddBookGenre(BookGenre bookGenre)
         {
-            _context.BookGenre.Add(bookGenre);
+            await _context.BookGenre.AddAsync(bookGenre);
         }
 
-        public Book GetBook(int id)
+        public async Task<Book> GetBook(int id)
         {
-            var book = (from b in _context.Book
+            var book = await (from b in _context.Book
                     where b.BookId == id
-                    select b).FirstOrDefault();
+                    select b).FirstOrDefaultAsync();
 
             if (book != null)
             {
-                book.BookGenre = (from bg in _context.BookGenre
+                book.BookGenre = await (from bg in _context.BookGenre
                                   where bg.BookId == id
-                                  select bg).ToList();
+                                  select bg).ToListAsync();
 
-                book.BookAuthor = (from ba in _context.BookAuthor
+                book.BookAuthor = await (from ba in _context.BookAuthor
                                    where ba.BookId == id
-                                   select ba).ToList();
+                                   select ba).ToListAsync();
             }
 
             return book;
         }
 
-        public Book GetBookByeISBN(string eisbn)
+        public async Task<Book> GetBookByeISBN(string eisbn)
         {
-            return (from b in _context.Book
+            return await (from b in _context.Book
                     where b.EIsbn == eisbn
-                    select b).FirstOrDefault();
+                    select b).FirstOrDefaultAsync();
         }
 
-        public Book GetBookByISBN(string isbn)
+        public async Task<Book> GetBookByISBN(string isbn)
         {
-            return (from b in _context.Book
+            return await (from b in _context.Book
                     where b.Isbn == isbn
-                    select b).FirstOrDefault();
+                    select b).FirstOrDefaultAsync();
         }
 
-        public List<Book> GetBooks()
+        public async Task<List<Book>> GetBooks()
         {
-            var books = _context.Book.ToList();
+            var books = await _context.Book.ToListAsync();
 
-            var fictionTypes = _context.FictionType.ToList();
-            var formTypes = _context.FormType.ToList();
+            var fictionTypes = await _context.FictionType.ToListAsync();
+            var formTypes = await _context.FormType.ToListAsync();
 
             foreach (var book in books)
             {

@@ -1,4 +1,7 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Persistence.Model;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,9 +44,91 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
     public class AddBookCommandHandler : IRequestHandler<AddBookCommand, AddBookCommandDto>
     {
-        public Task<AddBookCommandDto> Handle(AddBookCommand request, CancellationToken cancellationToken)
+        private readonly IBookUnitOfWork _bookUnitOfWork;
+        private readonly IUserService _userService;
+
+        public AddBookCommandHandler(IBookUnitOfWork bookUnitOfWork, IUserService userService)
         {
-            throw new NotImplementedException();
+            _bookUnitOfWork = bookUnitOfWork;
+            _userService = userService;
+        }
+
+        public async Task<AddBookCommandDto> Handle(AddBookCommand request, CancellationToken cancellationToken)
+        {
+            var response = new AddBookCommandDto();
+
+            if (!string.IsNullOrEmpty(request.eISBN))
+            {
+                var existingISBN = await _bookUnitOfWork.BookDataLayer.GetBookByeISBN(request.eISBN);
+
+                if (existingISBN != null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Book with that eISBN already exists.");
+                    return response;
+                }
+
+            }
+
+            if (!string.IsNullOrEmpty(request.ISBN))
+            {
+                var existingeISBN = _bookUnitOfWork.BookDataLayer.GetBookByISBN(request.ISBN);
+
+                if (existingeISBN != null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Book with that ISBN already exists.");
+                    return response;
+                }
+
+            }
+
+            var book = new Book()
+            {
+                CoverImage = request.CoverImage == null ? null : Convert.ToBase64String(request.CoverImage),
+                CreatedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value),
+                CreatedDate = DateTime.Now,
+                Edition = request.Edition,
+                EIsbn = request.eISBN,
+                FictionTypeId = request.FictionTypeID,
+                FormTypeId = request.FormTypeID,
+                Isbn = request.ISBN,
+                NumberInSeries = request.NumberInSeries,
+                PublicationFormatId = request.PublicationFormatID,
+                PublisherId = request.PublisherIDs,
+                SeriesId = request.SeriesID,
+                Subtitle = request.Subtitle,
+                Title = request.Title,
+            };
+
+            await _bookUnitOfWork.Begin();
+
+            await _bookUnitOfWork.BookDataLayer.AddBook(book);
+
+            foreach (int authorId in request.Authors)
+            {
+                _bookUnitOfWork.BookDataLayer.AddBookAuthor(new BookAuthor()
+                {
+                    AuthorId = authorId,
+                    BookId = book.BookId,
+                });
+            }
+
+            foreach (int genreId in request.Genres)
+            {
+                _bookUnitOfWork.BookDataLayer.AddBookGenre(new BookGenre()
+                {
+                    GenreId = genreId,
+                    BookId = book.BookId,
+                });
+            }
+
+            await _bookUnitOfWork.Save();
+            await _bookUnitOfWork.Commit();
+
+            response.BookId = book.BookId;
+
+            return response;
         }
     }
 }

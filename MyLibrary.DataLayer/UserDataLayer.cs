@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyLibrary.Data.Model;
+using MyLibrary.Persistence.Model;
 using MyLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer
 {
@@ -16,9 +17,9 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public void AddUser(User user)
+        public async Task AddUser(User user)
         {
-            _context.User.Add(user);
+            await _context.User.AddAsync(user);
         }
 
         public void ClearUserRoles(User user)
@@ -27,19 +28,19 @@ namespace MyLibrary.DataLayer
             user.UserRole.Clear();
         }
 
-        public User GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
-            return _context.User.Include("UserRole.Role").FirstOrDefault(u => u.UserId == id);
+            return await _context.User.Include("UserRole.Role").FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        public User GetUserByUsername(string username)
+        public async Task<User> GetUserByUsername(string username)
         {
-            return _context.User.Include("UserRole.Role").FirstOrDefault(u => u.Username == username);
+            return await _context.User.Include("UserRole.Role").FirstOrDefaultAsync(u => u.Username == username);
         }
 
-        public List<User> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
-            return (
+            return await (
                 from u in _context.User
                 where !u.IsDeleted
                 select new User()
@@ -67,7 +68,7 @@ namespace MyLibrary.DataLayer
                              RoleId = r.RoleId
                          }
                      }).ToList()
-                }).ToList();
+                }).ToListAsync();
         }
     }
 }

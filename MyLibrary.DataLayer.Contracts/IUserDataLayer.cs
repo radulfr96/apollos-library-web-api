@@ -1,6 +1,7 @@
-﻿using MyLibrary.Data.Model;
+﻿using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer.Contracts
 {
@@ -13,27 +14,27 @@ namespace MyLibrary.DataLayer.Contracts
         /// Retreives all users
         /// </summary>
         /// <returns>The list of users</returns>
-        List<User> GetUsers();
+        Task<List<User>> GetUsers();
         
         /// <summary>
         /// Used to get a user by their id
         /// </summary>
         /// <param name="id">The id of the user to be retreived</param>
         /// <returns>The user with the id</returns>
-        User GetUser(int id);
+        Task<User> GetUser(int id);
 
         /// <summary>
         /// Used to get a user by their username
         /// </summary>
         /// <param name="username">The users username</param>
         /// <returns>The user with the username</returns>
-        User GetUserByUsername(string username);
+        Task<User> GetUserByUsername(string username);
 
         /// <summary>
         /// Used to add a new user
         /// </summary>
         /// <param name="user">The user to be added</param>
-        void AddUser(User user);
+        Task AddUser(User user);
 
         /// <summary>
         /// Used to clear the roles of a user

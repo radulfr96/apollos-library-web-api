@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.UnitOfWork.Contracts
 {
@@ -15,16 +16,16 @@ namespace MyLibrary.UnitOfWork.Contracts
         /// <summary>
         /// Used to begin a transaction
         /// </summary>
-        void Begin();
+        Task Begin();
 
         /// <summary>
         /// Used to save data changes
         /// </summary>
-        void Save();
+        Task Save();
 
         /// <summary>
         /// Used to commit changes
         /// </summary>
-        void Commit();
+        Task Commit();
     }
 }

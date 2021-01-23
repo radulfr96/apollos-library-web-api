@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using MyLibrary.Data.Model;
 using MyLibrary.DataLayer;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.UnitOfWork
 {
@@ -32,21 +33,21 @@ namespace MyLibrary.UnitOfWork
             }
         }
 
-        public void Begin()
+        public async Task Begin()
         {
-            _context.Database.BeginTransaction();
+            await _context.Database.BeginTransactionAsync();
         }
 
-        public void Commit()
+        public async Task Commit()
         {
-            _context.Database.CommitTransaction();
+            await _context.Database.CommitTransactionAsync();
         }
 
-        public void Rollback()
+        public async Task Rollback()
         {
             if (_context.Database.CurrentTransaction != null)
             {
-                _context.Database.RollbackTransaction();
+                await _context.Database.RollbackTransactionAsync();
             }
         }
 
@@ -63,15 +64,15 @@ namespace MyLibrary.UnitOfWork
 
             if (disposing)
             {
-                _context.Dispose();
+                _context.DisposeAsync();
             }
 
             disposed = true;
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         ~BookUnitOfWork()

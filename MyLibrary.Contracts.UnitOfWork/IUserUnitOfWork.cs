@@ -1,5 +1,6 @@
 ﻿using MyLibrary.DataLayer.Contracts;
 using System;
+using System.Threading.Tasks;
 
 namespace MyLibrary.Contracts.UnitOfWork
 {
@@ -21,16 +22,16 @@ namespace MyLibrary.Contracts.UnitOfWork
         /// <summary>
         /// Used to begin a transaction
         /// </summary>
-        void Begin();
+        Task Begin();
 
         /// <summary>
         /// Used to save data changes
         /// </summary>
-        void Save();
+        Task Save();
 
         /// <summary>
         /// Used to commit changes
         /// </summary>
-        void Commit();
+        Task Commit();
     }
 }

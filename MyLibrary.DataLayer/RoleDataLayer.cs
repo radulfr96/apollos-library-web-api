@@ -1,9 +1,11 @@
-﻿using MyLibrary.Data.Model;
+﻿using MyLibrary.Persistence.Model;
 using MyLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyLibrary.DataLayer
 {
@@ -16,24 +18,24 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public void AddRole(Role role)
+        public async Task AddRole(Role role)
         {
-            _context.Add(role);
+            await _context.AddAsync(role);
         }
 
-        public Role GetRole(int roleId)
+        public async Task<Role> GetRole(int roleId)
         {
-            return _context.Role.FirstOrDefault(r => r.RoleId == roleId);
+            return await _context.Role.FirstOrDefaultAsync(r => r.RoleId == roleId);
         }
 
-        public List<Role> GetRoles()
+        public async Task<List<Role>> GetRoles()
         {
-            return _context.Role.ToList();
+            return await _context.Role.ToListAsync();
         }
 
-        public List<UserRole> GetUserRoles(int userId)
+        public async Task<List<UserRole>> GetUserRoles(int userId)
         {
-            return _context.UserRole.Where(ur => ur.UserId == userId).ToList();
+            return await _context.UserRole.Where(ur => ur.UserId == userId).ToListAsync();
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer
 {
@@ -17,19 +18,19 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public void AddPublisher(Publisher publisher)
+        public async Task AddPublisher(Publisher publisher)
         {
-            _context.Publisher.Add(publisher);
+            await _context.Publisher.AddAsync(publisher);
         }
 
-        public Publisher GetPublisher(int id)
+        public async Task<Publisher> GetPublisher(int id)
         {
-            return _context.Publisher.FirstOrDefault(p => p.PublisherId == id);
+            return await _context.Publisher.FirstOrDefaultAsync(p => p.PublisherId == id);
         }
 
-        public List<Publisher> GetPublishers()
+        public async Task<List<Publisher>> GetPublishers()
         {
-            return _context.Publisher.Include("Country").Where(p => p.IsDeleted == null || p.IsDeleted == false).ToList();
+            return await _context.Publisher.Include("Country").Where(p => p.IsDeleted == null || p.IsDeleted == false).ToListAsync();
         }
     }
 }

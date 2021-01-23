@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyLibrary.Contracts.UnitOfWork\MyLibrary.UnitOfWork.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.Persistence\MyLibrary.Persistence.csproj" />
+    <ProjectReference Include="..\MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +12,32 @@ namespace MyLibrary.Application.Author.Queries.GetAuthorQuery
 {
     public class GetAuthorQuery : IRequest<GetAuthorQueryDto>
     {
+        public int AuthorId { get; set; }
     }
 
     public class GetAuthorQueryHandler : IRequestHandler<GetAuthorQuery, GetAuthorQueryDto>
     {
-        public Task<GetAuthorQueryDto> Handle(GetAuthorQuery request, CancellationToken cancellationToken)
+        private readonly IAuthorUnitOfWork _authorUnitOfWork;
+
+        public GetAuthorQueryHandler(IAuthorUnitOfWork authorUnitOfWork)
         {
-            throw new NotImplementedException();
+            _authorUnitOfWork = authorUnitOfWork;
+        }
+
+        public async Task<GetAuthorQueryDto> Handle(GetAuthorQuery query, CancellationToken cancellationToken)
+        {
+            var response = new GetAuthorQueryDto();
+
+            var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(query.AuthorId);
+
+            response.AuthorID = author.AuthorId;
+            response.Firstname = author.FirstName;
+            response.Description = author.Description;
+            response.CountryID = author.CountryId;
+            response.Lastname = author.LastName;
+            response.Middlename = author.MiddleName;
+
+            return response;
         }
     }
 }

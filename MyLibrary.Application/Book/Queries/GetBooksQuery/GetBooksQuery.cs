@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,36 @@ namespace MyLibrary.Application.Book.Queries.GetBooksQuery
 
     public class GetBooksQueryHandler : IRequestHandler<GetBooksQuery, GetBooksQueryDto>
     {
-        public Task<GetBooksQueryDto> Handle(GetBooksQuery query, CancellationToken cancellationToken)
+        private readonly IBookUnitOfWork _bookUnitOfWork;
+
+        public GetBooksQueryHandler(IBookUnitOfWork bookUnitOfWork)
         {
-            throw new NotImplementedException();
+            _bookUnitOfWork = bookUnitOfWork;
+        }
+
+        public async Task<GetBooksQueryDto> Handle(GetBooksQuery query, CancellationToken cancellationToken)
+        {
+            var response = new GetBooksQueryDto();
+
+            var books = await _bookUnitOfWork.BookDataLayer.GetBooks();
+
+            if (books == null || books.Count == 0)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+
+            response.Books = books.Select(b => new BookListItemDTO()
+            {
+                BookID = b.BookId,
+                eISBN = b.EIsbn,
+                FictionType = b.FictionType.Name,
+                ISBN = b.Isbn,
+                FormatType = b.FormType.Name,
+                Title = b.Title
+            }).ToList();
+
+            return response;
         }
     }
 }

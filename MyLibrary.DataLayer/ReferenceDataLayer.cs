@@ -1,9 +1,11 @@
-﻿using MyLibrary.Data.Model;
+﻿using Microsoft.EntityFrameworkCore;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer
 {
@@ -16,9 +18,9 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public List<Country> GetCountries()
+        public async Task<List<Country>> GetCountries()
         {
-            return _context.Country.ToList();
+            return await _context.Country.ToListAsync();
         }
     }
 }

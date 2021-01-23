@@ -1,4 +1,7 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Persistence.Model;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,9 +45,96 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
 
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>
     {
-        public Task<UpdateBookCommandDto> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
+        private readonly IBookUnitOfWork _bookUnitOfWork;
+        private readonly IUserService _userService;
+
+        public UpdateBookCommandHandler(IBookUnitOfWork bookUnitOfWork, IUserService userService)
         {
-            throw new NotImplementedException();
+            _bookUnitOfWork = bookUnitOfWork;
+            _userService = userService;
+        }
+
+        public async Task<UpdateBookCommandDto> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
+        {
+            var response = new UpdateBookCommandDto();
+
+            var book = await _bookUnitOfWork.BookDataLayer.GetBook(command.BookID);
+
+            if (book == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+
+            if (!string.IsNullOrEmpty(command.ISBN))
+            {
+                var existingISBN = await _bookUnitOfWork.BookDataLayer.GetBookByISBN(command.ISBN);
+
+                if (existingISBN != null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Book with that ISBN already exists.");
+                    return response;
+                }
+
+            }
+
+            if (!string.IsNullOrEmpty(command.eISBN))
+            {
+                var existingeISBN = await _bookUnitOfWork.BookDataLayer.GetBookByeISBN(command.eISBN);
+
+                if (existingeISBN != null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Messages.Add("Book with that eISBN already exists.");
+                    return response;
+                }
+
+            }
+
+
+            book.CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage);
+            book.CreatedBy = _userService.GetUserId();
+            book.CreatedDate = DateTime.Now;
+            book.Edition = command.Edition;
+            book.EIsbn = command.eISBN;
+            book.FictionTypeId = command.FictionTypeID;
+            book.FormTypeId = command.FormTypeID;
+            book.Isbn = command.ISBN;
+            book.NumberInSeries = command.NumberInSeries;
+            book.PublicationFormatId = command.PublicationFormatID;
+            book.PublisherId = command.PublisherIDs;
+            book.SeriesId = command.SeriesID;
+            book.Subtitle = command.Subtitle;
+            book.Title = command.Title;
+
+            _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookID);
+            _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookID);
+
+            await _bookUnitOfWork.Begin();
+
+            foreach (int authorId in command.Authors)
+            {
+                await _bookUnitOfWork.BookDataLayer.AddBookAuthor(new BookAuthor()
+                {
+                    AuthorId = authorId,
+                    BookId = book.BookId,
+                });
+            }
+
+            foreach (int genreId in command.Genres)
+            {
+                await _bookUnitOfWork.BookDataLayer.AddBookGenre(new BookGenre()
+                {
+                    GenreId = genreId,
+                    BookId = book.BookId,
+                });
+            }
+
+            await _bookUnitOfWork.Save();
+            await _bookUnitOfWork.Commit();
+
+            return response;
         }
     }
 }

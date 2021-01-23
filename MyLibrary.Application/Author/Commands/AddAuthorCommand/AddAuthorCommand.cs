@@ -1,4 +1,7 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Persistence.Model;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,24 +9,49 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Author.Commands
+namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
 {
     public class AddAuthorCommand : IRequest<AddAuthorCommandDto>
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must supply a first name or an alias")]
         public string Firstname { get; set; }
         public string Middlename { get; set; }
         public string Lastname { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must select a country of origin")]
         public string CountryID { get; set; }
         public string Description { get; set; }
     }
 
     public class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, AddAuthorCommandDto>
     {
-        public Task<AddAuthorCommandDto> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
+        private readonly IAuthorUnitOfWork _authorUnitOfWork;
+        private readonly IUserService _userService;
+
+        public AddAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService)
         {
-            throw new NotImplementedException();
+            _authorUnitOfWork = authorUnitOfWork;
+            _userService = userService;
+        }
+
+        public async Task<AddAuthorCommandDto> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
+        {
+            var response = new AddAuthorCommandDto();
+
+            var author = new Persistence.Model.Author()
+            {
+                FirstName = request.Firstname,
+                MiddleName = request.Middlename,
+                LastName = request.Lastname,
+                CountryId = request.CountryID,
+                Description = request.Description,
+                CreatedDate = DateTime.Now,
+                CreatedBy = _userService.GetUserId(),
+            };
+
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthor(author);
+            await _authorUnitOfWork.Save();
+
+            response.AuthorID = author.AuthorId;
+
+            return response;
         }
     }
 }
