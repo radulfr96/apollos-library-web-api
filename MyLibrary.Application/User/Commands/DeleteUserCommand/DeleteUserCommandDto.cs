@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Interfaces
+namespace MyLibrary.Application.User.Commands.DeleteUserCommand
 {
-    public interface IUserService
+    public class DeleteUserCommandDto
     {
-        string GetUsername();
-
-        int GetUserId();
 
     }
 }

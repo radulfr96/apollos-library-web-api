@@ -22,7 +22,6 @@
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer\MyLibrary.DataLayer.csproj" />
     <ProjectReference Include="..\MyLibrary.Persistence\MyLibrary.Persistence.csproj" />
-    <ProjectReference Include="..\MyLibrary.Services\MyLibrary.Services.csproj" />
     <ProjectReference Include="..\MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 

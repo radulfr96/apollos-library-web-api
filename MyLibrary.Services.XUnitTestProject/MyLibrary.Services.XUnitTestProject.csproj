@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.Services\MyLibrary.Services.csproj" />
     <ProjectReference Include="..\MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 

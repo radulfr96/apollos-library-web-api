@@ -55,7 +55,7 @@ namespace MyLibrary.UnitOfWork
             await _transaction.CommitAsync();
         }
 
-        public async Task Dispose()
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

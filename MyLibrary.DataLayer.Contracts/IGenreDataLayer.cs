@@ -34,6 +34,6 @@ namespace MyLibrary.DataLayer.Contracts
         /// Used to remove a genre from the database
         /// </summary>
         /// <param name="id">The id of the genre to be deleted</param>
-        void DeleteGenre(int id);
+        Task DeleteGenre(int id);
     }
 }

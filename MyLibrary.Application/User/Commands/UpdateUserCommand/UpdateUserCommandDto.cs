@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Interfaces
+namespace MyLibrary.Application.User.Commands.UpdateUserCommand
 {
-    public interface IUserService
+    public class UpdateUserCommandDto
     {
-        string GetUsername();
-
-        int GetUserId();
-
     }
 }

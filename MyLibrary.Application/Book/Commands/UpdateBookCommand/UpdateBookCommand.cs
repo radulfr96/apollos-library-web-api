@@ -16,7 +16,6 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
         public int BookID { get; set; }
         public string ISBN { get; set; }
         public string eISBN { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must provide a title")]
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public int? SeriesID { get; set; }
@@ -29,18 +28,6 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
         public byte[] CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
-
-        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var results = new List<ValidationResult>();
-
-            if (string.IsNullOrEmpty(eISBN) && string.IsNullOrEmpty(ISBN))
-            {
-                results.Add(new ValidationResult("You must provide a ISBN or an eISBN"));
-            }
-
-            return results;
-        }
     }
 
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>

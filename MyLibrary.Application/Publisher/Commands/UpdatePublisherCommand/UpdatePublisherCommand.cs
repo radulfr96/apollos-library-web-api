@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,9 +60,42 @@ namespace MyLibrary.Application.Publisher.Commands.UpdatePublisherCommand
 
     public class UpdatePublisherCommandHandler : IRequestHandler<UpdatePublisherCommand, UpdatePublisherCommandDto>
     {
-        public Task<UpdatePublisherCommandDto> Handle(UpdatePublisherCommand command, CancellationToken cancellationToken)
+        private IPublisherUnitOfWork _publisherUnitOfWork;
+        private IUserService _userService;
+        private IDateTimeService _dateTimeService;
+
+        public UpdatePublisherCommandHandler(IPublisherUnitOfWork publisherUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
-            throw new NotImplementedException();
+            _publisherUnitOfWork = publisherUnitOfWork;
+            _userService = userService;
+            _dateTimeService = dateTimeService;
+        }
+
+        public async Task<UpdatePublisherCommandDto> Handle(UpdatePublisherCommand command, CancellationToken cancellationToken)
+        {
+            var response = new UpdatePublisherCommandDto();
+
+            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherID);
+
+            if (publisher == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
+            }
+
+            publisher.City = command.City;
+            publisher.CountryId = command.CountryID;
+            publisher.IsDeleted = false;
+            publisher.ModifiedBy = _userService.GetUserId();
+            publisher.ModifiedDate = _dateTimeService.Now;
+            publisher.Name = command.Name;
+            publisher.Postcode = command.Postcode;
+            publisher.State = command.State;
+            publisher.StreetAddress = command.StreetAddress;
+            publisher.Website = command.Website;
+            await _publisherUnitOfWork.Save();
+
+            return response;
         }
     }
 }

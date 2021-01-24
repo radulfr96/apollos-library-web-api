@@ -40,6 +40,8 @@ namespace MyLibrary.WebApi
 
             services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
 
+            services.AddMediatR(typeof(Startup));
+
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());

@@ -21,7 +21,7 @@ using System.Text;
 
 namespace MyLibrary.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
         private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly IConfiguration _configuration;
@@ -95,98 +95,6 @@ namespace MyLibrary.Services
                 response = new RegisterUserResponse();
             }
 
-            return response;
-        }
-
-        public GetUsersResponse GetUsers()
-        {
-            var response = new GetUsersResponse();
-            try
-            {
-                var users = _userUnitOfWork.UserDataLayer.GetUsers();
-
-                if (users.Count == 0)
-                {
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    response.Messages.Add("No users found");
-                    return response;
-                }
-
-                foreach (User user in users)
-                {
-                    response.Users.Add(DAO2DTO(user));
-                }
-
-                response.StatusCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, "Unable to retreive users.");
-                response = new GetUsersResponse();
-            }
-            return response;
-        }
-
-        public BaseResponse UpdateUser(UpdateUserRequest request)
-        {
-            var response = new BaseResponse();
-
-            try
-            {
-                response = request.ValidateRequest(response);
-
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                    return response;
-
-                var userWithUsername = _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
-
-                if (userWithUsername != null && request.UserID != userWithUsername.UserId)
-                {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Messages.Add("Username is already taken");
-                    return response;
-                }
-
-                var user = _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
-
-                if (user == null)
-                {
-                    s_logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    response.Messages.Add("Update unsuccessful user not found");
-                    return response;
-                }
-
-                user.Username = request.Username;
-
-                if (!string.IsNullOrEmpty(request.Password))
-                {
-                    user.Password = HashPassword(request.Password, user.Salter);
-                }
-
-                user.ModifiedBy = int.Parse(_principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
-                user.ModifiedDate = DateTime.Now;
-
-                _userUnitOfWork.UserDataLayer.ClearUserRoles(user);
-
-                foreach (var role in request.Roles)
-                {
-                    user.UserRole.Add(new UserRole()
-                    {
-                        RoleId = role.RoleId,
-                        UserId = user.UserId,
-                    });
-                }
-
-                _userUnitOfWork.Save();
-
-                response.StatusCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, "Unable to update user.");
-                response = new BaseResponse();
-            }
             return response;
         }
 
@@ -315,71 +223,6 @@ namespace MyLibrary.Services
             {
                 s_logger.Error(ex, "Unable to delete user.");
                 response = new BaseResponse();
-            }
-            return response;
-        }
-
-        public BaseResponse DeactivateUser(int id)
-        {
-            var response = new BaseResponse();
-
-            try
-            {
-                var user = _userUnitOfWork.UserDataLayer.GetUser(id);
-
-                if (user == null)
-                {
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    response.Messages.Add($"Unable to deactivate user with id [{id}]");
-                    return response;
-                }
-
-                user.IsActive = false;
-
-                _userUnitOfWork.Save();
-
-                response.StatusCode = HttpStatusCode.OK;
-
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, "Unable to deactivate user.");
-                response = new BaseResponse();
-            }
-            return response;
-        }
-
-        public GetUserResponse GetUserById(int id)
-        {
-            var response = new GetUserResponse();
-
-            try
-            {
-                var user = _userUnitOfWork.UserDataLayer.GetUser(id);
-
-                if (user == null)
-                {
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    response.Messages.Add($"Unable to finc user with id [{id}]");
-                    return response;
-                }
-
-                response.Roles = new List<RoleDTO>();
-                foreach (var role in _userUnitOfWork.RoleDataLayer.GetRoles())
-                {
-                    response.Roles.Add(new RoleDTO()
-                    {
-                        Name = role.Name,
-                        RoleId = role.RoleId
-                    });
-                }
-                response.User = DAO2DTO(user);
-                response.StatusCode = HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, "Unable to find user.");
-                response = new GetUserResponse();
             }
             return response;
         }

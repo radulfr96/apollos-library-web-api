@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Interfaces
+namespace MyLibrary.Application.Publisher.Commands.DeletePublisherCommand
 {
-    public interface IUserService
+    public class DeletePublisherCommandDto
     {
-        string GetUsername();
-
-        int GetUserId();
-
     }
 }

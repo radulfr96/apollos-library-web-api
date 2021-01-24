@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.DTOs;
+using MyLibrary.Contracts.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +12,37 @@ namespace MyLibrary.Application.User.Queries.GetUserQuery
 {
     public class GetUserQuery : IRequest<GetUserQueryDto>
     {
+        public int UserId { get; set; }
     }
 
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryDto>
     {
-        public Task<GetUserQueryDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        private readonly IUserUnitOfWork _userUnitOfWork;
+
+        public GetUserQueryHandler(IUserUnitOfWork userUnitOfWork)
         {
-            throw new NotImplementedException();
+            _userUnitOfWork = userUnitOfWork;
+        }
+
+        public async Task<GetUserQueryDto> Handle(GetUserQuery query, CancellationToken cancellationToken)
+        {
+            var response = new GetUserQueryDto();
+
+            var user = await _userUnitOfWork.UserDataLayer.GetUser(query.UserId);
+
+            if (user == null)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                response.Messages.Add($"Unable to finc user with id [{id}]");
+                return response;
+            }
+
+            response.IsActive = user.IsActive ? "Active" : "Inactive";
+            response.UserID = user.UserId;
+            response.Username = user.Username;
+            response.Roles = user.UserRole.Select(r => new RoleDTO() { RoleId = r.RoleId, Name = r.Role.Name }).ToList();
+
+            return response;
         }
     }
 }

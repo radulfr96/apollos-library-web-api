@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MyLibrary.Contracts.UnitOfWork\MyLibrary.UnitOfWork.Contracts.csproj" />
     <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\MyLibrary.DataLayer.Contracts.csproj" />
-    <ProjectReference Include="..\MyLibrary.Services.Contracts\MyLibrary.Services.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
