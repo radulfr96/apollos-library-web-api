@@ -1,8 +1,6 @@
 ﻿using Moq;
-using MyLibrary.Common.Requests;
-using MyLibrary.Common.Requests.Book;
-using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork;
 using MyLibrary.UnitOfWork.Contracts;
 using System;

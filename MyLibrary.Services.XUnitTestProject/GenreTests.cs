@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Moq;
-using MyLibrary.Common.DTOs;
-using MyLibrary.Common.Requests;
-using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.UnitOfWork.Contracts;
 using System;

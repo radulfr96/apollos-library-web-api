@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace MyLibrary.Application.Publisher.Commands.DeletePublisherCommand
 {
     public class DeletePublisherCommand : IRequest<DeletePublisherCommandDto>
     {
-        public int DeleteId { get; set; }
+        public int PubisherId { get; set; }
     }
 
     public class DeletePublisherCommandHandler : IRequestHandler<DeletePublisherCommand, DeletePublisherCommandDto>
@@ -27,12 +28,11 @@ namespace MyLibrary.Application.Publisher.Commands.DeletePublisherCommand
         {
             var response = new DeletePublisherCommandDto();
 
-            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.DeleteId);
+            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PubisherId);
 
             if (publisher == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return response;
+                throw new PublisherNotFoundException($"Unable to find publisher with id {command.PubisherId}");
             }
 
             publisher.IsDeleted = true;

@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using MyLibrary.Application.Common.DTOs;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Common.Functions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Contracts.UnitOfWork;
 using MyLibrary.Persistence.Model;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +30,15 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
         private readonly Hasher _hasher;
+        private readonly ILogger _logger;
 
-        public UpdateUserCommandHandler(IUserUnitOfWork userUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
+        public UpdateUserCommandHandler(IUserUnitOfWork userUnitOfWork, IUserService userService, IDateTimeService dateTimeService, ILogger logger)
         {
             _userUnitOfWork = userUnitOfWork;
             _userService = userService;
             _dateTimeService = dateTimeService;
             _hasher = new Hasher();
+            _logger = logger;
         }
 
         public async Task<UpdateUserCommandDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -45,19 +49,15 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
 
             if (userWithUsername != null && request.UserID != userWithUsername.UserId)
             {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.Messages.Add("Username is already taken");
-                return response;
+                throw new UsernameTakenException("Username is already taken");
             }
 
             var user = await _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
 
             if (user == null)
             {
-                s_logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Messages.Add("Update unsuccessful user not found");
-                return response;
+                _logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
+                 throw new UserNotFoundException("Update unsuccessful user not found");
             }
 
             user.Username = request.Username;

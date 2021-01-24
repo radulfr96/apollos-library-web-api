@@ -1,0 +1,27 @@
+﻿using FluentValidation.Results;
+using MyLibrary.Application.Common.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyLibrary.Application.Common.Exceptions
+{
+    public class ValidationException : Exception
+    {
+
+        public IList<string> Errors { get; }
+
+        public ValidationException() : base ("One or more validation failures have occured")
+        {
+            Errors = new List<string>();
+        }
+
+        public ValidationException(IEnumerable<ValidationFailure> failures)
+        : this()
+        {
+            Errors = failures.Select(e => e.ErrorMessage).ToList();
+        }
+    }
+}

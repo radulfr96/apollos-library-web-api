@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyLibrary.Data.Enums
+namespace MyLibrary.Application.Common.Enums
 {
     public enum RoleEnum
     {

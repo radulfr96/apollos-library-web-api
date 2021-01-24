@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,7 @@ namespace MyLibrary.Application.Genre.Queries.GetGenreQuery
 
             if (genre == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return response;
+                throw new GenreNotFoundException($"Unable to find genre with id {query.GenreId}");
             }
 
             response.GenreId = genre.GenreId;

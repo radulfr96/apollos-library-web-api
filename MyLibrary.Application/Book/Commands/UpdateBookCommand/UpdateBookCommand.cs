@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
+using MyLibrary.Application.Exceptions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork.Contracts;
@@ -51,8 +53,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
 
             if (book == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return response;
+                throw new BookNotFoundException($"Unable to get find book with id {command.BookID}");
             }
 
             if (!string.IsNullOrEmpty(command.ISBN))
@@ -61,9 +62,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
 
                 if (existingISBN != null)
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Messages.Add("Book with that ISBN already exists.");
-                    return response;
+                    throw new ISBNAlreadyAddedException("Book with that ISBN already exists.");
                 }
 
             }
@@ -74,13 +73,9 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
 
                 if (existingeISBN != null)
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Messages.Add("Book with that eISBN already exists.");
-                    return response;
+                    throw new ISBNAlreadyAddedException("Book with that eISBN already exists.");
                 }
-
             }
-
 
             book.CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage);
             book.CreatedBy = _userService.GetUserId();

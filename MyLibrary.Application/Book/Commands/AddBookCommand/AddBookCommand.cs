@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork.Contracts;
@@ -52,9 +53,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
                 if (existingISBN != null)
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Messages.Add("Book with that eISBN already exists.");
-                    return response;
+                    throw new ISBNAlreadyAddedException("Book with that eISBN already exists.");
                 }
 
             }
@@ -65,9 +64,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
                 if (existingeISBN != null)
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Messages.Add("Book with that ISBN already exists.");
-                    return response;
+                    throw new ISBNAlreadyAddedException("Book with that ISBN already exists.");
                 }
 
             }

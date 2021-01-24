@@ -31,7 +31,6 @@ namespace MyLibrary.Infrastructure.Services
 
             if (countries.Count == 0)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
 

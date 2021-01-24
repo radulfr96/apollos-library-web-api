@@ -13,7 +13,6 @@ namespace MyLibrary.Application.Genre.Commands.AddGenreCommand
 {
     public class AddGenreCommand : IRequest<AddGenreCommandDto>
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must supply a genre name")]
         public string Name { get; set; }
     }
 

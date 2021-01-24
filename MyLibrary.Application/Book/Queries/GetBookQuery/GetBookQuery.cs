@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,7 @@ namespace MyLibrary.Application.Book.Queries.GetBookQuery
 
             if (book == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return response;
+                throw new BookNotFoundException($"Unable to get find book with id {query.BookId}");
             }
 
             response.BookID = book.BookId;

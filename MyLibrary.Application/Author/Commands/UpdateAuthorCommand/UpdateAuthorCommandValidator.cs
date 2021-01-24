@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MyLibrary.Application.Enums;
+using MyLibrary.Application.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

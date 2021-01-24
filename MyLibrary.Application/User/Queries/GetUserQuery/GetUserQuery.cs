@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MyLibrary.Application.Common.DTOs;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Contracts.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,7 @@ namespace MyLibrary.Application.User.Queries.GetUserQuery
 
             if (user == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Messages.Add($"Unable to finc user with id [{id}]");
-                return response;
+                throw new UserNotFoundException($"Unable to finc user with id [{query.UserId}]");
             }
 
             response.IsActive = user.IsActive ? "Active" : "Inactive";

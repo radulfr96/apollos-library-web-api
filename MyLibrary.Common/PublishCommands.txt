@@ -1,2 +1,0 @@
-﻿dotnet pack --configuration Release
-dotnet nuget push "MyLibrary.Common/bin/Release/MyLibrary.Common.1.0.11.nupkg" --source "github"

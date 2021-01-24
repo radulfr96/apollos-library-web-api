@@ -30,7 +30,7 @@ namespace MyLibrary.Application.Publisher.Queries.GetPublishersQuery
 
             if (publishers.Count == 0)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
+                return response;
             }
 
             response.Publishers = publishers.Select(p => new PublisherListItemDTO()

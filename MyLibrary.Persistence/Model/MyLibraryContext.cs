@@ -29,6 +29,7 @@ namespace MyLibrary.Persistence.Model
         public virtual DbSet<Series> Series { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
+        public virtual DbSet<ErrorCode> ErrorCode { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -222,6 +223,23 @@ namespace MyLibrary.Persistence.Model
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ErrorCode>(entity =>
+            {
+                entity.HasKey(e => e.ErrorCodeId);
+
+                entity.ToTable("ErrorCode", "dbo");
+
+                entity.Property(e => e.ErrorCodeId).HasColumnName("ErrorCodeID");
+                
+                entity.Property(e => e.ErrorCodeId)
+                .IsRequired();
+
+                entity.Property(e => e.Message)
+                .IsRequired()
+                .HasMaxLength(500)
+                .IsUnicode(true);
             });
 
             modelBuilder.Entity<FormType>(entity =>

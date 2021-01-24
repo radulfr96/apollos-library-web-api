@@ -30,7 +30,6 @@ namespace MyLibrary.Application.Genre.Queries.GetGenresQuery
 
             if (genres.Count == 0)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
 
@@ -39,8 +38,6 @@ namespace MyLibrary.Application.Genre.Queries.GetGenresQuery
                 GenreId = g.GenreId,
                 Name = g.Name
             }).ToList();
-
-            response.StatusCode = HttpStatusCode.OK;
 
             return response;
         }

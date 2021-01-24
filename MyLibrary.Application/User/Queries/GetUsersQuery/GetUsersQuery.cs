@@ -31,8 +31,6 @@ namespace MyLibrary.Application.User.Queries.GetUsersQuery
 
             if (users.Count == 0)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Messages.Add("No users found");
                 return response;
             }
 

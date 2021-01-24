@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Contracts.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -23,17 +24,15 @@ namespace MyLibrary.Application.User.Commands.DeleteUserCommand
             _userUnitOfWork = userUnitOfWork;
         }
 
-        public async Task<DeleteUserCommandDto> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteUserCommandDto> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
         {
             var response = new DeleteUserCommandDto();
 
-            var user = await _userUnitOfWork.UserDataLayer.GetUser(id);
+            var user = await _userUnitOfWork.UserDataLayer.GetUser(command.UserId);
 
             if (user == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                response.Messages.Add($"Unable to delete user with id [{id}]");
-                return response;
+                throw new UserNotFoundException($"Unable to delete user with id [{command.UserId}]");
             }
 
             user.IsDeleted = true;

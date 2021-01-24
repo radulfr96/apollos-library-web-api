@@ -28,7 +28,6 @@ namespace MyLibrary.Application.Book.Queries.GetBooksQuery
 
             if (books == null || books.Count == 0)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
                 return response;
             }
 

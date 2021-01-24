@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
@@ -12,8 +13,7 @@ namespace MyLibrary.Application.Genre.Commands.UpdateGenreCommand
 {
     public class UpdateGenreCommand : IRequest<UpdateGenreCommandDto>
     {
-        public int GenreID { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must provide a genre name")]
+        public int GenreId { get; set; }
         public string Name { get; set; }
     }
 
@@ -34,12 +34,11 @@ namespace MyLibrary.Application.Genre.Commands.UpdateGenreCommand
         {
             var response = new UpdateGenreCommandDto();
 
-            var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(command.GenreID);
+            var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(command.GenreId);
 
             if (genre == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return response;
+                throw new GenreNotFoundException($"Unable to find genre with id {command.GenreId}");
             }
 
             genre.Name = command.Name;

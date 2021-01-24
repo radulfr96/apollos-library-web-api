@@ -1,6 +1,7 @@
-﻿using MyLibrary.Data.Enums;
-using MyLibrary.Data.Model;
+﻿
+using MyLibrary.Application.Common.Enums;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

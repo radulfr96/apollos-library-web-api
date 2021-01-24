@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,10 @@ namespace MyLibrary.Application.Genre.Commands.DeleteGenreCommand
             var genre = _genreUnitOfWork.GenreDataLayer.GetGenre(command.GenreId);
             if (genre == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return response;
+                throw new GenreNotFoundException($"Unable to find genre with id {command.GenreId}");
             }
 
-            _genreUnitOfWork.GenreDataLayer.DeleteGenre(command.GenreId);
+            await _genreUnitOfWork.GenreDataLayer.DeleteGenre(command.GenreId);
             await _genreUnitOfWork.Save();
 
             return response;

@@ -18,8 +18,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MyLibrary.Application.Book.Queries.GetBookQuery;
 using MyLibrary.Application.Common.Behaviour;
 using MyLibrary.Persistence.Model;
+using MyLibrary.WebApi.Filters;
 
 namespace MyLibrary.WebApi
 {
@@ -38,9 +40,12 @@ namespace MyLibrary.WebApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMediatR(typeof(Startup));
 
+            services.AddScoped<ApiExceptionFilterAttribute>();
             services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
             services.AddControllers();
 

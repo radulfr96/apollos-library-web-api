@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace MyLibrary.Application.Publisher.Queries.GetPublisherQuery
 
             if (publisher == null)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
+                throw new PublisherNotFoundException($"Unable to find publisher with id [{query.PublisherId}]");
             }
 
             response.City = publisher.City;
