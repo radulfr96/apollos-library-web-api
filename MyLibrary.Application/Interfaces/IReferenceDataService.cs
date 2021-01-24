@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyLibrary.Application.Common.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace MyLibrary.Application.Interfaces
     public interface IReferenceDataService
     {
         string GetReferenceData();
+
+        Task<List<CountryDTO>> GetCountries();
     }
 }

@@ -1,9 +1,10 @@
-﻿using MyLibrary.Data.Model;
-using MyLibrary.DataLayer.Contracts;
+﻿using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.Services.XUnitTestProject.MockClasses
 {
@@ -16,23 +17,23 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
             Users = new List<User>();
         }
 
-        public void AddUser(User user)
+        public async Task AddUser(User user)
         {
             user.UserId = Users.Count() + 1;
             Users.Add(user);
         }
 
-        public User GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
             return Users.FirstOrDefault(u => u.UserId == id);
         }
 
-        public User GetUserByUsername(string username)
+        public async Task<User> GetUserByUsername(string username)
         {
             return Users.FirstOrDefault(u => u.Username == username);
         }
 
-        public List<User> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
             return Users;
         }

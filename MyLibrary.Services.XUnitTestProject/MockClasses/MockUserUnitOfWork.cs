@@ -3,6 +3,7 @@ using MyLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.Services.XUnitTestProject.MockClasses
 {
@@ -28,17 +29,17 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
             }
         }
 
-        public void Begin()
+        public async Task Begin()
         {
             
         }
 
-        public void Commit()
+        public async Task Commit()
         {
             
         }
 
-        public void Save()
+        public async Task Save()
         {
             
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Author.Commands
+namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
 {
     public class AddAuthorCommandDto
     {

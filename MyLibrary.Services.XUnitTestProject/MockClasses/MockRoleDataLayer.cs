@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.Services.XUnitTestProject.MockClasses
 {
@@ -20,12 +21,12 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
             Roles = new List<Role>();
         }
 
-        public void AddRole(Role role)
+        public Task AddRole(Role role)
         {
             throw new NotImplementedException();
         }
 
-        public Role GetRole(int roleId)
+        public async Task<Role> GetRole(int roleId)
         {
             switch (roleId)
             {
@@ -45,12 +46,12 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
             return null;
         }
 
-        public List<Role> GetRoles()
+        public async Task<List<Role>> GetRoles()
         {
             return Roles.ToList();
         }
 
-        public List<UserRole> GetUserRoles(int userId)
+        public async Task<List<UserRole>> GetUserRoles(int userId)
         {
             return UserRoles.Where(r => r.UserId == userId).ToList();
         }

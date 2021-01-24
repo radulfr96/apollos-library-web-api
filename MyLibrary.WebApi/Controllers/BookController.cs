@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyLibrary.Common.Requests;
-using MyLibrary.Common.Requests.Book;
-using MyLibrary.Data.Model;
-using MyLibrary.Services;
-using MyLibrary.Services.Contracts;
-using MyLibrary.UnitOfWork;
+using MyLibrary.Application.Book.Commands.AddBookCommand;
+using MyLibrary.Application.Book.Commands.UpdateBookCommand;
+using MyLibrary.Application.Book.Queries.GetBookQuery;
+using MyLibrary.Application.Book.Queries.GetBooksQuery;
 
 namespace MyLibrary.WebApi.Controllers
 {
@@ -20,17 +19,11 @@ namespace MyLibrary.WebApi.Controllers
     [Route("api/[controller]")]
     public class BookController : BaseApiController
     {
-        private readonly MyLibraryContext _dbContext;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IBookService _bookService;
+        private readonly IMediator _mediator;
 
-        public BookController(MyLibraryContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration)
+        public BookController(IMediator mediator, IConfiguration configuration) : base(configuration)
         {
-            _dbContext = dbContext;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
-            _bookService = new BookService(new BookUnitOfWork(_dbContext), _httpContextAccessor.HttpContext.User);
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -38,32 +31,10 @@ namespace MyLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">the request with the book information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("")]
-        public IActionResult AddBook(AddBookRequest request)
+        [HttpPost("create")]
+        public async Task<AddBookCommandDto> AddBook([FromBody] AddBookCommand command)
         {
-            try
-            {
-                var response = _bookService.AddBook(request);
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                        return Ok(response);
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(BuildBadRequestMessage(response));
-                    case HttpStatusCode.NotFound:
-                        return NotFound();
-                    case HttpStatusCode.InternalServerError:
-                        return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, $"Unable to add book.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return await _mediator.Send(command);
         }
 
         /// <summary>
@@ -71,64 +42,20 @@ namespace MyLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">the id of the book to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpGet("{id}")]
-        public IActionResult GetBook(int id)
+        [HttpPost("")]
+        public async Task<GetBookQueryDto> GetBook([FromBody] GetBookQuery query)
         {
-            try
-            {
-                var response = _bookService.GetBook(id);
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                        return Ok(response);
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(BuildBadRequestMessage(response));
-                    case HttpStatusCode.NotFound:
-                        return NotFound();
-                    case HttpStatusCode.InternalServerError:
-                        return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, $"Unable to retreive book with id [{id}].");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return await _mediator.Send(query);
         }
 
         /// <summary>
         /// Used to get a books
         /// </summary>
         /// <returns>Response that indicates the result</returns>
-        [HttpGet("")]
-        public IActionResult GetBooks()
+        [HttpPost("books")]
+        public async Task<GetBooksQueryDto> GetBooks([FromBody] GetBooksQuery query)
         {
-            try
-            {
-                var response = _bookService.GetBooks();
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                        return Ok(response);
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(BuildBadRequestMessage(response));
-                    case HttpStatusCode.NotFound:
-                        return NotFound();
-                    case HttpStatusCode.InternalServerError:
-                        return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, $"Unable to retreive books.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return await _mediator.Send(query);
         }
 
         /// <summary>
@@ -137,31 +64,9 @@ namespace MyLibrary.WebApi.Controllers
         /// <param name="request">the request with the book information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
-        public IActionResult UpdateBook(UpdateBookRequest request)
+        public async Task<UpdateBookCommandDto> UpdateBook(UpdateBookCommand command)
         {
-            try
-            {
-                var response = _bookService.UpdateBook(request);
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                        return Ok(response);
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(BuildBadRequestMessage(response));
-                    case HttpStatusCode.NotFound:
-                        return NotFound();
-                    case HttpStatusCode.InternalServerError:
-                        return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, $"Unable to update book.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return await _mediator.Send(command);
         }
     }
 }
