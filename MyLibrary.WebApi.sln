@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.UnitOfWork.Contra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.UnitOfWork", "MyLibrary.UnitOfWork\MyLibrary.UnitOfWork.csproj", "{0CA1A141-9D16-400A-8BED-B24626142F6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Services.XUnitTestProject", "MyLibrary.Services.XUnitTestProject\MyLibrary.Services.XUnitTestProject.csproj", "{60086900-1F73-483F-876C-EF1FE15189D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Application.XUnitTestProject", "MyLibrary.Application.XUnitTestProject\MyLibrary.Application.XUnitTestProject.csproj", "{60086900-1F73-483F-876C-EF1FE15189D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Application", "MyLibrary.Application\MyLibrary.Application.csproj", "{E1C8EE44-4BF0-412A-96F9-36B7D477E6C9}"
 EndProject

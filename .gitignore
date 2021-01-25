@@ -36,3 +36,7 @@ MyLibrary.Infrastructure/obj/
 MyLibrary.Application/obj/
 MyLibrary.Common/bin/
 MyLibrary.Common/obj/
+MyLibrary.Application.XUnitTestProject/bin/
+MyLibrary.Application.XUnitTestProject/obj/
+MyLibrary.Application/bin/
+MyLibrary.Infrastructure/bin/

@@ -12,9 +12,16 @@ namespace MyLibrary.Application.Common.Enums
 
         // AddAuthorErrors
         FirstnameNotProvided = 1,
-        LastnameNotProvided = 2,
-        CountryNotProvided = 3,
-
+        FirstnameInvalidLength = 2,
+        FirstnameInvalidFormat = 3,
+        MiddlenameInvalidLength = 4,
+        MiddlenameInvalidFormat = 5,
+        LastnameNotProvided = 6,
+        LastnameInvalidLength = 7,
+        LastnameInvalidFormat = 8,
+        CountryNotProvided = 9,
+        CountryInvalidValue = 10,
+        DecriptionInvalidLength = 11,
 
         BookNotFound = 100,
         ISBNAlreadyAdded = 101,

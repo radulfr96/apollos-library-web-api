@@ -1,4 +1,9 @@
-﻿using Moq;
+﻿using Bogus;
+using FluentValidation.Results;
+using FluentValidation.TestHelper;
+using Moq;
+using MyLibrary.Application.Author.Commands.AddAuthorCommand;
+using MyLibrary.Application.Common.Enums;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
@@ -9,11 +14,14 @@ using System.Security.Claims;
 using System.Text;
 using Xunit;
 
-namespace MyLibrary.Services.XUnitTestProject
+namespace MyLibrary.Application.XUnitTestProject
 {
-    public class AuthorTests
+    public class AddAuthorCommandTest
     {
         //private readonly ClaimsPrincipal MockPrincipal;
+
+        private readonly AddAuthorCommandValidator _validatior;
+        private readonly Faker _faker;
 
         //public AuthorTests()
         //{
@@ -24,134 +32,295 @@ namespace MyLibrary.Services.XUnitTestProject
         //    });
         //}
 
-        //[Fact]
-        //public void CreateAuthorAllDetailsSuccess()
-        //{
-        //    var request = new AddAuthorRequest()
-        //    {
-        //        Firstname = "Wade",
-        //        Middlename = "James",
-        //        Lastname = "Russell",
-        //        CountryID = "AU",
-        //        Description = "This is a test author"
-        //    };
+        public AddAuthorCommandTest()
+        {
+            _validatior = new AddAuthorCommandValidator();
+            _faker = new Faker();
+        }
 
-        //    var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+        [Fact]
+        public void CreateAuthorFirstnameNotProvided()
+        {
+            var command = new AddAuthorCommand();
 
-        //    mockAuthorDataLayer.Setup(layer => layer.AddAuthor(It.IsAny<Author>())).Callback((Author author) =>
-        //    {
-        //        author.AuthorId = 1;
-        //    });
+            var result = _validatior.TestValidate(command);
 
-        //    var unitOfWork = new Mock<IAuthorUnitOfWork>();
-        //    unitOfWork.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any());
 
-        //    var service = new AuthorService(unitOfWork.Object, MockPrincipal);
+            command.Firstname = "";
 
-        //    var response = service.AddAuthor(request);
+            result = _validatior.TestValidate(command);
 
-        //    Assert.True(response.StatusCode == HttpStatusCode.OK);
-        //    Assert.True(response.AuthorID == 1);
-        //}
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any());
+        }
 
-        //[Fact]
-        //public void CreateAuthorSuccess()
-        //{
-        //    var request = new AddAuthorRequest()
-        //    {
-        //        Firstname = "Wade",
-        //        CountryID = "AU",
-        //    };
+        [Fact]
+        public void CreateAuthorFirstnameInvalidLength()
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Random.String(51),
+            };
 
-        //    var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+            var result = _validatior.TestValidate(command);
 
-        //    mockAuthorDataLayer.Setup(layer => layer.AddAuthor(It.IsAny<Author>())).Callback((Author author) =>
-        //    {
-        //        author.AuthorId = 1;
-        //    });
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidLength.ToString()).Any());
+        }
 
-        //    var unitOfWork = new Mock<IAuthorUnitOfWork>();
-        //    unitOfWork.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+        [Theory]
+        [InlineData("Tester0")]
+        [InlineData("Tester1")]
+        [InlineData("Tester2")]
+        [InlineData("Tester3")]
+        [InlineData("Tester4")]
+        [InlineData("Tester5")]
+        [InlineData("Tester6")]
+        [InlineData("Tester7")]
+        [InlineData("Tester8")]
+        [InlineData("Tester9")]
+        [InlineData("Tester!")]
+        [InlineData("Tester@")]
+        [InlineData("Tester#")]
+        [InlineData("Tester$")]
+        [InlineData("Tester%")]
+        [InlineData("Tester^")]
+        [InlineData("Tester&")]
+        [InlineData("Tester*")]
+        [InlineData("Tester(")]
+        [InlineData("Tester)")]
+        [InlineData("Tester`")]
+        [InlineData("Tester~")]
+        [InlineData("Tester_")]
+        [InlineData("Tester+")]
+        [InlineData("Tester=")]
+        [InlineData("Tester[")]
+        [InlineData("Tester]")]
+        [InlineData("Tester{")]
+        [InlineData("Tester}")]
+        [InlineData("Tester|")]
+        [InlineData("Tester\\")]
+        [InlineData("Tester")]
+        [InlineData("Tester?")]
+        [InlineData("Tester<")]
+        [InlineData("Tester>")]
+        [InlineData("Tester,")]
+        [InlineData("Tester.")]
+        public void CreateAuthorFirstnameInvalidFormat(string name)
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = name,
+            };
 
-        //    var service = new AuthorService(unitOfWork.Object, MockPrincipal);
+            var result = _validatior.TestValidate(command);
 
-        //    var response = service.AddAuthor(request);
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidFormat.ToString()).Any());
+        }
 
-        //    Assert.True(response.StatusCode == HttpStatusCode.OK);
-        //    Assert.True(response.AuthorID == 1);
-        //}
+        [Fact]
+        public void CreateAuthorLastnameNotProvided()
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = null,
+            };
 
-        //[Fact]
-        //public void CreateAuthorFailNoName()
-        //{
-        //    var request = new AddAuthorRequest()
-        //    {
-        //        Firstname = null,
-        //        CountryID = "AU",
-        //    };
+            var result = _validatior.TestValidate(command);
 
-        //    var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any());
 
-        //    mockAuthorDataLayer.Setup(layer => layer.AddAuthor(It.IsAny<Author>())).Callback((Author author) =>
-        //    {
-        //        author.AuthorId = 1;
-        //    });
+            command.Lastname = "";
 
-        //    var unitOfWork = new Mock<IAuthorUnitOfWork>();
-        //    unitOfWork.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+            result = _validatior.TestValidate(command);
 
-        //    var service = new AuthorService(unitOfWork.Object, MockPrincipal);
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any());
+        }
 
-        //    var response = service.AddAuthor(request);
+        [Fact]
+        public void CreateAuthorLastnameInvalidLength()
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = _faker.Random.String(51),
+            };
 
-        //    Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
-        //    Assert.True(response.Messages.Count == 1);
-        //    Assert.True(response.Messages[0] == "You must supply a first name or an alias");
+            var result = _validatior.TestValidate(command);
 
-        //    request.Firstname = "";
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidLength.ToString()).Any());
+        }
 
-        //    response = service.AddAuthor(request);
+        [Theory]
+        [InlineData("Tester0")]
+        [InlineData("Tester1")]
+        [InlineData("Tester2")]
+        [InlineData("Tester3")]
+        [InlineData("Tester4")]
+        [InlineData("Tester5")]
+        [InlineData("Tester6")]
+        [InlineData("Tester7")]
+        [InlineData("Tester8")]
+        [InlineData("Tester9")]
+        [InlineData("Tester!")]
+        [InlineData("Tester@")]
+        [InlineData("Tester#")]
+        [InlineData("Tester$")]
+        [InlineData("Tester%")]
+        [InlineData("Tester^")]
+        [InlineData("Tester&")]
+        [InlineData("Tester*")]
+        [InlineData("Tester(")]
+        [InlineData("Tester)")]
+        [InlineData("Tester`")]
+        [InlineData("Tester~")]
+        [InlineData("Tester_")]
+        [InlineData("Tester+")]
+        [InlineData("Tester=")]
+        [InlineData("Tester[")]
+        [InlineData("Tester]")]
+        [InlineData("Tester{")]
+        [InlineData("Tester}")]
+        [InlineData("Tester|")]
+        [InlineData("Tester\\")]
+        [InlineData("Tester")]
+        [InlineData("Tester?")]
+        [InlineData("Tester<")]
+        [InlineData("Tester>")]
+        [InlineData("Tester,")]
+        [InlineData("Tester.")]
+        public void CreateAuthorLastnameInvalidFormat(string name)
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = name,
+            };
 
-        //    Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
-        //    Assert.True(response.Messages.Count == 1);
-        //    Assert.True(response.Messages[0] == "You must supply a first name or an alias");
-        //}
+            var result = _validatior.TestValidate(command);
 
-        //[Fact]
-        //public void CreateAuthorFailNoCountry()
-        //{
-        //    var request = new AddAuthorRequest()
-        //    {
-        //        Firstname = "Wade",
-        //        CountryID = null,
-        //    };
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidFormat.ToString()).Any());
+        }
 
-        //    var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+        [Fact]
+        public void CreateAuthorMiddlenameInvalidLength()
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = _faker.Name.LastName(),
+                Middlename = _faker.Random.String(51)
+            };
 
-        //    mockAuthorDataLayer.Setup(layer => layer.AddAuthor(It.IsAny<Author>())).Callback((Author author) =>
-        //    {
-        //        author.AuthorId = 1;
-        //    });
+            var result = _validatior.TestValidate(command);
 
-        //    var unitOfWork = new Mock<IAuthorUnitOfWork>();
-        //    unitOfWork.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidLength.ToString()).Any());
+        }
 
-        //    var service = new AuthorService(unitOfWork.Object, MockPrincipal);
+        [Theory]
+        [InlineData("Tester0")]
+        [InlineData("Tester1")]
+        [InlineData("Tester2")]
+        [InlineData("Tester3")]
+        [InlineData("Tester4")]
+        [InlineData("Tester5")]
+        [InlineData("Tester6")]
+        [InlineData("Tester7")]
+        [InlineData("Tester8")]
+        [InlineData("Tester9")]
+        [InlineData("Tester!")]
+        [InlineData("Tester@")]
+        [InlineData("Tester#")]
+        [InlineData("Tester$")]
+        [InlineData("Tester%")]
+        [InlineData("Tester^")]
+        [InlineData("Tester&")]
+        [InlineData("Tester*")]
+        [InlineData("Tester(")]
+        [InlineData("Tester)")]
+        [InlineData("Tester`")]
+        [InlineData("Tester~")]
+        [InlineData("Tester_")]
+        [InlineData("Tester+")]
+        [InlineData("Tester=")]
+        [InlineData("Tester[")]
+        [InlineData("Tester]")]
+        [InlineData("Tester{")]
+        [InlineData("Tester}")]
+        [InlineData("Tester|")]
+        [InlineData("Tester\\")]
+        [InlineData("Tester")]
+        [InlineData("Tester?")]
+        [InlineData("Tester<")]
+        [InlineData("Tester>")]
+        [InlineData("Tester,")]
+        [InlineData("Tester.")]
+        public void CreateAuthorMiddlenameInvalidFormat(string name)
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = _faker.Name.LastName(),
+                Middlename = name,
+            };
 
-        //    var response = service.AddAuthor(request);
+            var result = _validatior.TestValidate(command);
 
-        //    Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
-        //    Assert.True(response.Messages.Count == 1);
-        //    Assert.True(response.Messages[0] == "You must select a country of origin");
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidFormat.ToString()).Any());
+        }
 
-        //    request.CountryID = "";
+        [Fact]
+        public void CreateAuthorNoCountryProvided()
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = _faker.Name.LastName(),
+                Middlename = _faker.Name.FirstName(),
+                Description = _faker.Random.String(2001)
+            };
 
-        //    response = service.AddAuthor(request);
+            var result = _validatior.TestValidate(command);
 
-        //    Assert.True(response.StatusCode == HttpStatusCode.BadRequest);
-        //    Assert.True(response.Messages.Count == 1);
-        //    Assert.True(response.Messages[0] == "You must select a country of origin");
-        //}
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
+
+            command.CountryID = "";
+
+            result = _validatior.TestValidate(command);
+
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
+        }
+
+
+        [Fact]
+        public void CreateAuthorDescriptionInvalidLength()
+        {
+            var command = new AddAuthorCommand()
+            {
+                Firstname = _faker.Name.FirstName(),
+                Lastname = _faker.Name.LastName(),
+                Middlename = _faker.Name.FirstName(),
+                CountryID = "AU",
+                Description = _faker.Random.String(2001)
+            };
+
+            var result = _validatior.TestValidate(command);
+
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.DecriptionInvalidLength.ToString()).Any());
+        }
 
         //[Fact]
         //public void GetAuthorsNotFound()
@@ -474,6 +643,63 @@ namespace MyLibrary.Services.XUnitTestProject
         //    var response = service.DeleteAuthor(1);
 
         //    Assert.True(response.StatusCode == HttpStatusCode.NotFound);
+        //}
+
+        //[Fact]
+        //public void CreateAuthorAllDetailsSuccess()
+        //{
+        //    var request = new AddAuthorRequest()
+        //    {
+        //        Firstname = "Wade",
+        //        Middlename = "James",
+        //        Lastname = "Russell",
+        //        CountryID = "AU",
+        //        Description = "This is a test author"
+        //    };
+
+        //    var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+
+        //    mockAuthorDataLayer.Setup(layer => layer.AddAuthor(It.IsAny<Author>())).Callback((Author author) =>
+        //    {
+        //        author.AuthorId = 1;
+        //    });
+
+        //    var unitOfWork = new Mock<IAuthorUnitOfWork>();
+        //    unitOfWork.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+
+        //    var service = new AuthorService(unitOfWork.Object, MockPrincipal);
+
+        //    var response = service.AddAuthor(request);
+
+        //    Assert.True(response.StatusCode == HttpStatusCode.OK);
+        //    Assert.True(response.AuthorID == 1);
+        //}
+
+        //[Fact]
+        //public void CreateAuthorSuccess()
+        //{
+        //    var request = new AddAuthorRequest()
+        //    {
+        //        Firstname = "Wade",
+        //        CountryID = "AU",
+        //    };
+
+        //    var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+
+        //    mockAuthorDataLayer.Setup(layer => layer.AddAuthor(It.IsAny<Author>())).Callback((Author author) =>
+        //    {
+        //        author.AuthorId = 1;
+        //    });
+
+        //    var unitOfWork = new Mock<IAuthorUnitOfWork>();
+        //    unitOfWork.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+
+        //    var service = new AuthorService(unitOfWork.Object, MockPrincipal);
+
+        //    var response = service.AddAuthor(request);
+
+        //    Assert.True(response.StatusCode == HttpStatusCode.OK);
+        //    Assert.True(response.AuthorID == 1);
         //}
     }
 }
