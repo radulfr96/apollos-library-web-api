@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
@@ -14,8 +15,8 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
     {
         public int AuthorID { get; set; }
         public string Firstname { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
+        public string Middlename { get; set; }
+        public string Lastname { get; set; }
         public string CountryID { get; set; }
         public string Description { get; set; }
     }
@@ -23,12 +24,14 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
     public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, UpdateAuthorCommandDto>
     {
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
+        private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
 
-        public UpdateAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
+        public UpdateAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IReferenceUnitOfWork referenceUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
             _authorUnitOfWork = authorUnitOfWork;
+            _referenceUnitOfWork = referenceUnitOfWork;
             _userService = userService;
             _dateTimeService = dateTimeService;
         }
@@ -37,11 +40,18 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
         {
             var response = new UpdateAuthorCommandDto();
 
+            var countries = (await _referenceUnitOfWork.ReferenceDataLayer.GetCountries()).Select(c => c.CountryId).ToList();
+
+            if (!countries.Contains(command.CountryID))
+            {
+                throw new CountryInvalidValueException($"Unable to find country with code [{command.CountryID}]");
+            }
+
             var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(command.AuthorID);
 
             author.FirstName = command.Firstname;
-            author.MiddleName = command.MiddleName;
-            author.LastName = command.LastName;
+            author.MiddleName = command.Middlename;
+            author.LastName = command.Lastname;
             author.CountryId = command.CountryID;
             author.Description = command.Description;
             author.ModifiedBy = _userService.GetUserId();
