@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork.Contracts;
@@ -23,27 +24,36 @@ namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
     public class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, AddAuthorCommandDto>
     {
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
+        private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
 
-        public AddAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
+        public AddAuthorCommandHandler(IAuthorUnitOfWork authorUnitOfWork, IReferenceUnitOfWork referenceUnitOfWork, IUserService userService, IDateTimeService dateTimeService)
         {
             _authorUnitOfWork = authorUnitOfWork;
             _userService = userService;
             _dateTimeService = dateTimeService;
+            _referenceUnitOfWork = referenceUnitOfWork;
         }
 
-        public async Task<AddAuthorCommandDto> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
+        public async Task<AddAuthorCommandDto> Handle(AddAuthorCommand command, CancellationToken cancellationToken)
         {
+            var countries = (await _referenceUnitOfWork.ReferenceDataLayer.GetCountries()).Select(c => c.CountryId).ToList();
+
+            if (!countries.Contains(command.CountryID))
+            {
+                throw new CountryInvalidValueException($"Unable to find country with code [{command.CountryID}]");
+            }
+
             var response = new AddAuthorCommandDto();
 
             var author = new Persistence.Model.Author()
             {
-                FirstName = request.Firstname,
-                MiddleName = request.Middlename,
-                LastName = request.Lastname,
-                CountryId = request.CountryID,
-                Description = request.Description,
+                FirstName = command.Firstname,
+                MiddleName = command.Middlename,
+                LastName = command.Lastname,
+                CountryId = command.CountryID,
+                Description = command.Description,
                 CreatedDate = _dateTimeService.Now,
                 CreatedBy = _userService.GetUserId(),
             };

@@ -40,3 +40,5 @@ MyLibrary.Application.XUnitTestProject/bin/
 MyLibrary.Application.XUnitTestProject/obj/
 MyLibrary.Application/bin/
 MyLibrary.Infrastructure/bin/
+MyLibrary.Application.UnitTests/bin/
+MyLibrary.Application.UnitTests/obj/
