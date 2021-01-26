@@ -23,14 +23,17 @@ namespace MyLibrary.Application.Common.Enums
         CountryInvalidValue = 10,
         DecriptionInvalidLength = 11,
 
-        BookNotFound = 100,
-        ISBNAlreadyAdded = 101,
+        // Update Author
+        AuthorNotFound = 100,
 
-        GenreNotFound = 200,
+        BookNotFound = 200,
+        ISBNAlreadyAdded = 201,
 
-        PublisherNotFound = 300,
+        GenreNotFound = 300,
 
-        UserNotFound = 400,
-        UsernameAlreadyTaken = 401,
+        PublisherNotFound = 400,
+
+        UserNotFound = 500,
+        UsernameAlreadyTaken = 501,
     }
 }

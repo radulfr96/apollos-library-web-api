@@ -49,6 +49,11 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
 
             var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(command.AuthorID);
 
+            if (author == null)
+            {
+                throw new AuthorNotFoundException($"Unable to find book with id [{command.AuthorID}]");
+            }
+
             author.FirstName = command.Firstname;
             author.MiddleName = command.Middlename;
             author.LastName = command.Lastname;
