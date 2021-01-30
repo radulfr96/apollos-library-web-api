@@ -23,11 +23,9 @@ namespace MyLibrary.DataLayer
             await _context.Author.AddAsync(author);
         }
 
-        public async Task DeleteAuthor(int id)
+        public async Task DeleteAuthor(Author author)
         {
-            var author = await GetAuthor(id);
-
-            _context.Author.Remove(author);
+            await Task.FromResult(_context.Author.Remove(author));
         }
 
         public async Task<Author> GetAuthor(int id)

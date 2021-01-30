@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,14 @@ namespace MyLibrary.Application.Author.Commands.DeleteAuthorCommand
         {
             var response = new DeleteAuthorCommandDto();
 
-            var author = _authorUnitOfWork.AuthorDataLayer.GetAuthor(query.AuthorId);
+            var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(query.AuthorId);
 
-            await _authorUnitOfWork.AuthorDataLayer.DeleteAuthor(query.AuthorId);
+            if (author == null)
+            {
+                throw new AuthorNotFoundException($"Unable to find author with id [{query.AuthorId}].");
+            }
+
+            await _authorUnitOfWork.AuthorDataLayer.DeleteAuthor(author);
             await _authorUnitOfWork.Save();
 
             return response;

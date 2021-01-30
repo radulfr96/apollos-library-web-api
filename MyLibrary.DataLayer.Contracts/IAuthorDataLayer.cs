@@ -34,6 +34,6 @@ namespace MyLibrary.DataLayer.Contracts
         /// Used to remove an author from the database
         /// </summary>
         /// <param name="id">The id of the author to be deleted</param>
-        Task DeleteAuthor(int id);
+        Task DeleteAuthor(Author author);
     }
 }
