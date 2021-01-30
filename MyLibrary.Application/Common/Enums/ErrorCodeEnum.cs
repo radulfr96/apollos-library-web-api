@@ -10,7 +10,7 @@ namespace MyLibrary.Application.Common.Enums
     {
         SystemError = 0,
 
-        // AddAuthorErrors
+        // Validation Errors
         FirstnameNotProvided = 1,
         FirstnameInvalidLength = 2,
         FirstnameInvalidFormat = 3,
@@ -22,18 +22,31 @@ namespace MyLibrary.Application.Common.Enums
         CountryNotProvided = 9,
         CountryInvalidValue = 10,
         DecriptionInvalidLength = 11,
+        NoISBNOreISBNNotProvided = 12,
+        ISBNAlreadyAdded = 13,
+        ISBNInvalidLength = 14,
+        ISBNInvalidFormat = 15,
+        eISBNAlreadyAdded = 16,
+        eISBNInvalidLength = 17,
+        eISBNInvalidFormat = 18,
+        TitleNotProvided = 19,
+        TitleInvalidLength = 20,
+        SubtitleInvalidLength = 21,
+        NumberInSeriesInvalidLength = 22,
+        EditionInvalidLength = 22,
+        UsernameAlreadyTaken = 99,
 
-        // Update Author
+
+        // Not Found Errors
         AuthorNotFound = 100,
+        BookNotFound = 101,
+        GenreNotFound = 102,
+        PublisherNotFound = 103,
+        UserNotFound = 104,
+        SeriesNotFound = 105,
+        PublicationFormatNotFound = 106,
+        FictionTypeNotFound = 107,
+        FormTypeNotFound = 108,
 
-        BookNotFound = 200,
-        ISBNAlreadyAdded = 201,
-
-        GenreNotFound = 300,
-
-        PublisherNotFound = 400,
-
-        UserNotFound = 500,
-        UsernameAlreadyTaken = 501,
     }
 }

@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class GenreNotFoundException : BadRequestException
+    public class FictionTypeNotFoundException : NotFoundException
     {
-        public GenreNotFoundException(string message) : base(ErrorCodeEnum.GenreNotFound, message)
+        public FictionTypeNotFoundException(string message) : base (ErrorCodeEnum.FictionTypeNotFound, message)
         {
+
         }
     }
 }

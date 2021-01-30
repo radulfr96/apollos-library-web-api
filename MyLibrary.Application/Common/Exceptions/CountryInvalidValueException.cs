@@ -9,8 +9,7 @@ namespace MyLibrary.Application.Common.Exceptions
 {
     public class CountryInvalidValueException : BadRequestException
     {
-        public CountryInvalidValueException(string message)
-        : base(ErrorCodeEnum.CountryInvalidValue, message)
+        public CountryInvalidValueException(string message) : base(ErrorCodeEnum.CountryInvalidValue, message)
         {
         }
     }

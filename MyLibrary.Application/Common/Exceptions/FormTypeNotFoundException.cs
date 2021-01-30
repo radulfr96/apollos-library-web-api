@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class GenreNotFoundException : BadRequestException
+    public class FormTypeNotFoundException : NotFoundException
     {
-        public GenreNotFoundException(string message) : base(ErrorCodeEnum.GenreNotFound, message)
+        public FormTypeNotFoundException(string message) : base(ErrorCodeEnum.FormTypeNotFound, message)
         {
+
         }
     }
 }

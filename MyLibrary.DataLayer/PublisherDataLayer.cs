@@ -20,17 +20,17 @@ namespace MyLibrary.DataLayer
 
         public async Task AddPublisher(Publisher publisher)
         {
-            await _context.Publisher.AddAsync(publisher);
+            await _context.Publishers.AddAsync(publisher);
         }
 
         public async Task<Publisher> GetPublisher(int id)
         {
-            return await _context.Publisher.FirstOrDefaultAsync(p => p.PublisherId == id);
+            return await _context.Publishers.FirstOrDefaultAsync(p => p.PublisherId == id);
         }
 
         public async Task<List<Publisher>> GetPublishers()
         {
-            return await _context.Publisher.Include("Country").Where(p => p.IsDeleted == null || p.IsDeleted == false).ToListAsync();
+            return await _context.Publishers.Include("Country").Where(p => p.IsDeleted == null || p.IsDeleted == false).ToListAsync();
         }
     }
 }

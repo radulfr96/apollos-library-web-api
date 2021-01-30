@@ -20,32 +20,32 @@ namespace MyLibrary.DataLayer
 
         public async Task AddBook(Book book)
         {
-            await _context.Book.AddAsync(book);
+            await _context.Books.AddAsync(book);
         }
 
         public async Task AddBookAuthor(BookAuthor bookAuthor)
         {
-            await _context.BookAuthor.AddAsync(bookAuthor);
+            await _context.BookAuthors.AddAsync(bookAuthor);
         }
 
         public async Task AddBookGenre(BookGenre bookGenre)
         {
-            await _context.BookGenre.AddAsync(bookGenre);
+            await _context.BookGenres.AddAsync(bookGenre);
         }
 
         public async Task<Book> GetBook(int id)
         {
-            var book = await (from b in _context.Book
+            var book = await (from b in _context.Books
                     where b.BookId == id
                     select b).FirstOrDefaultAsync();
 
             if (book != null)
             {
-                book.BookGenre = await (from bg in _context.BookGenre
+                book.BookGenres = await (from bg in _context.BookGenres
                                   where bg.BookId == id
                                   select bg).ToListAsync();
 
-                book.BookAuthor = await (from ba in _context.BookAuthor
+                book.BookAuthors = await (from ba in _context.BookAuthors
                                    where ba.BookId == id
                                    select ba).ToListAsync();
             }
@@ -55,24 +55,24 @@ namespace MyLibrary.DataLayer
 
         public async Task<Book> GetBookByeISBN(string eisbn)
         {
-            return await (from b in _context.Book
+            return await (from b in _context.Books
                     where b.EIsbn == eisbn
                     select b).FirstOrDefaultAsync();
         }
 
         public async Task<Book> GetBookByISBN(string isbn)
         {
-            return await (from b in _context.Book
+            return await (from b in _context.Books
                     where b.Isbn == isbn
                     select b).FirstOrDefaultAsync();
         }
 
         public async Task<List<Book>> GetBooks()
         {
-            var books = await _context.Book.ToListAsync();
+            var books = await _context.Books.ToListAsync();
 
-            var fictionTypes = await _context.FictionType.ToListAsync();
-            var formTypes = await _context.FormType.ToListAsync();
+            var fictionTypes = await _context.FictionTypes.ToListAsync();
+            var formTypes = await _context.FormTypes.ToListAsync();
 
             foreach (var book in books)
             {
@@ -84,18 +84,25 @@ namespace MyLibrary.DataLayer
             return books;
         }
 
+        public async Task<Series> GetSeries(int seriesId)
+        {
+            return await (from s in _context.Series
+                          where s.SeriesId == seriesId
+                          select s).FirstOrDefaultAsync();
+        }
+
         public void DeleteBookAuthorRelationships(int bookId)
         {
-            var bookAuthors = _context.BookAuthor.Where(b => b.BookId == bookId);
+            var bookAuthors = _context.BookAuthors.Where(b => b.BookId == bookId);
 
-            _context.BookAuthor.RemoveRange(bookAuthors);
+            _context.BookAuthors.RemoveRange(bookAuthors);
         }
 
         public void DeleteBookGenreRelationships(int bookId)
         {
-            var bookGenres = _context.BookGenre.Where(b => b.BookId == bookId);
+            var bookGenres = _context.BookGenres.Where(b => b.BookId == bookId);
 
-            _context.BookGenre.RemoveRange(bookGenres);
+            _context.BookGenres.RemoveRange(bookGenres);
         }
     }
 }

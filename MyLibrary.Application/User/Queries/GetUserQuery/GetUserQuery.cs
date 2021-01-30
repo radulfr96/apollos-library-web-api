@@ -39,7 +39,7 @@ namespace MyLibrary.Application.User.Queries.GetUserQuery
             response.IsActive = user.IsActive ? "Active" : "Inactive";
             response.UserID = user.UserId;
             response.Username = user.Username;
-            response.Roles = user.UserRole.Select(r => new RoleDTO() { RoleId = r.RoleId, Name = r.Role.Name }).ToList();
+            response.Roles = user.UserRoles.Select(r => new RoleDTO() { RoleId = r.RoleId, Name = r.Role.Name }).ToList();
 
             return response;
         }

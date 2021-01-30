@@ -13,7 +13,7 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
 {
     public class UpdateAuthorCommand : IRequest<UpdateAuthorCommandDto>
     {
-        public int AuthorID { get; set; }
+        public int AuthorId { get; set; }
         public string Firstname { get; set; }
         public string Middlename { get; set; }
         public string Lastname { get; set; }
@@ -40,6 +40,13 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
         {
             var response = new UpdateAuthorCommandDto();
 
+            var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(command.AuthorId);
+
+            if (author == null)
+            {
+                throw new AuthorNotFoundException($"Unable to find book with id [{command.AuthorId}]");
+            }
+
             var countries = (await _referenceUnitOfWork.ReferenceDataLayer.GetCountries()).Select(c => c.CountryId).ToList();
 
             if (!countries.Contains(command.CountryID))
@@ -47,12 +54,6 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
                 throw new CountryInvalidValueException($"Unable to find country with code [{command.CountryID}]");
             }
 
-            var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(command.AuthorID);
-
-            if (author == null)
-            {
-                throw new AuthorNotFoundException($"Unable to find book with id [{command.AuthorID}]");
-            }
 
             author.FirstName = command.Firstname;
             author.MiddleName = command.Middlename;

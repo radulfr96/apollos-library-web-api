@@ -343,6 +343,10 @@ namespace MyLibrary.Application.XUnitTestProject
 
             var mockAuthorUow = new Mock<IAuthorUnitOfWork>();
 
+            var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
+            mockAuthorDataLayer.Setup(a => a.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Author()));
+            mockAuthorUow.Setup(d => d.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
+
             var mockUserService = new Mock<IUserService>();
 
             var mockDateTimeService = new Mock<IDateTimeService>();

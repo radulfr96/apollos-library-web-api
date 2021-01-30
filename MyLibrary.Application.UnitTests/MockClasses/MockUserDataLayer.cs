@@ -40,7 +40,7 @@ namespace MyLibrary.Services.XUnitTestProject.MockClasses
 
         public void ClearUserRoles(User user)
         {
-            user.UserRole.Clear();
+            user.UserRoles.Clear();
         }
     }
 }

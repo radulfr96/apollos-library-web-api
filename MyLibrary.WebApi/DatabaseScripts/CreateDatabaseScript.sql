@@ -75,7 +75,7 @@ GO
 
 CREATE TABLE [Book].[Series]
 (
-	[SeriesID] INT IDENTITY NOT NULL,
+	[SeriesID] INT PRIMARY KEY IDENTITY NOT NULL,
 	[Name] VARCHAR(200)
 )
 
@@ -98,6 +98,12 @@ CREATE TABLE [Book].[FormType]
 	[TypeID] INT IDENTITY NOT NULL,
 	[Name] VARCHAR(20) NOT NULL,
 	CONSTRAINT PK_FormType PRIMARY KEY (TypeID)
+)
+
+CREATE TABLE [dbo].[ErrorCode]
+(
+	[ErrorCodeId] INT NOT NULL PRIMARY KEY,
+	[Message] VARCHAR(80) NOT NULL,
 )
 
 CREATE TABLE [dbo].[Country]
@@ -149,8 +155,8 @@ CREATE TABLE [Author].[Author]
 CREATE TABLE [Book].[Book]
 (
 	[BookID] INT IDENTITY NOT NULL,
-	[ISBN] VARCHAR(12),
-	[eISBN] VARCHAR(12),
+	[ISBN] VARCHAR(13),
+	[eISBN] VARCHAR(13),
 	[Title] VARCHAR(200) NOT NULL,
 	[Subtitle] VARCHAR(200),
 	[SeriesID] INT,
@@ -166,6 +172,9 @@ CREATE TABLE [Book].[Book]
 	[ModifiedDate] DATETIME,
 	[ModifiedBy] INT,
 	CONSTRAINT PK_Book PRIMARY KEY (BookID),
+	CONSTRAINT FK_SeriesBook
+	FOREIGN KEY ([SeriesID])
+	REFERENCES [Book].[Series] (SeriesID),
 	CONSTRAINT FK_PublicationFormatBook
 	FOREIGN KEY ([PublicationFormatID]) 
 	REFERENCES [Book].[PublicationFormat] (TypeID),

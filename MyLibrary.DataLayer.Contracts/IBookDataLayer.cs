@@ -56,6 +56,14 @@ namespace MyLibrary.DataLayer.Contracts
         /// <returns>The books</returns>
         Task<List<Book>> GetBooks();
 
+
+        /// <summary>
+        /// Used to get a series by its id
+        /// </summary>
+        /// <param name="seriesId">The id of the series to be found</param>
+        /// <returns>The series with the id received</returns>
+        Task<Author> GetSeries(int seriesId);
+
         /// <summary>
         /// Used to delete a books genre relationships
         /// </summary>

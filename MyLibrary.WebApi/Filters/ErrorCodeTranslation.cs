@@ -14,7 +14,7 @@ namespace MyLibrary.WebApi.Filters
         {
             if (_errorCodes.Count == 0)
             {
-                var errors = (from e in context.ErrorCode
+                var errors = (from e in context.ErrorCodes
                               select e).ToList();
 
                 foreach (var e in errors)

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class Publisher
     {
         public Publisher()
         {
-            Book = new HashSet<Book>();
+            Books = new HashSet<Book>();
         }
 
         public int PublisherId { get; set; }
@@ -27,6 +29,6 @@ namespace MyLibrary.Persistence.Model
         public virtual Country Country { get; set; }
         public virtual User CreatedByNavigation { get; set; }
         public virtual User ModifiedByNavigation { get; set; }
-        public virtual ICollection<Book> Book { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
     }
 }

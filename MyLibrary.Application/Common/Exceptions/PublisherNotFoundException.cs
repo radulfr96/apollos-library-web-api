@@ -9,8 +9,7 @@ namespace MyLibrary.Application.Common.Exceptions
 {
     public class PublisherNotFoundException : BadRequestException
     {
-        public PublisherNotFoundException(string message)
-        : base(ErrorCodeEnum.PublisherNotFound, message)
+        public PublisherNotFoundException(string message) : base(ErrorCodeEnum.PublisherNotFound, message)
         {
         }
     }

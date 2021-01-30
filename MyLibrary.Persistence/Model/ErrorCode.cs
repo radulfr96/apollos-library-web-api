@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace MyLibrary.Persistence.Model
 {
-    public class ErrorCode
+    public partial class ErrorCode
     {
         public int ErrorCodeId { get; set; }
         public string Message { get; set; }

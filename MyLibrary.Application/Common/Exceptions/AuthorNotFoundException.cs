@@ -9,8 +9,7 @@ namespace MyLibrary.Application.Common.Exceptions
 {
     public class AuthorNotFoundException : NotFoundException
     {
-        public AuthorNotFoundException(string message)
-        : base(ErrorCodeEnum.AuthorNotFound, message)
+        public AuthorNotFoundException(string message) : base(ErrorCodeEnum.AuthorNotFound, message)
         {
         }
     }

@@ -42,3 +42,5 @@ MyLibrary.Application/bin/
 MyLibrary.Infrastructure/bin/
 MyLibrary.Application.UnitTests/bin/
 MyLibrary.Application.UnitTests/obj/
+MyLibrary.Persistence/bin/Debug/net5.0/MyLibrary.Persistence.dll
+MyLibrary.Persistence/bin/

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class Genre
     {
         public Genre()
         {
-            BookGenre = new HashSet<BookGenre>();
+            BookGenres = new HashSet<BookGenre>();
         }
 
         public int GenreId { get; set; }
@@ -19,6 +21,6 @@ namespace MyLibrary.Persistence.Model
 
         public virtual User CreatedByNavigation { get; set; }
         public virtual User ModifiedByNavigation { get; set; }
-        public virtual ICollection<BookGenre> BookGenre { get; set; }
+        public virtual ICollection<BookGenre> BookGenres { get; set; }
     }
 }

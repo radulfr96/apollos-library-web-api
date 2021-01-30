@@ -48,8 +48,8 @@ namespace MyLibrary.Application.Book.Queries.GetBookQuery
             response.SeriesID = book.SeriesId;
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;
-            response.Authors = book.BookAuthor.Select(ba => ba.AuthorId).ToList();
-            response.Genres = book.BookGenre.Select(bg => bg.GenreId).ToList();
+            response.Authors = book.BookAuthors.Select(ba => ba.AuthorId).ToList();
+            response.Genres = book.BookGenres.Select(bg => bg.GenreId).ToList();
 
 
             return response;

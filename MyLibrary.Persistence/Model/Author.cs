@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class Author
     {
         public Author()
         {
-            BookAuthor = new HashSet<BookAuthor>();
+            BookAuthors = new HashSet<BookAuthor>();
         }
 
         public int AuthorId { get; set; }
@@ -22,6 +24,6 @@ namespace MyLibrary.Persistence.Model
         public int? ModifiedBy { get; set; }
 
         public virtual Country Country { get; set; }
-        public virtual ICollection<BookAuthor> BookAuthor { get; set; }
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
     }
 }

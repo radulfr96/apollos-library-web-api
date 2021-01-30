@@ -9,8 +9,7 @@ namespace MyLibrary.Application.Common.Exceptions
 {
     public class UserNotFoundException : NotFoundException
     {
-        public UserNotFoundException(string message)
-        : base(ErrorCodeEnum.UserNotFound, message)
+        public UserNotFoundException(string message) : base(ErrorCodeEnum.UserNotFound, message)
         {
         }
     }

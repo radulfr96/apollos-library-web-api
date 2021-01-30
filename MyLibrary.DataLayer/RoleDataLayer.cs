@@ -25,17 +25,17 @@ namespace MyLibrary.DataLayer
 
         public async Task<Role> GetRole(int roleId)
         {
-            return await _context.Role.FirstOrDefaultAsync(r => r.RoleId == roleId);
+            return await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == roleId);
         }
 
         public async Task<List<Role>> GetRoles()
         {
-            return await _context.Role.ToListAsync();
+            return await _context.Roles.ToListAsync();
         }
 
         public async Task<List<UserRole>> GetUserRoles(int userId)
         {
-            return await _context.UserRole.Where(ur => ur.UserId == userId).ToListAsync();
+            return await _context.UserRoles.Where(ur => ur.UserId == userId).ToListAsync();
         }
     }
 }

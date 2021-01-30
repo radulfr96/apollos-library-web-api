@@ -74,7 +74,7 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
 
             foreach (var role in request.Roles)
             {
-                user.UserRole.Add(new UserRole()
+                user.UserRoles.Add(new UserRole()
                 {
                     RoleId = role.RoleId,
                     UserId = user.UserId,

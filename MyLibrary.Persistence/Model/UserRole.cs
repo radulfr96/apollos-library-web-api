@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class UserRole

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class MyLibraryContext : DbContext
@@ -15,24 +17,35 @@ namespace MyLibrary.Persistence.Model
         {
         }
 
-        public virtual DbSet<Author> Author { get; set; }
-        public virtual DbSet<Book> Book { get; set; }
-        public virtual DbSet<BookAuthor> BookAuthor { get; set; }
-        public virtual DbSet<BookGenre> BookGenre { get; set; }
-        public virtual DbSet<Country> Country { get; set; }
-        public virtual DbSet<FictionType> FictionType { get; set; }
-        public virtual DbSet<FormType> FormType { get; set; }
-        public virtual DbSet<Genre> Genre { get; set; }
-        public virtual DbSet<PublicationFormat> PublicationFormat { get; set; }
-        public virtual DbSet<Publisher> Publisher { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<Author> Authors { get; set; }
+        public virtual DbSet<Book> Books { get; set; }
+        public virtual DbSet<BookAuthor> BookAuthors { get; set; }
+        public virtual DbSet<BookGenre> BookGenres { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<ErrorCode> ErrorCodes { get; set; }
+        public virtual DbSet<FictionType> FictionTypes { get; set; }
+        public virtual DbSet<FormType> FormTypes { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<PublicationFormat> PublicationFormats { get; set; }
+        public virtual DbSet<Publisher> Publishers { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Series> Series { get; set; }
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserRole> UserRole { get; set; }
-        public virtual DbSet<ErrorCode> ErrorCode { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=localhost\\sqlexpress;Database=MyLibrary;Trusted_Connection=True;Integrated Security=True;MultipleActiveResultSets=true");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
             modelBuilder.Entity<Author>(entity =>
             {
                 entity.ToTable("Author", "Author");
@@ -41,10 +54,10 @@ namespace MyLibrary.Persistence.Model
 
                 entity.Property(e => e.CountryId)
                     .IsRequired()
-                    .HasColumnName("CountryID")
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .IsFixedLength();
+                    .HasColumnName("CountryID")
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
@@ -68,7 +81,7 @@ namespace MyLibrary.Persistence.Model
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Country)
-                    .WithMany(p => p.Author)
+                    .WithMany(p => p.Authors)
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AuthorCountry");
@@ -85,18 +98,18 @@ namespace MyLibrary.Persistence.Model
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.EIsbn)
-                    .HasColumnName("eISBN")
-                    .HasMaxLength(12)
-                    .IsUnicode(false);
+                    .HasMaxLength(13)
+                    .IsUnicode(false)
+                    .HasColumnName("eISBN");
 
                 entity.Property(e => e.FictionTypeId).HasColumnName("FictionTypeID");
 
                 entity.Property(e => e.FormTypeId).HasColumnName("FormTypeID");
 
                 entity.Property(e => e.Isbn)
-                    .HasColumnName("ISBN")
-                    .HasMaxLength(12)
-                    .IsUnicode(false);
+                    .HasMaxLength(13)
+                    .IsUnicode(false)
+                    .HasColumnName("ISBN");
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -116,39 +129,44 @@ namespace MyLibrary.Persistence.Model
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.BookCreatedByNavigation)
+                    .WithMany(p => p.BookCreatedByNavigations)
                     .HasForeignKey(d => d.CreatedBy)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Book__CreatedBy__571DF1D5");
+                    .HasConstraintName("FK__Book__CreatedBy__5AEE82B9");
 
                 entity.HasOne(d => d.FictionType)
-                    .WithMany(p => p.Book)
+                    .WithMany(p => p.Books)
                     .HasForeignKey(d => d.FictionTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FictionTypeBook");
 
                 entity.HasOne(d => d.FormType)
-                    .WithMany(p => p.Book)
+                    .WithMany(p => p.Books)
                     .HasForeignKey(d => d.FormTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FormTypeBook");
 
                 entity.HasOne(d => d.ModifiedByNavigation)
-                    .WithMany(p => p.BookModifiedByNavigation)
+                    .WithMany(p => p.BookModifiedByNavigations)
                     .HasForeignKey(d => d.ModifiedBy)
                     .HasConstraintName("FK_PublisherUserModified");
 
                 entity.HasOne(d => d.PublicationFormat)
-                    .WithMany(p => p.Book)
+                    .WithMany(p => p.Books)
                     .HasForeignKey(d => d.PublicationFormatId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PublicationFormatBook");
 
                 entity.HasOne(d => d.Publisher)
-                    .WithMany(p => p.Book)
+                    .WithMany(p => p.Books)
                     .HasForeignKey(d => d.PublisherId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookPublisher");
+
+                entity.HasOne(d => d.Series)
+                    .WithMany(p => p.Books)
+                    .HasForeignKey(d => d.SeriesId)
+                    .HasConstraintName("FK_SeriesBook");
             });
 
             modelBuilder.Entity<BookAuthor>(entity =>
@@ -162,13 +180,13 @@ namespace MyLibrary.Persistence.Model
                 entity.Property(e => e.BookId).HasColumnName("BookID");
 
                 entity.HasOne(d => d.Author)
-                    .WithMany(p => p.BookAuthor)
+                    .WithMany(p => p.BookAuthors)
                     .HasForeignKey(d => d.AuthorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookAuthorAuthor");
 
                 entity.HasOne(d => d.Book)
-                    .WithMany(p => p.BookAuthor)
+                    .WithMany(p => p.BookAuthors)
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookAuthorBook");
@@ -185,13 +203,13 @@ namespace MyLibrary.Persistence.Model
                 entity.Property(e => e.BookId).HasColumnName("BookID");
 
                 entity.HasOne(d => d.Book)
-                    .WithMany(p => p.BookGenre)
+                    .WithMany(p => p.BookGenres)
                     .HasForeignKey(d => d.BookId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookGenreBook");
 
                 entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.BookGenre)
+                    .WithMany(p => p.BookGenres)
                     .HasForeignKey(d => d.GenreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BookGenreGenre");
@@ -199,13 +217,27 @@ namespace MyLibrary.Persistence.Model
 
             modelBuilder.Entity<Country>(entity =>
             {
+                entity.ToTable("Country");
+
                 entity.Property(e => e.CountryId)
-                    .HasColumnName("CountryID")
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .IsFixedLength();
+                    .HasColumnName("CountryID")
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(80)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ErrorCode>(entity =>
+            {
+                entity.ToTable("ErrorCode");
+
+                entity.Property(e => e.ErrorCodeId).ValueGeneratedNever();
+
+                entity.Property(e => e.Message)
                     .IsRequired()
                     .HasMaxLength(80)
                     .IsUnicode(false);
@@ -223,23 +255,6 @@ namespace MyLibrary.Persistence.Model
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<ErrorCode>(entity =>
-            {
-                entity.HasKey(e => e.ErrorCodeId);
-
-                entity.ToTable("ErrorCode", "dbo");
-
-                entity.Property(e => e.ErrorCodeId).HasColumnName("ErrorCodeID");
-                
-                entity.Property(e => e.ErrorCodeId)
-                .IsRequired();
-
-                entity.Property(e => e.Message)
-                .IsRequired()
-                .HasMaxLength(500)
-                .IsUnicode(true);
             });
 
             modelBuilder.Entity<FormType>(entity =>
@@ -272,12 +287,12 @@ namespace MyLibrary.Persistence.Model
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.GenreCreatedByNavigation)
+                    .WithMany(p => p.GenreCreatedByNavigations)
                     .HasForeignKey(d => d.CreatedBy)
                     .HasConstraintName("FK_GenreUser");
 
                 entity.HasOne(d => d.ModifiedByNavigation)
-                    .WithMany(p => p.GenreModifiedByNavigation)
+                    .WithMany(p => p.GenreModifiedByNavigations)
                     .HasForeignKey(d => d.ModifiedBy)
                     .HasConstraintName("FK_GenreUserModified");
             });
@@ -309,10 +324,10 @@ namespace MyLibrary.Persistence.Model
 
                 entity.Property(e => e.CountryId)
                     .IsRequired()
-                    .HasColumnName("CountryID")
                     .HasMaxLength(2)
                     .IsUnicode(false)
-                    .IsFixedLength();
+                    .HasColumnName("CountryID")
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
@@ -335,27 +350,27 @@ namespace MyLibrary.Persistence.Model
 
                 entity.Property(e => e.StreetAddress)
                     .IsRequired()
-                    .HasColumnName("Street Address")
                     .HasMaxLength(100)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasColumnName("Street Address");
 
                 entity.Property(e => e.Website)
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Country)
-                    .WithMany(p => p.Publisher)
+                    .WithMany(p => p.Publishers)
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PublisherCountry");
 
                 entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.PublisherCreatedByNavigation)
+                    .WithMany(p => p.PublisherCreatedByNavigations)
                     .HasForeignKey(d => d.CreatedBy)
                     .HasConstraintName("FK_PublisherUser");
 
                 entity.HasOne(d => d.ModifiedByNavigation)
-                    .WithMany(p => p.PublisherModifiedByNavigation)
+                    .WithMany(p => p.PublisherModifiedByNavigations)
                     .HasForeignKey(d => d.ModifiedBy)
                     .HasConstraintName("FK_PublisherUserModified");
             });
@@ -374,17 +389,13 @@ namespace MyLibrary.Persistence.Model
 
             modelBuilder.Entity<Series>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Series", "Book");
+
+                entity.Property(e => e.SeriesId).HasColumnName("SeriesID");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .IsUnicode(false);
-
-                entity.Property(e => e.SeriesId)
-                    .HasColumnName("SeriesID")
-                    .ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -427,13 +438,13 @@ namespace MyLibrary.Persistence.Model
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.UserRole)
+                    .WithMany(p => p.UserRoles)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRoleRole");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserRole)
+                    .WithMany(p => p.UserRoles)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRoleUser");

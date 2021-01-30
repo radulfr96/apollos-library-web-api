@@ -20,22 +20,22 @@ namespace MyLibrary.DataLayer
 
         public async Task AddAuthor(Author author)
         {
-            await _context.Author.AddAsync(author);
+            await _context.Authors.AddAsync(author);
         }
 
         public async Task DeleteAuthor(Author author)
         {
-            await Task.FromResult(_context.Author.Remove(author));
+            await Task.FromResult(_context.Authors.Remove(author));
         }
 
         public async Task<Author> GetAuthor(int id)
         {
-            return await _context.Author.Include("Country").FirstOrDefaultAsync(a => a.AuthorId == id);
+            return await _context.Authors.Include("Country").FirstOrDefaultAsync(a => a.AuthorId == id);
         }
 
         public async Task<List<Author>> GetAuthors()
         {
-            return await _context.Author.Include("Country").ToListAsync();
+            return await _context.Authors.Include("Country").ToListAsync();
         }
     }
 }

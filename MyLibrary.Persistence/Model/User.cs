@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class User
     {
         public User()
         {
-            BookCreatedByNavigation = new HashSet<Book>();
-            BookModifiedByNavigation = new HashSet<Book>();
-            GenreCreatedByNavigation = new HashSet<Genre>();
-            GenreModifiedByNavigation = new HashSet<Genre>();
-            PublisherCreatedByNavigation = new HashSet<Publisher>();
-            PublisherModifiedByNavigation = new HashSet<Publisher>();
-            UserRole = new HashSet<UserRole>();
+            BookCreatedByNavigations = new HashSet<Book>();
+            BookModifiedByNavigations = new HashSet<Book>();
+            GenreCreatedByNavigations = new HashSet<Genre>();
+            GenreModifiedByNavigations = new HashSet<Genre>();
+            PublisherCreatedByNavigations = new HashSet<Publisher>();
+            PublisherModifiedByNavigations = new HashSet<Publisher>();
+            UserRoles = new HashSet<UserRole>();
         }
 
         public int UserId { get; set; }
@@ -27,12 +29,12 @@ namespace MyLibrary.Persistence.Model
         public DateTime? ModifiedDate { get; set; }
         public int? ModifiedBy { get; set; }
 
-        public virtual ICollection<Book> BookCreatedByNavigation { get; set; }
-        public virtual ICollection<Book> BookModifiedByNavigation { get; set; }
-        public virtual ICollection<Genre> GenreCreatedByNavigation { get; set; }
-        public virtual ICollection<Genre> GenreModifiedByNavigation { get; set; }
-        public virtual ICollection<Publisher> PublisherCreatedByNavigation { get; set; }
-        public virtual ICollection<Publisher> PublisherModifiedByNavigation { get; set; }
-        public virtual ICollection<UserRole> UserRole { get; set; }
+        public virtual ICollection<Book> BookCreatedByNavigations { get; set; }
+        public virtual ICollection<Book> BookModifiedByNavigations { get; set; }
+        public virtual ICollection<Genre> GenreCreatedByNavigations { get; set; }
+        public virtual ICollection<Genre> GenreModifiedByNavigations { get; set; }
+        public virtual ICollection<Publisher> PublisherCreatedByNavigations { get; set; }
+        public virtual ICollection<Publisher> PublisherModifiedByNavigations { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

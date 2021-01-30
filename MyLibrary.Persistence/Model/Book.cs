@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace MyLibrary.Persistence.Model
 {
     public partial class Book
     {
         public Book()
         {
-            BookAuthor = new HashSet<BookAuthor>();
-            BookGenre = new HashSet<BookGenre>();
+            BookAuthors = new HashSet<BookAuthor>();
+            BookGenres = new HashSet<BookGenre>();
         }
 
         public int BookId { get; set; }
@@ -35,7 +37,8 @@ namespace MyLibrary.Persistence.Model
         public virtual User ModifiedByNavigation { get; set; }
         public virtual PublicationFormat PublicationFormat { get; set; }
         public virtual Publisher Publisher { get; set; }
-        public virtual ICollection<BookAuthor> BookAuthor { get; set; }
-        public virtual ICollection<BookGenre> BookGenre { get; set; }
+        public virtual Series Series { get; set; }
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
+        public virtual ICollection<BookGenre> BookGenres { get; set; }
     }
 }

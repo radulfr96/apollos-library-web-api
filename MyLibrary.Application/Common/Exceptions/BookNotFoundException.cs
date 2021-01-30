@@ -10,8 +10,7 @@ namespace MyLibrary.Application.Exceptions
 {
     public class BookNotFoundException : NotFoundException
     {
-        public BookNotFoundException(string message)
-        : base(ErrorCodeEnum.BookNotFound, message)
+        public BookNotFoundException(string message) : base(ErrorCodeEnum.BookNotFound, message)
         {
         }
     }

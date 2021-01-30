@@ -25,21 +25,21 @@ namespace MyLibrary.DataLayer
 
         public async Task DeleteGenre(int id)
         {
-            var bookGenres = await _context.BookGenre.Where(bg => bg.GenreId == id).ToListAsync();
+            var bookGenres = await _context.BookGenres.Where(bg => bg.GenreId == id).ToListAsync();
 
-            _context.BookGenre.RemoveRange(bookGenres);
+            _context.BookGenres.RemoveRange(bookGenres);
 
-            _context.Genre.Remove(await _context.Genre.FirstOrDefaultAsync(g => g.GenreId == id));
+            _context.Genres.Remove(await _context.Genres.FirstOrDefaultAsync(g => g.GenreId == id));
         }
 
         public async Task<Genre> GetGenre(int id)
         {
-            return await _context.Genre.FirstOrDefaultAsync(g => g.GenreId == id);
+            return await _context.Genres.FirstOrDefaultAsync(g => g.GenreId == id);
         }
 
         public async Task<List<Genre>> GetGenres()
         {
-            return await _context.Genre.ToListAsync();
+            return await _context.Genres.ToListAsync();
         }
     }
 }

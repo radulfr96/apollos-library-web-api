@@ -28,13 +28,11 @@ namespace MyLibrary.Application.XUnitTestProject
     {
         private readonly AddAuthorCommandValidator _validatior;
         private readonly Faker _faker;
-        private readonly TestFixture _fixture1;
 
         public AddAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
             _validatior = new AddAuthorCommandValidator();
             _faker = new Faker();
-            _fixture = fixture;
         }
 
         [Fact]
