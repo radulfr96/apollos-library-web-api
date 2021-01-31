@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Application.Exceptions
+namespace MyLibrary.Application.Common.Exceptions
 {
     public class BookNotFoundException : NotFoundException
     {

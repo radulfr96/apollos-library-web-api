@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MyLibrary.Application.Exceptions;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;

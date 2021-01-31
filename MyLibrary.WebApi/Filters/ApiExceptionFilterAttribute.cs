@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MyLibrary.Application.Common.Enums;
 using MyLibrary.Application.Common.Exceptions;
-using MyLibrary.Application.Exceptions;
 using Newtonsoft.Json;
 using NLog;
 using System;
