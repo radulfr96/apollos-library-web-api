@@ -34,6 +34,8 @@ namespace MyLibrary.Application.Common.Enums
         SubtitleInvalidLength = 21,
         NumberInSeriesInvalidValue = 22,
         EditionInvalidValue = 22,
+        GenreNameNotProvided = 23,
+        GenreNameInvalidLength = 24,
         UsernameAlreadyTaken = 99,
 
 
