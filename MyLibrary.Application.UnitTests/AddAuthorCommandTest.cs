@@ -21,7 +21,7 @@ using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Common.DTOs;
 using MyLibrary.Application.Interfaces;
 
-namespace MyLibrary.Application.XUnitTestProject
+namespace MyLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class AddAuthorCommandTest : TestBase

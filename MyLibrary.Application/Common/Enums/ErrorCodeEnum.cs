@@ -22,7 +22,7 @@ namespace MyLibrary.Application.Common.Enums
         CountryNotProvided = 9,
         CountryInvalidValue = 10,
         DecriptionInvalidLength = 11,
-        NoISBNOreISBNNotProvided = 12,
+        NoISBNOreISBNProvided = 12,
         ISBNAlreadyAdded = 13,
         ISBNInvalidLength = 14,
         ISBNInvalidFormat = 15,
@@ -32,8 +32,8 @@ namespace MyLibrary.Application.Common.Enums
         TitleNotProvided = 19,
         TitleInvalidLength = 20,
         SubtitleInvalidLength = 21,
-        NumberInSeriesInvalidLength = 22,
-        EditionInvalidLength = 22,
+        NumberInSeriesInvalidValue = 22,
+        EditionInvalidValue = 22,
         UsernameAlreadyTaken = 99,
 
 

@@ -19,7 +19,7 @@ namespace MyLibrary.Persistence.Model
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public int? SeriesId { get; set; }
-        public int? NumberInSeries { get; set; }
+        public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormatId { get; set; }
         public int FictionTypeId { get; set; }

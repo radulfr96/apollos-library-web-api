@@ -13,7 +13,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace MyLibrary.Application.XUnitTestProject
+namespace MyLibrary.Application.UnitTests
 {
     public class TestFixture
     {

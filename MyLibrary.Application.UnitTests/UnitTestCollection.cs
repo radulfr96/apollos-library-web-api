@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.XUnitTestProject
+namespace MyLibrary.Application.UnitTests
 {
     [CollectionDefinition("UnitTestCollection")]
     public class UnitTestCollection : ICollectionFixture<TestFixture>

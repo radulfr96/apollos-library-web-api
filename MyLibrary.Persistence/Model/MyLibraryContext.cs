@@ -113,6 +113,8 @@ namespace MyLibrary.Persistence.Model
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.NumberInSeries).HasColumnType("decimal(18, 0)");
+
                 entity.Property(e => e.PublicationFormatId).HasColumnName("PublicationFormatID");
 
                 entity.Property(e => e.PublisherId).HasColumnName("PublisherID");

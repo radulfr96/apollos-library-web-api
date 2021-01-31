@@ -14,7 +14,7 @@ namespace MyLibrary.Application.Book.Queries.GetBookQuery
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public int? SeriesID { get; set; }
-        public int? NumberInSeries { get; set; }
+        public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormat { get; set; }
         public int FictionType { get; set; }

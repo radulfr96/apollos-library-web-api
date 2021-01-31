@@ -19,7 +19,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public int? SeriesID { get; set; }
-        public int? NumberInSeries { get; set; }
+        public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormatID { get; set; }
         public int FictionTypeID { get; set; }
@@ -74,7 +74,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             if (!string.IsNullOrEmpty(command.ISBN))
             {
-                var existingeISBN = _bookUnitOfWork.BookDataLayer.GetBookByISBN(command.ISBN);
+                var existingeISBN = await _bookUnitOfWork.BookDataLayer.GetBookByISBN(command.ISBN);
 
                 if (existingeISBN != null)
                 {
@@ -108,7 +108,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             if (formType == null)
             {
-                throw new FictionTypeNotFoundException($"Unable to find form type with id [{command.FormTypeID}]");
+                throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeID}]");
             }
 
             var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherID);
@@ -140,7 +140,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             foreach (int authorId in command.Authors)
             {
-                var author = _authorUnitOfWork.AuthorDataLayer.GetAuthor(authorId);
+                var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(authorId);
 
                 if (author == null)
                 {
@@ -156,7 +156,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             foreach (int genreId in command.Genres)
             {
-                var genre = _genreUnitOfWork.GenreDataLayer.GetGenre(genreId);
+                var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(genreId);
 
                 if (genre == null)
                 {

@@ -16,7 +16,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
 
             When(b => string.IsNullOrEmpty(b.ISBN), () =>
             {
-                RuleFor(b => b.EISBN).NotEmpty().WithErrorCode(ErrorCodeEnum.NoISBNOreISBNNotProvided.ToString());
+                RuleFor(b => b.EISBN).NotEmpty().WithErrorCode(ErrorCodeEnum.NoISBNOreISBNProvided.ToString());
             });
 
             When(b => !string.IsNullOrEmpty(b.ISBN), () =>
@@ -31,7 +31,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
                 RuleFor(b => b.EISBN).Must(BeValidISBN).WithErrorCode(ErrorCodeEnum.eISBNInvalidFormat.ToString());
             });
 
-            RuleFor(b => b.Title).NotEmpty().WithErrorCode(ErrorCodeEnum.FirstnameNotProvided.ToString());
+            RuleFor(b => b.Title).NotEmpty().WithErrorCode(ErrorCodeEnum.TitleNotProvided.ToString());
             RuleFor(b => b.Title).Length(1, 200).WithErrorCode(ErrorCodeEnum.TitleInvalidLength.ToString());
 
             When(b => !string.IsNullOrEmpty(b.Subtitle), () =>
@@ -39,9 +39,9 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
                 RuleFor(b => b.Subtitle).Length(1, 200).WithErrorCode(ErrorCodeEnum.SubtitleInvalidLength.ToString());
             });
 
-            RuleFor(b => b.NumberInSeries).GreaterThan(1).WithErrorCode(ErrorCodeEnum.NumberInSeriesInvalidLength.ToString());
+            RuleFor(b => b.NumberInSeries).GreaterThanOrEqualTo(0).WithErrorCode(ErrorCodeEnum.NumberInSeriesInvalidValue.ToString());
 
-            RuleFor(b => b.Edition).GreaterThan(1).WithErrorCode(ErrorCodeEnum.NumberInSeriesInvalidLength.ToString());
+            RuleFor(b => b.Edition).GreaterThan(0).WithErrorCode(ErrorCodeEnum.EditionInvalidValue.ToString());
         }
 
         private bool BeValidISBN(string isbn)

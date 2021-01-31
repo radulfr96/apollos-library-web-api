@@ -160,7 +160,7 @@ CREATE TABLE [Book].[Book]
 	[Title] VARCHAR(200) NOT NULL,
 	[Subtitle] VARCHAR(200),
 	[SeriesID] INT,
-	[NumberInSeries] INT,
+	[NumberInSeries] DECIMAL,
 	[Edition] INT,
 	[PublicationFormatID] INT NOT NULL,
 	[FictionTypeID] INT NOT NULL,

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.XUnitTestProject
+namespace MyLibrary.Application.UnitTests
 {
     public class TestBase : IDisposable
     {

@@ -5,7 +5,6 @@ using Moq;
 using MyLibrary.Application.Author.Commands.DeleteAuthorCommand;
 using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Interfaces;
-using MyLibrary.Application.XUnitTestProject;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
