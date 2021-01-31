@@ -24,13 +24,11 @@ namespace MyLibrary.Application.UnitTests
     {
         private readonly UpdateAuthorCommandValidator _validatior;
         private readonly Faker _faker;
-        private readonly TestFixture _fixture1;
 
         public UpdateAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
             _validatior = new UpdateAuthorCommandValidator();
             _faker = new Faker();
-            _fixture = fixture;
         }
 
         [Fact]

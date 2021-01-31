@@ -19,14 +19,7 @@ namespace MyLibrary.Application.UnitTests
     [Collection("UnitTestCollection")]
     public class DeleteAuthorCommandTest : TestBase
     {
-        private readonly Faker _faker;
-        private readonly TestFixture _fixture1;
-
-        public DeleteAuthorCommandTest(TestFixture fixture) : base(fixture)
-        {
-            _faker = new Faker();
-            _fixture = fixture;
-        }
+        public DeleteAuthorCommandTest(TestFixture fixture) : base(fixture) { }
 
         [Fact]
         public async Task AuthorNotFound()

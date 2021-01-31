@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
@@ -29,6 +30,11 @@ namespace MyLibrary.Application.Author.Queries.GetAuthorQuery
             var response = new GetAuthorQueryDto();
 
             var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(query.AuthorId);
+
+            if (author == null)
+            {
+                throw new AuthorNotFoundException($"Unable to find author with id [{query.AuthorId}]");
+            }
 
             response.AuthorID = author.AuthorId;
             response.Firstname = author.FirstName;
