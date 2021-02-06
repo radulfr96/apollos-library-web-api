@@ -12,7 +12,8 @@ namespace MyLibrary.Application.Genre.Commands.UpdateGenreCommand
     {
         public UpdateGenreCommandValidator()
         {
-            RuleFor(g => g.Name).NotEmpty().WithErrorCode(ErrorCodeEnum.FirstnameNotProvided.ToString());
+            RuleFor(g => g.Name).NotEmpty().WithErrorCode(ErrorCodeEnum.GenreNameNotProvided.ToString());
+            RuleFor(g => g.Name).Length(1, 50).WithErrorCode(ErrorCodeEnum.GenreNameInvalidLength.ToString());
         }
     }
 }

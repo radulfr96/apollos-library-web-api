@@ -22,12 +22,12 @@ namespace MyLibrary.Application.UnitTests
     [Collection("UnitTestCollection")]
     public class AddBookCommandTest : TestBase
     {
-        private readonly AddBookCommandValidator _validatior;
+        private readonly AddBookCommandValidator _validator;
         private readonly Faker _faker;
 
         public AddBookCommandTest(TestFixture fixture) : base(fixture)
         {
-            _validatior = new AddBookCommandValidator();
+            _validator = new AddBookCommandValidator();
             _faker = new Faker();
         }
 
@@ -36,7 +36,7 @@ namespace MyLibrary.Application.UnitTests
         {
             var command = new AddBookCommand();
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NoISBNOreISBNProvided.ToString()).Any());
@@ -44,7 +44,7 @@ namespace MyLibrary.Application.UnitTests
             command.ISBN = "";
             command.EISBN = "";
 
-            result = _validatior.TestValidate(command);
+            result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NoISBNOreISBNProvided.ToString()).Any());
@@ -58,14 +58,14 @@ namespace MyLibrary.Application.UnitTests
                 ISBN = "9780356501086",
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any());
 
             command.Title = "";
 
-            result = _validatior.TestValidate(command);
+            result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any());
@@ -80,7 +80,7 @@ namespace MyLibrary.Application.UnitTests
                 Title = new Faker().Lorem.Random.String(201)
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleInvalidLength.ToString()).Any());
@@ -96,7 +96,7 @@ namespace MyLibrary.Application.UnitTests
                 Subtitle = new Faker().Lorem.Random.String(201)
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SubtitleInvalidLength.ToString()).Any());
@@ -112,7 +112,7 @@ namespace MyLibrary.Application.UnitTests
                 NumberInSeries = -1,
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NumberInSeriesInvalidValue.ToString()).Any());
@@ -129,7 +129,7 @@ namespace MyLibrary.Application.UnitTests
                 Edition = 0,
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.EditionInvalidValue.ToString()).Any());

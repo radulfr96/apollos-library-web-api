@@ -26,12 +26,12 @@ namespace MyLibrary.Application.UnitTests
     [Collection("UnitTestCollection")]
     public class AddAuthorCommandTest : TestBase
     {
-        private readonly AddAuthorCommandValidator _validatior;
+        private readonly AddAuthorCommandValidator _validator;
         private readonly Faker _faker;
 
         public AddAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
-            _validatior = new AddAuthorCommandValidator();
+            _validator = new AddAuthorCommandValidator();
             _faker = new Faker();
         }
 
@@ -40,14 +40,14 @@ namespace MyLibrary.Application.UnitTests
         {
             var command = new AddAuthorCommand();
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any());
 
             command.Firstname = "";
 
-            result = _validatior.TestValidate(command);
+            result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any());
@@ -61,7 +61,7 @@ namespace MyLibrary.Application.UnitTests
                 Firstname = _faker.Random.String(51),
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidLength.ToString()).Any());
@@ -112,7 +112,7 @@ namespace MyLibrary.Application.UnitTests
                 Firstname = name,
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidFormat.ToString()).Any());
@@ -127,14 +127,14 @@ namespace MyLibrary.Application.UnitTests
                 Lastname = null,
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any());
 
             command.Lastname = "";
 
-            result = _validatior.TestValidate(command);
+            result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any());
@@ -149,7 +149,7 @@ namespace MyLibrary.Application.UnitTests
                 Lastname = _faker.Random.String(51),
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidLength.ToString()).Any());
@@ -201,7 +201,7 @@ namespace MyLibrary.Application.UnitTests
                 Lastname = name,
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidFormat.ToString()).Any());
@@ -217,7 +217,7 @@ namespace MyLibrary.Application.UnitTests
                 Middlename = _faker.Random.String(51)
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidLength.ToString()).Any());
@@ -270,7 +270,7 @@ namespace MyLibrary.Application.UnitTests
                 Middlename = name,
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidFormat.ToString()).Any());
@@ -287,14 +287,14 @@ namespace MyLibrary.Application.UnitTests
                 Description = _faker.Random.String(2001)
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
 
             command.CountryID = "";
 
-            result = _validatior.TestValidate(command);
+            result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
@@ -313,7 +313,7 @@ namespace MyLibrary.Application.UnitTests
                 Description = _faker.Random.String(2001)
             };
 
-            var result = _validatior.TestValidate(command);
+            var result = _validator.TestValidate(command);
 
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.DecriptionInvalidLength.ToString()).Any());

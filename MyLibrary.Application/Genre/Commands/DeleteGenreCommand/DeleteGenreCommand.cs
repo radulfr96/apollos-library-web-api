@@ -28,7 +28,7 @@ namespace MyLibrary.Application.Genre.Commands.DeleteGenreCommand
         {
             var response = new DeleteGenreCommandDto();
 
-            var genre = _genreUnitOfWork.GenreDataLayer.GetGenre(command.GenreId);
+            var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(command.GenreId);
             if (genre == null)
             {
                 throw new GenreNotFoundException($"Unable to find genre with id {command.GenreId}");
