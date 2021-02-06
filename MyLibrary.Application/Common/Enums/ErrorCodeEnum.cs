@@ -36,6 +36,10 @@ namespace MyLibrary.Application.Common.Enums
         EditionInvalidValue = 22,
         GenreNameNotProvided = 23,
         GenreNameInvalidLength = 24,
+        PublisherNameNotProvided = 25,
+        PublisherNameInvalidLength = 26,
+        WebsiteInvalidLength = 27,
+        InvalidAddressProvided = 28,
         UsernameAlreadyTaken = 99,
 
 

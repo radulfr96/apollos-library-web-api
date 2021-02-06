@@ -15,12 +15,10 @@ namespace MyLibrary.Application.UnitTests
     public class AddGenreCommandTest : TestBase
     {
         private readonly AddGenreCommandValidator _validator;
-        private readonly Faker _faker;
 
         public AddGenreCommandTest(TestFixture fixture) : base(fixture)
         {
             _validator = new AddGenreCommandValidator();
-            _faker = new Faker();
         }
 
         [Fact]
