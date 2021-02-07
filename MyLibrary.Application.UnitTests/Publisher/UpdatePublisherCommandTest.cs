@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.UnitTests.Publisher
+namespace MyLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class UpdatePublisherCommandTest : TestBase
@@ -150,12 +150,13 @@ namespace MyLibrary.Application.UnitTests.Publisher
                 StreetAddress = new Faker().Address.StreetAddress(),
                 City = new Faker().Address.City(),
                 Postcode = new Faker().Address.ZipCode(),
+                CountryID = "AU",
             };
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Count() == 0);
+            Assert.True(result.IsValid);
+            Assert.True(result.Errors.Count() == 0);
         }
 
         [Fact]
@@ -201,6 +202,7 @@ namespace MyLibrary.Application.UnitTests.Publisher
             });
 
             var mockPublisherService = new Mock<IPublisherUnitOfWork>();
+            mockPublisherService.Setup(p => p.PublisherDataLayer).Returns(new Mock<IPublisherDataLayer>().Object);
             _fixture.ServiceCollection.AddTransient(services =>
             {
                 return mockPublisherService.Object;
@@ -236,12 +238,27 @@ namespace MyLibrary.Application.UnitTests.Publisher
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<CountryInvalidValueException>(() => mediator.Send(command));
+            await Assert.ThrowsAsync<PublisherNotFoundException>(() => mediator.Send(command));
         }
 
         [Fact]
         public async Task PublisherCountryInvalidValue()
         {
+            var publisher = new Persistence.Model.Publisher()
+            {
+                CreatedDate = new DateTime(2021, 02, 07),
+                IsDeleted = false,
+                City = "Melbourne",
+                CountryId = "AU",
+                CreatedBy = 1,
+                Name = "Test Pub",
+                Postcode = "3000",
+                State = "Victoria",
+                StreetAddress = "123 Fake Street",
+                Website = "www.example.com",
+                PublisherId = 1,
+            };
+
             var command = new UpdatePublisherCommand()
             {
                 Name = new Faker().Random.AlphaNumeric(50),
@@ -280,14 +297,14 @@ namespace MyLibrary.Application.UnitTests.Publisher
                 return mockReferenceUOW.Object;
             });
 
-            _fixture.ServiceCollection.AddTransient(services =>
-            {
-                return mockUserService.Object;
-            });
+            var mockPublisherService = new Mock<IPublisherUnitOfWork>();
 
+            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            publisherDataLayer.Setup(p => p.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(publisher));
+            mockPublisherService.Setup(p => p.PublisherDataLayer).Returns(publisherDataLayer.Object);
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return mockDateTimeService.Object;
+                return mockPublisherService.Object;
             });
 
             var provider = _fixture.ServiceCollection.BuildServiceProvider();

@@ -151,11 +151,12 @@ namespace MyLibrary.Application.UnitTests
                 StreetAddress = new Faker().Address.StreetAddress(),
                 City = new Faker().Address.City(),
                 Postcode = new Faker().Address.ZipCode(),
+                CountryID = "AU"
             };
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
+            Assert.True(result.IsValid);
             Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Count() == 0);
         }
 

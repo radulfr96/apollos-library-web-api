@@ -24,20 +24,22 @@ namespace MyLibrary.Application.Publisher.Commands.UpdatePublisherCommand
             {
                 RuleFor(p => p).Must(BeValidAddress).WithErrorCode(ErrorCodeEnum.InvalidAddressProvided.ToString());
             });
+
+            RuleFor(p => p.CountryID).NotEmpty().WithErrorCode(ErrorCodeEnum.CountryNotProvided.ToString());
         }
 
         private bool BeValidAddress(UpdatePublisherCommand command)
         {
-            return !(!string.IsNullOrEmpty(command.StreetAddress)
-                    || !string.IsNullOrEmpty(command.City)
-                    || !string.IsNullOrEmpty(command.Postcode)
-                    || !string.IsNullOrEmpty(command.State)
+            return !((string.IsNullOrEmpty(command.StreetAddress)
+                    || string.IsNullOrEmpty(command.City)
+                    || string.IsNullOrEmpty(command.Postcode)
+                    || string.IsNullOrEmpty(command.State)
                     )
                     &&
                     (
                     string.IsNullOrEmpty(command.StreetAddress)
                     || string.IsNullOrEmpty(command.City)
-                    || string.IsNullOrEmpty(command.Postcode));
+                    || string.IsNullOrEmpty(command.Postcode)));
         }
     }
 }
