@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 
-namespace MyLibrary.Application.UnitTests
+namespace MyLibrary.Application.IntegrationTests
 {
     public class TestPrincipal : ClaimsPrincipal
     {

@@ -8,6 +8,6 @@ namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
 {
     public class AddAuthorCommandDto
     {
-        public int AuthorID { get; set; }
+        public int AuthorId { get; set; }
     }
 }

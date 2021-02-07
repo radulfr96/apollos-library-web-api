@@ -14,8 +14,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using MyLibrary.UnitOfWork.Contracts;
 using MyLibrary.UnitOfWork;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Infrastructure.Services;
 
-namespace MyLibrary.Application.UnitTests
+namespace MyLibrary.Application.IntegrationTests
 {
     public class TestFixture
     {
@@ -72,6 +74,11 @@ namespace MyLibrary.Application.UnitTests
 
             ServiceCollection.AddTransient<IReferenceUnitOfWork>(p => {
                 return new ReferenceUnitOfWork(context);
+            });
+
+            ServiceCollection.AddSingleton<IUserService>(p =>
+            {
+                return new UserService();
             });
 
             localConfig.Bind(configuration);

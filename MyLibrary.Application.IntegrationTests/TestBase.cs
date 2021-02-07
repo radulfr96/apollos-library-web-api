@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.UnitTests
+namespace MyLibrary.Application.IntegrationTests
 {
     public class TestBase : IDisposable
     {
@@ -19,8 +19,8 @@ namespace MyLibrary.Application.UnitTests
             _fixture = fixture;
             _checkpoint = new Checkpoint();
 
-            _checkpoint.SchemasToInclude = new string[] { };
-            _checkpoint.TablesToInclude = new string[] { };
+            _checkpoint.SchemasToInclude = new string[] { "Author" };
+            _checkpoint.TablesToInclude = new string[] { "Author" };
         }
 
         public void Dispose()

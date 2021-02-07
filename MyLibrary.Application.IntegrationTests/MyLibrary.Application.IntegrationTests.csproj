@@ -28,16 +28,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyLibrary.Application\MyLibrary.Application.csproj" />
+    <ProjectReference Include="..\MyLibrary.Infrastructure\MyLibrary.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Author\" />
   </ItemGroup>
 
 </Project>

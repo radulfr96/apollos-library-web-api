@@ -61,7 +61,7 @@ namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
             await _authorUnitOfWork.AuthorDataLayer.AddAuthor(author);
             await _authorUnitOfWork.Save();
 
-            response.AuthorID = author.AuthorId;
+            response.AuthorId = author.AuthorId;
 
             return response;
         }
