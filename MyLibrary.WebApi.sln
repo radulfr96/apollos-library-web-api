@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary.Persistence", "MyLibrary.Persistence\MyLibrary.Persistence.csproj", "{52FE48DB-676B-49F9-BD31-29041F9EEAB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLibrary.Application.IntegrationTests", "MyLibrary.Application.IntegrationTests\MyLibrary.Application.IntegrationTests.csproj", "{C53128E4-49C9-4C8D-AA31-55A7C8752BFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{52FE48DB-676B-49F9-BD31-29041F9EEAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52FE48DB-676B-49F9-BD31-29041F9EEAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52FE48DB-676B-49F9-BD31-29041F9EEAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C53128E4-49C9-4C8D-AA31-55A7C8752BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C53128E4-49C9-4C8D-AA31-55A7C8752BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53128E4-49C9-4C8D-AA31-55A7C8752BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C53128E4-49C9-4C8D-AA31-55A7C8752BFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

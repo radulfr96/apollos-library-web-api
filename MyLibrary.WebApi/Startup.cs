@@ -21,6 +21,8 @@ using Microsoft.IdentityModel.Tokens;
 using MyLibrary.Application.Book.Queries.GetBookQuery;
 using MyLibrary.Application.Common.Behaviour;
 using MyLibrary.Persistence.Model;
+using MyLibrary.UnitOfWork;
+using MyLibrary.UnitOfWork.Contracts;
 using MyLibrary.WebApi.Filters;
 
 namespace MyLibrary.WebApi
@@ -37,15 +39,49 @@ namespace MyLibrary.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMediatR(typeof(Startup));
 
             services.AddScoped<ApiExceptionFilterAttribute>();
+
+            var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
             services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
+            var context = new MyLibraryContext(optionsBuilder.Options);
 
             services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+            services.AddTransient(ser =>
+            {
+                return new MyLibraryContext(optionsBuilder.Options);
+            });
+
+            services.AddTransient(ser =>
+            {
+                return new MyLibraryContext(optionsBuilder.Options);
+            });
+
+            services.AddTransient<IPublisherUnitOfWork>(p => {
+                return new PublisherUnitOfWork(context);
+            });
+
+            services.AddTransient<IAuthorUnitOfWork>(p => {
+                return new AuthorUnitOfWork(context);
+            });
+
+            services.AddTransient<IBookUnitOfWork>(p => {
+                return new BookUnitOfWork(context);
+            });
+
+            services.AddTransient<IGenreUnitOfWork>(p => {
+                return new GenreUnitOfWork(context);
+            });
+
+            services.AddTransient<IReferenceUnitOfWork>(p => {
+                return new ReferenceUnitOfWork(context);
+            });
 
             services.AddControllers();
 
