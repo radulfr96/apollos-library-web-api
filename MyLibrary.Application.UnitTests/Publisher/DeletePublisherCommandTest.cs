@@ -1,10 +1,9 @@
-﻿using Bogus;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MyLibrary.Application.Common.Exceptions;
-using MyLibrary.Application.Genre.Commands.DeleteGenreCommand;
 using MyLibrary.Application.Interfaces;
+using MyLibrary.Application.Publisher.Commands.DeletePublisherCommand;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
@@ -14,21 +13,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.UnitTests
+namespace MyLibrary.Application.UnitTests.Publisher
 {
     [Collection("UnitTestCollection")]
-    public class DeleteGenreCommandTest : TestBase
+    public class DeletePublisherCommandTest : TestBase
     {
-        public DeleteGenreCommandTest(TestFixture fixture) : base(fixture)
+        public DeletePublisherCommandTest(TestFixture fixture) : base(fixture)
         {
         }
 
         [Fact]
-        public async Task GenreNotFound()
+        public async Task PublisherNotFound()
         {
-            var command = new DeleteGenreCommand()
+            var command = new DeletePublisherCommand()
             {
-                GenreId = 1,
+                PubisherId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -43,20 +42,20 @@ namespace MyLibrary.Application.UnitTests
                 return mockDateTimeService.Object;
             });
 
-            var genreUnitOfWork = new Mock<IGenreUnitOfWork>();
+            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
 
-            var genreDataLayer = new Mock<IGenreDataLayer>();
-            genreUnitOfWork.Setup(s => s.GenreDataLayer).Returns(genreDataLayer.Object);
+            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            publisherUnitOfWork.Setup(s => s.PublisherDataLayer).Returns(publisherDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return genreUnitOfWork.Object;
+                return publisherUnitOfWork.Object;
             });
 
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<GenreNotFoundException>(() => mediator.Send(command));
+            await Assert.ThrowsAsync<PublisherNotFoundException>(() => mediator.Send(command));
         }
     }
 }
