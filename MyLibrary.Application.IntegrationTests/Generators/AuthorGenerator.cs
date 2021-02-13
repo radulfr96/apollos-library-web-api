@@ -15,7 +15,7 @@ namespace MyLibrary.Application.IntegrationTests.Generators
                 .RuleFor(a => a.CountryId, countryId)
                 .RuleFor(a => a.CreatedBy, userId)
                 .RuleFor(a => a.CreatedDate, f => f.Date.Recent())
-                .RuleFor(a => a.Description, f => f.Lorem.Sentences(3))
+                .RuleFor(a => a.Description, f => f.Lorem.Sentence())
                 .RuleFor(a => a.FirstName, f => f.Name.FirstName())
                 .RuleFor(a => a.LastName, f => f.Name.LastName())
                 .RuleFor(a => a.MiddleName, f => f.Name.LastName())

@@ -136,7 +136,11 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
                 Title = command.Title,
             };
 
+            await _bookUnitOfWork.Begin();
+
             await _bookUnitOfWork.BookDataLayer.AddBook(book);
+
+            await _bookUnitOfWork.Save();
 
             foreach (int authorId in command.Authors)
             {
@@ -171,6 +175,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
             }
 
             await _bookUnitOfWork.Save();
+            await _bookUnitOfWork.Commit();
 
             response.BookId = book.BookId;
 

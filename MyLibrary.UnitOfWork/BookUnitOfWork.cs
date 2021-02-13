@@ -53,18 +53,23 @@ namespace MyLibrary.UnitOfWork
 
         public void Dispose()
         {
-            Dispose(true);
+            Dispose(true).Wait();
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected async virtual Task Dispose(bool disposing)
         {
             if (disposed)
                 return;
 
+            if (_context.Database.CurrentTransaction != null)
+            {
+                await _context.Database.RollbackTransactionAsync();
+            }
+
             if (disposing)
             {
-                _context.DisposeAsync();
+                await _context.DisposeAsync();
             }
 
             disposed = true;
@@ -77,7 +82,7 @@ namespace MyLibrary.UnitOfWork
 
         ~BookUnitOfWork()
         {
-            Dispose(false);
+            Dispose(false).Wait();
         }
     }
 }

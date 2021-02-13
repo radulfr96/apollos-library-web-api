@@ -80,8 +80,8 @@ namespace MyLibrary.Application.IntegrationTests
             services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
 
             _checkpoint = new Checkpoint();
-            _checkpoint.SchemasToInclude = new string[] { "Author" };
-            _checkpoint.TablesToInclude = new string[] { "Author" };
+            _checkpoint.SchemasToInclude = new string[] { "Author", "Book", "Genre", "Publisher" };
+            _checkpoint.TablesToInclude = new string[] { "Author", "Book", "Genre", "BookAuthor", "BookGenre", "Publisher" };
 
             ServiceCollection = services;
         }
