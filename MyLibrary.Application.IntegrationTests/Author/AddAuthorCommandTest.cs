@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MyLibrary.Application.Author.Commands.AddAuthorCommand;
+using MyLibrary.Application.IntegrationTests.Generators;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Persistence.Model;
 using System;
@@ -20,17 +21,14 @@ namespace MyLibrary.Application.IntegrationTests
     [Collection("IntegrationTestCollection")]
     public class AddAuthorCommandTest : TestBase
     {
-        private readonly Faker _faker;
         private readonly IDateTimeService _dateTime;
         private readonly MyLibraryContext _context;
         private readonly IMediator _mediatr;
 
         public AddAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
-            _faker = new Faker();
             var services = fixture.ServiceCollection;
 
-            _faker = new Faker();
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
             _dateTime = mockDateTimeService.Object;
@@ -49,13 +47,15 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
+            var authorGenerated = AuthorGenerator.GetGenericAuthor(1, "AU");
+
             var command = new AddAuthorCommand()
             {
-                Firstname = _faker.Name.FirstName(),
-                Lastname = _faker.Name.LastName(),
-                Middlename = _faker.Name.FirstName(),
-                CountryID = "AU",
-                Description = _faker.Lorem.Sentence(),
+                Firstname = authorGenerated.FirstName,
+                Lastname = authorGenerated.LastName,
+                Middlename = authorGenerated.MiddleName,
+                CountryID = authorGenerated.CountryId,
+                Description = authorGenerated.Description,
             };
 
             var result = await _mediatr.Send(command);

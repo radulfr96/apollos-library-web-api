@@ -16,7 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.IntegrationTests.Author
+namespace MyLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
     public class UpdateAuthorCommandTest : TestBase
@@ -31,7 +31,10 @@ namespace MyLibrary.Application.IntegrationTests.Author
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
             _dateTime = mockDateTimeService.Object;
-            fixture.ServiceCollection.AddSingleton(mockDateTimeService.Object);
+            fixture.ServiceCollection.AddTransient(p =>
+            {
+                return _dateTime;
+            });
 
             
             _provider = fixture.ServiceCollection.BuildServiceProvider();
@@ -73,7 +76,7 @@ namespace MyLibrary.Application.IntegrationTests.Author
                 AuthorId = author.AuthorId,
                 CountryId = newAuthorDetails.CountryId,
                 CreatedBy = 1,
-                CreatedDate = _dateTime.Now,
+                CreatedDate = author.CreatedDate,
                 Description = newAuthorDetails.Description,
                 FirstName = newAuthorDetails.FirstName,
                 LastName = newAuthorDetails.LastName,

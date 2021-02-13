@@ -49,23 +49,23 @@ namespace MyLibrary.Application.IntegrationTests
             _context = new MyLibraryContext(optionsBuilder.Options);
 
             services.AddTransient<IPublisherUnitOfWork>(p => {
-                return new PublisherUnitOfWork(_context);
+                return new PublisherUnitOfWork(p.GetRequiredService<MyLibraryContext>());
             });
 
             services.AddTransient<IAuthorUnitOfWork>(p => {
-                return new AuthorUnitOfWork(_context);
+                return new AuthorUnitOfWork(p.GetRequiredService<MyLibraryContext>());
             });
 
             services.AddTransient<IBookUnitOfWork>(p => {
-                return new BookUnitOfWork(_context);
+                return new BookUnitOfWork(p.GetRequiredService<MyLibraryContext>());
             });
 
             services.AddTransient<IGenreUnitOfWork>(p => {
-                return new GenreUnitOfWork(_context);
+                return new GenreUnitOfWork(p.GetRequiredService<MyLibraryContext>());
             });
 
             services.AddTransient<IReferenceUnitOfWork>(p => {
-                return new ReferenceUnitOfWork(_context);
+                return new ReferenceUnitOfWork(p.GetRequiredService<MyLibraryContext>());
             });
 
             services.AddSingleton<IUserService>(p =>

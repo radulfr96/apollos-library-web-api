@@ -30,7 +30,7 @@ namespace MyLibrary.DataLayer
 
         public async Task<Author> GetAuthor(int id)
         {
-            return await _context.Authors.FirstOrDefaultAsync(a => a.AuthorId == id);
+            return await _context.Authors.Include("Country").FirstOrDefaultAsync(a => a.AuthorId == id);
         }
 
         public async Task<List<Author>> GetAuthors()
