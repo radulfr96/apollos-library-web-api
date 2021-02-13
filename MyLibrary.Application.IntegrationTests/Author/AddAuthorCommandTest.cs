@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MyLibrary.Application.Author.Commands.AddAuthorCommand;
 using MyLibrary.Application.Interfaces;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +22,23 @@ namespace MyLibrary.Application.IntegrationTests
     {
         private readonly Faker _faker;
         private readonly IDateTimeService _dateTime;
+        private readonly MyLibraryContext _context;
+        private readonly IMediator _mediatr;
 
         public AddAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
             _faker = new Faker();
+            var services = fixture.ServiceCollection;
+
+            _faker = new Faker();
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-
             _dateTime = mockDateTimeService.Object;
+            services.AddSingleton(mockDateTimeService.Object);
+
+            var provider = services.BuildServiceProvider();
+            _mediatr = provider.GetRequiredService<IMediator>();
+            _context = provider.GetRequiredService<MyLibraryContext>();
         }
 
         [Fact]
@@ -48,16 +58,9 @@ namespace MyLibrary.Application.IntegrationTests
                 Description = _faker.Lorem.Sentence(),
             };
 
-            var services = _fixture.ServiceCollection;
+            var result = await _mediatr.Send(command);
 
-            services.AddSingleton(_dateTime);
-
-            var provider = services.BuildServiceProvider();
-            var mediator = provider.GetRequiredService<IMediator>();
-
-            var result = await mediator.Send(command);
-
-            var author = _fixture.context.Authors.FirstOrDefault(a => a.AuthorId == result.AuthorId);
+            var author = _context.Authors.FirstOrDefault(a => a.AuthorId == result.AuthorId);
 
             author.Should().BeEquivalentTo(new Persistence.Model.Author()
             {

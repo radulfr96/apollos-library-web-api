@@ -10,25 +10,17 @@ namespace MyLibrary.Application.IntegrationTests
 {
     public class TestBase : IDisposable
     {
-        protected TestFixture _fixture;
-
-        private readonly Checkpoint _checkpoint;
+        private readonly TestFixture _fixture;
 
         public TestBase(TestFixture fixture)
         {
             _fixture = fixture;
-            _checkpoint = new Checkpoint();
-
-            _checkpoint.SchemasToInclude = new string[] { "Author" };
-            _checkpoint.TablesToInclude = new string[] { "Author" };
         }
 
         public void Dispose()
         {
-            _checkpoint.Reset(_fixture.configuration.ConnectionString);
 
-            // ... clean up test data from the database ...
-            GC.SuppressFinalize(this);
+            _fixture.ResetCheckpoint();
         }
     }
 }

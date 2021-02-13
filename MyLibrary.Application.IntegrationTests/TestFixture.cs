@@ -16,18 +16,20 @@ using MyLibrary.UnitOfWork.Contracts;
 using MyLibrary.UnitOfWork;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Infrastructure.Services;
+using Respawn;
 
 namespace MyLibrary.Application.IntegrationTests
 {
     public class TestFixture
     {
-        public readonly MyLibraryContext context;
-        public readonly Configuration configuration;
         public IServiceCollection ServiceCollection { get; private set; }
+        private readonly MyLibraryContext _context;
+        private readonly Configuration _configuration;
+        private readonly Checkpoint _checkpoint;
 
         public TestFixture()
         {
-            ServiceCollection = new ServiceCollection();
+            var services = new ServiceCollection();
 
             var localConfig = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -35,57 +37,66 @@ namespace MyLibrary.Application.IntegrationTests
                 .AddEnvironmentVariables()
                 .Build();
 
-            configuration = new Configuration();
+            _configuration = new Configuration();
 
             var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
             optionsBuilder.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
 
-            ServiceCollection.AddDbContext<MyLibraryContext>(opt =>
+            services.AddDbContext<MyLibraryContext>(opt =>
             {
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
             });
-            context = new MyLibraryContext(optionsBuilder.Options);
+            _context = new MyLibraryContext(optionsBuilder.Options);
 
-            ServiceCollection.AddTransient(ser =>
-            {
-                return new MyLibraryContext(optionsBuilder.Options);
+            services.AddTransient<IPublisherUnitOfWork>(p => {
+                return new PublisherUnitOfWork(_context);
             });
 
-            ServiceCollection.AddTransient(ser =>
-            {
-                return new MyLibraryContext(optionsBuilder.Options);
+            services.AddTransient<IAuthorUnitOfWork>(p => {
+                return new AuthorUnitOfWork(_context);
             });
 
-            ServiceCollection.AddTransient<IPublisherUnitOfWork>(p => {
-                return new PublisherUnitOfWork(context);
+            services.AddTransient<IBookUnitOfWork>(p => {
+                return new BookUnitOfWork(_context);
             });
 
-            ServiceCollection.AddTransient<IAuthorUnitOfWork>(p => {
-                return new AuthorUnitOfWork(context);
+            services.AddTransient<IGenreUnitOfWork>(p => {
+                return new GenreUnitOfWork(_context);
             });
 
-            ServiceCollection.AddTransient<IBookUnitOfWork>(p => {
-                return new BookUnitOfWork(context);
+            services.AddTransient<IReferenceUnitOfWork>(p => {
+                return new ReferenceUnitOfWork(_context);
             });
 
-            ServiceCollection.AddTransient<IGenreUnitOfWork>(p => {
-                return new GenreUnitOfWork(context);
-            });
-
-            ServiceCollection.AddTransient<IReferenceUnitOfWork>(p => {
-                return new ReferenceUnitOfWork(context);
-            });
-
-            ServiceCollection.AddSingleton<IUserService>(p =>
+            services.AddSingleton<IUserService>(p =>
             {
                 return new UserService();
             });
 
-            localConfig.Bind(configuration);
+            localConfig.Bind(_configuration);
 
-            ServiceCollection.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();
 
-            ServiceCollection.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
+
+            _checkpoint = new Checkpoint();
+            _checkpoint.SchemasToInclude = new string[] { "Author" };
+            _checkpoint.TablesToInclude = new string[] { "Author" };
+
+            ServiceCollection = services;
+        }
+
+        public Configuration Configuration
+        { 
+            get
+            {
+                return _configuration;
+            }
+        }
+
+        public void ResetCheckpoint()
+        {
+            _checkpoint.Reset(_configuration.ConnectionString).Wait();
         }
     }
 }

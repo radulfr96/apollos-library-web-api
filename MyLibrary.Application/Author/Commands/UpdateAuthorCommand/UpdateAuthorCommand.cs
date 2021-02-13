@@ -54,7 +54,6 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
                 throw new CountryInvalidValueException($"Unable to find country with code [{command.CountryID}]");
             }
 
-
             author.FirstName = command.Firstname;
             author.MiddleName = command.Middlename;
             author.LastName = command.Lastname;

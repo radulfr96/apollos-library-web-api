@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MyLibrary.Application.Author.Commands.DeleteAuthorCommand;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,17 @@ namespace MyLibrary.Application.IntegrationTests
     public class DeleteAuthorCommandTest : TestBase
     {
         private readonly Faker _faker;
+        private readonly MyLibraryContext _context;
+        private readonly IMediator _mediatr;
 
         public DeleteAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
             _faker = new Faker();
+            var services = fixture.ServiceCollection;
+
+            var provider = services.BuildServiceProvider();
+            _mediatr = provider.GetRequiredService<IMediator>();
+            _context = provider.GetRequiredService<MyLibraryContext>();
         }
 
         [Fact]
@@ -38,22 +46,21 @@ namespace MyLibrary.Application.IntegrationTests
                 MiddleName = _faker.Name.FirstName(),
             };
 
-            _fixture.context.Authors.Add(author);
-            _fixture.context.SaveChanges();
+            _context.Authors.Add(author);
+            _context.SaveChanges();
+
+            var record = _context.Authors.FirstOrDefault(a => a.AuthorId == author.AuthorId);
+
+            Assert.NotNull(record);
 
             var command = new DeleteAuthorCommand()
             {
                 AuthorId = author.AuthorId,
             };
 
-            var services = _fixture.ServiceCollection;
+            await _mediatr.Send(command);
 
-            var provider = services.BuildServiceProvider();
-            var mediator = provider.GetRequiredService<IMediator>();
-
-            await mediator.Send(command);
-
-            var authorAfter = _fixture.context.Authors.FirstOrDefault(a => a.AuthorId == command.AuthorId);
+            var authorAfter = _context.Authors.FirstOrDefault(a => a.AuthorId == command.AuthorId);
 
             Assert.Null(authorAfter);
         }
