@@ -21,8 +21,8 @@ namespace MyLibrary.Application.IntegrationTests.Generators
                 .RuleFor(b => b.Isbn, f => f.Random.String2(12, "0123456789"))
                 .RuleFor(b => b.NumberInSeries, f => f.Random.Int(1, 100))
                 .RuleFor(b => b.PublicationFormatId, f => (int)f.Random.Enum<PublicationFormatEnum>())
-                .RuleFor(b => b.Subtitle, f => f.Random.Words(2))
-                .RuleFor(b => b.Title, f => f.Random.Words(2))
+                .RuleFor(b => b.Subtitle, f => f.Random.Words(1))
+                .RuleFor(b => b.Title, f => f.Random.Words(1))
                 .Generate();
         }
     }

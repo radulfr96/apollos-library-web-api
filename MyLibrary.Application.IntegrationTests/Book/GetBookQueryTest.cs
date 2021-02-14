@@ -39,6 +39,7 @@ namespace MyLibrary.Application.IntegrationTests
 
             var publisher = PublisherGenerator.GetGenericPublisher("AU");
             _context.Publishers.Add(publisher);
+            _context.SaveChanges();
 
             var book = BookGenerator.GetGenericPhysicalBook(1);
             book.PublisherId = publisher.PublisherId;
@@ -65,6 +66,7 @@ namespace MyLibrary.Application.IntegrationTests
                 SeriesID = book.SeriesId,
                 Subtitle = book.Subtitle,
                 Title = book.Title,
+                Publisher = publisher.PublisherId,
             });
         }
     }

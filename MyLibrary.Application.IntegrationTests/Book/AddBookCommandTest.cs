@@ -96,15 +96,16 @@ namespace MyLibrary.Application.IntegrationTests
                           join g in _context.Genres
                           on bg.GenreId equals g.GenreId
                           where bg.BookId == result.BookId
-                          select g).ToList();
+                          select g.GenreId).ToList();
 
             genres.Should().HaveCount(2);
+
 
             var authors = (from ba in _context.BookAuthors
                            join a in _context.Authors
                            on ba.AuthorId equals a.AuthorId
                            where ba.BookId == result.BookId
-                           select a).ToList();
+                           select a.AuthorId).ToList();
 
             authors.Should().HaveCount(2);
         }

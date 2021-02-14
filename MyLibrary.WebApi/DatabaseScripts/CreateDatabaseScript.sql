@@ -119,7 +119,7 @@ CREATE TABLE [Publisher].[Publisher]
 	[Website] VARCHAR(200),
 	[Street Address] VARCHAR(100) NOT NULL,
 	[City] VARCHAR(100) NOT NULL,
-	[Postcode] VARCHAR(5) NOT NULL,
+	[Postcode] VARCHAR(20) NOT NULL,
 	[State] VARCHAR(50) NOT NULL,
 	[CountryID] CHAR(2) NOT NULL,
 	[IsDeleted] BIT,

@@ -20,7 +20,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public int? SeriesID { get; set; }
-        public int? NumberInSeries { get; set; }
+        public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormatID { get; set; }
         public int FictionTypeID { get; set; }
@@ -141,9 +141,14 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
             book.SeriesId = command.SeriesID;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
+            book.ModifiedBy = _userService.GetUserId();
+            book.ModifiedDate = _dateTimeService.Now;
+
+            await _bookUnitOfWork.Begin();
 
             _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookID);
             _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookID);
+            await _bookUnitOfWork.Save();
 
             foreach (int authorId in command.Authors)
             {
@@ -178,6 +183,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
             }
 
             await _bookUnitOfWork.Save();
+            await _bookUnitOfWork.Commit();
 
             return response;
         }
