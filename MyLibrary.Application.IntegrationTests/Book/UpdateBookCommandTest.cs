@@ -15,7 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.IntegrationTests.Book
+namespace MyLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
     public class UpdateBookCommandTest : TestBase

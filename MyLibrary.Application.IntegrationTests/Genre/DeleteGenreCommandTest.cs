@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using MyLibrary.Application.Genre.Commands.DeleteGenreCommand;
 using MyLibrary.Application.IntegrationTests.Generators;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Persistence.Model;
@@ -16,19 +18,20 @@ using Xunit;
 namespace MyLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class DeleteBookCommandTest : TestBase
+    public class DeleteGenreCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
         private readonly MyLibraryContext _context;
         private readonly IMediator _mediatr;
-        public DeleteBookCommandTest(TestFixture fixture) : base(fixture)
+
+        public DeleteGenreCommandTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-            services.AddSingleton(mockDateTimeService.Object);
             _dateTime = mockDateTimeService.Object;
+            services.AddSingleton(mockDateTimeService.Object);
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
@@ -36,20 +39,28 @@ namespace MyLibrary.Application.IntegrationTests
         }
 
         [Fact]
-        public async Task DeleteBookCommand()
+        public async Task DeleteGenreCommand()
         {
-            //Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
-            //{
-            //    new Claim(ClaimTypes.Sid, "1"),
-            //});
+            Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
+            {
+                new Claim(ClaimTypes.Sid, "1"),
+            });
 
-            //var publisher = PublisherGenerator.GetGenericPublisher("AU");
-            //_context.Publishers.Add(publisher);
+            var genre = GenreGenerator.GetGenre(1);
 
-            //var command = new DeleteBookCommand
+            _context.Genres.Add(genre);
+            _context.SaveChanges();
 
-            //var result = await _mediatr.Send(command);
+            var command = new DeleteGenreCommand()
+            {
+                GenreId = genre.GenreId,
+            };
 
+            await _mediatr.Send(command);
+
+            var deleted = _context.Genres.FirstOrDefault(g => g.GenreId == command.GenreId);
+
+            deleted.Should().BeNull();
         }
     }
 }
