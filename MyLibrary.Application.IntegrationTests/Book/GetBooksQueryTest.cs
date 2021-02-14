@@ -39,7 +39,7 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisher = PublisherGenerator.GetGenericPublisher("AU");
+            var publisher = PublisherGenerator.GetGenericPublisher("AU", 1);
             _context.Publishers.Add(publisher);
             _context.SaveChanges();
 

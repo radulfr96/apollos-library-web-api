@@ -9,12 +9,12 @@ namespace MyLibrary.Application.IntegrationTests.Generators
 {
     public static class PublisherGenerator
     {
-        public static Persistence.Model.Publisher GetGenericPublisher(string countryId)
+        public static Persistence.Model.Publisher GetGenericPublisher(string countryId, int userId)
         {
             return new Faker<Persistence.Model.Publisher>()
                 .RuleFor(p => p.City, f => f.Address.City())
                 .RuleFor(p => p.CountryId, countryId)
-                .RuleFor(p => p.CreatedBy, 1)
+                .RuleFor(p => p.CreatedBy, userId)
                 .RuleFor(p => p.CreatedDate, f => f.Date.Recent())
                 .RuleFor(p => p.IsDeleted, false)
                 .RuleFor(p => p.Name, f => f.Company.CompanyName())

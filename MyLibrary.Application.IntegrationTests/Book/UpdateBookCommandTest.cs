@@ -46,10 +46,10 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisher1 = PublisherGenerator.GetGenericPublisher("UK");
+            var publisher1 = PublisherGenerator.GetGenericPublisher("UK", 1);
             _context.Publishers.Add(publisher1);
 
-            var publisher2 = PublisherGenerator.GetGenericPublisher("UK");
+            var publisher2 = PublisherGenerator.GetGenericPublisher("UK", 1);
             _context.Publishers.Add(publisher2);
 
             _context.SaveChanges();

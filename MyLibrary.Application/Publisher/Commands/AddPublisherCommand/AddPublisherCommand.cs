@@ -69,6 +69,8 @@ namespace MyLibrary.Application.Publisher.Commands.AddPublisherCommand
             await _publisherUnitOfWork.PublisherDataLayer.AddPublisher(publisher);
             await _publisherUnitOfWork.Save();
 
+            response.PublisherId = publisher.PublisherId;
+
             return response;
         }
     }
