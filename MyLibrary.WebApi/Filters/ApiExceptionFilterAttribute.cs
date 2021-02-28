@@ -62,7 +62,7 @@ namespace MyLibrary.WebApi.Filters
         private void HandleUnknownException(ExceptionContext context)
         {
             string message = null;
-            BaseErrorCodeException exception = context.Exception as BaseErrorCodeException;
+            ErrorCodeException exception = context.Exception as ErrorCodeException;
             List<string> errors = null;
             if (exception != null)
             {
@@ -113,7 +113,7 @@ namespace MyLibrary.WebApi.Filters
 
         private void HandleBadRequestException(ExceptionContext context)
         {
-            var exception = context.Exception as BaseErrorCodeException;
+            var exception = context.Exception as ErrorCodeException;
             List<string> errors = new List<string>();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
@@ -133,7 +133,7 @@ namespace MyLibrary.WebApi.Filters
 
         private void HandleObjectNotFoundException(ExceptionContext context)
         {
-            var exception = context.Exception as BaseErrorCodeException;
+            var exception = context.Exception as ErrorCodeException;
             List<string> errors = new List<string>();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class BaseErrorCodeException : Exception
+    public class ErrorCodeException : Exception
     {
         public ErrorCodeEnum ErrorCode { get; protected set; }
 
-        public BaseErrorCodeException(ErrorCodeEnum errorCode, string message = null, Exception inner = null)
+        public ErrorCodeException(ErrorCodeEnum errorCode, string message = null, Exception inner = null)
         : base(message, inner)
         {
             ErrorCode = errorCode;

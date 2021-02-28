@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class SystemErrorException : BaseErrorCodeException
+    public class SystemErrorException : ErrorCodeException
     {
         public SystemErrorException(string message = null)
         : base(ErrorCodeEnum.SystemError, message)

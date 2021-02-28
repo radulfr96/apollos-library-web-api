@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class BadRequestException : BaseErrorCodeException
+    public class BadRequestException : ErrorCodeException
     {
         public BadRequestException(ErrorCodeEnum errorCode, string message = null, Exception inner = null)
         : base(errorCode, message, inner)

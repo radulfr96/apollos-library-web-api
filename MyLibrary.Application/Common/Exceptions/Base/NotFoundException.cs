@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class NotFoundException : BaseErrorCodeException
+    public class NotFoundException : ErrorCodeException
     {
         public NotFoundException(ErrorCodeEnum errorCode, string message = null, Exception inner = null)
         : base(errorCode ,message, inner)

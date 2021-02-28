@@ -5,6 +5,8 @@
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -12,11 +14,14 @@ namespace MyLibrary.IDP
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public IWebHostEnvironment Environment { get; }
 
-        public Startup(IWebHostEnvironment environment)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Environment = environment;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -30,12 +35,18 @@ namespace MyLibrary.IDP
                 options.EmitStaticAudienceClaim = true;
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryClients(Config.Clients)
                 .AddTestUsers(TestUsers.Users);
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+
+            builder.AddConfigurationStore(opt =>
+            {
+                opt.ConfigureDbContext = builder =>
+                builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
+            });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -48,7 +59,7 @@ namespace MyLibrary.IDP
             // uncomment if you want to add MVC
             app.UseStaticFiles();
             app.UseRouting();
-            
+
             app.UseIdentityServer();
 
             // uncomment, if you want to add MVC

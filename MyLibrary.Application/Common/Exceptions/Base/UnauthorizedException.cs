@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.Common.Exceptions
 {
-    public class UnauthorizedException : BaseErrorCodeException
+    public class UnauthorizedException : ErrorCodeException
     {
         public UnauthorizedException(ErrorCodeEnum errorCode, string message = null, Exception inner = null)
         : base(errorCode, message, inner)

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityServer4.AccessTokenValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -63,23 +64,28 @@ namespace MyLibrary.WebApi
                 return new MyLibraryContext(optionsBuilder.Options);
             });
 
-            services.AddTransient<IPublisherUnitOfWork>(p => {
+            services.AddTransient<IPublisherUnitOfWork>(p =>
+            {
                 return new PublisherUnitOfWork(context);
             });
 
-            services.AddTransient<IAuthorUnitOfWork>(p => {
+            services.AddTransient<IAuthorUnitOfWork>(p =>
+            {
                 return new AuthorUnitOfWork(context);
             });
 
-            services.AddTransient<IBookUnitOfWork>(p => {
+            services.AddTransient<IBookUnitOfWork>(p =>
+            {
                 return new BookUnitOfWork(context);
             });
 
-            services.AddTransient<IGenreUnitOfWork>(p => {
+            services.AddTransient<IGenreUnitOfWork>(p =>
+            {
                 return new GenreUnitOfWork(context);
             });
 
-            services.AddTransient<IReferenceUnitOfWork>(p => {
+            services.AddTransient<IReferenceUnitOfWork>(p =>
+            {
                 return new ReferenceUnitOfWork(context);
             });
 
@@ -87,23 +93,13 @@ namespace MyLibrary.WebApi
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = true;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(opt =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
+                    opt.Authority = "https://localhost:44318";
+                    opt.ApiName = "mylibraryapi";
+                    opt.ApiSecret = "apisecret";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

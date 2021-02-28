@@ -12,20 +12,35 @@ namespace MyLibrary.IDP
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
             new IdentityResource[]
-            { 
+            {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource(
+                    "roles",
+                    "Your role(s)",
+                    new List<string>() { "role" }),
             };
 
-        public static IEnumerable<ApiScope> ApiScopes =>
-            new ApiScope[]
-            { };
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource(
+                    "mylibraryapi",
+                    "My Library API",
+                    new List<string>() { "role" })
+                { 
+                    ApiSecrets = { new Secret("apisecret".Sha256()) }
+                },
+            };
 
         public static IEnumerable<Client> Clients =>
-            new Client[] 
+            new Client[]
             {
                 new Client
                 {
+                    AccessTokenLifetime = 120,
+                    AllowOfflineAccess = true,
+                    UpdateAccessTokenClaimsOnRefresh = true,
                     ClientName = "My Library",
                     ClientId = "mylibrarywebclient",
                     AllowedGrantTypes = GrantTypes.Code,
@@ -33,10 +48,13 @@ namespace MyLibrary.IDP
                     {
                         "https://localhost:5050/signin-oidc"
                     },
+                    RequirePkce = true,
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        "roles",
+                        "mylibraryapi"
                     },
                     ClientSecrets =
                     {
