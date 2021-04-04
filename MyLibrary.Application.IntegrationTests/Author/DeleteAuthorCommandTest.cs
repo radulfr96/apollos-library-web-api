@@ -38,7 +38,7 @@ namespace MyLibrary.Application.IntegrationTests
             var author = new Persistence.Model.Author()
             {
                 CountryId = "AU",
-                CreatedBy = 1,
+                CreatedBy = new Guid(),
                 CreatedDate = new DateTime(2021, 02, 07),
                 Description = _faker.Lorem.Sentence(),
                 FirstName = _faker.Name.FirstName(),

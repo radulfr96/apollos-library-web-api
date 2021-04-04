@@ -46,13 +46,13 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisher1 = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisher1 = PublisherGenerator.GetGenericPublisher("AU", new Guid());
             _context.Publishers.Add(publisher1);
 
-            var publisher2 = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisher2 = PublisherGenerator.GetGenericPublisher("AU", new Guid());
             _context.Publishers.Add(publisher2);
 
-            var publisher3 = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisher3 = PublisherGenerator.GetGenericPublisher("AU", new Guid());
             _context.Publishers.Add(publisher3);
 
             _context.SaveChanges();

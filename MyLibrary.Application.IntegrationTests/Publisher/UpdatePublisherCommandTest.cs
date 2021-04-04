@@ -41,17 +41,19 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task UpdatePublisherCommand()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", userID);
 
             _context.Publishers.Add(publisherGenerated);
             _context.SaveChanges();
 
-            var newPublisherDetails = PublisherGenerator.GetGenericPublisher("US", 1);
+            var newPublisherDetails = PublisherGenerator.GetGenericPublisher("US", userID);
 
             var command = new UpdatePublisherCommand()
             {
@@ -73,10 +75,10 @@ namespace MyLibrary.Application.IntegrationTests
             {
                 City = newPublisherDetails.City,
                 CountryId = newPublisherDetails.CountryId,
-                CreatedBy = 1,
+                CreatedBy = userID,
                 CreatedDate = publisherGenerated.CreatedDate,
                 IsDeleted = false,
-                ModifiedBy = 1,
+                ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
                 Name = newPublisherDetails.Name,
                 Postcode = newPublisherDetails.Postcode,

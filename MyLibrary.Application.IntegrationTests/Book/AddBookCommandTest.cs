@@ -41,29 +41,31 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task AddBookCommand()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var publisher = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisher = PublisherGenerator.GetGenericPublisher("AU", userID);
             _context.Publishers.Add(publisher);
 
-            var author1 = AuthorGenerator.GetGenericAuthor(1, "UK");
+            var author1 = AuthorGenerator.GetGenericAuthor(userID, "UK");
             _context.Authors.Add(author1);
 
-            var author2 = AuthorGenerator.GetGenericAuthor(1, "UK");
+            var author2 = AuthorGenerator.GetGenericAuthor(userID, "UK");
             _context.Authors.Add(author2);
 
-            var genre1 = GenreGenerator.GetGenre(1);
+            var genre1 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre1);
 
-            var genre2 = GenreGenerator.GetGenre(1);
+            var genre2 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre2);
 
             _context.SaveChanges();
 
-            var bookGenerated = BookGenerator.GetGenericPhysicalBook(1);
+            var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
 
             var command = new AddBookCommand()
             {

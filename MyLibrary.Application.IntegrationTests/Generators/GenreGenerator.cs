@@ -9,7 +9,7 @@ namespace MyLibrary.Application.IntegrationTests.Generators
 {
     public static class GenreGenerator
     {
-        public static Persistence.Model.Genre GetGenre(int createBy)
+        public static Persistence.Model.Genre GetGenre(Guid createBy)
         {
             return new Faker<Persistence.Model.Genre>()
                 .RuleFor(g => g.CreatedBy, createBy)

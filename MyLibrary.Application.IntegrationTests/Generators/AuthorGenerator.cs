@@ -9,7 +9,7 @@ namespace MyLibrary.Application.IntegrationTests.Generators
 {
     public static class AuthorGenerator
     {
-        public static Persistence.Model.Author GetGenericAuthor(int userId, string countryId)
+        public static Persistence.Model.Author GetGenericAuthor(Guid userId, string countryId)
         {
             return new Faker<Persistence.Model.Author>()
                 .RuleFor(a => a.CountryId, countryId)

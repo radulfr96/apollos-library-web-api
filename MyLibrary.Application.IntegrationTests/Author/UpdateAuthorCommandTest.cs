@@ -45,17 +45,19 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task UpdateAuthorCommandSuccess()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var author = AuthorGenerator.GetGenericAuthor(1, "US");
+            var author = AuthorGenerator.GetGenericAuthor(userID, "US");
 
             _context.Authors.Add(author);
             _context.SaveChanges();
 
-            var newAuthorDetails = AuthorGenerator.GetGenericAuthor(1, "AU");
+            var newAuthorDetails = AuthorGenerator.GetGenericAuthor(userID, "AU");
 
             var command = new UpdateAuthorCommand()
             {
@@ -75,13 +77,13 @@ namespace MyLibrary.Application.IntegrationTests
             {
                 AuthorId = author.AuthorId,
                 CountryId = newAuthorDetails.CountryId,
-                CreatedBy = 1,
+                CreatedBy = userID,
                 CreatedDate = author.CreatedDate,
                 Description = newAuthorDetails.Description,
                 FirstName = newAuthorDetails.FirstName,
                 LastName = newAuthorDetails.LastName,
                 MiddleName = newAuthorDetails.MiddleName,
-                ModifiedBy = 1,
+                ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
             }, opt => opt.Excluding(a => a.Country).Excluding(a => a.BookAuthors));
         }

@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyLibrary.Application.UnitTests.Publisher
+namespace MyLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class DeletePublisherCommandTest : TestBase

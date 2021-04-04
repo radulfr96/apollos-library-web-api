@@ -12,7 +12,7 @@ namespace MyLibrary.Application.User.Commands.DeleteUserCommand
 {
     public class DeleteUserCommand : IRequest<DeleteUserCommandDto>
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, DeleteUserCommandDto>
@@ -28,17 +28,16 @@ namespace MyLibrary.Application.User.Commands.DeleteUserCommand
         {
             var response = new DeleteUserCommandDto();
 
-            var user = await _userUnitOfWork.UserDataLayer.GetUser(command.UserId);
+            //var user = await _userUnitOfWork.UserDataLayer.GetUser(command.UserId);
 
-            if (user == null)
-            {
-                throw new UserNotFoundException($"Unable to delete user with id [{command.UserId}]");
-            }
+            //if (user == null)
+            //{
+            //    throw new UserNotFoundException($"Unable to delete user with id [{command.UserId}]");
+            //}
 
-            user.IsDeleted = true;
-            user.Username = "Deleted";
+            //user.IsActive = false;
 
-            await _userUnitOfWork.Save();
+            //await _userUnitOfWork.Save();
 
             return response;
         }

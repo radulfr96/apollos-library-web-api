@@ -1,8 +1,8 @@
-﻿using MyLibrary.DataLayer.Contracts;
+﻿using MyLibrary.IDP.DataLayer;
 using System;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Contracts.UnitOfWork
+namespace MyLibrary.IDP.UnitOfWork
 {
     /// <summary>
     /// Used to perform units of work for users
@@ -13,11 +13,6 @@ namespace MyLibrary.Contracts.UnitOfWork
         /// Data layer for users
         /// </summary>
         IUserDataLayer UserDataLayer { get; }
-
-        /// <summary>
-        /// Data layer for roles
-        /// </summary>
-        IRoleDataLayer RoleDataLayer { get; }
 
         /// <summary>
         /// Used to begin a transaction

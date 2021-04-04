@@ -28,19 +28,7 @@ namespace MyLibrary.Persistence.Model
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<PublicationFormat> PublicationFormats { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Series> Series { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserRole> UserRoles { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=localhost\\sqlexpress;Database=MyLibrary;Trusted_Connection=True;Integrated Security=True;MultipleActiveResultSets=true");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -130,12 +118,6 @@ namespace MyLibrary.Persistence.Model
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.BookCreatedByNavigations)
-                    .HasForeignKey(d => d.CreatedBy)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Book__CreatedBy__5AEE82B9");
-
                 entity.HasOne(d => d.FictionType)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.FictionTypeId)
@@ -147,11 +129,6 @@ namespace MyLibrary.Persistence.Model
                     .HasForeignKey(d => d.FormTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FormTypeBook");
-
-                entity.HasOne(d => d.ModifiedByNavigation)
-                    .WithMany(p => p.BookModifiedByNavigations)
-                    .HasForeignKey(d => d.ModifiedBy)
-                    .HasConstraintName("FK_PublisherUserModified");
 
                 entity.HasOne(d => d.PublicationFormat)
                     .WithMany(p => p.Books)
@@ -287,16 +264,6 @@ namespace MyLibrary.Persistence.Model
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.GenreCreatedByNavigations)
-                    .HasForeignKey(d => d.CreatedBy)
-                    .HasConstraintName("FK_GenreUser");
-
-                entity.HasOne(d => d.ModifiedByNavigation)
-                    .WithMany(p => p.GenreModifiedByNavigations)
-                    .HasForeignKey(d => d.ModifiedBy)
-                    .HasConstraintName("FK_GenreUserModified");
             });
 
             modelBuilder.Entity<PublicationFormat>(entity =>
@@ -342,7 +309,7 @@ namespace MyLibrary.Persistence.Model
 
                 entity.Property(e => e.Postcode)
                     .IsRequired()
-                    .HasMaxLength(5)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.State)
@@ -365,28 +332,6 @@ namespace MyLibrary.Persistence.Model
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PublisherCountry");
-
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.PublisherCreatedByNavigations)
-                    .HasForeignKey(d => d.CreatedBy)
-                    .HasConstraintName("FK_PublisherUser");
-
-                entity.HasOne(d => d.ModifiedByNavigation)
-                    .WithMany(p => p.PublisherModifiedByNavigations)
-                    .HasForeignKey(d => d.ModifiedBy)
-                    .HasConstraintName("FK_PublisherUserModified");
-            });
-
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.ToTable("Role", "Users");
-
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Series>(entity =>
@@ -398,58 +343,6 @@ namespace MyLibrary.Persistence.Model
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("User", "Users");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.Property(e => e.CreatedBy)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasColumnType("text");
-
-                entity.Property(e => e.Salter)
-                    .IsRequired()
-                    .HasColumnType("text");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<UserRole>(entity =>
-            {
-                entity.ToTable("UserRole", "Users");
-
-                entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
-
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.UserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRoleRole");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_UserRoleUser");
             });
 
             OnModelCreatingPartial(modelBuilder);

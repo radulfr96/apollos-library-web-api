@@ -39,19 +39,19 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisher = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisher = PublisherGenerator.GetGenericPublisher("AU", new Guid());
             _context.Publishers.Add(publisher);
             _context.SaveChanges();
 
-            var book1 = BookGenerator.GetGenericPhysicalBook(1);
+            var book1 = BookGenerator.GetGenericPhysicalBook(new Guid());
             book1.PublisherId = publisher.PublisherId;
             _context.Books.Add(book1);
 
-            var book2 = BookGenerator.GetGenericPhysicalBook(1);
+            var book2 = BookGenerator.GetGenericPhysicalBook(new Guid());
             book2.PublisherId = publisher.PublisherId;
             _context.Books.Add(book2);
 
-            var book3 = BookGenerator.GetGenericPhysicalBook(1);
+            var book3 = BookGenerator.GetGenericPhysicalBook(new Guid());
             book3.PublisherId = publisher.PublisherId;
             _context.Books.Add(book3);
 

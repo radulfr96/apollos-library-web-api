@@ -37,9 +37,9 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var authorGenerated1 = AuthorGenerator.GetGenericAuthor(1, "AU");
-            var authorGenerated2 = AuthorGenerator.GetGenericAuthor(1, "US");
-            var authorGenerated3 = AuthorGenerator.GetGenericAuthor(1, "UK");
+            var authorGenerated1 = AuthorGenerator.GetGenericAuthor(new Guid(), "AU");
+            var authorGenerated2 = AuthorGenerator.GetGenericAuthor(new Guid(), "US");
+            var authorGenerated3 = AuthorGenerator.GetGenericAuthor(new Guid(), "UK");
 
             var country1 = _context.Countries.FirstOrDefault(c => c.CountryId == authorGenerated1.CountryId);
             var country2 = _context.Countries.FirstOrDefault(c => c.CountryId == authorGenerated2.CountryId);

@@ -21,12 +21,13 @@ namespace MyLibrary.WebApi.Filters
 
     public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
         private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
 
-        public ApiExceptionFilterAttribute(ILogger logger)
+        //public ApiExceptionFilterAttribute(ILogger logger)
+        public ApiExceptionFilterAttribute()
         {
-            _logger = logger;
+            //_logger = logger;
 
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
@@ -66,18 +67,18 @@ namespace MyLibrary.WebApi.Filters
             List<string> errors = null;
             if (exception != null)
             {
-                _logger.Warn(context.Exception, "An application error code");
+                //_logger.Warn(context.Exception, "An application error code");
 
                 message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
                 if (message == null)
                 {
-                    _logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
+                    //_logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
                     message = ErrorCodeTranslation.GetErrorMessageFromCode((int)ErrorCodeEnum.SystemError);
                 }
             }
             else
             {
-                _logger.Error(context.Exception, "An error occured");
+                //_logger.Error(context.Exception, "An error occured");
                 message = ErrorCodeTranslation.GetErrorMessageFromCode((int)ErrorCodeEnum.SystemError);
             }
 
@@ -97,14 +98,14 @@ namespace MyLibrary.WebApi.Filters
             var exception = context.Exception as Application.Common.Exceptions.ValidationException;
             foreach(var e in exception.Errors)
             {
-                _logger.Warn("Validation Error {ErrorCode}: {ErrorValue}", e);
+                //_logger.Warn("Validation Error {ErrorCode}: {ErrorValue}", e);
                 var message = ErrorCodeTranslation.GetErrorMessageFromCode((int)Enum.Parse(typeof(ErrorCodeEnum), e, true));
                 if (message != null)
                 {
                     errors.Add(message);
                 }
-                else
-                    _logger.Error("Cannot find ErrorCode {ErrorCode}", e);
+                //else
+                    //_logger.Error("Cannot find ErrorCode {ErrorCode}", e);
             }
             context.Result = new BadRequestObjectResult(errors);
 
@@ -117,10 +118,11 @@ namespace MyLibrary.WebApi.Filters
             List<string> errors = new List<string>();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
-            _logger.Warn("Bad data in request. Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
-            if (message == null)
-                _logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
-            else
+           // _logger.Warn("Bad data in request. Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
+            //if (message == null)
+                //_logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
+            //else
+            if (message != null)
                 errors.Add(message);
 
             context.Result = new ObjectResult(errors)
@@ -137,10 +139,10 @@ namespace MyLibrary.WebApi.Filters
             List<string> errors = new List<string>();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
-            _logger.Warn("Object not found. Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
-            if (message == null)
-                _logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
-            else
+            //_logger.Warn("Object not found. Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
+            if (message != null)
+                //_logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
+            //else
                 errors.Add(message);
 
             context.Result = new ObjectResult(errors)
@@ -157,11 +159,11 @@ namespace MyLibrary.WebApi.Filters
             List<string> errors = new List<string>();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
-            _logger.Warn("Authorisation Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
+            //_logger.Warn("Authorisation Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
             if (message == null)
             {
                 message = ErrorCodeTranslation.GetErrorMessageFromCode((int)ErrorCodeEnum.SystemError);
-                _logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
+                //_logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
             }
 
             errors.Add(message);

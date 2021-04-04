@@ -17,7 +17,7 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
 {
     public class UpdateUserCommand : IRequest<UpdateUserCommandDto>
     {
-        public int UserID { get; set; }
+        public Guid UserID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string ConfirmationPassword { get; set; }
@@ -45,43 +45,32 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
         {
             var response = new UpdateUserCommandDto();
 
-            var userWithUsername = await _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
+            //var userWithUsername = await _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
 
-            if (userWithUsername != null && request.UserID != userWithUsername.UserId)
-            {
-                throw new UsernameTakenException("Username is already taken");
-            }
+            //if (userWithUsername != null && request.UserID != userWithUsername.UserId)
+            //{
+            //    throw new UsernameTakenException("Username is already taken");
+            //}
 
-            var user = await _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
+            //var user = await _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
 
-            if (user == null)
-            {
-                _logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
-                 throw new UserNotFoundException("Update unsuccessful user not found");
-            }
+            //if (user == null)
+            //{
+            //    _logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
+            //     throw new UserNotFoundException("Update unsuccessful user not found");
+            //}
 
-            user.Username = request.Username;
+            //user.Username = request.Username;
 
-            if (!string.IsNullOrEmpty(request.Password))
-            {
-                user.Password = _hasher.HashPassword(request.Password, user.Salter);
-            }
+            //if (!string.IsNullOrEmpty(request.Password))
+            //{
+            //    user.Password = _hasher.HashPassword(request.Password);
+            //}
 
-            user.ModifiedBy = _userService.GetUserId();
-            user.ModifiedDate = _dateTimeService.Now;
+            //user.ModifiedBy = _userService.GetUserId();
+            //user.ModifiedDate = _dateTimeService.Now;
 
-            _userUnitOfWork.UserDataLayer.ClearUserRoles(user);
-
-            foreach (var role in request.Roles)
-            {
-                user.UserRoles.Add(new UserRole()
-                {
-                    RoleId = role.RoleId,
-                    UserId = user.UserId,
-                });
-            }
-
-            await _userUnitOfWork.Save();
+            //await _userUnitOfWork.Save();
 
             return response;
         }

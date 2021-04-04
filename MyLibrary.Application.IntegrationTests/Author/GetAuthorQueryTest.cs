@@ -38,7 +38,7 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var authorGenerated = AuthorGenerator.GetGenericAuthor(1, "AU");
+            var authorGenerated = AuthorGenerator.GetGenericAuthor(new Guid(), "AU");
 
             _context.Authors.Add(authorGenerated);
             _context.SaveChanges();

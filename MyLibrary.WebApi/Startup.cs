@@ -21,6 +21,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MyLibrary.Application.Book.Queries.GetBookQuery;
 using MyLibrary.Application.Common.Behaviour;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Infrastructure.Services;
 using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork;
 using MyLibrary.UnitOfWork.Contracts;
@@ -87,6 +89,16 @@ namespace MyLibrary.WebApi
             services.AddTransient<IReferenceUnitOfWork>(p =>
             {
                 return new ReferenceUnitOfWork(context);
+            });
+
+            services.AddTransient<IUserService>(p =>
+            {
+                return new UserService();
+            });
+
+            services.AddTransient<IDateTimeService>(p =>
+            {
+                return new DateTimeService();
             });
 
             services.AddControllers();

@@ -55,7 +55,7 @@ namespace MyLibrary.Application.Author.Commands.AddAuthorCommand
                 CountryId = command.CountryID,
                 Description = command.Description,
                 CreatedDate = _dateTimeService.Now,
-                CreatedBy = _userService.GetUserId(),
+                CreatedBy = _userService.GetUserID(),
             };
 
             await _authorUnitOfWork.AuthorDataLayer.AddAuthor(author);

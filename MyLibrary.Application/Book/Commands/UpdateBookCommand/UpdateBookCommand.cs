@@ -128,7 +128,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
             }
 
             book.CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage);
-            book.CreatedBy = _userService.GetUserId();
+            book.CreatedBy = _userService.GetUserID();
             book.CreatedDate = _dateTimeService.Now;
             book.Edition = command.Edition;
             book.EIsbn = command.EISBN;
@@ -141,7 +141,7 @@ namespace MyLibrary.Application.Book.Commands.UpdateBookCommand
             book.SeriesId = command.SeriesID;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
-            book.ModifiedBy = _userService.GetUserId();
+            book.ModifiedBy = _userService.GetUserID();
             book.ModifiedDate = _dateTimeService.Now;
 
             await _bookUnitOfWork.Begin();

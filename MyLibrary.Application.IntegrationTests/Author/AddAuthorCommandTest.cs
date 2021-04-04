@@ -42,12 +42,14 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task AddAuthorCommandSuccess()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var authorGenerated = AuthorGenerator.GetGenericAuthor(1, "AU");
+            var authorGenerated = AuthorGenerator.GetGenericAuthor(userID, "AU");
 
             var command = new AddAuthorCommand()
             {
@@ -66,7 +68,7 @@ namespace MyLibrary.Application.IntegrationTests
             {
                 AuthorId = author.AuthorId,
                 CountryId = command.CountryID,
-                CreatedBy = 1,
+                CreatedBy = userID,
                 CreatedDate = _dateTime.Now,
                 Description = command.Description,
                 FirstName = command.Firstname,

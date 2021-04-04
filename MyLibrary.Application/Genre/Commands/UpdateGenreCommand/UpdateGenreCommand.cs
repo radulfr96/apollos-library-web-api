@@ -42,7 +42,7 @@ namespace MyLibrary.Application.Genre.Commands.UpdateGenreCommand
             }
 
             genre.Name = command.Name;
-            genre.ModifiedBy = _userService.GetUserId();
+            genre.ModifiedBy = _userService.GetUserID();
             genre.ModifiedDate = _dateTimeService.Now;
 
             await _genreUnitOfWork.Save();

@@ -1,19 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using MyLibrary.Contracts.UnitOfWork;
-using MyLibrary.DataLayer;
-using MyLibrary.DataLayer.Contracts;
-using MyLibrary.Persistence.Model;
+using MyLibrary.IDP.DataLayer;
+using MyLibrary.IDP.Model;
 using System;
 using System.Threading.Tasks;
 
-namespace MyLibrary.UnitOfWork
+namespace MyLibrary.IDP.UnitOfWork
 {
     public class UserUnitOfWork : IUserUnitOfWork, IDisposable
     {
         private MyLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
         private IUserDataLayer _userDataLayer;
-        private IRoleDataLayer _roleDataLayer;
         private bool disposed = false;
 
         public UserUnitOfWork(MyLibraryContext dbContext)
@@ -30,18 +27,6 @@ namespace MyLibrary.UnitOfWork
                     _userDataLayer = new UserDataLayer(_dbContext);
                 }
                 return _userDataLayer;
-            }
-        }
-
-        public IRoleDataLayer RoleDataLayer
-        {
-            get
-            {
-                if (_roleDataLayer == null)
-                {
-                    _roleDataLayer = new RoleDataLayer(_dbContext);
-                }
-                return _roleDataLayer;
             }
         }
 

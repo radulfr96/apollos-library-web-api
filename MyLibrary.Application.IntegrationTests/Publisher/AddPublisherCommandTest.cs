@@ -41,12 +41,14 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task AddPublisherCommand()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", userID);
 
             var command = new AddPublisherCommand()
             {

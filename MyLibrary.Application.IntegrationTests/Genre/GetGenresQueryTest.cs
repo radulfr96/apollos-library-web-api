@@ -46,11 +46,11 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var genre1 = GenreGenerator.GetGenre(1);
+            var genre1 = GenreGenerator.GetGenre(new Guid());
 
             _context.Genres.Add(genre1);
 
-            var genre2 = GenreGenerator.GetGenre(1);
+            var genre2 = GenreGenerator.GetGenre(new Guid());
 
             _context.Genres.Add(genre2);
 

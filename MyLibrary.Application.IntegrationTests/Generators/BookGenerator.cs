@@ -10,7 +10,7 @@ namespace MyLibrary.Application.IntegrationTests.Generators
 {
     public static class BookGenerator
     {
-        public static Persistence.Model.Book GetGenericPhysicalBook(int createdBy)
+        public static Persistence.Model.Book GetGenericPhysicalBook(Guid createdBy)
         {
             return new Faker<Persistence.Model.Book>()
                 .RuleFor(b => b.CreatedBy, createdBy)

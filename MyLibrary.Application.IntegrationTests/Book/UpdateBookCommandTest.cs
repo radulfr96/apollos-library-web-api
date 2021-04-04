@@ -41,40 +41,42 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task UpdateBookCommand()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var publisher1 = PublisherGenerator.GetGenericPublisher("UK", 1);
+            var publisher1 = PublisherGenerator.GetGenericPublisher("UK", userID);
             _context.Publishers.Add(publisher1);
 
-            var publisher2 = PublisherGenerator.GetGenericPublisher("UK", 1);
+            var publisher2 = PublisherGenerator.GetGenericPublisher("UK", userID);
             _context.Publishers.Add(publisher2);
 
             _context.SaveChanges();
 
-            var author1 = AuthorGenerator.GetGenericAuthor(1, "UK");
+            var author1 = AuthorGenerator.GetGenericAuthor(userID, "UK");
             _context.Authors.Add(author1);
 
-            var author2 = AuthorGenerator.GetGenericAuthor(1, "UK");
+            var author2 = AuthorGenerator.GetGenericAuthor(userID, "UK");
             _context.Authors.Add(author2);
 
-            var author3 = AuthorGenerator.GetGenericAuthor(1, "UK");
+            var author3 = AuthorGenerator.GetGenericAuthor(userID, "UK");
             _context.Authors.Add(author3);
 
-            var genre1 = GenreGenerator.GetGenre(1);
+            var genre1 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre1);
 
-            var genre2 = GenreGenerator.GetGenre(1);
+            var genre2 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre2);
 
-            var genre3 = GenreGenerator.GetGenre(1);
+            var genre3 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre3);
 
             _context.SaveChanges();
 
-            var bookGenerated = BookGenerator.GetGenericPhysicalBook(1);
+            var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
             bookGenerated.PublisherId = publisher1.PublisherId;
 
             _context.Books.Add(bookGenerated);
@@ -105,7 +107,7 @@ namespace MyLibrary.Application.IntegrationTests
                 AuthorId = author2.AuthorId,
             });
 
-            var newBookDetails = BookGenerator.GetGenericPhysicalBook(1);
+            var newBookDetails = BookGenerator.GetGenericPhysicalBook(userID);
 
             var command = new UpdateBookCommand()
             {
@@ -140,14 +142,14 @@ namespace MyLibrary.Application.IntegrationTests
             book.Should().BeEquivalentTo(new Persistence.Model.Book()
             {
                 BookId = bookGenerated.BookId,
-                CreatedBy = 1,
+                CreatedBy = userID,
                 CreatedDate = bookGenerated.CreatedDate,
                 Edition = newBookDetails.Edition,
                 EIsbn = newBookDetails.EIsbn,
                 FictionTypeId = newBookDetails.FictionTypeId,
                 FormTypeId = newBookDetails.FormTypeId,
                 Isbn = newBookDetails.Isbn,
-                ModifiedBy = 1,
+                ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
                 NumberInSeries = newBookDetails.NumberInSeries,
                 PublicationFormatId = newBookDetails.PublicationFormatId,

@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyLibrary.Persistence.Model;
-using MyLibrary.DataLayer.Contracts;
+using MyLibrary.IDP.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyLibrary.DataLayer
+namespace MyLibrary.IDP.DataLayer
 {
     public class UserDataLayer : IUserDataLayer
     {
@@ -22,27 +21,30 @@ namespace MyLibrary.DataLayer
             await _context.Users.AddAsync(user);
         }
 
-        public void ClearUserRoles(User user)
+        public async Task<User> GetUser(Guid id)
         {
-            _context.UserRoles.RemoveRange(user.UserRoles);
-            user.UserRoles.Clear();
+            return await _context.Users.Include("Users.UserClaim").FirstOrDefaultAsync(u => u.UserId == id);
         }
 
-        public async Task<User> GetUser(int id)
+        public async Task<User> GetUserBySubject(string subject)
         {
-            return await _context.Users.Include("UserRole.Role").FirstOrDefaultAsync(u => u.UserId == id);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Subject == subject);
         }
 
         public async Task<User> GetUserByUsername(string username)
         {
-            return await _context.Users.Include("UserRole.Role").FirstOrDefaultAsync(u => u.Username == username);
+            return await _context.Users.Include("Users.UserClaim").FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<List<UserClaim>> GetUserClaimsBySubject(string subject)
+        {
+            return await _context.UserClaims.Where(u => u.User.Subject == subject).ToListAsync();
         }
 
         public async Task<List<User>> GetUsers()
         {
             return await (
                 from u in _context.Users
-                where !u.IsDeleted
                 select new User()
                 {
                     CreatedBy = u.CreatedBy,
@@ -51,24 +53,14 @@ namespace MyLibrary.DataLayer
                     ModifiedBy = u.ModifiedBy,
                     ModifiedDate = u.ModifiedDate,
                     Password = u.Password,
-                    Salter = u.Salter,
                     UserId = u.UserId,
                     Username = u.Username,
-                    UserRoles =
-                    (from ur in _context.UserRoles
-                     join r in _context.Roles on ur.RoleId equals r.RoleId
-                     where ur.UserId == u.UserId
-                     select new UserRole()
-                     {
-                         RoleId = r.RoleId,
-                         UserId = u.UserId,
-                         Role = new Role()
-                         {
-                             Name = r.Name,
-                             RoleId = r.RoleId
-                         }
-                     }).ToList()
                 }).ToListAsync();
+        }
+
+        public async Task<User> GetUserBySecurityCode(string securityCode)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.SecurityCode == securityCode && u.SecurityCodeExpirationDate >= DateTime.Now);
         }
     }
 }

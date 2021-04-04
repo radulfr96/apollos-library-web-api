@@ -7,10 +7,7 @@ using MyLibrary.Application.Interfaces;
 using MyLibrary.Application.Publisher.Queries.GetPublisherQuery;
 using MyLibrary.Persistence.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -46,7 +43,7 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", 1);
+            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", new Guid());
 
             _context.Publishers.Add(publisherGenerated);
             _context.SaveChanges();

@@ -5,10 +5,14 @@
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyLibrary.IDP.Model;
+using MyLibrary.IDP.Services;
+using MyLibrary.IDP.UnitOfWork;
 
 namespace MyLibrary.IDP
 {
@@ -29,6 +33,15 @@ namespace MyLibrary.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
+            var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
+            services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
+            var context = new MyLibraryContext(optionsBuilder.Options);
+
+            services.AddScoped<IUserService>(provider =>
+            {
+                return new UserService(new UserUnitOfWork(provider.GetRequiredService<MyLibraryContext>()), new PasswordHasher<User>());
+            });
+
             var builder = services.AddIdentityServer(options =>
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
@@ -36,8 +49,9 @@ namespace MyLibrary.IDP
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryClients(Config.Clients)
-                .AddTestUsers(TestUsers.Users);
+                .AddInMemoryClients(Config.Clients);
+
+            builder.AddProfileService<ProfileService>();
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();

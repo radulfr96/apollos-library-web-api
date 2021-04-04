@@ -13,7 +13,7 @@ namespace MyLibrary.Application.User.Queries.GetUserQuery
 {
     public class GetUserQuery : IRequest<GetUserQueryDto>
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryDto>
@@ -29,17 +29,16 @@ namespace MyLibrary.Application.User.Queries.GetUserQuery
         {
             var response = new GetUserQueryDto();
 
-            var user = await _userUnitOfWork.UserDataLayer.GetUser(query.UserId);
+            //var user = await _userUnitOfWork.UserDataLayer.GetUser(query.UserId);
 
-            if (user == null)
-            {
-                throw new UserNotFoundException($"Unable to finc user with id [{query.UserId}]");
-            }
+            //if (user == null)
+            //{
+            //    throw new UserNotFoundException($"Unable to finc user with id [{query.UserId}]");
+            //}
 
-            response.IsActive = user.IsActive ? "Active" : "Inactive";
-            response.UserID = user.UserId;
-            response.Username = user.Username;
-            response.Roles = user.UserRoles.Select(r => new RoleDTO() { RoleId = r.RoleId, Name = r.Role.Name }).ToList();
+            //response.IsActive = user.IsActive ? "Active" : "Inactive";
+            //response.UserID = user.UserId;
+            //response.Username = user.Username;
 
             return response;
         }

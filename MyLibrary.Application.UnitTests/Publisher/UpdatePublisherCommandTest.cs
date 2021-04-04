@@ -250,7 +250,7 @@ namespace MyLibrary.Application.UnitTests
                 IsDeleted = false,
                 City = "Melbourne",
                 CountryId = "AU",
-                CreatedBy = 1,
+                CreatedBy = new Guid(),
                 Name = "Test Pub",
                 Postcode = "3000",
                 State = "Victoria",

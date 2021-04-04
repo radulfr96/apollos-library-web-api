@@ -121,7 +121,7 @@ namespace MyLibrary.Application.Book.Commands.AddBookCommand
             var book = new Persistence.Model.Book()
             {
                 CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage),
-                CreatedBy = _userService.GetUserId(),
+                CreatedBy = _userService.GetUserID(),
                 CreatedDate = _dateTimeService.Now,
                 Edition = command.Edition,
                 EIsbn = command.EISBN,

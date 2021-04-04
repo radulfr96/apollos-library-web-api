@@ -46,7 +46,7 @@ namespace MyLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var genre = GenreGenerator.GetGenre(1);
+            var genre = GenreGenerator.GetGenre(new Guid());
 
             _context.Genres.Add(genre);
             _context.SaveChanges();

@@ -64,7 +64,7 @@ namespace MyLibrary.Application.Publisher.Commands.UpdatePublisherCommand
             publisher.City = command.City;
             publisher.CountryId = command.CountryID;
             publisher.IsDeleted = false;
-            publisher.ModifiedBy = _userService.GetUserId();
+            publisher.ModifiedBy = _userService.GetUserID();
             publisher.ModifiedDate = _dateTimeService.Now;
             publisher.Name = command.Name;
             publisher.Postcode = command.Postcode;

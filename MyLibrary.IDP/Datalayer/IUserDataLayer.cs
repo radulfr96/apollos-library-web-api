@@ -1,9 +1,9 @@
-﻿using MyLibrary.Persistence.Model;
+﻿using MyLibrary.IDP.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MyLibrary.DataLayer.Contracts
+namespace MyLibrary.IDP.DataLayer
 {
     /// <summary>
     /// Used to handle data storage of users
@@ -15,13 +15,13 @@ namespace MyLibrary.DataLayer.Contracts
         /// </summary>
         /// <returns>The list of users</returns>
         Task<List<User>> GetUsers();
-        
+
         /// <summary>
         /// Used to get a user by their id
         /// </summary>
         /// <param name="id">The id of the user to be retreived</param>
         /// <returns>The user with the id</returns>
-        Task<User> GetUser(int id);
+        Task<User> GetUser(Guid id);
 
         /// <summary>
         /// Used to get a user by their username
@@ -36,10 +36,10 @@ namespace MyLibrary.DataLayer.Contracts
         /// <param name="user">The user to be added</param>
         Task AddUser(User user);
 
-        /// <summary>
-        /// Used to clear the roles of a user
-        /// </summary>
-        /// <param name="user">The user whose roles need to be cleared</param>
-        void ClearUserRoles(User user);
+        Task<User> GetUserBySubject(string subject);
+
+        Task<List<UserClaim>> GetUserClaimsBySubject(string subject);
+
+        Task<User> GetUserBySecurityCode(string securityCode);
     }
 }

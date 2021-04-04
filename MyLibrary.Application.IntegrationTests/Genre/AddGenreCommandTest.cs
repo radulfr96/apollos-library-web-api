@@ -41,12 +41,14 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task AddGenreCommand()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var genreGenerated = GenreGenerator.GetGenre(1);
+            var genreGenerated = GenreGenerator.GetGenre(new Guid());
 
             var command = new AddGenreCommand()
             {
@@ -63,7 +65,7 @@ namespace MyLibrary.Application.IntegrationTests
             {
                 GenreId = genre.GenreId,
                 CreatedDate = _dateTime.Now,
-                CreatedBy = 1,
+                CreatedBy = userID,
                 Name = command.Name,
             });
         }

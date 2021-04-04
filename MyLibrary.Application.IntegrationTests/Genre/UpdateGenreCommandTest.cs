@@ -41,17 +41,19 @@ namespace MyLibrary.Application.IntegrationTests
         [Fact]
         public async Task UpdateGenreCommand()
         {
+            var userID = new Guid();
+
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Sid, userID.ToString()),
             });
 
-            var genre = GenreGenerator.GetGenre(1);
+            var genre = GenreGenerator.GetGenre(new Guid());
 
             _context.Genres.Add(genre);
             _context.SaveChanges();
 
-            var newGenreDetails = GenreGenerator.GetGenre(1);
+            var newGenreDetails = GenreGenerator.GetGenre(new Guid());
 
             var command = new UpdateGenreCommand()
             {
@@ -67,10 +69,10 @@ namespace MyLibrary.Application.IntegrationTests
 
             genreResult.Should().BeEquivalentTo(new Persistence.Model.Genre()
             {
-                CreatedBy = 1,
+                CreatedBy = userID,
                 CreatedDate = genre.CreatedDate,
                 GenreId = genre.GenreId,
-                ModifiedBy = 1,
+                ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
                 Name = newGenreDetails.Name,
             });

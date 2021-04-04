@@ -8,14 +8,12 @@ namespace MyLibrary.Application.Common.DTOs
     /// </summary>
     public class UserDTO
     {
-        public int UserID { get; set; }
+        public Guid UserID { get; set; }
         public string Username { get; set; }
         public string IsActive { get; set; }
-        public List<RoleDTO> Roles { get; set; }
 
         public UserDTO()
         {
-            Roles = new List<RoleDTO>();
         }
     }
 }
