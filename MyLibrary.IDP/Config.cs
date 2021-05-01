@@ -46,7 +46,7 @@ namespace MyLibrary.IDP
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = new List<string>()
                     {
-                        "https://localhost:5050/signin-oidc"
+                        "https://localhost:3000/signin-oidc"
                     },
                     RequirePkce = true,
                     AllowedScopes =

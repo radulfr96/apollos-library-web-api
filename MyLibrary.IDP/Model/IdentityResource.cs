@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace MyLibrary.IDP.Model
 {
+    [Table("IdentityResources", Schema = "Identity")]
     public partial class IdentityResource
     {
         public IdentityResource()

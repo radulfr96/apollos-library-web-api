@@ -46,10 +46,7 @@ namespace MyLibrary.IDP
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
-            })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryClients(Config.Clients);
+            });
 
             builder.AddProfileService<ProfileService>();
 
@@ -57,6 +54,12 @@ namespace MyLibrary.IDP
             builder.AddDeveloperSigningCredential();
 
             builder.AddConfigurationStore(opt =>
+            {
+                opt.ConfigureDbContext = builder =>
+                builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
+            });
+
+            builder.AddOperationalStore(opt =>
             {
                 opt.ConfigureDbContext = builder =>
                 builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
