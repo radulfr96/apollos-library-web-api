@@ -23,5 +23,9 @@ namespace MyLibrary.IDP.Services
 
         Task AddUser(User user, string password);
 
+        Task<string> InitiatePasswordResetRequest(string email);
+
+        Task<bool> SetPassword(string securityCode, string password);
+
     }
 }

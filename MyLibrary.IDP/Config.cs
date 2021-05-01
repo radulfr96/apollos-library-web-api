@@ -10,28 +10,28 @@ namespace MyLibrary.IDP
 {
     public static class Config
     {
-        public static IEnumerable<IdentityResource> IdentityResources =>
-            new IdentityResource[]
+        public static IEnumerable<IdentityResource> IdentityResources
+        {
+            get
             {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-                new IdentityResource(
-                    "roles",
-                    "Your role(s)",
-                    new List<string>() { "role" }),
-            };
+                return new List<IdentityResource>()
+                {
+                    new IdentityResources.OpenId(),
+                };
+            }
+        }
 
         public static IEnumerable<ApiResource> ApiResources =>
-            new ApiResource[]
-            {
+                new ApiResource[]
+                {
                 new ApiResource(
                     "mylibraryapi",
                     "My Library API",
                     new List<string>() { "role" })
-                { 
+                {
                     ApiSecrets = { new Secret("apisecret".Sha256()) }
                 },
-            };
+                };
 
         public static IEnumerable<Client> Clients =>
             new Client[]

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,6 +100,66 @@ namespace MyLibrary.IDP.Services
             await _unitOfWork.Save();
 
             return true;
+        }
+
+        public async Task<string> InitiatePasswordResetRequest(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+
+            var user = await _unitOfWork.UserDataLayer.GetUserByUsername(email);
+
+            if (user == null)
+            {
+                throw new Exception($"User with email address {email} can't be found.");
+            }
+
+            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
+            {
+                var securityCodeData = new byte[128];
+                randomNumberGenerator.GetBytes(securityCodeData);
+                user.SecurityCode = Convert.ToBase64String(securityCodeData);
+            }
+
+            user.SecurityCodeExpirationDate = DateTime.Now.AddHours(1);
+
+            await _unitOfWork.Save();
+            return user.SecurityCode;
+        }
+
+        public async Task<bool> SetPassword(string securityCode, string password)
+        {
+            if (string.IsNullOrWhiteSpace(securityCode))
+            {
+                throw new ArgumentNullException(nameof(securityCode));
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            var user = await _unitOfWork.UserDataLayer.GetUserBySecurityCode(securityCode);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            if (!user.IsActive)
+            {
+                user.IsActive = true;
+            }
+
+            user.SecurityCode = null;
+            // hash & salt the password
+            user.Password = _passwordHasher.HashPassword(user, password);
+
+            await _unitOfWork.Save();
+            return true;
+
         }
     }
 }

@@ -42,16 +42,25 @@ namespace MyLibrary.IDP.UserRegistration
                 return View(model);
             }
 
-            var userId = new Guid();
+            var userId = Guid.NewGuid();
 
             var user = new User()
             {
                 CreatedBy = userId,
                 CreatedDate = DateTime.Now,
                 IsActive = false,
-                Subject = new Guid().ToString(),
+                Subject = Guid.NewGuid().ToString(),
                 UserId = userId,
-                Username = model.Email
+                Username = model.Email,
+                UserClaims = new List<UserClaim>()
+                {
+                    new UserClaim()
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = "sub",
+                        Value = "UnpaidAccount",
+                    },
+                },
             };
 
             using (var randomNumberGenerator = new RNGCryptoServiceProvider())

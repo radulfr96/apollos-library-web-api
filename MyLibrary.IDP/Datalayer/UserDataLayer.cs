@@ -33,7 +33,14 @@ namespace MyLibrary.IDP.DataLayer
 
         public async Task<User> GetUserByUsername(string username)
         {
-            return await _context.Users.Include("Users.UserClaim").FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user != null)
+            {
+                user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
+            }
+
+            return user;
         }
 
         public async Task<List<UserClaim>> GetUserClaimsBySubject(string subject)
