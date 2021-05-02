@@ -36,7 +36,7 @@ namespace MyLibrary.IDP.Model
         public virtual DbSet<ClientScope> ClientScopes { get; set; }
         public virtual DbSet<ClientSecret> ClientSecrets { get; set; }
         public virtual DbSet<DeviceCode> DeviceCodes { get; set; }
-        public virtual DbSet<IdentityResource> IdentityResources { get; set; }
+        public virtual DbSet<IdentityResources> IdentityResources { get; set; }
         public virtual DbSet<IdentityResourceClaim> IdentityResourceClaims { get; set; }
         public virtual DbSet<IdentityResourceProperty> IdentityResourceProperties { get; set; }
         public virtual DbSet<PersistedGrant> PersistedGrants { get; set; }
@@ -401,7 +401,7 @@ namespace MyLibrary.IDP.Model
                 entity.Property(e => e.SubjectId).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<IdentityResource>(entity =>
+            modelBuilder.Entity<IdentityResources>(entity =>
             {
                 entity.ToTable("IdentityResources", "Identity");
 

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
+using AutoMapper;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyLibrary.IDP.Model;
 using MyLibrary.IDP.Services;
+using MyLibrary.IDP.Stores;
 using MyLibrary.IDP.UnitOfWork;
+using System.Reflection;
 
 namespace MyLibrary.IDP
 {
@@ -33,13 +35,17 @@ namespace MyLibrary.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
-            var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
             services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
-            var context = new MyLibraryContext(optionsBuilder.Options);
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddScoped<IUserService>(provider =>
             {
                 return new UserService(new UserUnitOfWork(provider.GetRequiredService<MyLibraryContext>()), new PasswordHasher<User>());
+            });
+
+            services.AddScoped<IMapper>(opt =>
+            {
+                return new Mapper(AutoMapper.Configuration());
             });
 
             var builder = services.AddIdentityServer(options =>
@@ -53,17 +59,21 @@ namespace MyLibrary.IDP
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
-            builder.AddConfigurationStore(opt =>
-            {
-                opt.ConfigureDbContext = builder =>
-                builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
-            });
-
-            builder.AddOperationalStore(opt =>
-            {
-                opt.ConfigureDbContext = builder =>
-                builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
-            });
+            builder
+                .AddResourceStore<ResourceStore>()
+                .AddClientStore<ClientStore>()
+                .AddDeviceFlowStore<DeviceFlowStore>()
+                .AddPersistedGrantStore<PersistedGrantStore>();
+            //.AddConfigurationStore(options =>
+            //{
+            //    options.ConfigureDbContext = builder =>
+            //        builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
+            //})
+            //.AddOperationalStore(options =>
+            //{
+            //    options.ConfigureDbContext = builder =>
+            //        builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
+            //});
         }
 
         public void Configure(IApplicationBuilder app)

@@ -7,9 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MyLibrary.IDP.Model
 {
     [Table("IdentityResources", Schema = "Identity")]
-    public partial class IdentityResource
+    public partial class IdentityResources
     {
-        public IdentityResource()
+        public IdentityResources()
         {
             IdentityResourceClaims = new HashSet<IdentityResourceClaim>();
             IdentityResourceProperties = new HashSet<IdentityResourceProperty>();

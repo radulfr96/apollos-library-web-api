@@ -12,6 +12,6 @@ namespace MyLibrary.IDP.Model
         public string Value { get; set; }
         public int IdentityResourceId { get; set; }
 
-        public virtual IdentityResource IdentityResource { get; set; }
+        public virtual IdentityResources IdentityResource { get; set; }
     }
 }
