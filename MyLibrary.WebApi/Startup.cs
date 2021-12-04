@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityServer4.AccessTokenValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,11 +19,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using MyLibrary.Data.Model;
-using MyLibrary.DataLayer;
-using MyLibrary.Services;
-using MyLibrary.Services.Contracts;
+using MyLibrary.Application.Book.Queries.GetBookQuery;
+using MyLibrary.Application.Common.Behaviour;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Infrastructure.Services;
+using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork;
+using MyLibrary.UnitOfWork.Contracts;
+using MyLibrary.WebApi.Filters;
 
 namespace MyLibrary.WebApi
 {
@@ -36,30 +42,76 @@ namespace MyLibrary.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddMediatR(typeof(Startup));
+
+            services.AddScoped<ApiExceptionFilterAttribute>();
+
+            var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
             services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
+            var context = new MyLibraryContext(optionsBuilder.Options);
+
+            services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+            services.AddTransient(ser =>
+            {
+                return new MyLibraryContext(optionsBuilder.Options);
+            });
+
+            services.AddTransient(ser =>
+            {
+                return new MyLibraryContext(optionsBuilder.Options);
+            });
+
+            services.AddTransient<IPublisherUnitOfWork>(p =>
+            {
+                return new PublisherUnitOfWork(context);
+            });
+
+            services.AddTransient<IAuthorUnitOfWork>(p =>
+            {
+                return new AuthorUnitOfWork(context);
+            });
+
+            services.AddTransient<IBookUnitOfWork>(p =>
+            {
+                return new BookUnitOfWork(context);
+            });
+
+            services.AddTransient<IGenreUnitOfWork>(p =>
+            {
+                return new GenreUnitOfWork(context);
+            });
+
+            services.AddTransient<IReferenceUnitOfWork>(p =>
+            {
+                return new ReferenceUnitOfWork(context);
+            });
+
+            services.AddTransient<IUserService>(p =>
+            {
+                return new UserService();
+            });
+
+            services.AddTransient<IDateTimeService>(p =>
+            {
+                return new DateTimeService();
+            });
 
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = true;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(opt =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
+                    opt.Authority = "https://localhost:44318";
+                    opt.ApiName = "mylibraryapi";
+                    opt.ApiSecret = "apisecret";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

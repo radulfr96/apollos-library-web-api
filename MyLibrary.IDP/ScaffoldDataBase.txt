@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "server=localhost\sqlexpress;Database=MyLibrary;Trusted_Connection=True;Integrated Security=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -Schema Identity, Users -o Model -Force

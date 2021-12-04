@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer
 {
@@ -17,26 +18,24 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public void AddAuthor(Author author)
+        public async Task AddAuthor(Author author)
         {
-            _context.Author.Add(author);
+            await _context.Authors.AddAsync(author);
         }
 
-        public void DeleteAuthor(int id)
+        public async Task DeleteAuthor(Author author)
         {
-            var author = GetAuthor(id);
-
-            _context.Author.Remove(author);
+            await Task.FromResult(_context.Authors.Remove(author));
         }
 
-        public Author GetAuthor(int id)
+        public async Task<Author> GetAuthor(int id)
         {
-            return _context.Author.Include("Country").FirstOrDefault(a => a.AuthorId == id);
+            return await _context.Authors.Include("Country").FirstOrDefaultAsync(a => a.AuthorId == id);
         }
 
-        public List<Author> GetAuthors()
+        public async Task<List<Author>> GetAuthors()
         {
-            return _context.Author.Include("Country").ToList();
+            return await _context.Authors.Include("Country").ToListAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using MyLibrary.Data.Model;
+﻿using MyLibrary.Persistence.Model;
 using MyLibrary.DataLayer;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.UnitOfWork.Contracts;

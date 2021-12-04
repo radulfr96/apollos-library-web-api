@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using MyLibrary.Data.Model;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.DataLayer;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MyLibrary.Persistence.Model;
+using System.Threading.Tasks;
 
 namespace MyLibrary.UnitOfWork
 {
@@ -33,14 +34,14 @@ namespace MyLibrary.UnitOfWork
             }
         }
 
-        public void Begin()
+        public async Task Begin()
         {
-            _transaction = _dbContext.Database.BeginTransaction();
+            _transaction = await _dbContext.Database.BeginTransactionAsync();
         }
 
-        public void Commit()
+        public async Task Commit()
         {
-            _transaction.Commit();
+            await _transaction.CommitAsync();
         }
 
         public void Dispose()
@@ -66,9 +67,9 @@ namespace MyLibrary.UnitOfWork
             disposed = true;
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         ~PublisherUnitOfWork()

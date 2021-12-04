@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyLibrary.Data.Model;
-using MyLibrary.Services;
-using MyLibrary.Services.Contracts;
+using MyLibrary.Application.Common.DTOs;
+using MyLibrary.Application.Interfaces;
+using MyLibrary.Infrastructure.Services;
+using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork;
 
 namespace MyLibrary.WebApi.Controllers
@@ -21,42 +22,20 @@ namespace MyLibrary.WebApi.Controllers
         private readonly MyLibraryContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IReferenceService _referenceService;
+        private readonly IReferenceDataService _referenceService;
 
         public ReferenceController(MyLibraryContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration)
         {
             _dbContext = dbContext;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-            _referenceService = new ReferenceService(new ReferenceUnitOfWork(_dbContext), _httpContextAccessor.HttpContext.User);
+            _referenceService = new ReferenceDataService(new ReferenceUnitOfWork(_dbContext));
         }
 
         [HttpGet("countries")]
-        public IActionResult GetCountries()
+        public async Task<List<CountryDTO>> GetCountries()
         {
-            try
-            {
-                var response = _referenceService.GetCountries();
-
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                        return Ok(response);
-                    case HttpStatusCode.BadRequest:
-                        return BadRequest(BuildBadRequestMessage(response));
-                    case HttpStatusCode.NotFound:
-                        return NotFound();
-                    case HttpStatusCode.InternalServerError:
-                        return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                s_logger.Error(ex, "Unable to retreive countries.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return await _referenceService.GetCountries();
         }
     }
 }

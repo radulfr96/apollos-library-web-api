@@ -1,9 +1,11 @@
-﻿using MyLibrary.Data.Model;
+﻿using Microsoft.EntityFrameworkCore;
 using MyLibrary.DataLayer.Contracts;
+using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer
 {
@@ -16,9 +18,24 @@ namespace MyLibrary.DataLayer
             _context = context;
         }
 
-        public List<Country> GetCountries()
+        public async Task<List<Country>> GetCountries()
         {
-            return _context.Country.ToList();
+            return await _context.Countries.ToListAsync();
+        }
+
+        public async Task<FictionType> GetFictionType(int fictionTypeId)
+        {
+            return await _context.FictionTypes.FirstOrDefaultAsync(f => f.TypeId == fictionTypeId);
+        }
+
+        public async Task<FormType> GetFormType(int formTypeId)
+        {
+            return await _context.FormTypes.FirstOrDefaultAsync(f => f.TypeId == formTypeId);
+        }
+
+        public async Task<PublicationFormat> GetPublicationFormat(int publicationFormatId)
+        {
+            return await _context.PublicationFormats.FirstOrDefaultAsync(f => f.TypeId == publicationFormatId);
         }
     }
 }

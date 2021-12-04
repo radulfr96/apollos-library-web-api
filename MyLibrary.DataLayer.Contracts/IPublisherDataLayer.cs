@@ -1,7 +1,8 @@
-﻿using MyLibrary.Data.Model;
+﻿using MyLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyLibrary.DataLayer.Contracts
 {
@@ -14,19 +15,19 @@ namespace MyLibrary.DataLayer.Contracts
         /// Used to the the publisher received
         /// </summary>
         /// <param name="genre">The publisher to be added</param>
-        void AddPublisher(Publisher publisher);
+        Task AddPublisher(Publisher publisher);
 
         /// <summary>
         /// Used to get a publisher by its id
         /// </summary>
         /// <param name="id">The id of the publisher to be found</param>
         /// <returns>The publisher with the id received</returns>
-        Publisher GetPublisher(int id);
+        Task<Publisher> GetPublisher(int id);
 
         /// <summary>
         /// Used to get all publishers
         /// </summary>
         /// <returns>The list of publishers</returns>
-        List<Publisher> GetPublishers();
+        Task<List<Publisher>> GetPublishers();
     }
 }
