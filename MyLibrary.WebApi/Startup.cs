@@ -108,7 +108,7 @@ namespace MyLibrary.WebApi
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(opt =>
                 {
-                    opt.Authority = "https://localhost:44318";
+                    opt.Authority = "https://localhost:5001";
                     opt.ApiName = "mylibraryapi";
                     opt.ApiSecret = "apisecret";
                 });

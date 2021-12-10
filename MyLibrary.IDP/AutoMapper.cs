@@ -21,6 +21,8 @@ namespace MyLibrary.IDP
                 cfg.CreateMap<IdentityResources, IdentityServer4.Models.Resource>();
                 cfg.CreateMap<ApiScope, IdentityServer4.Models.ApiScope>();
                 cfg.CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>();
+                cfg.CreateMap<ClientSecret, IdentityServer4.Models.Secret>();
+                cfg.CreateMap<ClientScope, IdentityServer4.Models.ApiScope>();
             });
         }
     }

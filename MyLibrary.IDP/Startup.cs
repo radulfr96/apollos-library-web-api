@@ -83,13 +83,17 @@ namespace MyLibrary.IDP
                 app.UseDeveloperExceptionPage();
             }
 
-            // uncomment if you want to add MVC
             app.UseStaticFiles();
+            app.UseCors(options =>
+            {
+                options
+                .AllowAnyOrigin()
+                .AllowAnyHeader();
+            });
             app.UseRouting();
 
             app.UseIdentityServer();
 
-            // uncomment, if you want to add MVC
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
