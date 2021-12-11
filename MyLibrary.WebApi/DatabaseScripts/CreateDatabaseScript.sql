@@ -1,9 +1,11 @@
 USE [master]
 
-DROP DATABASE MyLibrary
+USE master;
+ALTER DATABASE MyLibrary SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE MyLibrary ;
 
 CREATE DATABASE MyLibrary
-GO
+
 
 USE MyLibrary
 GO
@@ -11,17 +13,21 @@ GO
 CREATE SCHEMA [Users]
 GO
 
+
 CREATE SCHEMA [Genre]
 GO
 
+
 CREATE SCHEMA [Book]
 GO
+
 
 CREATE SCHEMA [Publisher]
 GO
 
 CREATE SCHEMA [Author]
 GO
+
 
 CREATE TABLE [Users].[User](
 	[UserID] [uniqueidentifier] NOT NULL,
@@ -37,7 +43,7 @@ CREATE TABLE [Users].[User](
 	[ModifiedBy] [UNIQUEIDENTIFIER] NULL,
 	CONSTRAINT [PK_User] PRIMARY KEY (UserID)
 	)
-GO
+
 
 CREATE TABLE [Users].[UserClaim](
 	[ID] [uniqueidentifier] NOT NULL,
@@ -47,7 +53,7 @@ CREATE TABLE [Users].[UserClaim](
 	CONSTRAINT [PK_UserClaim] PRIMARY KEY (ID),
 	CONSTRAINT [FK_UserUserClaim] FOREIGN KEY ([UserID]) REFERENCES [Users].[User](UserID)
 	)
-GO
+
 
 CREATE TABLE [Genre].[Genre]
 (
@@ -59,7 +65,7 @@ CREATE TABLE [Genre].[Genre]
 	[ModifiedBy] UNIQUEIDENTIFIER,
 	CONSTRAINT PK_Genre PRIMARY KEY (GenreID),
 )
-GO
+
 
 CREATE TABLE [Book].[Series]
 (
@@ -118,7 +124,7 @@ CREATE TABLE [Publisher].[Publisher]
 	CONSTRAINT FK_PublisherCountry
 	FOREIGN KEY ([CountryID]) REFERENCES [dbo].[Country] (CountryID),
 )
-GO
+
 
 CREATE TABLE [Author].[Author]
 (
@@ -196,16 +202,21 @@ CREATE TABLE [Book].[BookAuthor]
 )
 
 DECLARE @UserID UNIQUEIDENTIFIER
-, @AdminRoleID INT
-, @StandardRoleID INT
 
 
 INSERT INTO [Users].[User] ([UserID], [Subject], [Username], [Password], [CreatedDate], [CreatedBy], [IsActive])
-VALUES (NEWID(), 'Test', 'wados.russell70@gmail.com', 'BvsurrjL2gS75K9KhRSbJneH3//7qCQRlmpTZF7JGs4=', GETDATE(), NEWID(), 1)
+VALUES (NEWID(), 'Administrator', 'wados.russell70@gmail.com', 'AQAAAAEAACcQAAAAECY64tCZ5CSbcXzOp4NE6XAr1TB9wQ1zgMv6Sa49QGTmEftnFXzPMsBH+NB1cu5brw==', GETDATE(), NEWID(), 1)
 
 SELECT @UserID = U.UserID
 FROM Users.[User] U
 WHERE U.Username = 'wados.russell70@gmail.com'
+
+INSERT INTO [Users].UserClaim (ID, UserID, Type, Value)
+VALUES (NEWID(), @UserID, 'role', 'administrator'),
+(NEWID(), @UserID, 'role', 'moderator'),
+(NEWID(), @UserID, 'role', 'freeaccount'),
+(NEWID(), @UserID, 'username', 'radulfr')
+
 
 UPDATE U
 SET U.CreatedBy = U.UserID
@@ -229,14 +240,14 @@ INSERT INTO [dbo].[Country] VALUES ('AI','Anguilla')
 INSERT INTO [dbo].[Country] VALUES ('AL','Albania')
 INSERT INTO [dbo].[Country] VALUES ('AM','Armenia')
 INSERT INTO [dbo].[Country] VALUES ('AN','Netherlands Antilles')
-INSERT INTO [dbo].[Country] VALUES ('AO','Angola')
+INSERT INTO [dbo].[Country] VALUES ('AO','Anla')
 INSERT INTO [dbo].[Country] VALUES ('AQ','Antarctica')
 INSERT INTO [dbo].[Country] VALUES ('AR','Argentina')
 INSERT INTO [dbo].[Country] VALUES ('AT','Austria')
 INSERT INTO [dbo].[Country] VALUES ('AU','Australia')
 INSERT INTO [dbo].[Country] VALUES ('AW','Aruba')
 INSERT INTO [dbo].[Country] VALUES ('AZ','Azerbaijan')
-INSERT INTO [dbo].[Country] VALUES ('BA','Bosnia and Herzegovina')
+INSERT INTO [dbo].[Country] VALUES ('BA','Bosnia and Herzevina')
 INSERT INTO [dbo].[Country] VALUES ('BB','Barbados')
 INSERT INTO [dbo].[Country] VALUES ('BD','Bangladesh')
 INSERT INTO [dbo].[Country] VALUES ('BE','Belgium')
@@ -258,7 +269,7 @@ INSERT INTO [dbo].[Country] VALUES ('BZ','Belize')
 INSERT INTO [dbo].[Country] VALUES ('CA','Canada')
 INSERT INTO [dbo].[Country] VALUES ('CC','Cocos (Keeling) Islands')
 INSERT INTO [dbo].[Country] VALUES ('CF','Central African Republic')
-INSERT INTO [dbo].[Country] VALUES ('CG','Congo')
+INSERT INTO [dbo].[Country] VALUES ('CG','Con')
 INSERT INTO [dbo].[Country] VALUES ('CH','Switzerland')
 INSERT INTO [dbo].[Country] VALUES ('CI','Ivory Coast')
 INSERT INTO [dbo].[Country] VALUES ('CK','Cook Islands')
@@ -363,7 +374,7 @@ INSERT INTO [dbo].[Country] VALUES ('MH','Marshall Islands')
 INSERT INTO [dbo].[Country] VALUES ('MK','Macedonia')
 INSERT INTO [dbo].[Country] VALUES ('ML','Mali')
 INSERT INTO [dbo].[Country] VALUES ('MM','Myanmar')
-INSERT INTO [dbo].[Country] VALUES ('MN','Mongolia')
+INSERT INTO [dbo].[Country] VALUES ('MN','Monlia')
 INSERT INTO [dbo].[Country] VALUES ('MO','Macau')
 INSERT INTO [dbo].[Country] VALUES ('MP','Northern Mariana Islands')
 INSERT INTO [dbo].[Country] VALUES ('MQ','Martinique')
@@ -431,7 +442,7 @@ INSERT INTO [dbo].[Country] VALUES ('SZ','Swaziland')
 INSERT INTO [dbo].[Country] VALUES ('TC','Turks and Caicos Islands')
 INSERT INTO [dbo].[Country] VALUES ('TD','Chad')
 INSERT INTO [dbo].[Country] VALUES ('TF','French Southern Territories')
-INSERT INTO [dbo].[Country] VALUES ('TG','Togo')
+INSERT INTO [dbo].[Country] VALUES ('TG','To')
 INSERT INTO [dbo].[Country] VALUES ('TH','Thailand')
 INSERT INTO [dbo].[Country] VALUES ('TJ','Tajikistan')
 INSERT INTO [dbo].[Country] VALUES ('TK','Tokelau')
@@ -440,7 +451,7 @@ INSERT INTO [dbo].[Country] VALUES ('TN','Tunisia')
 INSERT INTO [dbo].[Country] VALUES ('TO','Tonga')
 INSERT INTO [dbo].[Country] VALUES ('TP','East Timor')
 INSERT INTO [dbo].[Country] VALUES ('TR','Turkey')
-INSERT INTO [dbo].[Country] VALUES ('TT','Trinidad and Tobago')
+INSERT INTO [dbo].[Country] VALUES ('TT','Trinidad and Toba')
 INSERT INTO [dbo].[Country] VALUES ('TV','Tuvalu')
 INSERT INTO [dbo].[Country] VALUES ('TW','Taiwan')
 INSERT INTO [dbo].[Country] VALUES ('TY','Mayotte')
@@ -472,6 +483,7 @@ GO
 CREATE SCHEMA [Identity]
 GO
 
+
 CREATE TABLE [Identity].[ApiResources] (
     [Id] int NOT NULL IDENTITY,
     [Enabled] bit NOT NULL,
@@ -487,7 +499,11 @@ CREATE TABLE [Identity].[ApiResources] (
     CONSTRAINT [PK_ApiResources] PRIMARY KEY ([Id])
 );
 
-GO
+INSERT INTO [Identity].ApiResources (Enabled, Name, DisplayName, Description, AllowedAccessTokenSigningAlgorithms, ShowInDiscoveryDocument, Created, Updated, LastAccessed, NonEditable)
+VALUES (1, 'openid', 'openid', 'Open ID', 0, 1, GETDATE(), NULL, NULL, 0),
+(1, 'mylibrarywebsite', 'My Library Website', 'My Library Website', 0, 1, GETDATE(), NULL, NULL, 0)
+
+
 
 CREATE TABLE [Identity].[ApiScopes] (
     [Id] int NOT NULL IDENTITY,
@@ -501,7 +517,14 @@ CREATE TABLE [Identity].[ApiScopes] (
     CONSTRAINT [PK_ApiScopes] PRIMARY KEY ([Id])
 );
 
-GO
+
+
+INSERT INTO [Identity].ApiScopes (Description, DisplayName, Emphasize, Enabled, Name, Required, ShowInDiscoveryDocument)
+VALUES ('Provides access to the My Library Web API', 'My Library API', 0, 1, 'mylibraryapi', 0, 1),
+('Provides access to user claims', 'User Claims', 0, 1, 'claims', 0, 1),
+('Provides access to user profiles', 'User Profiles', 0, 1, 'profile', 0, 1),
+('Provides access to openid', 'Open ID', 0, 1, 'openid', 0, 1)
+
 
 CREATE TABLE [Identity].[Clients] (
     [Id] int NOT NULL IDENTITY,
@@ -512,7 +535,7 @@ CREATE TABLE [Identity].[Clients] (
     [ClientName] nvarchar(200) NULL,
     [Description] nvarchar(1000) NULL,
     [ClientUri] nvarchar(2000) NULL,
-    [LogoUri] nvarchar(2000) NULL,
+    [LogoURI] nvarchar(2000) NULL,
     [RequireConsent] bit NOT NULL,
     [AllowRememberConsent] bit NOT NULL,
     [AlwaysIncludeUserClaimsInIdToken] bit NOT NULL,
@@ -551,7 +574,103 @@ CREATE TABLE [Identity].[Clients] (
     CONSTRAINT [PK_Clients] PRIMARY KEY ([Id])
 );
 
-GO
+
+
+INSERT INTO [Identity].[Clients]
+           ([Enabled]
+           ,[ClientId]
+           ,[ProtocolType]
+           ,[RequireClientSecret]
+           ,[ClientName]
+           ,[Description]
+           ,[ClientUri]
+           ,[LogoUri]
+           ,[RequireConsent]
+           ,[AllowRememberConsent]
+           ,[AlwaysIncludeUserClaimsInIdToken]
+           ,[RequirePkce]
+           ,[AllowPlainTextPkce]
+           ,[RequireRequestObject]
+           ,[AllowAccessTokensViaBrowser]
+           ,[FrontChannelLogoutUri]
+           ,[FrontChannelLogoutSessionRequired]
+           ,[BackChannelLogoutUri]
+           ,[BackChannelLogoutSessionRequired]
+           ,[AllowOfflineAccess]
+           ,[IdentityTokenLifetime]
+           ,[AllowedIdentityTokenSigningAlgorithms]
+           ,[AccessTokenLifetime]
+           ,[AuthorizationCodeLifetime]
+           ,[ConsentLifetime]
+           ,[AbsoluteRefreshTokenLifetime]
+           ,[SlidingRefreshTokenLifetime]
+           ,[RefreshTokenUsage]
+           ,[UpdateAccessTokenClaimsOnRefresh]
+           ,[RefreshTokenExpiration]
+           ,[AccessTokenType]
+           ,[EnableLocalLogin]
+           ,[IncludeJwtId]
+           ,[AlwaysSendClientClaims]
+           ,[ClientClaimsPrefix]
+           ,[PairWiseSubjectSalt]
+           ,[Created]
+           ,[Updated]
+           ,[LastAccessed]
+           ,[UserSsoLifetime]
+           ,[UserCodeType]
+           ,[DeviceCodeLifetime]
+           ,[NonEditable])
+     VALUES
+           (1
+           ,'mylibrarywebapp'
+           ,'oidc'
+           ,1
+           ,'My Library Web App'
+           ,'My Library Web App'
+           ,'http://localhost:3000'
+           ,NULL
+           ,0
+           ,0
+           ,1
+           ,1
+           ,0
+           ,0
+           ,1
+           ,'http://localhost:3000/logout'
+           ,1
+           ,NULL
+           ,0
+           ,0
+           ,6000
+           ,NULL
+           ,6000
+           ,6000
+           ,6000
+           ,6000
+           ,6000
+           ,6000
+           ,1
+           ,6000
+           ,0
+           ,1
+           ,1
+           ,1
+           ,NULL
+           ,NULL
+           ,GETDATE()
+           ,NULL
+           ,NULL
+           ,NULL
+           ,NULL
+           ,6000
+           ,0)
+
+	DECLARE @ClientID INT
+
+	SELECT @ClientID = Id
+	FROM [Identity].Clients 
+	WHERE ClientId = 'mylibrarywebapp'
+
 
 CREATE TABLE [Identity].[IdentityResources] (
     [Id] int NOT NULL IDENTITY,
@@ -568,7 +687,8 @@ CREATE TABLE [Identity].[IdentityResources] (
     CONSTRAINT [PK_IdentityResources] PRIMARY KEY ([Id])
 );
 
-GO
+----INSERT INTO [Identity].IdentityResources (Created, Description, 
+
 
 CREATE TABLE [Identity].[ApiResourceClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -578,7 +698,7 @@ CREATE TABLE [Identity].[ApiResourceClaims] (
     CONSTRAINT [FK_ApiResourceClaims_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [Identity].[ApiResources] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ApiResourceProperties] (
     [Id] int NOT NULL IDENTITY,
@@ -589,7 +709,7 @@ CREATE TABLE [Identity].[ApiResourceProperties] (
     CONSTRAINT [FK_ApiResourceProperties_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [Identity].[ApiResources] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ApiResourceScopes] (
     [Id] int NOT NULL IDENTITY,
@@ -599,7 +719,7 @@ CREATE TABLE [Identity].[ApiResourceScopes] (
     CONSTRAINT [FK_ApiResourceScopes_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [Identity].[ApiResources] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ApiResourceSecrets] (
     [Id] int NOT NULL IDENTITY,
@@ -613,7 +733,7 @@ CREATE TABLE [Identity].[ApiResourceSecrets] (
     CONSTRAINT [FK_ApiResourceSecrets_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [Identity].[ApiResources] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ApiScopeClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -623,7 +743,7 @@ CREATE TABLE [Identity].[ApiScopeClaims] (
     CONSTRAINT [FK_ApiScopeClaims_ApiScopes_ScopeId] FOREIGN KEY ([ScopeId]) REFERENCES [Identity].[ApiScopes] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ApiScopeProperties] (
     [Id] int NOT NULL IDENTITY,
@@ -634,7 +754,7 @@ CREATE TABLE [Identity].[ApiScopeProperties] (
     CONSTRAINT [FK_ApiScopeProperties_ApiScopes_ScopeId] FOREIGN KEY ([ScopeId]) REFERENCES [Identity].[ApiScopes] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ClientClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -645,7 +765,7 @@ CREATE TABLE [Identity].[ClientClaims] (
     CONSTRAINT [FK_ClientClaims_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ClientCorsOrigins] (
     [Id] int NOT NULL IDENTITY,
@@ -655,7 +775,7 @@ CREATE TABLE [Identity].[ClientCorsOrigins] (
     CONSTRAINT [FK_ClientCorsOrigins_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ClientGrantTypes] (
     [Id] int NOT NULL IDENTITY,
@@ -665,7 +785,12 @@ CREATE TABLE [Identity].[ClientGrantTypes] (
     CONSTRAINT [FK_ClientGrantTypes_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
+
+INSERT INTO [Identity].[ClientGrantTypes] (GrantType, ClientId)
+VALUES ('password', @ClientID),
+('client_credentials', @ClientID),
+('implicit', @ClientID)
 
 CREATE TABLE [Identity].[ClientIdPRestrictions] (
     [Id] int NOT NULL IDENTITY,
@@ -675,17 +800,17 @@ CREATE TABLE [Identity].[ClientIdPRestrictions] (
     CONSTRAINT [FK_ClientIdPRestrictions_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
 
-CREATE TABLE [Identity].[ClientPostLogoutRedirectUris] (
+
+CREATE TABLE [Identity].[ClientPostLoutRedirectUris] (
     [Id] int NOT NULL IDENTITY,
     [PostLogoutRedirectUri] nvarchar(2000) NOT NULL,
     [ClientId] int NOT NULL,
-    CONSTRAINT [PK_ClientPostLogoutRedirectUris] PRIMARY KEY ([Id]),
-    CONSTRAINT [FK_ClientPostLogoutRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [PK_ClientPostLoutRedirectUris] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClientPostLoutRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[ClientProperties] (
     [Id] int NOT NULL IDENTITY,
@@ -696,7 +821,8 @@ CREATE TABLE [Identity].[ClientProperties] (
     CONSTRAINT [FK_ClientProperties_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
+
 
 CREATE TABLE [Identity].[ClientRedirectUris] (
     [Id] int NOT NULL IDENTITY,
@@ -706,7 +832,11 @@ CREATE TABLE [Identity].[ClientRedirectUris] (
     CONSTRAINT [FK_ClientRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
+
+INSERT INTO [Identity].ClientRedirectUris (ClientId, RedirectUri)
+VALUES (@ClientID, 'http://localhost:3000/callback')
+
 
 CREATE TABLE [Identity].[ClientScopes] (
     [Id] int NOT NULL IDENTITY,
@@ -716,7 +846,14 @@ CREATE TABLE [Identity].[ClientScopes] (
     CONSTRAINT [FK_ClientScopes_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
+
+INSERT INTO [Identity].ClientScopes (ClientId, Scope)
+VALUES (@ClientID, 'openid'),
+(@ClientID, 'profile'),
+(@ClientID, 'claims'),
+(@ClientID, 'mylibraryapi')
+
 
 CREATE TABLE [Identity].[ClientSecrets] (
     [Id] int NOT NULL IDENTITY,
@@ -730,7 +867,11 @@ CREATE TABLE [Identity].[ClientSecrets] (
     CONSTRAINT [FK_ClientSecrets_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
+
+INSERT INTO [Identity].ClientSecrets (ClientId, Created, Description, Expiration, Type, Value)
+VALUES (@ClientID, GETDATE(), 'mylibrarywebsite', NULL, 'SharedSecret', '979eb386dc9a387d614b72902e44f5cb295636d71f829d2afccff401eb794bd6')
+
 
 CREATE TABLE [Identity].[IdentityResourceClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -740,7 +881,7 @@ CREATE TABLE [Identity].[IdentityResourceClaims] (
     CONSTRAINT [FK_IdentityResourceClaims_IdentityResources_IdentityResourceId] FOREIGN KEY ([IdentityResourceId]) REFERENCES [Identity].[IdentityResources] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE TABLE [Identity].[IdentityResourceProperties] (
     [Id] int NOT NULL IDENTITY,
@@ -751,91 +892,91 @@ CREATE TABLE [Identity].[IdentityResourceProperties] (
     CONSTRAINT [FK_IdentityResourceProperties_IdentityResources_IdentityResourceId] FOREIGN KEY ([IdentityResourceId]) REFERENCES [Identity].[IdentityResources] ([Id]) ON DELETE CASCADE
 );
 
-GO
+
 
 CREATE INDEX [IX_ApiResourceClaims_ApiResourceId] ON [Identity].[ApiResourceClaims] ([ApiResourceId]);
 
-GO
+
 
 CREATE INDEX [IX_ApiResourceProperties_ApiResourceId] ON [Identity].[ApiResourceProperties] ([ApiResourceId]);
 
-GO
+
 
 CREATE UNIQUE INDEX [IX_ApiResources_Name] ON [Identity].[ApiResources] ([Name]);
 
-GO
+
 
 CREATE INDEX [IX_ApiResourceScopes_ApiResourceId] ON [Identity].[ApiResourceScopes] ([ApiResourceId]);
 
-GO
+
 
 CREATE INDEX [IX_ApiResourceSecrets_ApiResourceId] ON [Identity].[ApiResourceSecrets] ([ApiResourceId]);
 
-GO
+
 
 CREATE INDEX [IX_ApiScopeClaims_ScopeId] ON [Identity].[ApiScopeClaims] ([ScopeId]);
 
-GO
+
 
 CREATE INDEX [IX_ApiScopeProperties_ScopeId] ON [Identity].[ApiScopeProperties] ([ScopeId]);
 
-GO
+
 
 CREATE UNIQUE INDEX [IX_ApiScopes_Name] ON [Identity].[ApiScopes] ([Name]);
 
-GO
+
 
 CREATE INDEX [IX_ClientClaims_ClientId] ON [Identity].[ClientClaims] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_ClientCorsOrigins_ClientId] ON [Identity].[ClientCorsOrigins] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_ClientGrantTypes_ClientId] ON [Identity].[ClientGrantTypes] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_ClientIdPRestrictions_ClientId] ON [Identity].[ClientIdPRestrictions] ([ClientId]);
 
-GO
 
-CREATE INDEX [IX_ClientPostLogoutRedirectUris_ClientId] ON [Identity].[ClientPostLogoutRedirectUris] ([ClientId]);
 
-GO
+CREATE INDEX [IX_ClientPostLoutRedirectUris_ClientId] ON [Identity].[ClientPostLoutRedirectUris] ([ClientId]);
+
+
 
 CREATE INDEX [IX_ClientProperties_ClientId] ON [Identity].[ClientProperties] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_ClientRedirectUris_ClientId] ON [Identity].[ClientRedirectUris] ([ClientId]);
 
-GO
+
 
 CREATE UNIQUE INDEX [IX_Clients_ClientId] ON [Identity].[Clients] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_ClientScopes_ClientId] ON [Identity].[ClientScopes] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_ClientSecrets_ClientId] ON [Identity].[ClientSecrets] ([ClientId]);
 
-GO
+
 
 CREATE INDEX [IX_IdentityResourceClaims_IdentityResourceId] ON [Identity].[IdentityResourceClaims] ([IdentityResourceId]);
 
-GO
+
 
 CREATE INDEX [IX_IdentityResourceProperties_IdentityResourceId] ON [Identity].[IdentityResourceProperties] ([IdentityResourceId]);
 
-GO
+
 
 CREATE UNIQUE INDEX [IX_IdentityResources_Name] ON [Identity].[IdentityResources] ([Name]);
 
-GO
+
 
 CREATE TABLE [Identity].[DeviceCodes] (
     [UserCode] nvarchar(200) NOT NULL,
@@ -850,7 +991,7 @@ CREATE TABLE [Identity].[DeviceCodes] (
     CONSTRAINT [PK_DeviceCodes] PRIMARY KEY ([UserCode])
 );
 
-GO
+
 
 CREATE TABLE [Identity].[PersistedGrants] (
     [Key] nvarchar(200) NOT NULL,
@@ -866,24 +1007,24 @@ CREATE TABLE [Identity].[PersistedGrants] (
     CONSTRAINT [PK_PersistedGrants] PRIMARY KEY ([Key])
 );
 
-GO
+
 
 CREATE UNIQUE INDEX [IX_DeviceCodes_DeviceCode] ON [Identity].[DeviceCodes] ([DeviceCode]);
 
-GO
+
 
 CREATE INDEX [IX_DeviceCodes_Expiration] ON [Identity].[DeviceCodes] ([Expiration]);
 
-GO
+
 
 CREATE INDEX [IX_PersistedGrants_Expiration] ON [Identity].[PersistedGrants] ([Expiration]);
 
-GO
+
 
 CREATE INDEX [IX_PersistedGrants_SubjectId_ClientId_Type] ON [Identity].[PersistedGrants] ([SubjectId], [ClientId], [Type]);
 
-GO
+
 
 CREATE INDEX [IX_PersistedGrants_SubjectId_SessionId_Type] ON [Identity].[PersistedGrants] ([SubjectId], [SessionId], [Type]);
 
-GO
+
