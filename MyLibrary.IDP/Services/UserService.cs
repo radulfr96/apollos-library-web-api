@@ -116,7 +116,7 @@ namespace MyLibrary.IDP.Services
                 throw new Exception($"User with email address {email} can't be found.");
             }
 
-            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
+            using (var randomNumberGenerator = RandomNumberGenerator.Create())
             {
                 var securityCodeData = new byte[128];
                 randomNumberGenerator.GetBytes(securityCodeData);

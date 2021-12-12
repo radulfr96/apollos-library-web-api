@@ -63,7 +63,7 @@ namespace MyLibrary.IDP.UserRegistration
                 },
             };
 
-            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
+            using (var randomNumberGenerator = RandomNumberGenerator.Create())
             {
                 var codeData = new byte[128];
                 randomNumberGenerator.GetBytes(codeData);

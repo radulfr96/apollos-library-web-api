@@ -500,9 +500,14 @@ CREATE TABLE [Identity].[ApiResources] (
 );
 
 INSERT INTO [Identity].ApiResources (Enabled, Name, DisplayName, Description, AllowedAccessTokenSigningAlgorithms, ShowInDiscoveryDocument, Created, Updated, LastAccessed, NonEditable)
-VALUES (1, 'openid', 'openid', 'Open ID', 0, 1, GETDATE(), NULL, NULL, 0),
+VALUES (1, 'openid', 'Open ID', 'Open ID', 0, 1, GETDATE(), NULL, NULL, 0), 
 (1, 'mylibrarywebsite', 'My Library Website', 'My Library Website', 0, 1, GETDATE(), NULL, NULL, 0)
 
+DECLARE @ResourceID INT
+
+SELECT @ResourceID = Id
+FROM [Identity].ApiResources
+WHERE [Name] = 'openid'
 
 
 CREATE TABLE [Identity].[ApiScopes] (
@@ -520,10 +525,7 @@ CREATE TABLE [Identity].[ApiScopes] (
 
 
 INSERT INTO [Identity].ApiScopes (Description, DisplayName, Emphasize, Enabled, Name, Required, ShowInDiscoveryDocument)
-VALUES ('Provides access to the My Library Web API', 'My Library API', 0, 1, 'mylibraryapi', 0, 1),
-('Provides access to user claims', 'User Claims', 0, 1, 'claims', 0, 1),
-('Provides access to user profiles', 'User Profiles', 0, 1, 'profile', 0, 1),
-('Provides access to openid', 'Open ID', 0, 1, 'openid', 0, 1)
+VALUES ('Provides access to the My Library Web API', 'My Library API', 0, 1, 'mylibraryapi', 0, 1)
 
 
 CREATE TABLE [Identity].[Clients] (
@@ -639,8 +641,8 @@ INSERT INTO [Identity].[Clients]
            ,'http://localhost:3000/logout'
            ,1
            ,NULL
-           ,0
-           ,0
+           ,1
+           ,1
            ,6000
            ,NULL
            ,6000
@@ -685,10 +687,12 @@ CREATE TABLE [Identity].[IdentityResources] (
     [Updated] datetime2 NULL,
     [NonEditable] bit NOT NULL,
     CONSTRAINT [PK_IdentityResources] PRIMARY KEY ([Id])
-);
+); 
 
-----INSERT INTO [Identity].IdentityResources (Created, Description, 
-
+INSERT INTO [Identity].IdentityResources (Created, Description, DisplayName, Emphasize, Enabled, Name, NonEditable, Required, ShowInDiscoveryDocument, Updated)
+VALUES (GETDATE(), 'openid', 'Open ID', 0, 1, 'openid', 0, 1, 1, NULL)
+, (GETDATE(), 'User claims', 'User Claims', 0, 1, 'claims', 0, 1, 1, NULL)
+, (GETDATE(), 'profile', 'User Profile', 0, 1, 'profile', 0, 1, 1, NULL)
 
 CREATE TABLE [Identity].[ApiResourceClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -698,7 +702,9 @@ CREATE TABLE [Identity].[ApiResourceClaims] (
     CONSTRAINT [FK_ApiResourceClaims_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [Identity].[ApiResources] ([Id]) ON DELETE CASCADE
 );
 
-
+INSERT INTO [Identity].ApiResourceClaims (ApiResourceId, Type)
+VALUES (@ResourceID, 'role'),
+(@ResourceID, 'username')
 
 CREATE TABLE [Identity].[ApiResourceProperties] (
     [Id] int NOT NULL IDENTITY,
@@ -802,7 +808,7 @@ CREATE TABLE [Identity].[ClientIdPRestrictions] (
 
 
 
-CREATE TABLE [Identity].[ClientPostLoutRedirectUris] (
+CREATE TABLE [Identity].[ClientPostLogoutRedirectUris] (
     [Id] int NOT NULL IDENTITY,
     [PostLogoutRedirectUri] nvarchar(2000) NOT NULL,
     [ClientId] int NOT NULL,
@@ -831,8 +837,6 @@ CREATE TABLE [Identity].[ClientRedirectUris] (
     CONSTRAINT [PK_ClientRedirectUris] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_ClientRedirectUris_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
-
-
 
 INSERT INTO [Identity].ClientRedirectUris (ClientId, RedirectUri)
 VALUES (@ClientID, 'http://localhost:3000/callback')
@@ -942,7 +946,7 @@ CREATE INDEX [IX_ClientIdPRestrictions_ClientId] ON [Identity].[ClientIdPRestric
 
 
 
-CREATE INDEX [IX_ClientPostLoutRedirectUris_ClientId] ON [Identity].[ClientPostLoutRedirectUris] ([ClientId]);
+CREATE INDEX [IX_ClientPostLogoutRedirectUris_ClientId] ON [Identity].[ClientPostLogoutRedirectUris] ([ClientId]);
 
 
 

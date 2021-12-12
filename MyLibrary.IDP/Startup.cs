@@ -54,8 +54,6 @@ namespace MyLibrary.IDP
                 options.EmitStaticAudienceClaim = true;
             });
 
-            builder.AddProfileService<ProfileService>();
-
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
@@ -63,7 +61,8 @@ namespace MyLibrary.IDP
                 .AddResourceStore<ResourceStore>()
                 .AddClientStore<ClientStore>()
                 .AddDeviceFlowStore<DeviceFlowStore>()
-                .AddPersistedGrantStore<PersistedGrantStore>();
+                .AddPersistedGrantStore<PersistedGrantStore>()
+                .AddProfileService<ProfileService>();
             //.AddConfigurationStore(options =>
             //{
             //    options.ConfigureDbContext = builder =>

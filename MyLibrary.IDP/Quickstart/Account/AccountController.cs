@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using AutoMapper;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -35,19 +36,22 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private readonly IMapper _mapper;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            IUserService userService)
+            IUserService userService,
+            IMapper mapper)
         {
             _userService = userService;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -128,7 +132,7 @@ namespace IdentityServerHost.Quickstart.UI
                     // issue authentication cookie with subject ID and username
                     var isuser = new IdentityServerUser(user.Subject)
                     {
-                        DisplayName = user.Username
+                        DisplayName = user.Username, 
                     };
 
                     await HttpContext.SignInAsync(isuser, props);
