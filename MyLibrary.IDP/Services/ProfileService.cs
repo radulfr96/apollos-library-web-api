@@ -24,7 +24,7 @@ namespace MyLibrary.IDP.Services
 
             var claims = await _userService.GetUserClaimsBySubject(subjectId);
 
-            context.AddRequestedClaims(claims.Select(c => new Claim(c.Type, c.Value)));
+            context.IssuedClaims.AddRange(claims.Select(c => new Claim(c.Type, c.Value)));
         }
 
         public async Task IsActiveAsync(IsActiveContext context)

@@ -693,6 +693,8 @@ INSERT INTO [Identity].IdentityResources (Created, Description, DisplayName, Emp
 VALUES (GETDATE(), 'openid', 'Open ID', 0, 1, 'openid', 0, 1, 1, NULL)
 , (GETDATE(), 'User claims', 'User Claims', 0, 1, 'claims', 0, 1, 1, NULL)
 , (GETDATE(), 'profile', 'User Profile', 0, 1, 'profile', 0, 1, 1, NULL)
+,(GETDATE(), 'User role', 'User Role', 0, 1, 'role', 0, 1, 1, NULL)
+,(GETDATE(), 'User username', 'Username', 0, 1, 'username', 0, 1, 1, NULL)
 
 CREATE TABLE [Identity].[ApiResourceClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -724,8 +726,6 @@ CREATE TABLE [Identity].[ApiResourceScopes] (
     CONSTRAINT [PK_ApiResourceScopes] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_ApiResourceScopes_ApiResources_ApiResourceId] FOREIGN KEY ([ApiResourceId]) REFERENCES [Identity].[ApiResources] ([Id]) ON DELETE CASCADE
 );
-
-
 
 CREATE TABLE [Identity].[ApiResourceSecrets] (
     [Id] int NOT NULL IDENTITY,
@@ -855,8 +855,9 @@ CREATE TABLE [Identity].[ClientScopes] (
 INSERT INTO [Identity].ClientScopes (ClientId, Scope)
 VALUES (@ClientID, 'openid'),
 (@ClientID, 'profile'),
-(@ClientID, 'claims'),
-(@ClientID, 'mylibraryapi')
+(@ClientID, 'mylibraryapi'),
+(@ClientID, 'role'),
+(@ClientID, 'username')
 
 
 CREATE TABLE [Identity].[ClientSecrets] (
