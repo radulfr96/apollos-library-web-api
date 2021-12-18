@@ -1,10 +1,10 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using MyLibrary.Application.Common.DTOs;
 using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Common.Functions;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.UnitOfWork.Contracts;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
         private readonly Hasher _hasher;
         private readonly ILogger _logger;
 
-        public UpdateUserCommandHandler(IUserUnitOfWork userUnitOfWork, IUserService userService, IDateTimeService dateTimeService, ILogger logger)
+        public UpdateUserCommandHandler(IUserUnitOfWork userUnitOfWork, IUserService userService, IDateTimeService dateTimeService, ILogger<UpdateUserCommandHandler> logger)
         {
             _userUnitOfWork = userUnitOfWork;
             _userService = userService;
@@ -55,7 +55,7 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
 
             if (user == null)
             {
-                _logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
+                _logger.LogWarning($"Unable to find as user with id [ {request.UserID} ]");
                 throw new UserNotFoundException("Update unsuccessful user not found");
             }
 
