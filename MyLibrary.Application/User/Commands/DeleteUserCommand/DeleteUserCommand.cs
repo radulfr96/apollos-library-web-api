@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MyLibrary.Application.Common.Exceptions;
-using MyLibrary.Contracts.UnitOfWork;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +28,16 @@ namespace MyLibrary.Application.User.Commands.DeleteUserCommand
         {
             var response = new DeleteUserCommandDto();
 
-            //var user = await _userUnitOfWork.UserDataLayer.GetUser(command.UserId);
+            var user = await _userUnitOfWork.UserDataLayer.GetUser(command.UserId);
 
-            //if (user == null)
-            //{
-            //    throw new UserNotFoundException($"Unable to delete user with id [{command.UserId}]");
-            //}
+            if (user == null)
+            {
+                throw new UserNotFoundException($"Unable to delete user with id [{command.UserId}]");
+            }
 
-            //user.IsActive = false;
+            user.IsActive = false;
 
-            //await _userUnitOfWork.Save();
+            await _userUnitOfWork.Save();
 
             return response;
         }

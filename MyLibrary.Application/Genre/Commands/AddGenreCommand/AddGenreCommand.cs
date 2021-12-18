@@ -38,7 +38,7 @@ namespace MyLibrary.Application.Genre.Commands.AddGenreCommand
             {
                 Name = command.Name,
                 CreatedDate = _dateTimeService.Now,
-                CreatedBy = _userService.GetUserID(),
+                CreatedBy = _userService.GetUserId(),
             };
 
             await _genreUnitOfWork.GenreDataLayer.AddGenre(genre);

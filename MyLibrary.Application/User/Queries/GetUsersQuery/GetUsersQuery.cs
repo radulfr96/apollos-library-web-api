@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MyLibrary.Application.Common.DTOs;
-using MyLibrary.Contracts.UnitOfWork;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,19 +27,19 @@ namespace MyLibrary.Application.User.Queries.GetUsersQuery
         {
             var response = new GetUsersQueryDto();
 
-            //var users = await _userUnitOfWork.UserDataLayer.GetUsers();
+            var users = await _userUnitOfWork.UserDataLayer.GetUsers();
 
-            //if (users.Count == 0)
-            //{
-            //    return response;
-            //}
+            if (users.Count == 0)
+            {
+                return response;
+            }
 
-            //response.Users = users.Select(u => new UserDTO()
-            //{
-            //    UserID = u.UserId,
-            //    IsActive = u.IsActive ? "Active" : "Inactive",
-            //    Username = u.Username,
-            //}).ToList();
+            response.Users = users.Select(u => new UserDTO()
+            {
+                UserID = u.UserId,
+                IsActive = u.IsActive ? "Active" : "Inactive",
+                Username = u.Username,
+            }).ToList();
 
             return response;
         }

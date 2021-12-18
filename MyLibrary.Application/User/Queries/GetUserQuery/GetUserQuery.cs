@@ -1,7 +1,5 @@
 ﻿using MediatR;
-using MyLibrary.Application.Common.DTOs;
-using MyLibrary.Application.Common.Exceptions;
-using MyLibrary.Contracts.UnitOfWork;
+using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

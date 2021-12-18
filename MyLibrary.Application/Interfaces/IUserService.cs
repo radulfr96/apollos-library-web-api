@@ -8,6 +8,6 @@ namespace MyLibrary.Application.Interfaces
 {
     public interface IUserService
     {
-        Guid GetUserID();
+        Guid GetUserId();
     }
 }

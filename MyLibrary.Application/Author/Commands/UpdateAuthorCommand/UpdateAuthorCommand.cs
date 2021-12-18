@@ -59,7 +59,7 @@ namespace MyLibrary.Application.Author.Commands.UpdateAuthorCommand
             author.LastName = command.Lastname;
             author.CountryId = command.CountryID;
             author.Description = command.Description;
-            author.ModifiedBy = _userService.GetUserID();
+            author.ModifiedBy = _userService.GetUserId();
             author.ModifiedDate = _dateTimeService.Now;
 
             await _authorUnitOfWork.Save();

@@ -91,6 +91,11 @@ namespace MyLibrary.WebApi
                 return new ReferenceUnitOfWork(context);
             });
 
+            services.AddTransient<IUserUnitOfWork>(p =>
+            {
+                return new UserUnitOfWork(context);
+            });
+
             services.AddTransient<IUserService>(p =>
             {
                 return new UserService();

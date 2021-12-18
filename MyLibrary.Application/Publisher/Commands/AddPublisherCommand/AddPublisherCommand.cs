@@ -54,7 +54,7 @@ namespace MyLibrary.Application.Publisher.Commands.AddPublisherCommand
 
             var publisher = new Persistence.Model.Publisher()
             {
-                CreatedBy = _userService.GetUserID(),
+                CreatedBy = _userService.GetUserId(),
                 CreatedDate = _dateTimeService.Now,
                 City = command.City,
                 CountryId = command.CountryID,

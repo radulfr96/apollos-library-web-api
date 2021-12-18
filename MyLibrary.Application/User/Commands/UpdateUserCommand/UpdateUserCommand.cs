@@ -3,8 +3,7 @@ using MyLibrary.Application.Common.DTOs;
 using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.Application.Common.Functions;
 using MyLibrary.Application.Interfaces;
-using MyLibrary.Contracts.UnitOfWork;
-using MyLibrary.Persistence.Model;
+using MyLibrary.UnitOfWork.Contracts;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -45,32 +44,32 @@ namespace MyLibrary.Application.User.Commands.UpdateUserCommand
         {
             var response = new UpdateUserCommandDto();
 
-            //var userWithUsername = await _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
+            var userWithUsername = await _userUnitOfWork.UserDataLayer.GetUserByUsername(request.Username);
 
-            //if (userWithUsername != null && request.UserID != userWithUsername.UserId)
-            //{
-            //    throw new UsernameTakenException("Username is already taken");
-            //}
+            if (userWithUsername != null && request.UserID != userWithUsername.UserId)
+            {
+                throw new UsernameTakenException("Username is already taken");
+            }
 
-            //var user = await _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
+            var user = await _userUnitOfWork.UserDataLayer.GetUser(request.UserID);
 
-            //if (user == null)
-            //{
-            //    _logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
-            //     throw new UserNotFoundException("Update unsuccessful user not found");
-            //}
+            if (user == null)
+            {
+                _logger.Warn($"Unable to find as user with id [ {request.UserID} ]");
+                throw new UserNotFoundException("Update unsuccessful user not found");
+            }
 
-            //user.Username = request.Username;
+            user.Username = request.Username;
 
-            //if (!string.IsNullOrEmpty(request.Password))
-            //{
-            //    user.Password = _hasher.HashPassword(request.Password);
-            //}
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                user.Password = _hasher.HashPassword(request.Password);
+            }
 
-            //user.ModifiedBy = _userService.GetUserId();
-            //user.ModifiedDate = _dateTimeService.Now;
+            user.ModifiedBy = _userService.GetUserId();
+            user.ModifiedDate = _dateTimeService.Now;
 
-            //await _userUnitOfWork.Save();
+            await _userUnitOfWork.Save();
 
             return response;
         }
