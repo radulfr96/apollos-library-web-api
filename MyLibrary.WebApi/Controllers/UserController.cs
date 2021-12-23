@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyLibrary.Application.User.Commands.UpdateSelfUserCommand;
 using MyLibrary.Application.User.Queries.GetUserQuery;
 using MyLibrary.Application.User.Queries.GetUsersQuery;
 using System.Threading.Tasks;
@@ -38,6 +39,31 @@ namespace MyLibrary.WebApi.Controllers
         public async Task<GetUserQueryDto> GetUser([FromBody] GetUserQuery query)
         {
             return await _mediator.Send(query);
+        }
+
+        /// <summary>
+        /// Used by the user to update themself
+        /// </summary>
+        /// <param name="command">the command with the user data</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPatch("selfupdate")]
+        public async Task<UpdateSelfUserCommandDto> UpdateSelf([FromBody] UpdateSelfUserCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        /// <summary>
+        /// Used to get a specific user
+        /// </summary>
+        /// <param name="username">the username to be checked</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("checkselfusername/{username}")]
+        public async Task<UpdateSelfUserCommandDto> CheckUsernameIsUniqueSelf([FromRoute] string username)
+        {
+            return await _mediator.Send(new UpdateSelfUserCommand()
+            {
+                Username = username,
+            });
         }
     }
 }

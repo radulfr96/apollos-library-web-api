@@ -145,8 +145,10 @@ namespace MyLibrary.WebApi
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateAudience = false
+                    ValidateAudience = false,
                 };
+
+                options.SaveToken = true;
             });
         }
 
