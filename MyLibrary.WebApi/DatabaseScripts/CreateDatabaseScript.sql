@@ -205,23 +205,23 @@ DECLARE @UserID UNIQUEIDENTIFIER
 
 
 INSERT INTO [Users].[User] ([UserID], [Subject], [Username], [Password], [CreatedDate], [CreatedBy], [IsActive])
-VALUES (NEWID(), 'Administrator', 'wados.russell70@gmail.com', 'AQAAAAEAACcQAAAAECY64tCZ5CSbcXzOp4NE6XAr1TB9wQ1zgMv6Sa49QGTmEftnFXzPMsBH+NB1cu5brw==', GETDATE(), NEWID(), 1)
+VALUES (NEWID(), NEWID(), 'radulfr', 'AQAAAAEAACcQAAAAECY64tCZ5CSbcXzOp4NE6XAr1TB9wQ1zgMv6Sa49QGTmEftnFXzPMsBH+NB1cu5brw==', GETDATE(), NEWID(), 1)
 
 SELECT @UserID = U.UserID
 FROM Users.[User] U
-WHERE U.Username = 'wados.russell70@gmail.com'
+WHERE U.Username = 'radulfr'
 
 INSERT INTO [Users].UserClaim (ID, UserID, Type, Value)
 VALUES (NEWID(), @UserID, 'role', 'administrator'),
 (NEWID(), @UserID, 'role', 'moderator'),
 (NEWID(), @UserID, 'role', 'freeaccount'),
-(NEWID(), @UserID, 'username', 'radulfr')
+(NEWID(), @UserID, 'email', 'wados.russell70@gmail.com')
 
 
 UPDATE U
 SET U.CreatedBy = U.UserID
 FROM Users.[User] U
-WHERE U.Username = 'wados.russell70@gmail.com'
+WHERE U.Username = 'radulfr'
 
 INSERT INTO [Book].PublicationFormat ([Name])
 VALUES ('Printed'), ('eBook'), ('Audio Book')
@@ -695,6 +695,7 @@ VALUES (GETDATE(), 'openid', 'Open ID', 0, 1, 'openid', 0, 1, 1, NULL)
 , (GETDATE(), 'profile', 'User Profile', 0, 1, 'profile', 0, 1, 1, NULL)
 ,(GETDATE(), 'User role', 'User Role', 0, 1, 'role', 0, 1, 1, NULL)
 ,(GETDATE(), 'User username', 'Username', 0, 1, 'username', 0, 1, 1, NULL)
+,(GETDATE(), 'User email', 'Email', 0, 1, 'email', 0, 1, 1, NULL)
 
 CREATE TABLE [Identity].[ApiResourceClaims] (
     [Id] int NOT NULL IDENTITY,
@@ -857,7 +858,8 @@ VALUES (@ClientID, 'openid'),
 (@ClientID, 'profile'),
 (@ClientID, 'mylibraryapi'),
 (@ClientID, 'role'),
-(@ClientID, 'username')
+(@ClientID, 'username'),
+(@ClientID, 'email')
 
 
 CREATE TABLE [Identity].[ClientSecrets] (

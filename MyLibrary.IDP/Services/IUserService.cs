@@ -11,6 +11,8 @@ namespace MyLibrary.IDP.Services
     {
         Task<User> GetUserByUsername(string username);
 
+        Task<User> GetUserByEmail(string username);
+
         Task<bool> ValidateCredentials(string username, string password);
 
         Task<List<UserClaim>> GetUserClaimsBySubject(string subject);

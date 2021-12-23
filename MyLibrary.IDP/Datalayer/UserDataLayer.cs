@@ -3,6 +3,7 @@ using MyLibrary.IDP.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MyLibrary.IDP.DataLayer
@@ -33,6 +34,25 @@ namespace MyLibrary.IDP.DataLayer
             if (user != null)
             {
                 user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
+                user.UserClaims.Add(new UserClaim() { Id = user.UserId, Value = username, Type = "username" });
+            }
+
+            return user;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == "email").FirstOrDefaultAsync();
+
+            if (emailClaim == null)
+                return null;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == emailClaim.UserId);
+
+            if (user != null)
+            {
+                user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
+                user.UserClaims.Add(new UserClaim() { Id = user.UserId, Value = user.Username, Type = "username" });
             }
 
             return user;
@@ -40,7 +60,15 @@ namespace MyLibrary.IDP.DataLayer
 
         public async Task<List<UserClaim>> GetUserClaimsBySubject(string subject)
         {
-            return await _context.UserClaims.Where(u => u.User.Subject == subject).ToListAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Subject == subject);
+
+            if (user == null)
+                return new List<UserClaim>();
+
+            var claims = await _context.UserClaims.Where(u => u.User.Subject == subject).ToListAsync();
+            claims.Add(new UserClaim() { Id = user.UserId, Value = user.Username, Type = "username" });
+
+            return claims;
         }
 
         public async Task<User> GetUserBySecurityCode(string securityCode)

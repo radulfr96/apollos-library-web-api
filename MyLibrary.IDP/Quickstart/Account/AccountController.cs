@@ -114,7 +114,7 @@ namespace IdentityServerHost.Quickstart.UI
                 // validate username/password against in-memory store
                 if (await _userService.ValidateCredentials(model.Email, model.Password))
                 {
-                    var user = await _userService.GetUserByUsername(model.Email);
+                    var user = await _userService.GetUserByEmail(model.Email);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.Subject, user.Username, clientId: context?.Client.ClientId));
 
                     // only set explicit expiration here if user chooses "remember me". 
@@ -132,7 +132,7 @@ namespace IdentityServerHost.Quickstart.UI
                     // issue authentication cookie with subject ID and username
                     var isuser = new IdentityServerUser(user.Subject)
                     {
-                        DisplayName = user.Username, 
+                        DisplayName = user.Username,
                     };
 
                     await HttpContext.SignInAsync(isuser, props);

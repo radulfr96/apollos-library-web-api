@@ -18,6 +18,13 @@ namespace MyLibrary.IDP.DataLayer
         Task<User> GetUserByUsername(string username);
 
         /// <summary>
+        /// Used to get a user by their email
+        /// </summary>
+        /// <param name="email">The users email</param>
+        /// <returns>The user with the email</returns>
+        Task<User> GetUserByEmail(string email);
+
+        /// <summary>
         /// Used to add a new user
         /// </summary>
         /// <param name="user">The user to be added</param>

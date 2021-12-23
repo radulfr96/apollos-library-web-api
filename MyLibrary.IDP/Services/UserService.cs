@@ -34,11 +34,16 @@ namespace MyLibrary.IDP.Services
             return await _unitOfWork.UserDataLayer.GetUserByUsername(username);
         }
 
-        public async Task<bool> ValidateCredentials(string username, string password)
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _unitOfWork.UserDataLayer.GetUserByEmail(email);
+        }
+
+        public async Task<bool> ValidateCredentials(string email, string password)
         {
             var result = false;
 
-            var user = await GetUserByUsername(username);
+            var user = await GetUserByEmail(email);
 
             if (user == null)
                 return result;
