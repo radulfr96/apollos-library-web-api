@@ -34,7 +34,7 @@ namespace MyLibrary.IDP.DataLayer
             if (user != null)
             {
                 user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
-                user.UserClaims.Add(new UserClaim() { Id = user.UserId, Value = username, Type = "username" });
+                user.UserClaims.Add(new UserClaim() { User = user, Value = username, Type = "username" });
             }
 
             return user;
@@ -52,7 +52,7 @@ namespace MyLibrary.IDP.DataLayer
             if (user != null)
             {
                 user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
-                user.UserClaims.Add(new UserClaim() { Id = user.UserId, Value = user.Username, Type = "username" });
+                user.UserClaims.Add(new UserClaim() { User = user, Value = user.Username, Type = "username" });
             }
 
             return user;
@@ -66,7 +66,7 @@ namespace MyLibrary.IDP.DataLayer
                 return new List<UserClaim>();
 
             var claims = await _context.UserClaims.Where(u => u.User.Subject == subject).ToListAsync();
-            claims.Add(new UserClaim() { Id = user.UserId, Value = user.Username, Type = "username" });
+            claims.Add(new UserClaim() { User = user, Value = user.Username, Type = "username" });
 
             return claims;
         }

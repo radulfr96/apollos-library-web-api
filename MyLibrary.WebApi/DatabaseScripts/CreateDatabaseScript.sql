@@ -212,10 +212,10 @@ FROM Users.[User] U
 WHERE U.Username = 'radulfr'
 
 INSERT INTO [Users].UserClaim (ID, UserID, Type, Value)
-VALUES (NEWID(), @UserID, 'role', 'administrator'),
-(NEWID(), @UserID, 'role', 'moderator'),
-(NEWID(), @UserID, 'role', 'freeaccount'),
-(NEWID(), @UserID, 'email', 'wados.russell70@gmail.com')
+VALUES (NEWID(), @UserID, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', 'administrator'),
+(NEWID(), @UserID, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', 'moderator'),
+(NEWID(), @UserID, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', 'freeaccount'),
+(NEWID(), @UserID, 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', 'wados.russell70@gmail.com')
 
 
 UPDATE U

@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using IdentityServer4.AccessTokenValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +21,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyLibrary.Application.Book.Queries.GetBookQuery;
@@ -28,6 +31,7 @@ using MyLibrary.Persistence.Model;
 using MyLibrary.UnitOfWork;
 using MyLibrary.UnitOfWork.Contracts;
 using MyLibrary.WebApi.Filters;
+using NLog;
 
 namespace MyLibrary.WebApi
 {
@@ -39,6 +43,8 @@ namespace MyLibrary.WebApi
         }
 
         public IConfiguration Configuration { get; }
+
+        public ILogger _logger = LogManager.GetCurrentClassLogger();
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -146,9 +152,29 @@ namespace MyLibrary.WebApi
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = false,
+                    NameClaimType = ClaimTypes.Name,
                 };
 
                 options.SaveToken = true;
+
+                options.Events = new JwtBearerEvents()
+                {
+                    OnTokenValidated = async authContext =>
+                    {
+                        try
+                        {
+                            SecurityToken securityToken;
+                            var token = authContext.Request.Headers.Authorization.FirstOrDefault();
+                            token = token.Substring(token.IndexOf(' ') + 1);
+                            var handler = new JwtSecurityTokenHandler().ValidateToken(token, authContext.Options.TokenValidationParameters, out securityToken);
+                            Thread.CurrentPrincipal = handler;
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error(ex, "Test");
+                        }
+                    },
+                };
             });
         }
 
