@@ -161,18 +161,7 @@ namespace MyLibrary.WebApi
                 {
                     OnTokenValidated = async authContext =>
                     {
-                        try
-                        {
-                            SecurityToken securityToken;
-                            var token = authContext.Request.Headers.Authorization.FirstOrDefault();
-                            token = token.Substring(token.IndexOf(' ') + 1);
-                            var handler = new JwtSecurityTokenHandler().ValidateToken(token, authContext.Options.TokenValidationParameters, out securityToken);
-                            Thread.CurrentPrincipal = handler;
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Error(ex, "Test");
-                        }
+                        Thread.CurrentPrincipal = authContext.Principal;
                     },
                 };
             });
