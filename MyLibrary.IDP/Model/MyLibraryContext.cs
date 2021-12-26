@@ -36,7 +36,7 @@ namespace MyLibrary.IDP.Model
         public virtual DbSet<ClientScope> ClientScopes { get; set; }
         public virtual DbSet<ClientSecret> ClientSecrets { get; set; }
         public virtual DbSet<DeviceCode> DeviceCodes { get; set; }
-        public virtual DbSet<IdentityResources> IdentityResources { get; set; }
+        public virtual DbSet<IdentityResource> IdentityResources { get; set; }
         public virtual DbSet<IdentityResourceClaim> IdentityResourceClaims { get; set; }
         public virtual DbSet<IdentityResourceProperty> IdentityResourceProperties { get; set; }
         public virtual DbSet<PersistedGrant> PersistedGrants { get; set; }
@@ -210,13 +210,20 @@ namespace MyLibrary.IDP.Model
 
                 entity.Property(e => e.FrontChannelLogoutUri).HasMaxLength(2000);
 
-                entity.Property(e => e.LogoUri).HasMaxLength(2000);
+                entity.Property(e => e.LogoUri)
+                    .HasMaxLength(2000)
+                    .HasColumnName("LogoURI");
 
                 entity.Property(e => e.PairWiseSubjectSalt).HasMaxLength(200);
 
                 entity.Property(e => e.ProtocolType)
                     .IsRequired()
                     .HasMaxLength(200);
+
+                entity.Property(e => e.RefreshTokenUsage)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.UserCodeType).HasMaxLength(100);
             });
@@ -297,7 +304,8 @@ namespace MyLibrary.IDP.Model
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.ClientPostLogoutRedirectUris)
-                    .HasForeignKey(d => d.ClientId);
+                    .HasForeignKey(d => d.ClientId)
+                    .HasConstraintName("FK_ClientPostLoutRedirectUris_Clients_ClientId");
             });
 
             modelBuilder.Entity<ClientProperty>(entity =>
@@ -401,7 +409,7 @@ namespace MyLibrary.IDP.Model
                 entity.Property(e => e.SubjectId).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<IdentityResources>(entity =>
+            modelBuilder.Entity<IdentityResource>(entity =>
             {
                 entity.ToTable("IdentityResources", "Identity");
 

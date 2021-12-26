@@ -63,16 +63,6 @@ namespace MyLibrary.IDP
                 .AddDeviceFlowStore<DeviceFlowStore>()
                 .AddPersistedGrantStore<PersistedGrantStore>()
                 .AddProfileService<ProfileService>();
-            //.AddConfigurationStore(options =>
-            //{
-            //    options.ConfigureDbContext = builder =>
-            //        builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
-            //})
-            //.AddOperationalStore(options =>
-            //{
-            //    options.ConfigureDbContext = builder =>
-            //        builder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
-            //});
         }
 
         public void Configure(IApplicationBuilder app)

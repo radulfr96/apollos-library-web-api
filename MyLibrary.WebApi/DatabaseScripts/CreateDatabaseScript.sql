@@ -557,7 +557,7 @@ CREATE TABLE [Identity].[Clients] (
     [ConsentLifetime] int NULL,
     [AbsoluteRefreshTokenLifetime] int NOT NULL,
     [SlidingRefreshTokenLifetime] int NOT NULL,
-    [RefreshTokenUsage] int NOT NULL,
+    [RefreshTokenUsage] VARCHAR(255) NOT NULL,
     [UpdateAccessTokenClaimsOnRefresh] bit NOT NULL,
     [RefreshTokenExpiration] int NOT NULL,
     [AccessTokenType] int NOT NULL,
@@ -650,7 +650,7 @@ INSERT INTO [Identity].[Clients]
            ,6000
            ,6000
            ,6000
-           ,6000
+           ,'OneTimeOnly'
            ,1
            ,6000
            ,0

@@ -44,11 +44,11 @@ namespace MyLibrary.IDP.Stores
             return _mapper.Map<List<Model.ApiScope>, List<IdentityServer4.Models.ApiScope>>(apiScopes);
         }
 
-        public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
+        public async Task<IEnumerable<IdentityServer4.Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
         {
             var identityResources = await _context.IdentityResources.Where(i => scopeNames.Contains(i.Name)).ToListAsync();
 
-            return _mapper.Map<List<Model.IdentityResources>, List<IdentityResource>>(identityResources);
+            return _mapper.Map<List<Model.IdentityResource>, List<IdentityServer4.Models.IdentityResource>>(identityResources);
         }
 
         public async Task<Resources> GetAllResourcesAsync()
@@ -62,7 +62,7 @@ namespace MyLibrary.IDP.Stores
             return new Resources()
             {
                 ApiResources = _mapper.Map<List<Model.ApiResource>, List<IdentityServer4.Models.ApiResource>>(apiResources),
-                IdentityResources = _mapper.Map<List<Model.IdentityResources>, List<IdentityResource>>(identityResources),
+                IdentityResources = _mapper.Map<List<Model.IdentityResource>, List<IdentityServer4.Models.IdentityResource>>(identityResources),
                 ApiScopes = _mapper.Map<List<Model.ApiScope>, List<IdentityServer4.Models.ApiScope>>(apiScopes),
             };
         }

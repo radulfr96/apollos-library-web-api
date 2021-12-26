@@ -37,7 +37,9 @@ namespace MyLibrary.DataLayer
 
         public async Task<User> GetUser(Guid id)
         {
-            return await _context.Users.Include("Users.UserClaim").FirstOrDefaultAsync(u => u.UserId == id);
+            return await _context.Users
+                                 .Include(u => u.UserClaims)
+                                 .FirstOrDefaultAsync(u => u.UserId == id);
         }
 
         public async Task<List<User>> GetUsers()

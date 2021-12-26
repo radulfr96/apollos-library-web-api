@@ -35,6 +35,7 @@ namespace MyLibrary.IDP.DataLayer
             {
                 user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
                 user.UserClaims.Add(new UserClaim() { User = user, Value = username, Type = "username" });
+                user.UserClaims.Add(new UserClaim() { User = user, Value = user.UserId.ToString(), Type = "userid" });
             }
 
             return user;
@@ -42,7 +43,7 @@ namespace MyLibrary.IDP.DataLayer
 
         public async Task<User> GetUserByEmail(string email)
         {
-            var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == "email").FirstOrDefaultAsync();
+            var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == ClaimTypes.Email).FirstOrDefaultAsync();
 
             if (emailClaim == null)
                 return null;
@@ -53,6 +54,7 @@ namespace MyLibrary.IDP.DataLayer
             {
                 user.UserClaims = await _context.UserClaims.Where(u => u.UserId == user.UserId).ToListAsync();
                 user.UserClaims.Add(new UserClaim() { User = user, Value = user.Username, Type = "username" });
+                user.UserClaims.Add(new UserClaim() { User = user, Value = user.UserId.ToString(), Type = "userid" });
             }
 
             return user;
@@ -67,6 +69,7 @@ namespace MyLibrary.IDP.DataLayer
 
             var claims = await _context.UserClaims.Where(u => u.User.Subject == subject).ToListAsync();
             claims.Add(new UserClaim() { User = user, Value = user.Username, Type = "username" });
+            claims.Add(new UserClaim() { User = user, Value = user.UserId.ToString(), Type = "userid" });
 
             return claims;
         }

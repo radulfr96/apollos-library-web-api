@@ -70,7 +70,7 @@ namespace MyLibrary.Application.IntegrationTests
 
             services.AddSingleton<IUserService>(p =>
             {
-                return new UserService();
+                return new UserService(null);
             });
 
             localConfig.Bind(_configuration);

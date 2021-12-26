@@ -14,11 +14,10 @@ namespace MyLibrary.IDP
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Client, IdentityServer4.Models.Client>();
-                cfg.CreateMap<IdentityResources, IdentityServer4.Models.IdentityResource>();
+                cfg.CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>();
                 cfg.CreateMap<ApiResource, IdentityServer4.Models.ApiResource>();
                 cfg.CreateMap<ApiScope, IdentityServer4.Models.ApiScope>();
                 cfg.CreateMap<ApiResource, IdentityServer4.Models.Resource>();
-                cfg.CreateMap<IdentityResources, IdentityServer4.Models.Resource>();
                 cfg.CreateMap<ApiScope, IdentityServer4.Models.ApiScope>();
                 cfg.CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>();
                 cfg.CreateMap<ClientSecret, IdentityServer4.Models.Secret>();

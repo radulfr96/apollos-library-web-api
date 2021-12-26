@@ -50,7 +50,7 @@ namespace MyLibrary.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
             services.AddMediatR(typeof(Startup));
 
             services.AddScoped<ApiExceptionFilterAttribute>();
@@ -105,7 +105,7 @@ namespace MyLibrary.WebApi
 
             services.AddTransient<IUserService>(p =>
             {
-                return new UserService();
+                return new UserService(p.GetService<IHttpContextAccessor>());
             });
 
             services.AddTransient<IDateTimeService>(p =>
@@ -156,14 +156,6 @@ namespace MyLibrary.WebApi
                 };
 
                 options.SaveToken = true;
-
-                options.Events = new JwtBearerEvents()
-                {
-                    OnTokenValidated = async authContext =>
-                    {
-                        Thread.CurrentPrincipal = authContext.Principal;
-                    },
-                };
             });
         }
 

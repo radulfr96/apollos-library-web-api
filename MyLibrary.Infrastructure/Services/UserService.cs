@@ -1,4 +1,5 @@
-﻿using MyLibrary.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using MyLibrary.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,16 @@ namespace MyLibrary.Infrastructure.Services
 {
     public class UserService : IUserService
     {
+        private readonly HttpContext _httpContext;
+
+        public UserService(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContext = httpContextAccessor.HttpContext;
+        }
+
         public Guid GetUserId()
         {
-            var principal = Thread.CurrentPrincipal as ClaimsPrincipal;
-
-            return Guid.Parse(principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value);
+            return Guid.Parse(_httpContext.User.Claims.FirstOrDefault(c => c.Type == "userid").Value);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace MyLibrary.IDP.Model
         public int? ConsentLifetime { get; set; }
         public int AbsoluteRefreshTokenLifetime { get; set; }
         public int SlidingRefreshTokenLifetime { get; set; }
-        public int RefreshTokenUsage { get; set; }
+        public string RefreshTokenUsage { get; set; }
         public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
         public int RefreshTokenExpiration { get; set; }
         public int AccessTokenType { get; set; }

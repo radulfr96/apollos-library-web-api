@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyLibrary.Application.User.Commands.UpdateSelfUserCommand;
+using MyLibrary.Application.User.Queries.CheckMyUsernameUnique;
 using MyLibrary.Application.User.Queries.GetUserQuery;
 using MyLibrary.Application.User.Queries.GetUsersQuery;
 using System.Threading.Tasks;
@@ -58,9 +59,9 @@ namespace MyLibrary.WebApi.Controllers
         /// <param name="username">the username to be checked</param>
         /// <returns>Response that indicates the result</returns>
         [HttpGet("checkselfusername/{username}")]
-        public async Task<UpdateSelfUserCommandDto> CheckUsernameIsUniqueSelf([FromRoute] string username)
+        public async Task<CheckMyUsernameUniqueQueryDto> CheckUsernameIsUniqueSelf([FromRoute] string username)
         {
-            return await _mediator.Send(new UpdateSelfUserCommand()
+            return await _mediator.Send(new CheckMyUsernameUniqueQuery()
             {
                 Username = username,
             });
