@@ -212,10 +212,10 @@ FROM Users.[User] U
 WHERE U.Username = 'radulfr'
 
 INSERT INTO [Users].UserClaim (ID, UserID, Type, Value)
-VALUES (NEWID(), @UserID, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', 'administrator'),
-(NEWID(), @UserID, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', 'moderator'),
-(NEWID(), @UserID, 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role', 'freeaccount'),
-(NEWID(), @UserID, 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', 'wados.russell70@gmail.com')
+VALUES (NEWID(), @UserID, 'role', 'administrator'),
+(NEWID(), @UserID, 'role', 'moderator'),
+(NEWID(), @UserID, 'role', 'freeaccount'),
+(NEWID(), @UserID, 'emailaddress', 'wados.russell70@gmail.com')
 
 
 UPDATE U
@@ -559,7 +559,7 @@ CREATE TABLE [Identity].[Clients] (
     [SlidingRefreshTokenLifetime] int NOT NULL,
     [RefreshTokenUsage] VARCHAR(255) NOT NULL,
     [UpdateAccessTokenClaimsOnRefresh] bit NOT NULL,
-    [RefreshTokenExpiration] int NOT NULL,
+    [RefreshTokenExpiration] VARCHAR(255) NOT NULL,
     [AccessTokenType] int NOT NULL,
     [EnableLocalLogin] bit NOT NULL,
     [IncludeJwtId] bit NOT NULL,
@@ -650,9 +650,9 @@ INSERT INTO [Identity].[Clients]
            ,6000
            ,6000
            ,6000
-           ,'OneTimeOnly'
+           ,'ReUse'
            ,1
-           ,6000
+           ,'Sliding'
            ,0
            ,1
            ,1
@@ -782,6 +782,9 @@ CREATE TABLE [Identity].[ClientCorsOrigins] (
     CONSTRAINT [FK_ClientCorsOrigins_Clients_ClientId] FOREIGN KEY ([ClientId]) REFERENCES [Identity].[Clients] ([Id]) ON DELETE CASCADE
 );
 
+INSERT INTO [Identity].[ClientCorsOrigins] (Origin, ClientId)
+VALUES ('http://localhost:3000', @ClientID)
+
 
 
 CREATE TABLE [Identity].[ClientGrantTypes] (
@@ -797,7 +800,8 @@ CREATE TABLE [Identity].[ClientGrantTypes] (
 INSERT INTO [Identity].[ClientGrantTypes] (GrantType, ClientId)
 VALUES ('password', @ClientID),
 ('client_credentials', @ClientID),
-('implicit', @ClientID)
+('implicit', @ClientID),
+('refresh_token', @ClientID)
 
 CREATE TABLE [Identity].[ClientIdPRestrictions] (
     [Id] int NOT NULL IDENTITY,
@@ -859,7 +863,8 @@ VALUES (@ClientID, 'openid'),
 (@ClientID, 'mylibraryapi'),
 (@ClientID, 'role'),
 (@ClientID, 'username'),
-(@ClientID, 'email')
+(@ClientID, 'email'),
+(@ClientID, 'offline_access')
 
 
 CREATE TABLE [Identity].[ClientSecrets] (

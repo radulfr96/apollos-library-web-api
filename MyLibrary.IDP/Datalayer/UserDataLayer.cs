@@ -43,7 +43,7 @@ namespace MyLibrary.IDP.DataLayer
 
         public async Task<User> GetUserByEmail(string email)
         {
-            var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == ClaimTypes.Email).FirstOrDefaultAsync();
+            var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == "emailaddress").FirstOrDefaultAsync();
 
             if (emailClaim == null)
                 return null;

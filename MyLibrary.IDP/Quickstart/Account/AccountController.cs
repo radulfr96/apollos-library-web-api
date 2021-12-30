@@ -117,25 +117,13 @@ namespace IdentityServerHost.Quickstart.UI
                     var user = await _userService.GetUserByEmail(model.Email);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.Subject, user.Username, clientId: context?.Client.ClientId));
 
-                    // only set explicit expiration here if user chooses "remember me". 
-                    // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
-                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
-                    {
-                        props = new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                        };
-                    };
-
                     // issue authentication cookie with subject ID and username
                     var isuser = new IdentityServerUser(user.Subject)
                     {
                         DisplayName = user.Username,
                     };
 
-                    await HttpContext.SignInAsync(isuser, props);
+                    await HttpContext.SignInAsync(isuser);
 
                     if (context != null)
                     {

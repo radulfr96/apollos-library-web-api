@@ -50,7 +50,7 @@ namespace MyLibrary.IDP.Model
         public int SlidingRefreshTokenLifetime { get; set; }
         public string RefreshTokenUsage { get; set; }
         public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
-        public int RefreshTokenExpiration { get; set; }
+        public string RefreshTokenExpiration { get; set; }
         public int AccessTokenType { get; set; }
         public bool EnableLocalLogin { get; set; }
         public bool IncludeJwtId { get; set; }
