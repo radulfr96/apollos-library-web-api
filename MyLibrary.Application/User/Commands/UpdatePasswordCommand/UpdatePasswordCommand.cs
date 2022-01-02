@@ -30,14 +30,13 @@ namespace MyLibrary.Application.User.Commands.UpdatePasswordCommand
         public UpdatePasswordCommandHandler(
             IUserUnitOfWork userUnitOfWork
             , IUserService userService
-            , IPasswordHasher<Persistence.Model.User> passwordHasher
             , IDateTimeService dateTimeService
             )
         {
             _userUnitOfWork = userUnitOfWork;
             _userService = userService;
-            _passwordHasher = passwordHasher;
             _dateTimeService = dateTimeService;
+            _passwordHasher = new PasswordHasher<Persistence.Model.User>();
         }
 
         public async Task<UpdatePasswordCommandDto> Handle(UpdatePasswordCommand command, CancellationToken cancellationToken)

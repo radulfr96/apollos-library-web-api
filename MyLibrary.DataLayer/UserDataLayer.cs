@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.Persistence.Model;
 using System;
@@ -58,18 +57,6 @@ namespace MyLibrary.DataLayer
                     UserId = u.UserId,
                     Username = u.Username,
                 }).ToListAsync();
-        }
-
-        public async Task<bool> VerifyPassword(Guid userId, string password)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-
-            if (user == null)
-                return false;
-
-            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
-
-            return result == PasswordVerificationResult.Success;
         }
     }
 }
