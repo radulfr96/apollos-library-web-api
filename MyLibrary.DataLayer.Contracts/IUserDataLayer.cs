@@ -31,5 +31,7 @@ namespace MyLibrary.DataLayer.Contracts
         /// <param name="id">The id of the user to be retreived</param>
         /// <returns>The user with the id</returns>
         Task<User> GetUser(Guid id);
+
+        Task<bool> VerifyPassword(Guid userId, string password);
     }
 }

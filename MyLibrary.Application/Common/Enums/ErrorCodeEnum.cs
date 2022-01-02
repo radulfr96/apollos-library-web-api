@@ -40,6 +40,7 @@ namespace MyLibrary.Application.Common.Enums
         PublisherNameInvalidLength = 26,
         WebsiteInvalidLength = 27,
         InvalidAddressProvided = 28,
+        PasswordInvalid = 29,
         UsernameAlreadyTaken = 99,
 
 

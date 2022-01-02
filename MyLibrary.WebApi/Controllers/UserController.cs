@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyLibrary.Application.User.Commands.UpdatePasswordCommand;
 using MyLibrary.Application.User.Commands.UpdateSelfUserCommand;
 using MyLibrary.Application.User.Queries.CheckMyUsernameUnique;
 using MyLibrary.Application.User.Queries.GetUserQuery;
@@ -65,6 +66,17 @@ namespace MyLibrary.WebApi.Controllers
             {
                 Username = username,
             });
+        }
+
+        /// <summary>
+        /// Used by user to update their password
+        /// </summary>
+        /// <param name="command">The request to update the password</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPatch("password")]
+        public async Task<UpdatePasswordCommandDto> CheckUsernameIsUniqueSelf([FromRoute] UpdatePasswordCommand command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }

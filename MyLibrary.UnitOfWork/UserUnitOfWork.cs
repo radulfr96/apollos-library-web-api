@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
 using MyLibrary.DataLayer;
 using MyLibrary.DataLayer.Contracts;
 using MyLibrary.Persistence.Model;
@@ -29,7 +30,7 @@ namespace MyLibrary.UnitOfWork
             {
                 if (_userDataLayer == null)
                 {
-                    _userDataLayer = new UserDataLayer(_dbContext);
+                    _userDataLayer = new UserDataLayer(_dbContext, new PasswordHasher<User>());
                 }
                 return _userDataLayer;
             }

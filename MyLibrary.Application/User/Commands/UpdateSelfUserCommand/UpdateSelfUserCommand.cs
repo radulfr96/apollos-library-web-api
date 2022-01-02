@@ -24,7 +24,6 @@ namespace MyLibrary.Application.User.Commands.UpdateSelfUserCommand
         private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
-        private readonly Hasher _hasher;
         private readonly ILogger _logger;
 
         public UpdateSelfUserCommandHandler(IUserUnitOfWork userUnitOfWork, IUserService userService, IDateTimeService dateTimeService, ILogger<UpdateSelfUserCommandHandler> logger)
@@ -32,7 +31,6 @@ namespace MyLibrary.Application.User.Commands.UpdateSelfUserCommand
             _userUnitOfWork = userUnitOfWork;
             _userService = userService;
             _dateTimeService = dateTimeService;
-            _hasher = new Hasher();
             _logger = logger;
         }
 

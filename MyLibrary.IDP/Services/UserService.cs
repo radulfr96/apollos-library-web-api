@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyLibrary.Application.Common.Functions;
 using MyLibrary.IDP.Model;
 using MyLibrary.IDP.UnitOfWork;
 using System;
