@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MyLibrary.Application.IntegrationTests.Generators;
@@ -23,6 +24,7 @@ namespace MyLibrary.Application.IntegrationTests
         private readonly IDateTimeService _dateTime;
         private readonly MyLibraryContext _context;
         private readonly IMediator _mediatr;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public AddPublisherCommandTest(TestFixture fixture) : base(fixture)
         {
@@ -36,17 +38,22 @@ namespace MyLibrary.Application.IntegrationTests
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
             _context = provider.GetRequiredService<MyLibraryContext>();
+            _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 
         [Fact]
         public async Task AddPublisherCommand()
         {
-            var userID = new Guid();
+            var userID = Guid.NewGuid();
 
-            Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
+            var httpContext = new TestHttpContext();
+
+            httpContext.User = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, userID.ToString()),
+                new Claim("userid", userID.ToString()),
             });
+
+            _contextAccessor.HttpContext = httpContext;
 
             var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", userID);
 

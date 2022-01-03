@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MyLibrary.Application.Author.Commands.UpdateAuthorCommand;
@@ -25,6 +26,7 @@ namespace MyLibrary.Application.IntegrationTests
         private readonly MyLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly ServiceProvider _provider;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public UpdateAuthorCommandTest(TestFixture fixture) : base(fixture)
         {
@@ -36,21 +38,25 @@ namespace MyLibrary.Application.IntegrationTests
                 return _dateTime;
             });
 
-            
             _provider = fixture.ServiceCollection.BuildServiceProvider();
             _mediatr = _provider.GetRequiredService<IMediator>();
             _context = _provider.GetRequiredService<MyLibraryContext>();
+            _contextAccessor = _provider.GetRequiredService<IHttpContextAccessor>();
         }
 
         [Fact]
         public async Task UpdateAuthorCommandSuccess()
         {
-            var userID = new Guid();
+            var userID = Guid.NewGuid();
 
-            Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
+            var httpContext = new TestHttpContext();
+
+            httpContext.User = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, userID.ToString()),
+                new Claim("userid", userID.ToString()),
             });
+
+            _contextAccessor.HttpContext = httpContext;
 
             var author = AuthorGenerator.GetGenericAuthor(userID, "US");
 

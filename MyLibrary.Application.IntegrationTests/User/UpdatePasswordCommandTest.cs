@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -24,6 +25,7 @@ namespace MyLibrary.Application.IntegrationTests
         private readonly IDateTimeService _dateTime;
         private readonly MyLibraryContext _context;
         private readonly IMediator _mediatr;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public UpdatePasswordCommandTest(TestFixture fixture) : base(fixture)
         {
@@ -37,37 +39,44 @@ namespace MyLibrary.Application.IntegrationTests
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
             _context = provider.GetRequiredService<MyLibraryContext>();
+            _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 
         [Fact]
         public async Task WhenUpdatePassword_PasswordUpdated()
         {
-            var userID = new Guid();
+            var userID = Guid.NewGuid();
 
-            Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
+            var httpContext = new TestHttpContext();
+
+            httpContext.User = new TestPrincipal(new Claim[]
             {
-                new Claim(ClaimTypes.Sid, userID.ToString()),
+                new Claim("userid", userID.ToString()),
             });
+
+            _contextAccessor.HttpContext = httpContext;
 
             var password = new Faker().Random.AlphaNumeric(50);
 
             var hasher = new PasswordHasher<Persistence.Model.User>();
             var user = new Persistence.Model.User()
             {
-                CreatedBy = Guid.NewGuid(),
+                CreatedBy = userID,
                 CreatedDate = DateTime.Parse("2021-01-02"),
                 IsActive = true,
                 Subject = Guid.NewGuid().ToString(),
-                UserId = Guid.NewGuid(),
+                UserId = userID,
                 Username = new Faker().Internet.UserName(),
             };
-            user.Password = hasher.HashPassword(user, password);
+            var oldPasswordHash = hasher.HashPassword(user, password);
+            user.Password = oldPasswordHash;
 
             _context.Users.Add(user);
             _context.SaveChanges();
 
+            var savedUser = _context.Users.FirstOrDefault(p => p.UserId == userID);
+
             var newPassword = new Faker().Random.AlphaNumeric(50);
-            var hashedNewPassword = hasher.HashPassword(user, newPassword);
 
             var command = new UpdatePasswordCommand()
             {
@@ -78,8 +87,11 @@ namespace MyLibrary.Application.IntegrationTests
             await _mediatr.Send(command);
 
             var updatedUser = _context.Users.FirstOrDefault(p => p.UserId == userID);
+            var validateChangeResult = hasher.VerifyHashedPassword(updatedUser, updatedUser.Password, newPassword);
 
-            updatedUser.Password.Should().BeEquivalentTo(hashedNewPassword);
+            validateChangeResult.Should().BeEquivalentTo(PasswordVerificationResult.Success);
+            updatedUser.ModifiedBy.Should().Be(userID);
+            updatedUser.ModifiedDate.Should().NotBeNull();
         }
     }
 }

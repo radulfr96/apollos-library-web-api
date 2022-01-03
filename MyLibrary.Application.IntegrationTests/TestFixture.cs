@@ -17,6 +17,7 @@ using MyLibrary.UnitOfWork;
 using MyLibrary.Application.Interfaces;
 using MyLibrary.Infrastructure.Services;
 using Respawn;
+using Microsoft.AspNetCore.Http;
 
 namespace MyLibrary.Application.IntegrationTests
 {
@@ -42,6 +43,7 @@ namespace MyLibrary.Application.IntegrationTests
             var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
             optionsBuilder.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
 
+            services.AddHttpContextAccessor();
             services.AddDbContext<MyLibraryContext>(opt =>
             {
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
@@ -68,10 +70,15 @@ namespace MyLibrary.Application.IntegrationTests
                 return new ReferenceUnitOfWork(p.GetRequiredService<MyLibraryContext>());
             });
 
+            services.AddTransient<IUserUnitOfWork>(p => {
+                return new UserUnitOfWork(p.GetRequiredService<MyLibraryContext>());
+            });
+
             services.AddSingleton<IUserService>(p =>
             {
-                return new UserService(null);
+                return new UserService(p.GetRequiredService<IHttpContextAccessor>());
             });
+
 
             localConfig.Bind(_configuration);
 
