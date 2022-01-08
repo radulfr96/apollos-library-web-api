@@ -6,6 +6,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -19,24 +20,19 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(IIdentityServerInteractionService interaction, IWebHostEnvironment environment, ILogger<HomeController> logger)
+        public HomeController(IIdentityServerInteractionService interaction, IWebHostEnvironment environment, ILogger<HomeController> logger, IConfiguration configuration)
         {
             _interaction = interaction;
             _environment = environment;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
         {
-            if (_environment.IsDevelopment())
-            {
-                // only show in development
-                return View();
-            }
-
-            _logger.LogInformation("Homepage is disabled in production. Returning 404.");
-            return NotFound();
+            return Redirect(_configuration.GetSection("FrontEndURL").Value);
         }
 
         /// <summary>

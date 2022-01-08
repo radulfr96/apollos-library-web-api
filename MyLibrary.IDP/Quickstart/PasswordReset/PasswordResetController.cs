@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MyLibrary.IDP.PasswordReset
@@ -36,9 +38,20 @@ namespace MyLibrary.IDP.PasswordReset
             var securityCode = await _userService.InitiatePasswordResetRequest(model.Email);
 
 
-            var link = Url.Action("ResetPassword", "PasswordReset", new { securityCode });
+            var link = $"{HttpContext.Request.Host.Host}{Url.Action("ResetPassword", "PasswordReset", new { securityCode })}";
 
-            Debug.WriteLine(link);
+            MailMessage message = new MailMessage("noreply@mylibrary.com", model.Email);
+
+            string mailbody = $"Please click the following link to reset your password: <a href='/{link}'>{link}</a";
+            message.Subject = "My Library Password Reset";
+            message.Body = mailbody;
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("127.0.0.1", 25); //smtp    
+            //client.EnableSsl = true;
+            client.UseDefaultCredentials = true;
+            
+            client.Send(message);
 
             return View("PasswordResetRequestSent");
         }

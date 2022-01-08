@@ -113,7 +113,7 @@ namespace MyLibrary.IDP.Services
                 throw new ArgumentNullException(nameof(email));
             }
 
-            var user = await _unitOfWork.UserDataLayer.GetUserByUsername(email);
+            var user = await _unitOfWork.UserDataLayer.GetUserByEmailUserOnly(email);
 
             if (user == null)
             {

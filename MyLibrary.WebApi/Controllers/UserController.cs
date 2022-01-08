@@ -74,7 +74,7 @@ namespace MyLibrary.WebApi.Controllers
         /// <param name="command">The request to update the password</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("password")]
-        public async Task<UpdatePasswordCommandDto> CheckUsernameIsUniqueSelf([FromRoute] UpdatePasswordCommand command)
+        public async Task<UpdatePasswordCommandDto> UpdatePassword([FromRoute] UpdatePasswordCommand command)
         {
             return await _mediator.Send(command);
         }

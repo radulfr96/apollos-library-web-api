@@ -60,6 +60,18 @@ namespace MyLibrary.IDP.DataLayer
             return user;
         }
 
+        public async Task<User> GetUserByEmailUserOnly(string email)
+        {
+            var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == "emailaddress").FirstOrDefaultAsync();
+
+            if (emailClaim == null)
+                return null;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == emailClaim.UserId);
+
+            return user;
+        }
+
         public async Task<List<UserClaim>> GetUserClaimsBySubject(string subject)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Subject == subject);

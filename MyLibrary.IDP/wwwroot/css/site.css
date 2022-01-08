@@ -1,24 +1,63 @@
 .body-container {
-  margin-top: 60px;
-  padding-bottom: 40px; }
+    margin-top: 60px;
+    padding-bottom: 40px;
+}
+
+body {
+    background-color: #8C2938;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+}
+
+h1 {
+    color: #ffffff;
+}
 
 .welcome-page li {
-  list-style: none;
-  padding: 4px; }
+    list-style: none;
+    padding: 4px;
+}
 
 .logged-out-page iframe {
-  display: none;
-  width: 0;
-  height: 0; }
+    display: none;
+    width: 0;
+    height: 0;
+}
 
 .grants-page .card {
-  margin-top: 20px;
-  border-bottom: 1px solid lightgray; }
-  .grants-page .card .card-title {
-    font-size: 120%;
-    font-weight: bold; }
-    .grants-page .card .card-title img {
-      width: 100px;
-      height: 100px; }
-  .grants-page .card label {
-    font-weight: bold; }
+    margin-top: 20px;
+    border-bottom: 1px solid lightgray;
+}
+
+    .grants-page .card .card-title {
+        font-size: 120%;
+        font-weight: bold;
+    }
+
+        .grants-page .card .card-title img {
+            width: 100px;
+            height: 100px;
+        }
+
+    .grants-page .card label {
+        font-weight: bold;
+    }
+
+.btn-primary {
+    background-color: #8C2938;
+    border-color: #8C2938;
+}
+
+    .btn-primary:hover {
+        background-color: #8C2938;
+        border-color: #8C2938;
+    }
+
+    .btn-primary:hover {
+        background-color: #8C2938;
+        border-color: #8C2938;
+    }
+
+    .btn-primary:active {
+        background-color: #8C2938;
+        border-color: #8C2938;
+    }

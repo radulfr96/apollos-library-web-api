@@ -56,7 +56,8 @@ namespace MyLibrary.WebApi
             services.AddScoped<ApiExceptionFilterAttribute>();
 
             var optionsBuilder = new DbContextOptionsBuilder<MyLibraryContext>();
-            services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
+            optionsBuilder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
+            //services.AddDbContext<MyLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
             var context = new MyLibraryContext(optionsBuilder.Options);
 
             services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
