@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.Application\ApollosLibrary.Application.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Application\ApollosLibrary.Application.csproj" />
   </ItemGroup>
 
 </Project>

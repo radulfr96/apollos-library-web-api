@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.Application\ApollosLibrary.Application.csproj" />
-    <ProjectReference Include="..\MyLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Application\ApollosLibrary.Application.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 
   <ItemGroup>

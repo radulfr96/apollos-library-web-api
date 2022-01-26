@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.Application\ApollosLibrary.Application.csproj" />
-    <ProjectReference Include="..\MyLibrary.Infrastructure\ApollosLibrary.Infrastructure.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Application\ApollosLibrary.Application.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Infrastructure\ApollosLibrary.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

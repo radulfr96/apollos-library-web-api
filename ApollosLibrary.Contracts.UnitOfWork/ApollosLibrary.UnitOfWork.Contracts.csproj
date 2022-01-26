@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.DataLayer.Contracts\ApollosLibrary.DataLayer.Contracts.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.DataLayer.Contracts\ApollosLibrary.DataLayer.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

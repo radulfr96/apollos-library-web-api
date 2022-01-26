@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLibrary.Contracts.UnitOfWork\ApollosLibrary.UnitOfWork.Contracts.csproj" />
-    <ProjectReference Include="..\MyLibrary.Persistence\ApollosLibrary.Persistence.csproj" />
-    <ProjectReference Include="..\MyLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Contracts.UnitOfWork\ApollosLibrary.UnitOfWork.Contracts.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Persistence\ApollosLibrary.Persistence.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 
 </Project>
