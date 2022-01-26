@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MyLibrary.Application.Common.Exceptions;
 using MyLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,16 @@ namespace MyLibrary.Application.User.Queries.GetUserQuery
         {
             var response = new GetUserQueryDto();
 
-            //var user = await _userUnitOfWork.UserDataLayer.GetUser(query.UserId);
+            var user = await _userUnitOfWork.UserDataLayer.GetUser(query.UserId);
 
-            //if (user == null)
-            //{
-            //    throw new UserNotFoundException($"Unable to finc user with id [{query.UserId}]");
-            //}
+            if (user == null)
+            {
+                throw new UserNotFoundException($"Unable to find user with id [{query.UserId}]");
+            }
 
-            //response.IsActive = user.IsActive ? "Active" : "Inactive";
-            //response.UserID = user.UserId;
-            //response.Username = user.Username;
+            response.IsActive = user.IsActive ? "Active" : "Inactive";
+            response.UserID = user.UserId;
+            response.Username = user.Username;
 
             return response;
         }

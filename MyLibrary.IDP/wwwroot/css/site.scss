@@ -40,3 +40,23 @@
 }
 
 
+.btn-primary {
+    background-color: #8C2938;
+    border-color: #8C2938;
+}
+
+.btn-primary:hover {
+    background-color: #8C2938;
+    border-color: #8C2938;
+}
+
+.btn-primary:focus {
+    background-color: #8C2938;
+    border-color: #8C2938;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #8C2938;
+    border-color: #8C2938;
+}
+

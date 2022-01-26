@@ -52,12 +52,12 @@ h1 {
         border-color: #8C2938;
     }
 
-    .btn-primary:hover {
+    .btn-primary:focus {
         background-color: #8C2938;
         border-color: #8C2938;
     }
 
-    .btn-primary:active {
-        background-color: #8C2938;
-        border-color: #8C2938;
-    }
+.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #8C2938;
+    border-color: #8C2938;
+}
