@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyLibrary.Contracts.UnitOfWork\ApollosLibrary.UnitOfWork.Contracts.csproj" />
+    <ProjectReference Include="..\MyLibrary.DataLayer\ApollosLibrary.DataLayer.csproj" />
+  </ItemGroup>
+
+</Project>
