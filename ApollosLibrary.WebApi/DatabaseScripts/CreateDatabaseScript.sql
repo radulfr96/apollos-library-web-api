@@ -1,13 +1,13 @@
 USE [master]
 
 USE master;
-ALTER DATABASE MyLibrary SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-DROP DATABASE MyLibrary ;
+ALTER DATABASE ApollosLibrary SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE ApollosLibrary ;
 
-CREATE DATABASE MyLibrary
+CREATE DATABASE ApollosLibrary
 
 
-USE MyLibrary
+USE ApollosLibrary
 GO
 
 CREATE SCHEMA [Users]
@@ -501,7 +501,7 @@ CREATE TABLE [Identity].[ApiResources] (
 
 INSERT INTO [Identity].ApiResources (Enabled, Name, DisplayName, Description, AllowedAccessTokenSigningAlgorithms, ShowInDiscoveryDocument, Created, Updated, LastAccessed, NonEditable)
 VALUES (1, 'openid', 'Open ID', 'Open ID', 0, 1, GETDATE(), NULL, NULL, 0), 
-(1, 'mylibrarywebsite', 'My Library Website', 'My Library Website', 0, 1, GETDATE(), NULL, NULL, 0)
+(1, 'apolloslibrarywebsite', 'My Library Website', 'My Library Website', 0, 1, GETDATE(), NULL, NULL, 0)
 
 DECLARE @ResourceID INT
 
@@ -525,7 +525,7 @@ CREATE TABLE [Identity].[ApiScopes] (
 
 
 INSERT INTO [Identity].ApiScopes (Description, DisplayName, Emphasize, Enabled, Name, Required, ShowInDiscoveryDocument)
-VALUES ('Provides access to the My Library Web API', 'My Library API', 0, 1, 'mylibraryapi', 0, 1)
+VALUES ('Provides access to the My Library Web API', 'My Library API', 0, 1, 'apolloslibraryapi', 0, 1)
 
 
 CREATE TABLE [Identity].[Clients] (
@@ -624,7 +624,7 @@ INSERT INTO [Identity].[Clients]
            ,[NonEditable])
      VALUES
            (1
-           ,'mylibrarywebapp'
+           ,'apolloslibrarywebapp'
            ,'oidc'
            ,1
            ,'My Library Web App'
@@ -671,7 +671,7 @@ INSERT INTO [Identity].[Clients]
 
 	SELECT @ClientID = Id
 	FROM [Identity].Clients 
-	WHERE ClientId = 'mylibrarywebapp'
+	WHERE ClientId = 'apolloslibrarywebapp'
 
 
 CREATE TABLE [Identity].[IdentityResources] (
@@ -860,7 +860,7 @@ CREATE TABLE [Identity].[ClientScopes] (
 INSERT INTO [Identity].ClientScopes (ClientId, Scope)
 VALUES (@ClientID, 'openid'),
 (@ClientID, 'profile'),
-(@ClientID, 'mylibraryapi'),
+(@ClientID, 'apolloslibraryapi'),
 (@ClientID, 'role'),
 (@ClientID, 'username'),
 (@ClientID, 'email'),
@@ -882,7 +882,7 @@ CREATE TABLE [Identity].[ClientSecrets] (
 
 
 INSERT INTO [Identity].ClientSecrets (ClientId, Created, Description, Expiration, Type, Value)
-VALUES (@ClientID, GETDATE(), 'mylibrarywebsite', NULL, 'SharedSecret', '979eb386dc9a387d614b72902e44f5cb295636d71f829d2afccff401eb794bd6')
+VALUES (@ClientID, GETDATE(), 'apolloslibrarywebsite', NULL, 'SharedSecret', '979eb386dc9a387d614b72902e44f5cb295636d71f829d2afccff401eb794bd6')
 
 
 CREATE TABLE [Identity].[IdentityResourceClaims] (

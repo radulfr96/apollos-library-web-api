@@ -38,6 +38,14 @@ namespace ApollosLibrary.Application.User.Queries.GetUserQuery
             response.IsActive = user.IsActive ? "Active" : "Inactive";
             response.UserID = user.UserId;
             response.Username = user.Username;
+            response.UserRoles = user.UserClaims.Where(u => u.Type == "role").Select(u => u.Value).ToList();
+            response.Roles = new List<string>()
+            {
+                "moderator",
+                "administrator",
+                "freeaccount",
+                "paidaccount"
+            };
 
             return response;
         }

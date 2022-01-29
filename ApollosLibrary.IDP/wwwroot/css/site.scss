@@ -39,24 +39,29 @@
     }
 }
 
+body {
+    background-color: #3B3BC4;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+}
+
 
 .btn-primary {
-    background-color: #8C2938;
-    border-color: #8C2938;
+    background-color: #3B3BC4;
+    border-color: #3B3BC4;
 }
 
 .btn-primary:hover {
-    background-color: #8C2938;
-    border-color: #8C2938;
+    background-color: #3B3BC4;
+    border-color: #3B3BC4;
 }
 
 .btn-primary:focus {
-    background-color: #8C2938;
-    border-color: #8C2938;
+    background-color: #3B3BC4;
+    border-color: #3B3BC4;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active {
-    background-color: #8C2938;
-    border-color: #8C2938;
+    background-color: #3B3BC4;
+    border-color: #3B3BC4;
 }
 
