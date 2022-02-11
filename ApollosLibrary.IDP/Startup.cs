@@ -67,6 +67,10 @@ namespace ApollosLibrary.IDP
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -79,11 +83,9 @@ namespace ApollosLibrary.IDP
                 .AllowAnyOrigin()
                 .AllowAnyHeader();
             });
-            app.UseRouting();
 
             app.UseIdentityServer();
 
-            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

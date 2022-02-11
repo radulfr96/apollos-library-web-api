@@ -89,7 +89,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             var updatedUser = _context.Users.FirstOrDefault(p => p.UserId == userID);
             var validateChangeResult = hasher.VerifyHashedPassword(updatedUser, updatedUser.Password, newPassword);
 
-            validateChangeResult.Should().BeEquivalentTo(PasswordVerificationResult.Success);
+            validateChangeResult.Should().BeOneOf(PasswordVerificationResult.Success);
             updatedUser.ModifiedBy.Should().Be(userID);
             updatedUser.ModifiedDate.Should().NotBeNull();
         }

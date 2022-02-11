@@ -18,6 +18,7 @@ using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Infrastructure.Services;
 using Respawn;
 using Microsoft.AspNetCore.Http;
+using Respawn.Graph;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -86,9 +87,11 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
 
-            _checkpoint = new Checkpoint();
-            _checkpoint.SchemasToInclude = new string[] { "Author", "Book", "Genre", "Publisher" };
-            _checkpoint.TablesToInclude = new string[] { "Author", "Book", "Genre", "BookAuthor", "BookGenre", "Publisher" };
+            _checkpoint = new Checkpoint
+            {
+                SchemasToInclude = new string[] { "Author", "Book", "Genre", "Publisher" },
+                TablesToInclude = new Table[] { "Author", "Book", "Genre", "BookAuthor", "BookGenre", "Publisher" },
+            };
 
             ServiceCollection = services;
         }
