@@ -80,9 +80,9 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <param name="id">The id of the genre to be deleted</param>
         /// <returns>Response that indicates the result</returns>
         [HttpDelete("{id}")]
-        public async Task<DeleteGenreCommandDto> DeleteGenre([FromBody] DeleteGenreCommand command)
+        public async Task<DeleteGenreCommandDto> DeleteGenre([FromRoute] int id)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(new DeleteGenreCommand() { GenreId = id });
         }
     }
 }

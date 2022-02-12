@@ -75,10 +75,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">The id of the publisher to be deleted</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpDelete("")]
-        public async Task<DeletePublisherCommandDto> DeletePublisher([FromBody] DeletePublisherCommand command)
+        [HttpDelete("{id}")]
+        public async Task<DeletePublisherCommandDto> DeletePublisher([FromRoute] int id)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(new DeletePublisherCommand() { PubisherId = id });
         }
     }
 }

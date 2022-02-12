@@ -12,6 +12,7 @@ using ApollosLibrary.Application.Author.Commands.AddAuthorCommand;
 using ApollosLibrary.Application.Author.Commands.DeleteAuthorCommand;
 using ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand;
 using ApollosLibrary.Application.Author.Queries.GetAuthorQuery;
+using ApollosLibrary.Application.Author.Queries.GetAuthorsQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -31,7 +32,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request with the author information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("create")]
+        [HttpPost("")]
         public async Task<AddAuthorCommandDto> AddAuthor([FromBody] AddAuthorCommand command)
         {
             return await _mediator.Send(command);
@@ -41,10 +42,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get authors
         /// </summary>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("authors")]
-        public async Task<GetAuthorQueryDto> GetAuthors([FromBody] GetAuthorQuery query)
+        [HttpGet("")]
+        public async Task<GetAuthorsQueryDto> GetAuthors()
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetAuthorsQuery());
         }
 
         /// <summary>
@@ -52,10 +53,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">the id of the author to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("")]
-        public async Task<GetAuthorQueryDto> GetAuthor([FromBody] GetAuthorQuery query)
+        [HttpGet("{id}")]
+        public async Task<GetAuthorQueryDto> GetAuthor([FromRoute] int id)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetAuthorQuery() { AuthorId = id });
         }
 
         /// <summary>
@@ -74,10 +75,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">The id of the author to be deleted</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpDelete("")]
-        public async Task<DeleteAuthorCommandDto> DeleteAuthor([FromBody] DeleteAuthorCommand command)
+        [HttpDelete("{id}")]
+        public async Task<DeleteAuthorCommandDto> DeleteAuthor([FromRoute] int id)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(new DeleteAuthorCommand() { AuthorId = id });
         }
     }
 }

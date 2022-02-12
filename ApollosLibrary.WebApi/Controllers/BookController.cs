@@ -31,7 +31,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">the request with the book information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("create")]
+        [HttpPost("")]
         public async Task<AddBookCommandDto> AddBook([FromBody] AddBookCommand command)
         {
             return await _mediator.Send(command);
@@ -42,20 +42,20 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">the id of the book to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("")]
-        public async Task<GetBookQueryDto> GetBook([FromBody] GetBookQuery query)
+        [HttpGet("{id}")]
+        public async Task<GetBookQueryDto> GetBook([FromRoute] int id)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetBookQuery());
         }
 
         /// <summary>
         /// Used to get a books
         /// </summary>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("books")]
-        public async Task<GetBooksQueryDto> GetBooks([FromBody] GetBooksQuery query)
+        [HttpGet("")]
+        public async Task<GetBooksQueryDto> GetBooks([FromRoute] int id)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetBooksQuery());
         }
 
         /// <summary>

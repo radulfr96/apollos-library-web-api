@@ -20,15 +20,11 @@ namespace ApollosLibrary.WebApi.Controllers
     public class ReferenceController : BaseApiController
     {
         private readonly ApollosLibraryContext _dbContext;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IReferenceDataService _referenceService;
 
-        public ReferenceController(ApollosLibraryContext dbContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration)
+        public ReferenceController(ApollosLibraryContext dbContext, IConfiguration configuration) : base(configuration)
         {
             _dbContext = dbContext;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
             _referenceService = new ReferenceDataService(new ReferenceUnitOfWork(_dbContext));
         }
 
