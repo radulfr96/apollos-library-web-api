@@ -8,6 +8,7 @@ using ApollosLibrary.Application.User.Queries.CheckMyUsernameUnique;
 using ApollosLibrary.Application.User.Queries.GetUserQuery;
 using ApollosLibrary.Application.User.Queries.GetUsersQuery;
 using System.Threading.Tasks;
+using System;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -37,10 +38,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">the id of the user to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("")]
-        public async Task<GetUserQueryDto> GetUser([FromBody] GetUserQuery query)
+        [HttpGet("{id}")]
+        public async Task<GetUserQueryDto> GetUser([FromRoute] Guid id)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetUserQuery() { UserId = id });
         }
 
         /// <summary>

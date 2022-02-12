@@ -32,7 +32,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request with the publisher information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("create")]
+        [HttpPost("")]
         public async Task<AddPublisherCommandDto> AddPublisher([FromBody] AddPublisherCommand command)
         {
             return await _mediator.Send(command);
@@ -42,10 +42,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get publishers
         /// </summary>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("publishers")]
-        public async Task<GetPublishersQueryDto> GetPublishers([FromBody] GetPublishersQuery query)
+        [HttpGet("")]
+        public async Task<GetPublishersQueryDto> GetPublishers()
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetPublishersQuery());
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">the id of the publisher to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("")]
-        public async Task<GetPublisherQueryDto> GetPublisher([FromBody] GetPublisherQuery query)
+        [HttpGet("{id}")]
+        public async Task<GetPublisherQueryDto> GetPublisher([FromRoute] int id)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetPublisherQuery() { PublisherId = id });
         }
 
         /// <summary>
