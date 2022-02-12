@@ -36,7 +36,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request with the genre information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("create")]
+        [HttpPost("")]
         public async Task<AddGenreCommandDto> AddGenre([FromBody] AddGenreCommand command)
         {
             return await _mediator.Send(command);
@@ -46,10 +46,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get genres
         /// </summary>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("genres")]
-        public async Task<GetGenresQueryDto> GetGenres([FromBody] GetGenresQuery query)
+        [HttpGet("")]
+        public async Task<GetGenresQueryDto> GetGenres()
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetGenresQuery());
         }
 
         /// <summary>
@@ -57,10 +57,10 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="id">the id of the genre to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPost("")]
-        public async Task<GetGenreQueryDto> GetGenre([FromBody] GetGenreQuery query)
+        [HttpGet("{id}")]
+        public async Task<GetGenreQueryDto> GetGenre([FromRoute] int id)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new GetGenreQuery() { GenreId = id });
         }
 
         /// <summary>

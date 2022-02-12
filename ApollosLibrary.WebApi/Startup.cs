@@ -55,64 +55,20 @@ namespace ApollosLibrary.WebApi
 
             services.AddScoped<ApiExceptionFilterAttribute>();
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContext>();
-            optionsBuilder.UseSqlServer(Configuration.GetSection("ConnectionString").Value);
-            //services.AddDbContext<ApollosLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
-            var context = new ApollosLibraryContext(optionsBuilder.Options);
+            services.AddDbContext<ApollosLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
 
             services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
-            services.AddTransient(ser =>
-            {
-                return new ApollosLibraryContext(optionsBuilder.Options);
-            });
-
-            services.AddTransient(ser =>
-            {
-                return new ApollosLibraryContext(optionsBuilder.Options);
-            });
-
-            services.AddTransient<IPublisherUnitOfWork>(p =>
-            {
-                return new PublisherUnitOfWork(context);
-            });
-
-            services.AddTransient<IAuthorUnitOfWork>(p =>
-            {
-                return new AuthorUnitOfWork(context);
-            });
-
-            services.AddTransient<IBookUnitOfWork>(p =>
-            {
-                return new BookUnitOfWork(context);
-            });
-
-            services.AddTransient<IGenreUnitOfWork>(p =>
-            {
-                return new GenreUnitOfWork(context);
-            });
-
-            services.AddTransient<IReferenceUnitOfWork>(p =>
-            {
-                return new ReferenceUnitOfWork(context);
-            });
-
-            services.AddTransient<IUserUnitOfWork>(p =>
-            {
-                return new UserUnitOfWork(context);
-            });
-
-            services.AddTransient<IUserService>(p =>
-            {
-                return new UserService(p.GetService<IHttpContextAccessor>());
-            });
-
-            services.AddTransient<IDateTimeService>(p =>
-            {
-                return new DateTimeService();
-            });
+            services.AddTransient<IPublisherUnitOfWork, PublisherUnitOfWork>();
+            services.AddTransient<IAuthorUnitOfWork, AuthorUnitOfWork>();
+            services.AddTransient<IBookUnitOfWork, BookUnitOfWork>();
+            services.AddTransient<IGenreUnitOfWork,GenreUnitOfWork>();
+            services.AddTransient<IReferenceUnitOfWork, ReferenceUnitOfWork>();
+            services.AddTransient<IUserUnitOfWork, UserUnitOfWork>();
+            services.AddTransient<IUserService,UserService>();
+            services.AddTransient<IDateTimeService, DateTimeService>();
 
             services.AddSwaggerGen(c =>
             {
