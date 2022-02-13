@@ -1,10 +1,10 @@
 mode: chatops
 branches:
   - label: enhancement
-    name: develop
+    name: master
     prefix: feature/
   - label: bug
-    name: develop
+    name: master
     prefix: bugfix/
   - label: urgent bug
     name: master
