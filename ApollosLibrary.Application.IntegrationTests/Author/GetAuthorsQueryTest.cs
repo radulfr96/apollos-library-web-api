@@ -18,7 +18,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     [Collection("IntegrationTestCollection")]
     public class GetAuthorsQueryTest : TestBase
     {
-        private readonly ApollosLibraryContext _context;
+        private readonly ApollosLibraryContextOld _context;
         private readonly IMediator _mediatr;
 
         public GetAuthorsQueryTest(TestFixture fixture) : base(fixture)
@@ -26,7 +26,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             var services = fixture.ServiceCollection;
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContext>();
+            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
         }
 
         [Fact]

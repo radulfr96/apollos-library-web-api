@@ -13,12 +13,12 @@ namespace ApollosLibrary.UnitOfWork
 {
     public class UserUnitOfWork : IUserUnitOfWork
     {
-        private readonly ApollosLibraryContext _dbContext;
+        private readonly ApollosLibraryContextOld _dbContext;
         private IDbContextTransaction _transaction;
         private IUserDataLayer _userDataLayer;
         private bool disposed = false;
 
-        public UserUnitOfWork(ApollosLibraryContext dbContext)
+        public UserUnitOfWork(ApollosLibraryContextOld dbContext)
         {
             _dbContext = dbContext;
         }

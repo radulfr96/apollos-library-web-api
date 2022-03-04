@@ -12,12 +12,12 @@ namespace ApollosLibrary.UnitOfWork
 {
     public class AuthorUnitOfWork : IAuthorUnitOfWork, IDisposable
     {
-        private readonly ApollosLibraryContext _dbContext;
+        private readonly ApollosLibraryContextOld _dbContext;
         private IDbContextTransaction _transaction;
         private IAuthorDataLayer _authorDataLayer;
         private bool disposed = false;
 
-        public AuthorUnitOfWork(ApollosLibraryContext dbContext)
+        public AuthorUnitOfWork(ApollosLibraryContextOld dbContext)
         {
             _dbContext = dbContext;
         }

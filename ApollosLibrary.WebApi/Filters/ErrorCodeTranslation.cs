@@ -10,7 +10,7 @@ namespace ApollosLibrary.WebApi.Filters
     {
         private readonly static Dictionary<int, string> _errorCodes = new Dictionary<int, string>();
 
-        public static void Initialise(ApollosLibraryContext context)
+        public static void Initialise(ApollosLibraryContextOld context)
         {
             if (_errorCodes.Count == 0)
             {

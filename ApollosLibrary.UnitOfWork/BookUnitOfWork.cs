@@ -13,10 +13,10 @@ namespace ApollosLibrary.UnitOfWork
     public class BookUnitOfWork : IBookUnitOfWork
     {
         private IBookDataLayer _bookDataLayer;
-        private readonly ApollosLibraryContext _context;
+        private readonly ApollosLibraryContextOld _context;
         private bool disposed = false;
 
-        public BookUnitOfWork(ApollosLibraryContext context)
+        public BookUnitOfWork(ApollosLibraryContextOld context)
         {
             _context = context;
         }

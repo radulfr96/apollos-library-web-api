@@ -23,7 +23,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class UpdateAuthorCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContext _context;
+        private readonly ApollosLibraryContextOld _context;
         private readonly IMediator _mediatr;
         private readonly ServiceProvider _provider;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -40,7 +40,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _provider = fixture.ServiceCollection.BuildServiceProvider();
             _mediatr = _provider.GetRequiredService<IMediator>();
-            _context = _provider.GetRequiredService<ApollosLibraryContext>();
+            _context = _provider.GetRequiredService<ApollosLibraryContextOld>();
             _contextAccessor = _provider.GetRequiredService<IHttpContextAccessor>();
         }
 

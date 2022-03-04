@@ -12,12 +12,12 @@ namespace ApollosLibrary.UnitOfWork
 {
     public class GenreUnitOfWork : IGenreUnitOfWork, IDisposable
     {
-        private readonly ApollosLibraryContext _dbContext;
+        private readonly ApollosLibraryContextOld _dbContext;
         private IDbContextTransaction _transaction;
         private IGenreDataLayer _genreDataLayer;
         private bool disposed = false;
 
-        public GenreUnitOfWork(ApollosLibraryContext dbContext)
+        public GenreUnitOfWork(ApollosLibraryContextOld dbContext)
         {
             _dbContext = dbContext;
         }

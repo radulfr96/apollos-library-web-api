@@ -17,7 +17,7 @@ namespace ApollosLibrary.Application.UnitTests
 {
     public class TestFixture
     {
-        public readonly ApollosLibraryContext context;
+        public readonly ApollosLibraryContextOld context;
         public readonly Configuration configuration;
         public IServiceCollection ServiceCollection { get; private set; }
 
@@ -33,23 +33,23 @@ namespace ApollosLibrary.Application.UnitTests
 
             configuration = new Configuration();
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContextOld>();
             optionsBuilder.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
 
-            ServiceCollection.AddDbContext<ApollosLibraryContext>(opt =>
+            ServiceCollection.AddDbContext<ApollosLibraryContextOld>(opt =>
             {
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
             });
-            context = new ApollosLibraryContext(optionsBuilder.Options);
+            context = new ApollosLibraryContextOld(optionsBuilder.Options);
 
             ServiceCollection.AddTransient(ser =>
             {
-                return new ApollosLibraryContext(optionsBuilder.Options);
+                return new ApollosLibraryContextOld(optionsBuilder.Options);
             });
 
             localConfig.Bind(configuration);
 
-            ServiceCollection.AddDbContext<ApollosLibraryContext>();
+            ServiceCollection.AddDbContext<ApollosLibraryContextOld>();
 
             ServiceCollection.AddHttpContextAccessor();
 

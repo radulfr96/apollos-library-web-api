@@ -11,9 +11,9 @@ namespace ApollosLibrary.DataLayer
 {
     public class ReferenceDataLayer : IReferenceDataLayer
     {
-        private ApollosLibraryContext _context;
+        private ApollosLibraryContextOld _context;
 
-        public ReferenceDataLayer(ApollosLibraryContext context)
+        public ReferenceDataLayer(ApollosLibraryContextOld context)
         {
             _context = context;
         }

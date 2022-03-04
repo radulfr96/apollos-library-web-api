@@ -13,11 +13,11 @@ namespace ApollosLibrary.UnitOfWork
     public class PublisherUnitOfWork : IPublisherUnitOfWork, IDisposable
     {
         private IPublisherDataLayer _publisherDataLayer;
-        private ApollosLibraryContext _dbContext;
+        private ApollosLibraryContextOld _dbContext;
         private IDbContextTransaction _transaction;
         private bool disposed = false;
 
-        public PublisherUnitOfWork(ApollosLibraryContext dbContext)
+        public PublisherUnitOfWork(ApollosLibraryContextOld dbContext)
         {
             _dbContext = dbContext;
         }

@@ -11,9 +11,9 @@ namespace ApollosLibrary.DataLayer
 {
     public class BookDataLayer : IBookDataLayer
     {
-        private ApollosLibraryContext _context;
+        private ApollosLibraryContextOld _context;
 
-        public BookDataLayer(ApollosLibraryContext context)
+        public BookDataLayer(ApollosLibraryContextOld context)
         {
             _context = context;
         }

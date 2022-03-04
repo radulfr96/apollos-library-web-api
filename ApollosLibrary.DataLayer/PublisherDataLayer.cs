@@ -11,9 +11,9 @@ namespace ApollosLibrary.DataLayer
 {
     public class PublisherDataLayer : IPublisherDataLayer
     {
-        private readonly ApollosLibraryContext _context;
+        private readonly ApollosLibraryContextOld _context;
 
-        public PublisherDataLayer(ApollosLibraryContext context)
+        public PublisherDataLayer(ApollosLibraryContextOld context)
         {
             _context = context;
         }

@@ -11,9 +11,9 @@ namespace ApollosLibrary.DataLayer
 {
     public class UserDataLayer : IUserDataLayer
     {
-        private ApollosLibraryContext _context;
+        private ApollosLibraryContextOld _context;
 
-        public UserDataLayer(ApollosLibraryContext context)
+        public UserDataLayer(ApollosLibraryContextOld context)
         {
             _context = context;
         }

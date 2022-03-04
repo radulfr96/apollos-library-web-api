@@ -23,7 +23,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class UpdatePasswordCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContext _context;
+        private readonly ApollosLibraryContextOld _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -38,7 +38,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContext>();
+            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
             _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 

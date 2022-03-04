@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ApollosLibrary.Persistence.Model
 {
-    public partial class ApollosLibraryContext : DbContext
+    public partial class ApollosLibraryContextOld : DbContext
     {
-        public ApollosLibraryContext()
+        public ApollosLibraryContextOld()
         {
         }
 
-        public ApollosLibraryContext(DbContextOptions<ApollosLibraryContext> options)
+        public ApollosLibraryContextOld(DbContextOptions<ApollosLibraryContextOld> options)
             : base(options)
         {
         }

@@ -11,9 +11,9 @@ namespace ApollosLibrary.DataLayer
 {
     public class GenreDataLayer : IGenreDataLayer
     {
-        public ApollosLibraryContext _context;
+        public ApollosLibraryContextOld _context;
 
-        public GenreDataLayer(ApollosLibraryContext context)
+        public GenreDataLayer(ApollosLibraryContextOld context)
         {
             _context = context;
         }

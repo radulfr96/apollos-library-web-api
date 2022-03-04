@@ -32,6 +32,7 @@ using ApollosLibrary.UnitOfWork;
 using ApollosLibrary.UnitOfWork.Contracts;
 using ApollosLibrary.WebApi.Filters;
 using NLog;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.WebApi
 {

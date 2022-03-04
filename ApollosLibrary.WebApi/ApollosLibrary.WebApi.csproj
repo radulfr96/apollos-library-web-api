@@ -12,6 +12,10 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
@@ -25,6 +29,7 @@
     <ProjectReference Include="..\ApollosLibrary.Application\ApollosLibrary.Application.csproj" />
     <ProjectReference Include="..\ApollosLibrary.DataLayer.Contracts\ApollosLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\ApollosLibrary.DataLayer\ApollosLibrary.DataLayer.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Domain\ApollosLibrary.Domain.csproj" />
     <ProjectReference Include="..\ApollosLibrary.Infrastructure\ApollosLibrary.Infrastructure.csproj" />
     <ProjectReference Include="..\ApollosLibrary.Persistence\ApollosLibrary.Persistence.csproj" />
     <ProjectReference Include="..\ApollosLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
