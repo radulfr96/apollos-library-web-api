@@ -69,6 +69,7 @@ namespace ApollosLibrary.WebApi
             services.AddTransient<IReferenceUnitOfWork, ReferenceUnitOfWork>();
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
+            services.AddScoped<DbContext, ApollosLibraryContext>();
 
             services.AddSwaggerGen(c =>
             {

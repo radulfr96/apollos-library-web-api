@@ -31,6 +31,7 @@ namespace ApollosLibrary.Domain.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"), 1L, 1);
 
                     b.Property<string>("CountryId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("CreatedBy")
@@ -93,10 +94,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<int?>("Edition")
                         .HasColumnType("int");
 
-                    b.Property<int>("FictionTypeTypeId")
+                    b.Property<int>("FictionTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FormTypeTypeId")
+                    b.Property<int>("FormTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Isbn")
@@ -112,10 +113,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<decimal?>("NumberInSeries")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PublicationFormatTypeId")
+                    b.Property<int>("PublicationFormatId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PublisherId")
+                    b.Property<int?>("PublisherId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SeriesId")
@@ -131,11 +132,11 @@ namespace ApollosLibrary.Domain.Migrations
 
                     b.HasKey("BookId");
 
-                    b.HasIndex("FictionTypeTypeId");
+                    b.HasIndex("FictionTypeId");
 
-                    b.HasIndex("FormTypeTypeId");
+                    b.HasIndex("FormTypeId");
 
-                    b.HasIndex("PublicationFormatTypeId");
+                    b.HasIndex("PublicationFormatId");
 
                     b.HasIndex("PublisherId");
 
@@ -345,11 +346,28 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("AuthorBook");
                 });
 
+            modelBuilder.Entity("BookGenre", b =>
+                {
+                    b.Property<int>("BooksBookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenresGenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksBookId", "GenresGenreId");
+
+                    b.HasIndex("GenresGenreId");
+
+                    b.ToTable("BookGenre");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Author", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Country");
                 });
@@ -358,27 +376,25 @@ namespace ApollosLibrary.Domain.Migrations
                 {
                     b.HasOne("ApollosLibrary.Domain.FictionType", "FictionType")
                         .WithMany()
-                        .HasForeignKey("FictionTypeTypeId")
+                        .HasForeignKey("FictionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApollosLibrary.Domain.FormType", "FormType")
                         .WithMany()
-                        .HasForeignKey("FormTypeTypeId")
+                        .HasForeignKey("FormTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApollosLibrary.Domain.PublicationFormat", "PublicationFormat")
                         .WithMany()
-                        .HasForeignKey("PublicationFormatTypeId")
+                        .HasForeignKey("PublicationFormatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApollosLibrary.Domain.Publisher", "Publisher")
                         .WithMany()
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PublisherId");
 
                     b.HasOne("ApollosLibrary.Domain.Series", "Series")
                         .WithMany("Books")
@@ -417,6 +433,21 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasOne("ApollosLibrary.Domain.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksBookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BookGenre", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksBookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApollosLibrary.Domain.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresGenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

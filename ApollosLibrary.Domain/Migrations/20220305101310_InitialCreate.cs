@@ -113,7 +113,7 @@ namespace ApollosLibrary.Domain.Migrations
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -126,7 +126,8 @@ namespace ApollosLibrary.Domain.Migrations
                         name: "FK_Authors_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
-                        principalColumn: "CountryId");
+                        principalColumn: "CountryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,13 +170,13 @@ namespace ApollosLibrary.Domain.Migrations
                     EIsbn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SeriesId = table.Column<int>(type: "int", nullable: true),
                     NumberInSeries = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Edition = table.Column<int>(type: "int", nullable: true),
-                    PublicationFormatTypeId = table.Column<int>(type: "int", nullable: false),
-                    FictionTypeTypeId = table.Column<int>(type: "int", nullable: false),
-                    FormTypeTypeId = table.Column<int>(type: "int", nullable: false),
-                    PublisherId = table.Column<int>(type: "int", nullable: false),
+                    PublicationFormatId = table.Column<int>(type: "int", nullable: false),
+                    FictionTypeId = table.Column<int>(type: "int", nullable: false),
+                    FormTypeId = table.Column<int>(type: "int", nullable: false),
+                    PublisherId = table.Column<int>(type: "int", nullable: true),
+                    SeriesId = table.Column<int>(type: "int", nullable: true),
                     CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -186,20 +187,20 @@ namespace ApollosLibrary.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
-                        name: "FK_Books_FictionTypes_FictionTypeTypeId",
-                        column: x => x.FictionTypeTypeId,
+                        name: "FK_Books_FictionTypes_FictionTypeId",
+                        column: x => x.FictionTypeId,
                         principalTable: "FictionTypes",
                         principalColumn: "TypeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_FormTypes_FormTypeTypeId",
-                        column: x => x.FormTypeTypeId,
+                        name: "FK_Books_FormTypes_FormTypeId",
+                        column: x => x.FormTypeId,
                         principalTable: "FormTypes",
                         principalColumn: "TypeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_PublicationFormats_PublicationFormatTypeId",
-                        column: x => x.PublicationFormatTypeId,
+                        name: "FK_Books_PublicationFormats_PublicationFormatId",
+                        column: x => x.PublicationFormatId,
                         principalTable: "PublicationFormats",
                         principalColumn: "TypeId",
                         onDelete: ReferentialAction.Cascade);
@@ -207,8 +208,7 @@ namespace ApollosLibrary.Domain.Migrations
                         name: "FK_Books_Publishers_PublisherId",
                         column: x => x.PublisherId,
                         principalTable: "Publishers",
-                        principalColumn: "PublisherId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PublisherId");
                     table.ForeignKey(
                         name: "FK_Books_Series_SeriesId",
                         column: x => x.SeriesId,
@@ -240,6 +240,30 @@ namespace ApollosLibrary.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BookGenre",
+                columns: table => new
+                {
+                    BooksBookId = table.Column<int>(type: "int", nullable: false),
+                    GenresGenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookGenre", x => new { x.BooksBookId, x.GenresGenreId });
+                    table.ForeignKey(
+                        name: "FK_BookGenre_Books_BooksBookId",
+                        column: x => x.BooksBookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookGenre_Genres_GenresGenreId",
+                        column: x => x.GenresGenreId,
+                        principalTable: "Genres",
+                        principalColumn: "GenreId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AuthorBook_BooksBookId",
                 table: "AuthorBook",
@@ -251,19 +275,24 @@ namespace ApollosLibrary.Domain.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_FictionTypeTypeId",
-                table: "Books",
-                column: "FictionTypeTypeId");
+                name: "IX_BookGenre_GenresGenreId",
+                table: "BookGenre",
+                column: "GenresGenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_FormTypeTypeId",
+                name: "IX_Books_FictionTypeId",
                 table: "Books",
-                column: "FormTypeTypeId");
+                column: "FictionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_PublicationFormatTypeId",
+                name: "IX_Books_FormTypeId",
                 table: "Books",
-                column: "PublicationFormatTypeId");
+                column: "FormTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_PublicationFormatId",
+                table: "Books",
+                column: "PublicationFormatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_PublisherId",
@@ -287,16 +316,19 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "AuthorBook");
 
             migrationBuilder.DropTable(
-                name: "ErrorCodes");
+                name: "BookGenre");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "ErrorCodes");
 
             migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "FictionTypes");
