@@ -1,4 +1,5 @@
-﻿using ApollosLibrary.Persistence.Model;
+﻿using ApollosLibrary.Domain;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,18 +17,6 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="book">the book to add</param>
         Task AddBook(Book book);
-
-        /// <summary>
-        /// Used to add a book author relationship
-        /// </summary>
-        /// <param name="bookAuthor">The book author relationship to add</param>
-        Task AddBookAuthor(BookAuthor bookAuthor);
-
-        /// <summary>
-        /// Used to add a books genre relationship
-        /// </summary>
-        /// <param name="bookGenre">The book genre relationship to add</param>
-        Task AddBookGenre(BookGenre bookGenre);
 
         /// <summary>
         /// Used to get a book by its ISBN
@@ -68,12 +57,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// Used to delete a books genre relationships
         /// </summary>
         /// <param name="bookId">The book id of the relationships to delete</param>
-        void DeleteBookGenreRelationships(int bookId);
+        Task DeleteBookGenreRelationships(int bookId);
 
         /// <summary>
         /// Used to delete a books author relationships
         /// </summary>
         /// <param name="bookId">The book id of the relationships to delete</param>
-        void DeleteBookAuthorRelationships(int bookId);
+        Task DeleteBookAuthorRelationships(int bookId);
     }
 }

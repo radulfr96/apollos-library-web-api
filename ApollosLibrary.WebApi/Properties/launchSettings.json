@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "ApollosLibrary.Services": {
+    "ApollosLibrary.WebApi": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

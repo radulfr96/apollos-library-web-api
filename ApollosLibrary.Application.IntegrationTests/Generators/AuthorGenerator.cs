@@ -9,9 +9,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
 {
     public static class AuthorGenerator
     {
-        public static Persistence.Model.Author GetGenericAuthor(Guid userId, string countryId)
+        public static Domain.Author GetGenericAuthor(Guid userId, string countryId)
         {
-            return new Faker<Persistence.Model.Author>()
+            return new Faker<Domain.Author>()
                 .RuleFor(a => a.CountryId, countryId)
                 .RuleFor(a => a.CreatedBy, userId)
                 .RuleFor(a => a.CreatedDate, f => f.Date.Recent())

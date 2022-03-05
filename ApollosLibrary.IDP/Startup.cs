@@ -15,6 +15,8 @@ using ApollosLibrary.IDP.Services;
 using ApollosLibrary.IDP.Stores;
 using ApollosLibrary.IDP.UnitOfWork;
 using System.Reflection;
+using MediatR;
+using ApollosLibrary.IDP.User.Queries.GetUserQuery;
 
 namespace ApollosLibrary.IDP
 {
@@ -35,18 +37,22 @@ namespace ApollosLibrary.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
+            services.AddMediatR(typeof(GetUserQuery).GetTypeInfo().Assembly);
+
             services.AddDbContext<ApollosLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddScoped<IUserService>(provider =>
             {
-                return new UserService(new UserUnitOfWork(provider.GetRequiredService<ApollosLibraryContext>()), new PasswordHasher<User>());
+                return new UserService(new UserUnitOfWork(provider.GetRequiredService<ApollosLibraryContext>()), new PasswordHasher<Model.User>());
             });
 
             services.AddScoped<IMapper>(opt =>
             {
                 return new Mapper(AutoMapper.Configuration());
             });
+
+            services.AddTransient<IUserUnitOfWork, UserUnitOfWork>();
 
             var builder = services.AddIdentityServer(options =>
             {

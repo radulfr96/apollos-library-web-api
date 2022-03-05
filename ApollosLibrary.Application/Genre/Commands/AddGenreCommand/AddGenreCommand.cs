@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ApollosLibrary.UnitOfWork.Contracts;
-using ApollosLibrary.Persistence.Model;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace ApollosLibrary.Application.Genre.Commands.AddGenreCommand
         {
             var response = new AddGenreCommandDto();
 
-            var genre = new Persistence.Model.Genre()
+            var genre = new Domain.Genre()
             {
                 Name = command.Name,
                 CreatedDate = _dateTimeService.Now,

@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.DataLayer
 {
     public class GenreDataLayer : IGenreDataLayer
     {
-        public ApollosLibraryContextOld _context;
+        public ApollosLibraryContext _context;
 
-        public GenreDataLayer(ApollosLibraryContextOld context)
+        public GenreDataLayer(ApollosLibraryContext context)
         {
             _context = context;
         }
@@ -25,10 +25,6 @@ namespace ApollosLibrary.DataLayer
 
         public async Task DeleteGenre(int id)
         {
-            var bookGenres = await _context.BookGenres.Where(bg => bg.GenreId == id).ToListAsync();
-
-            _context.BookGenres.RemoveRange(bookGenres);
-
             _context.Genres.Remove(await _context.Genres.FirstOrDefaultAsync(g => g.GenreId == id));
         }
 

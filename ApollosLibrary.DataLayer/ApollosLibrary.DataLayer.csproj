@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApollosLibrary.DataLayer.Contracts\ApollosLibrary.DataLayer.Contracts.csproj" />
-    <ProjectReference Include="..\ApollosLibrary.Persistence\ApollosLibrary.Persistence.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Domain\ApollosLibrary.Domain.csproj" />
   </ItemGroup>
 
 </Project>

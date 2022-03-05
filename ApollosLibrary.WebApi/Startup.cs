@@ -27,7 +27,7 @@ using ApollosLibrary.Application.Book.Queries.GetBookQuery;
 using ApollosLibrary.Application.Common.Behaviour;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Infrastructure.Services;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork;
 using ApollosLibrary.UnitOfWork.Contracts;
 using ApollosLibrary.WebApi.Filters;
@@ -67,7 +67,6 @@ namespace ApollosLibrary.WebApi
             services.AddTransient<IBookUnitOfWork, BookUnitOfWork>();
             services.AddTransient<IGenreUnitOfWork,GenreUnitOfWork>();
             services.AddTransient<IReferenceUnitOfWork, ReferenceUnitOfWork>();
-            services.AddTransient<IUserUnitOfWork, UserUnitOfWork>();
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
 
@@ -118,11 +117,14 @@ namespace ApollosLibrary.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContext dbContext)
         {
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            dbContext.Database.Migrate();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

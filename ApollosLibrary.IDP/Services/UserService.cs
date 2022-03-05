@@ -15,9 +15,9 @@ namespace ApollosLibrary.IDP.Services
     public class UserService : IUserService
     {
         private readonly IUserUnitOfWork _unitOfWork;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IPasswordHasher<Model.User> _passwordHasher;
 
-        public UserService(IUserUnitOfWork unitOfWork, IPasswordHasher<User> passwordHasher)
+        public UserService(IUserUnitOfWork unitOfWork, IPasswordHasher<Model.User> passwordHasher)
         {
             _unitOfWork = unitOfWork;
             _passwordHasher = passwordHasher;
@@ -28,12 +28,12 @@ namespace ApollosLibrary.IDP.Services
             throw new NotImplementedException();
         }
 
-        public async Task<User> GetUserByUsername(string username)
+        public async Task<Model.User> GetUserByUsername(string username)
         {
             return await _unitOfWork.UserDataLayer.GetUserByUsername(username);
         }
 
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<Model.User> GetUserByEmail(string email)
         {
             return await _unitOfWork.UserDataLayer.GetUserByEmail(email);
         }
@@ -72,7 +72,7 @@ namespace ApollosLibrary.IDP.Services
             return user.IsActive;
         }
 
-        public async Task<User> GetUserBySubject(string subject)
+        public async Task<Model.User> GetUserBySubject(string subject)
         {
             if (string.IsNullOrWhiteSpace(subject))
             {
@@ -82,7 +82,7 @@ namespace ApollosLibrary.IDP.Services
             return await _unitOfWork.UserDataLayer.GetUserBySubject(subject);
         }
 
-        public async Task AddUser(User user, string password)
+        public async Task AddUser(Model.User user, string password)
         {
             user.Password = _passwordHasher.HashPassword(user, password);
             await _unitOfWork.UserDataLayer.AddUser(user);

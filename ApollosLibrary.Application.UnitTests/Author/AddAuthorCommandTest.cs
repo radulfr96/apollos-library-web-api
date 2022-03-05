@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using FluentValidation.Results;
 using FluentValidation.TestHelper;
-using ApollosLibrary.Persistence.Model;
+
 using Moq;
 using ApollosLibrary.Application.Author.Commands.AddAuthorCommand;
 using ApollosLibrary.Application.Common.Enums;
@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Common.DTOs;
 using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.UnitTests
 {

@@ -1,22 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using ApollosLibrary.DataLayer;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.UnitOfWork
 {
     public class BookUnitOfWork : IBookUnitOfWork
     {
         private IBookDataLayer _bookDataLayer;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private bool disposed = false;
 
-        public BookUnitOfWork(ApollosLibraryContextOld context)
+        public BookUnitOfWork(ApollosLibraryContext context)
         {
             _context = context;
         }

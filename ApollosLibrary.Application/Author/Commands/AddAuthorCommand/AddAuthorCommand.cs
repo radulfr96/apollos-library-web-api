@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace ApollosLibrary.Application.Author.Commands.AddAuthorCommand
 
             var response = new AddAuthorCommandDto();
 
-            var author = new Persistence.Model.Author()
+            var author = new Domain.Author()
             {
                 FirstName = command.Firstname,
                 MiddleName = command.Middlename,

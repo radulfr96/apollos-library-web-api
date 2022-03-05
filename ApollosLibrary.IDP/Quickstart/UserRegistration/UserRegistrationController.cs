@@ -44,7 +44,7 @@ namespace ApollosLibrary.IDP.UserRegistration
 
             var userId = Guid.NewGuid();
 
-            var user = new User()
+            var user = new Model.User()
             {
                 CreatedBy = userId,
                 CreatedDate = DateTime.Now,

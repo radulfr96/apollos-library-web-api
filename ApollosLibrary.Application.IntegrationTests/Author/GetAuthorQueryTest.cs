@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ApollosLibrary.Application.Author.Queries.GetAuthorQuery;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +12,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
     public class GetAuthorQueryTest : TestBase
     {
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
         public GetAuthorQueryTest(TestFixture fixture) : base(fixture)
@@ -27,7 +27,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             var services = fixture.ServiceCollection;
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
         }
 
         [Fact]

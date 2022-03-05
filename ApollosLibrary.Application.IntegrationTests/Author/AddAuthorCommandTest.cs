@@ -7,7 +7,7 @@ using Moq;
 using ApollosLibrary.Application.Author.Commands.AddAuthorCommand;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -23,7 +24,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class AddAuthorCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -38,7 +39,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
             _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 
@@ -71,7 +72,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var author = _context.Authors.FirstOrDefault(a => a.AuthorId == result.AuthorId);
 
-            author.Should().BeEquivalentTo(new Persistence.Model.Author()
+            author.Should().BeEquivalentTo(new Domain.Author()
             {
                 AuthorId = author.AuthorId,
                 CountryId = command.CountryID,
@@ -81,7 +82,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FirstName = command.Firstname,
                 LastName = command.Lastname,
                 MiddleName = command.Middlename,
-            }, opt => opt.Excluding(a => a.Country).Excluding(a => a.BookAuthors));
+            }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books));
         }
     }
 }

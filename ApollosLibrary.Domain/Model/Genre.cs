@@ -14,5 +14,6 @@ namespace ApollosLibrary.Domain
         public Guid? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public Guid? ModifiedBy { get; set; }
+        public ICollection<Book> Books { get; set; }
     }
 }

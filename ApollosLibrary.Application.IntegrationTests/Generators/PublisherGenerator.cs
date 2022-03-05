@@ -9,9 +9,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
 {
     public static class PublisherGenerator
     {
-        public static Persistence.Model.Publisher GetGenericPublisher(string countryId, Guid userId)
+        public static Domain.Publisher GetGenericPublisher(string countryId, Guid userId)
         {
-            return new Faker<Persistence.Model.Publisher>()
+            return new Faker<Domain.Publisher>()
                 .RuleFor(p => p.City, f => f.Address.City())
                 .RuleFor(p => p.CountryId, countryId)
                 .RuleFor(p => p.CreatedBy, userId)

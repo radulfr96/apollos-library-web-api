@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using ApollosLibrary.Application.Common.DTOs;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Infrastructure.Services;
-using ApollosLibrary.Persistence.Model;
 using ApollosLibrary.UnitOfWork;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -19,10 +19,10 @@ namespace ApollosLibrary.WebApi.Controllers
     [Route("api/[controller]")]
     public class ReferenceController : BaseApiController
     {
-        private readonly ApollosLibraryContextOld _dbContext;
+        private readonly ApollosLibraryContext _dbContext;
         private readonly IReferenceDataService _referenceService;
 
-        public ReferenceController(ApollosLibraryContextOld dbContext, IConfiguration configuration) : base(configuration)
+        public ReferenceController(ApollosLibraryContext dbContext, IConfiguration configuration) : base(configuration)
         {
             _dbContext = dbContext;
             _referenceService = new ReferenceDataService(new ReferenceUnitOfWork(_dbContext));

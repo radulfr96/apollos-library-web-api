@@ -8,7 +8,7 @@ using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -179,7 +180,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBookByISBN(It.IsAny<string>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBookByISBN(It.IsAny<string>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -259,8 +260,8 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
-            bookDataLayer.Setup(d => d.GetBookByISBN(It.IsAny<string>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
+            bookDataLayer.Setup(d => d.GetBookByISBN(It.IsAny<string>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -340,8 +341,8 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
-            bookDataLayer.Setup(d => d.GetBookByeISBN(It.IsAny<string>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
+            bookDataLayer.Setup(d => d.GetBookByeISBN(It.IsAny<string>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -422,7 +423,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
             bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
@@ -503,7 +504,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -585,7 +586,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -669,7 +670,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -755,7 +756,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -835,7 +836,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var publisherDataLayer = new Mock<IPublisherDataLayer>();
-            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Publisher()));
+            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Publisher()));
 
             var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
             publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
@@ -846,7 +847,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -926,7 +927,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var publisherDataLayer = new Mock<IPublisherDataLayer>();
-            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Publisher()));
+            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Publisher()));
 
             var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
             publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
@@ -937,7 +938,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);

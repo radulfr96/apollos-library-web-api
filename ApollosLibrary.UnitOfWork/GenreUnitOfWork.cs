@@ -1,23 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using ApollosLibrary.DataLayer;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.UnitOfWork
 {
     public class GenreUnitOfWork : IGenreUnitOfWork, IDisposable
     {
-        private readonly ApollosLibraryContextOld _dbContext;
+        private readonly ApollosLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
         private IGenreDataLayer _genreDataLayer;
         private bool disposed = false;
 
-        public GenreUnitOfWork(ApollosLibraryContextOld dbContext)
+        public GenreUnitOfWork(ApollosLibraryContext dbContext)
         {
             _dbContext = dbContext;
         }

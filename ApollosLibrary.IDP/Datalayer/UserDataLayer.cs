@@ -17,17 +17,41 @@ namespace ApollosLibrary.IDP.DataLayer
             _context = context;
         }
 
-        public async Task AddUser(User user)
+        public async Task AddUser(Model.User user)
         {
             await _context.Users.AddAsync(user);
         }
 
-        public async Task<User> GetUserBySubject(string subject)
+        public async Task<Model.User> GetUser(Guid id)
+        {
+            return await _context.Users
+                                 .Include(u => u.UserClaims)
+                                 .FirstOrDefaultAsync(u => u.UserId == id);
+        }
+
+        public async Task<List<Model.User>> GetUsers()
+        {
+            return await (
+                from u in _context.Users
+                select new Model.User()
+                {
+                    CreatedBy = u.CreatedBy,
+                    CreatedDate = u.CreatedDate,
+                    IsActive = u.IsActive,
+                    ModifiedBy = u.ModifiedBy,
+                    ModifiedDate = u.ModifiedDate,
+                    Password = u.Password,
+                    UserId = u.UserId,
+                    Username = u.Username,
+                }).ToListAsync();
+        }
+
+        public async Task<Model.User> GetUserBySubject(string subject)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Subject == subject);
         }
 
-        public async Task<User> GetUserByUsername(string username)
+        public async Task<Model.User> GetUserByUsername(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
@@ -41,7 +65,7 @@ namespace ApollosLibrary.IDP.DataLayer
             return user;
         }
 
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<Model.User> GetUserByEmail(string email)
         {
             var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == "emailaddress").FirstOrDefaultAsync();
 
@@ -60,7 +84,7 @@ namespace ApollosLibrary.IDP.DataLayer
             return user;
         }
 
-        public async Task<User> GetUserByEmailUserOnly(string email)
+        public async Task<Model.User> GetUserByEmailUserOnly(string email)
         {
             var emailClaim = await _context.UserClaims.Where(u => u.Value == email && u.Type == "emailaddress").FirstOrDefaultAsync();
 
@@ -86,7 +110,7 @@ namespace ApollosLibrary.IDP.DataLayer
             return claims;
         }
 
-        public async Task<User> GetUserBySecurityCode(string securityCode)
+        public async Task<Model.User> GetUserBySecurityCode(string securityCode)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.SecurityCode == securityCode && u.SecurityCodeExpirationDate >= DateTime.Now);
         }

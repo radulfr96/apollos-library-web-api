@@ -1,19 +1,19 @@
-﻿using ApollosLibrary.Persistence.Model;
-using ApollosLibrary.DataLayer.Contracts;
+﻿using ApollosLibrary.DataLayer.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.DataLayer
 {
     public class BookDataLayer : IBookDataLayer
     {
-        private ApollosLibraryContextOld _context;
+        private ApollosLibraryContext _context;
 
-        public BookDataLayer(ApollosLibraryContextOld context)
+        public BookDataLayer(ApollosLibraryContext context)
         {
             _context = context;
         }
@@ -23,32 +23,17 @@ namespace ApollosLibrary.DataLayer
             await _context.Books.AddAsync(book);
         }
 
-        public async Task AddBookAuthor(BookAuthor bookAuthor)
-        {
-            await _context.BookAuthors.AddAsync(bookAuthor);
-        }
-
-        public async Task AddBookGenre(BookGenre bookGenre)
-        {
-            await _context.BookGenres.AddAsync(bookGenre);
-        }
-
         public async Task<Book> GetBook(int id)
         {
+            var book1 = _context.Books
+                .Where(b => b.BookId == id)
+                .Include(b => b.Genres)
+                .Include(b => b.Authors)
+                .FirstOrDefault();
+
             var book = await (from b in _context.Books
                     where b.BookId == id
                     select b).FirstOrDefaultAsync();
-
-            if (book != null)
-            {
-                book.BookGenres = await (from bg in _context.BookGenres
-                                  where bg.BookId == id
-                                  select bg).ToListAsync();
-
-                book.BookAuthors = await (from ba in _context.BookAuthors
-                                   where ba.BookId == id
-                                   select ba).ToListAsync();
-            }
 
             return book;
         }
@@ -91,18 +76,20 @@ namespace ApollosLibrary.DataLayer
                           select s).FirstOrDefaultAsync();
         }
 
-        public void DeleteBookAuthorRelationships(int bookId)
+        public async Task DeleteBookAuthorRelationships(int bookId)
         {
-            var bookAuthors = _context.BookAuthors.Where(b => b.BookId == bookId);
+            var book = (await _context.Books.Include(b => b.Authors).FirstOrDefaultAsync(b => b.BookId == bookId));
 
-            _context.BookAuthors.RemoveRange(bookAuthors);
+            if (book != null)
+                book.Authors = new List<Author>();
         }
 
-        public void DeleteBookGenreRelationships(int bookId)
+        public async Task DeleteBookGenreRelationships(int bookId)
         {
-            var bookGenres = _context.BookGenres.Where(b => b.BookId == bookId);
+            var book = (await _context.Books.Include(b => b.Genres).FirstOrDefaultAsync(b => b.BookId == bookId));
 
-            _context.BookGenres.RemoveRange(bookGenres);
+            if (book != null)
+                book.Genres = new List<Genre>();
         }
     }
 }

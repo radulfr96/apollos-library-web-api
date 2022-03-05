@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApollosLibrary.Persistence\ApollosLibrary.Persistence.csproj" />
+    <ProjectReference Include="..\ApollosLibrary.Domain\ApollosLibrary.Domain.csproj" />
   </ItemGroup>
 
 </Project>

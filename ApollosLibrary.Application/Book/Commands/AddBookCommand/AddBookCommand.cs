@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -118,7 +118,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherID}]");
             }
 
-            var book = new Persistence.Model.Book()
+            var book = new Domain.Book()
             {
                 CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage),
                 CreatedBy = _userService.GetUserId(),
@@ -151,11 +151,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                     throw new AuthorNotFoundException($"Unable to find author with id [{authorId}]");
                 }
 
-                await _bookUnitOfWork.BookDataLayer.AddBookAuthor(new BookAuthor()
-                {
-                    AuthorId = authorId,
-                    BookId = book.BookId,
-                });
+                author.Books.Add(book);
             }
 
             foreach (int genreId in command.Genres)
@@ -167,11 +163,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                     throw new GenreNotFoundException($"Unable to find genre with id [{genreId}]");
                 }
 
-                await _bookUnitOfWork.BookDataLayer.AddBookGenre(new BookGenre()
-                {
-                    GenreId = genreId,
-                    BookId = book.BookId,
-                });
+                genre.Books.Add(book);
             }
 
             await _bookUnitOfWork.Save();

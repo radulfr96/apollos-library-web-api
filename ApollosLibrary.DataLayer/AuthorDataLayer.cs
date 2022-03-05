@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.DataLayer
 {
     public class AuthorDataLayer : IAuthorDataLayer
     {
-        private ApollosLibraryContextOld _context;
+        private ApollosLibraryContext _context;
 
-        public AuthorDataLayer(ApollosLibraryContextOld context)
+        public AuthorDataLayer(ApollosLibraryContext context)
         {
             _context = context;
         }

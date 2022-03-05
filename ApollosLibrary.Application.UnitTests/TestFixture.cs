@@ -6,18 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using ApollosLibrary.Application.Author.Commands.AddAuthorCommand;
-using ApollosLibrary.Persistence.Model;
+
 using Microsoft.Extensions.Configuration;
 using ApollosLibrary.Application.Common;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     public class TestFixture
     {
-        public readonly ApollosLibraryContextOld context;
+        public readonly ApollosLibraryContext context;
         public readonly Configuration configuration;
         public IServiceCollection ServiceCollection { get; private set; }
 
@@ -33,23 +34,23 @@ namespace ApollosLibrary.Application.UnitTests
 
             configuration = new Configuration();
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContextOld>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContext>();
             optionsBuilder.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
 
-            ServiceCollection.AddDbContext<ApollosLibraryContextOld>(opt =>
+            ServiceCollection.AddDbContext<ApollosLibraryContext>(opt =>
             {
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
             });
-            context = new ApollosLibraryContextOld(optionsBuilder.Options);
+            context = new ApollosLibraryContext(optionsBuilder.Options);
 
             ServiceCollection.AddTransient(ser =>
             {
-                return new ApollosLibraryContextOld(optionsBuilder.Options);
+                return new ApollosLibraryContext(optionsBuilder.Options);
             });
 
             localConfig.Bind(configuration);
 
-            ServiceCollection.AddDbContext<ApollosLibraryContextOld>();
+            ServiceCollection.AddDbContext<ApollosLibraryContext>();
 
             ServiceCollection.AddHttpContextAccessor();
 

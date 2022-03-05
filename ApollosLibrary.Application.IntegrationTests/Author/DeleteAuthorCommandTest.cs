@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ApollosLibrary.Application.Author.Commands.DeleteAuthorCommand;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -18,7 +18,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class DeleteAuthorCommandTest : TestBase
     {
         private readonly Faker _faker;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
         public DeleteAuthorCommandTest(TestFixture fixture) : base(fixture)
@@ -28,14 +28,14 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
         }
 
         [Fact]
         public async Task DeleteAuthorSuccess()
         {
 
-            var author = new Persistence.Model.Author()
+            var author = new Domain.Author()
             {
                 CountryId = "AU",
                 CreatedBy = new Guid(),

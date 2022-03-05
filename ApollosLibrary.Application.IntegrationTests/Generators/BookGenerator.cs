@@ -10,9 +10,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
 {
     public static class BookGenerator
     {
-        public static Persistence.Model.Book GetGenericPhysicalBook(Guid createdBy)
+        public static Domain.Book GetGenericPhysicalBook(Guid createdBy)
         {
-            return new Faker<Persistence.Model.Book>()
+            return new Faker<Domain.Book>()
                 .RuleFor(b => b.CreatedBy, createdBy)
                 .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
                 .RuleFor(b => b.Edition, f => f.Random.Int(1, 100))

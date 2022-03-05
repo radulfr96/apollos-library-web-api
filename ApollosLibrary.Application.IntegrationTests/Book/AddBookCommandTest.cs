@@ -6,7 +6,6 @@ using Moq;
 using ApollosLibrary.Application.Book.Commands.AddBookCommand;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -22,7 +23,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class AddBookCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -37,7 +38,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
             _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 
@@ -99,24 +100,13 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(command);
 
-            var author = _context.Books.FirstOrDefault(a => a.BookId == bookGenerated.BookId);
+            var book = _context.Books
+                                .Include(b => b.Genres)
+                                .FirstOrDefault(a => a.BookId == bookGenerated.BookId);
 
-            var genres = (from bg in _context.BookGenres
-                          join g in _context.Genres
-                          on bg.GenreId equals g.GenreId
-                          where bg.BookId == result.BookId
-                          select g.GenreId).ToList();
+            book.Genres.Should().HaveCount(2);
 
-            genres.Should().HaveCount(2);
-
-
-            var authors = (from ba in _context.BookAuthors
-                           join a in _context.Authors
-                           on ba.AuthorId equals a.AuthorId
-                           where ba.BookId == result.BookId
-                           select a.AuthorId).ToList();
-
-            authors.Should().HaveCount(2);
+            book.Authors.Should().HaveCount(2);
         }
     }
 }

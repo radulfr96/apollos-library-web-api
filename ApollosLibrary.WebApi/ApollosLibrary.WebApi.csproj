@@ -31,7 +31,6 @@
     <ProjectReference Include="..\ApollosLibrary.DataLayer\ApollosLibrary.DataLayer.csproj" />
     <ProjectReference Include="..\ApollosLibrary.Domain\ApollosLibrary.Domain.csproj" />
     <ProjectReference Include="..\ApollosLibrary.Infrastructure\ApollosLibrary.Infrastructure.csproj" />
-    <ProjectReference Include="..\ApollosLibrary.Persistence\ApollosLibrary.Persistence.csproj" />
     <ProjectReference Include="..\ApollosLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 

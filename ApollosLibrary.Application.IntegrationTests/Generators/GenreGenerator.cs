@@ -9,9 +9,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
 {
     public static class GenreGenerator
     {
-        public static Persistence.Model.Genre GetGenre(Guid createBy)
+        public static Domain.Genre GetGenre(Guid createBy)
         {
-            return new Faker<Persistence.Model.Genre>()
+            return new Faker<Domain.Genre>()
                 .RuleFor(g => g.CreatedBy, createBy)
                 .RuleFor(g => g.CreatedDate, f => f.Date.Recent())
                 .RuleFor(g => g.Name, f => f.Name.Random.AlphaNumeric(8))

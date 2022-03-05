@@ -48,8 +48,8 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             response.SeriesID = book.SeriesId;
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;
-            response.Authors = book.BookAuthors.Select(ba => ba.AuthorId).ToList();
-            response.Genres = book.BookGenres.Select(bg => bg.GenreId).ToList();
+            response.Authors = book.Authors.Select(a => a.AuthorId).ToList();
+            response.Genres = book.Genres.Select(g => g.GenreId).ToList();
 
 
             return response;

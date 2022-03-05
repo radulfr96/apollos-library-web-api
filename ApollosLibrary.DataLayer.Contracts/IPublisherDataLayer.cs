@@ -1,4 +1,5 @@
-﻿using ApollosLibrary.Persistence.Model;
+﻿using ApollosLibrary.Domain;
+
 using System;
 using System.Collections.Generic;
 using System.Text;

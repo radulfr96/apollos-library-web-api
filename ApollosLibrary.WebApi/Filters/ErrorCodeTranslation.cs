@@ -1,4 +1,4 @@
-﻿using ApollosLibrary.Persistence.Model;
+﻿using ApollosLibrary.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace ApollosLibrary.WebApi.Filters
     {
         private readonly static Dictionary<int, string> _errorCodes = new Dictionary<int, string>();
 
-        public static void Initialise(ApollosLibraryContextOld context)
+        public static void Initialise(ApollosLibraryContext context)
         {
             if (_errorCodes.Count == 0)
             {

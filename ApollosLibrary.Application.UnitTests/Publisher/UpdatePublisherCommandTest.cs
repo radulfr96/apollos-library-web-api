@@ -8,7 +8,7 @@ using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Publisher.Commands.UpdatePublisherCommand;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -156,7 +157,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             Assert.True(result.IsValid);
-            Assert.True(result.Errors.Count() == 0);
+            Assert.True(result.Errors.Count == 0);
         }
 
         [Fact]
@@ -244,7 +245,7 @@ namespace ApollosLibrary.Application.UnitTests
         [Fact]
         public async Task PublisherCountryInvalidValue()
         {
-            var publisher = new Persistence.Model.Publisher()
+            var publisher = new Domain.Publisher()
             {
                 CreatedDate = new DateTime(2021, 02, 07),
                 IsDeleted = false,

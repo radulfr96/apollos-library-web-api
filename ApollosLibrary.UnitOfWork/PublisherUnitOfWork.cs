@@ -3,21 +3,19 @@ using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.DataLayer;
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ApollosLibrary.Persistence.Model;
 using System.Threading.Tasks;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.UnitOfWork
 {
     public class PublisherUnitOfWork : IPublisherUnitOfWork, IDisposable
     {
         private IPublisherDataLayer _publisherDataLayer;
-        private ApollosLibraryContextOld _dbContext;
+        private ApollosLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
         private bool disposed = false;
 
-        public PublisherUnitOfWork(ApollosLibraryContextOld dbContext)
+        public PublisherUnitOfWork(ApollosLibraryContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -61,7 +61,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetBookByISBN(It.IsAny<string>())).Returns(Task.FromResult(new Persistence.Model.Book()));
+            bookDataLayer.Setup(d => d.GetBookByISBN(It.IsAny<string>())).Returns(Task.FromResult(new Domain.Book()));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);

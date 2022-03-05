@@ -6,7 +6,6 @@ using Moq;
 using ApollosLibrary.Application.Book.Commands.UpdateBookCommand;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -22,7 +23,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class UpdateBookCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -37,7 +38,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
             _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 
@@ -85,34 +86,13 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
             bookGenerated.PublisherId = publisher1.PublisherId;
+            bookGenerated.Genres.Add(genre1);
+            bookGenerated.Genres.Add(genre2);
+            bookGenerated.Authors.Add(author1);
+            bookGenerated.Authors.Add(author2);
 
             _context.Books.Add(bookGenerated);
-
             _context.SaveChanges();
-
-            _context.BookGenres.Add(new BookGenre()
-            {
-                BookId = bookGenerated.BookId,
-                GenreId = genre1.GenreId,
-            });
-
-            _context.BookGenres.Add(new BookGenre()
-            {
-                BookId = bookGenerated.BookId,
-                GenreId = genre2.GenreId,
-            });
-
-            _context.BookAuthors.Add(new BookAuthor()
-            {
-                BookId = bookGenerated.BookId,
-                AuthorId = author1.AuthorId,
-            });
-
-            _context.BookAuthors.Add(new BookAuthor()
-            {
-                BookId = bookGenerated.BookId,
-                AuthorId = author2.AuthorId,
-            });
 
             var newBookDetails = BookGenerator.GetGenericPhysicalBook(userID);
 
@@ -146,7 +126,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var book = _context.Books.FirstOrDefault(b => b.BookId == bookGenerated.BookId);
 
-            book.Should().BeEquivalentTo(new Persistence.Model.Book()
+            book.Should().BeEquivalentTo(new Domain.Book()
             {
                 BookId = bookGenerated.BookId,
                 CreatedBy = userID,
@@ -169,37 +149,25 @@ namespace ApollosLibrary.Application.IntegrationTests
             .Excluding(f => f.FormType)
             .Excluding(f => f.PublicationFormat)
             .Excluding(f => f.Publisher)
-            .Excluding(f => f.BookAuthors)
-            .Excluding(f => f.BookGenres));
+            .Excluding(f => f.Authors)
+            .Excluding(f => f.Genres));
 
-            var author = _context.Books.FirstOrDefault(a => a.BookId == bookGenerated.BookId);
+            var bookEntity = _context.Books.Include(b => b.Authors).Include(b => b.Genres).FirstOrDefault(a => a.BookId == bookGenerated.BookId);
 
-            var genres = (from bg in _context.BookGenres
-                          join g in _context.Genres
-                          on bg.GenreId equals g.GenreId
-                          where bg.BookId == bookGenerated.BookId
-                          select g.GenreId).ToList();
+            bookEntity.Genres.Should().HaveCount(2);
 
-            genres.Should().HaveCount(2);
-
-            genres.Should().Contain(new List<int>()
+            bookEntity.Genres.Should().Contain(new List<Domain.Genre>()
             {
-                genre2.GenreId,
-                genre3.GenreId,
+                genre2,
+                genre3,
             });
 
-            var authors = (from ba in _context.BookAuthors
-                           join a in _context.Authors
-                           on ba.AuthorId equals a.AuthorId
-                           where ba.BookId == bookGenerated.BookId
-                           select a.AuthorId).ToList();
+            bookEntity.Authors.Should().HaveCount(2);
 
-            authors.Should().HaveCount(2);
-
-            authors.Should().Contain(new List<int>()
+            bookEntity.Authors.Should().Contain(new List<Domain.Author>()
             {
-                author2.AuthorId,
-                author3.AuthorId,
+                author2,
+                author3,
             });
         }
     }

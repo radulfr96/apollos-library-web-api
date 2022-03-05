@@ -52,7 +52,7 @@ namespace ApollosLibrary.Application.Publisher.Commands.AddPublisherCommand
                 throw new CountryInvalidValueException($"Unable to find country with code [{command.CountryID}]");
             }
 
-            var publisher = new Persistence.Model.Publisher()
+            var publisher = new Domain.Publisher()
             {
                 CreatedBy = _userService.GetUserId(),
                 CreatedDate = _dateTimeService.Now,

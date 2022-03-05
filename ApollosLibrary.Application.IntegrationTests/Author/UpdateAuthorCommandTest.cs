@@ -7,7 +7,6 @@ using Moq;
 using ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -23,7 +23,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class UpdateAuthorCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly ServiceProvider _provider;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -40,7 +40,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _provider = fixture.ServiceCollection.BuildServiceProvider();
             _mediatr = _provider.GetRequiredService<IMediator>();
-            _context = _provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = _provider.GetRequiredService<ApollosLibraryContext>();
             _contextAccessor = _provider.GetRequiredService<IHttpContextAccessor>();
         }
 
@@ -79,7 +79,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var authorRecord = _context.Authors.FirstOrDefault(a => a.AuthorId == author.AuthorId);
 
-            authorRecord.Should().BeEquivalentTo(new Persistence.Model.Author()
+            authorRecord.Should().BeEquivalentTo(new Domain.Author()
             {
                 AuthorId = author.AuthorId,
                 CountryId = newAuthorDetails.CountryId,
@@ -91,7 +91,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 MiddleName = newAuthorDetails.MiddleName,
                 ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
-            }, opt => opt.Excluding(a => a.Country).Excluding(a => a.BookAuthors));
+            }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books));
         }
     }
 }

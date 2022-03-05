@@ -29,7 +29,7 @@ namespace ApollosLibrary.Application.UnitTests
             var mockDateTimeService = new Mock<IDateTimeService>();
 
             var mockAuthorDatalayer = new Mock<IAuthorDataLayer>();
-            mockAuthorDatalayer.Setup(a => a.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult((Persistence.Model.Author)null));
+            mockAuthorDatalayer.Setup(a => a.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult((Domain.Author)null));
 
             var mockAuthorUow = new Mock<IAuthorUnitOfWork>();
             mockAuthorUow.Setup(u => u.AuthorDataLayer).Returns(mockAuthorDatalayer.Object);

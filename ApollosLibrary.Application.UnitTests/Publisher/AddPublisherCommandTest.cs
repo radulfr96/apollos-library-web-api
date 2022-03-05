@@ -9,7 +9,7 @@ using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Publisher.Commands.AddPublisherCommand;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.UnitTests
 {

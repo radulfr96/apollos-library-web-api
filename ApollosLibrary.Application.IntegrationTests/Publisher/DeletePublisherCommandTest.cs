@@ -5,7 +5,6 @@ using Moq;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Publisher.Commands.DeletePublisherCommand;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -21,7 +21,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class DeletePublisherCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
         public DeletePublisherCommandTest(TestFixture fixture) : base(fixture)
@@ -35,7 +35,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
         }
 
         [Fact]

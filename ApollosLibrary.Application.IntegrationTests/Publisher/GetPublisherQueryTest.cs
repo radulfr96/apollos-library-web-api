@@ -5,12 +5,12 @@ using Moq;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Publisher.Queries.GetPublisherQuery;
-using ApollosLibrary.Persistence.Model;
 using System;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -18,7 +18,7 @@ namespace ApollosLibrary.Application.IntegrationTests
     public class GetPublisherQueryTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
         public GetPublisherQueryTest(TestFixture fixture) : base(fixture)
@@ -32,7 +32,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
-            _context = provider.GetRequiredService<ApollosLibraryContextOld>();
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
         }
 
         [Fact]

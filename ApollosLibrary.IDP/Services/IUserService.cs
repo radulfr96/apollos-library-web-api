@@ -9,9 +9,9 @@ namespace ApollosLibrary.IDP.Services
 {
     public interface IUserService
     {
-        Task<User> GetUserByUsername(string username);
+        Task<Model.User> GetUserByUsername(string username);
 
-        Task<User> GetUserByEmail(string username);
+        Task<Model.User> GetUserByEmail(string username);
 
         Task<bool> ValidateCredentials(string username, string password);
 
@@ -23,7 +23,7 @@ namespace ApollosLibrary.IDP.Services
 
         Task<bool> ActivateUser(string securityCode);
 
-        Task AddUser(User user, string password);
+        Task AddUser(Model.User user, string password);
 
         Task<string> InitiatePasswordResetRequest(string email);
 

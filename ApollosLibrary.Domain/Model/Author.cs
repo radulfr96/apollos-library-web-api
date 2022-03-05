@@ -13,7 +13,10 @@ namespace ApollosLibrary.Domain
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Description { get; set; }
+
+        public string CountryId { get; set; }
         public Country Country { get; set; }
+        
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

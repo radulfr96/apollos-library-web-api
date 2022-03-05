@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using ApollosLibrary.Application.Author.Commands.AddAuthorCommand;
-using ApollosLibrary.Persistence.Model;
 using Microsoft.Extensions.Configuration;
 using ApollosLibrary.Application.Common;
 using System.IO;
@@ -19,13 +18,14 @@ using ApollosLibrary.Infrastructure.Services;
 using Respawn;
 using Microsoft.AspNetCore.Http;
 using Respawn.Graph;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
     public class TestFixture
     {
         public IServiceCollection ServiceCollection { get; private set; }
-        private readonly ApollosLibraryContextOld _context;
+        private readonly ApollosLibraryContext _context;
         private readonly Configuration _configuration;
         private readonly Checkpoint _checkpoint;
 
@@ -41,38 +41,34 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _configuration = new Configuration();
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContextOld>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContext>();
             optionsBuilder.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
 
             services.AddHttpContextAccessor();
-            services.AddDbContext<ApollosLibraryContextOld>(opt =>
+            services.AddDbContext<ApollosLibraryContext>(opt =>
             {
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
             });
-            _context = new ApollosLibraryContextOld(optionsBuilder.Options);
+            _context = new ApollosLibraryContext(optionsBuilder.Options);
 
             services.AddTransient<IPublisherUnitOfWork>(p => {
-                return new PublisherUnitOfWork(p.GetRequiredService<ApollosLibraryContextOld>());
+                return new PublisherUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
             services.AddTransient<IAuthorUnitOfWork>(p => {
-                return new AuthorUnitOfWork(p.GetRequiredService<ApollosLibraryContextOld>());
+                return new AuthorUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
             services.AddTransient<IBookUnitOfWork>(p => {
-                return new BookUnitOfWork(p.GetRequiredService<ApollosLibraryContextOld>());
+                return new BookUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
             services.AddTransient<IGenreUnitOfWork>(p => {
-                return new GenreUnitOfWork(p.GetRequiredService<ApollosLibraryContextOld>());
+                return new GenreUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
             services.AddTransient<IReferenceUnitOfWork>(p => {
-                return new ReferenceUnitOfWork(p.GetRequiredService<ApollosLibraryContextOld>());
-            });
-
-            services.AddTransient<IUserUnitOfWork>(p => {
-                return new UserUnitOfWork(p.GetRequiredService<ApollosLibraryContextOld>());
+                return new ReferenceUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
             services.AddSingleton<IUserService>(p =>

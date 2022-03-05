@@ -8,7 +8,7 @@ using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.DataLayer.Contracts;
-using ApollosLibrary.Persistence.Model;
+
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -342,7 +343,7 @@ namespace ApollosLibrary.Application.UnitTests
             var mockAuthorUow = new Mock<IAuthorUnitOfWork>();
 
             var mockAuthorDataLayer = new Mock<IAuthorDataLayer>();
-            mockAuthorDataLayer.Setup(a => a.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult(new Persistence.Model.Author()));
+            mockAuthorDataLayer.Setup(a => a.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Author()));
             mockAuthorUow.Setup(d => d.AuthorDataLayer).Returns(mockAuthorDataLayer.Object);
 
             var mockUserService = new Mock<IUserService>();
@@ -397,7 +398,7 @@ namespace ApollosLibrary.Application.UnitTests
                 new Country() { CountryId = "AU", Name = "Australia"}
             }));
 
-            mockAuthorDataLayer.Setup(s => s.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult((Persistence.Model.Author)null));
+            mockAuthorDataLayer.Setup(s => s.GetAuthor(It.IsAny<int>())).Returns(Task.FromResult((Domain.Author)null));
 
             var mockReferenceUOW = new Mock<IReferenceUnitOfWork>();
             mockReferenceUOW.Setup(u => u.ReferenceDataLayer).Returns(mockReferenceDataLayer.Object);
