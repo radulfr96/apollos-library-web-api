@@ -8,7 +8,7 @@ namespace ApollosLibrary.WebApi.Filters
 {
     public class ErrorCodeTranslation
     {
-        private readonly static Dictionary<int, string> _errorCodes = new Dictionary<int, string>();
+        private readonly static Dictionary<int, string> _errorCodes = new ();
 
         public static void Initialise(ApollosLibraryContext context)
         {

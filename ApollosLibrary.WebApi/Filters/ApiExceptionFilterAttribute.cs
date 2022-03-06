@@ -62,10 +62,9 @@ namespace ApollosLibrary.WebApi.Filters
 
         private void HandleUnknownException(ExceptionContext context)
         {
-            string message = null;
-            ErrorCodeException exception = context.Exception as ErrorCodeException;
-            List<string> errors = null;
-            if (exception != null)
+            string message;
+            List<string> errors;
+            if (context.Exception is ErrorCodeException exception)
             {
                 //_logger.Warn(context.Exception, "An application error code");
 
@@ -94,7 +93,7 @@ namespace ApollosLibrary.WebApi.Filters
 
         private void HandleValidationException(ExceptionContext context)
         {
-            List<string> errors = new List<string>();
+            List<string> errors = new();
             var exception = context.Exception as Application.Common.Exceptions.ValidationException;
             foreach(var e in exception.Errors)
             {
@@ -115,7 +114,7 @@ namespace ApollosLibrary.WebApi.Filters
         private void HandleBadRequestException(ExceptionContext context)
         {
             var exception = context.Exception as ErrorCodeException;
-            List<string> errors = new List<string>();
+            List<string> errors = new ();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
            // _logger.Warn("Bad data in request. Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
@@ -136,7 +135,7 @@ namespace ApollosLibrary.WebApi.Filters
         private void HandleObjectNotFoundException(ExceptionContext context)
         {
             var exception = context.Exception as ErrorCodeException;
-            List<string> errors = new List<string>();
+            List<string> errors = new ();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
             //_logger.Warn("Object not found. Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
@@ -156,7 +155,7 @@ namespace ApollosLibrary.WebApi.Filters
         private void HandleUnauthorizedException(ExceptionContext context)
         {
             var exception = context.Exception as UnauthorizedException;
-            List<string> errors = new List<string>();
+            List<string> errors = new ();
 
             string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
             //_logger.Warn("Authorisation Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);

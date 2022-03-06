@@ -146,8 +146,8 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
 
             await _bookUnitOfWork.Begin();
 
-            _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookID);
-            _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookID);
+            await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookID);
+            await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookID);
             await _bookUnitOfWork.Save();
 
             foreach (int authorId in command.Authors)

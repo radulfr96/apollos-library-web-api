@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+# nullable disable
+
 namespace ApollosLibrary.Domain
 {
     public class Author
@@ -16,7 +18,7 @@ namespace ApollosLibrary.Domain
 
         public string CountryId { get; set; }
         public Country Country { get; set; }
-        
+
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

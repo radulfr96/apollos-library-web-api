@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+# nullable disable
+
 namespace ApollosLibrary.Domain
 {
     public class Book
@@ -25,13 +27,13 @@ namespace ApollosLibrary.Domain
 
         public int FormTypeId { get; set; }
         public FormType FormType { get; set; }
-        
+
         public int? PublisherId { get; set; }
         public Publisher Publisher { get; set; }
-        
+
         public int? SeriesId { get; set; }
         public Series Series { get; set; }
-        
+
         public string CoverImage { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
