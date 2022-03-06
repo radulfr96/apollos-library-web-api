@@ -46,7 +46,55 @@ namespace ApollosLibrary.Domain
 
             modelBuilder.Entity<FormType>().HasData(new List<FormType>()
             {
+                new FormType()
+                {
+                    TypeId = 1,
+                    Name = "Novel",
+                },
+                new FormType()
+                {
+                    TypeId = 2,
+                    Name = "Novella",
+                },
+                new FormType()
+                {
+                    TypeId = 3,
+                    Name = "Screenplay",
+                },
+                new FormType()
+                {
+                    TypeId = 4,
+                    Name = "Manuscript",
+                },
+                new FormType()
+                {
+                    TypeId = 5,
+                    Name = "Poem",
+                },
+                new FormType()
+                {
+                    TypeId = 6,
+                    Name = "Textbook",
+                },
+            });
 
+            modelBuilder.Entity<PublicationFormat>().HasData(new List<PublicationFormat>()
+            {
+                new PublicationFormat()
+                {
+                    TypeId = 1,
+                    Name = "Printed",
+                },
+                new PublicationFormat()
+                {
+                    TypeId = 2,
+                    Name = "eBook",
+                },
+                new PublicationFormat()
+                {
+                    TypeId = 3,
+                    Name = "Audio Book",
+                },
             });
         }
     }
