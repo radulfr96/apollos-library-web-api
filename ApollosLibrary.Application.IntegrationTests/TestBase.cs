@@ -19,8 +19,6 @@ namespace ApollosLibrary.Application.IntegrationTests
 
         public void Dispose()
         {
-
-            _fixture.ResetCheckpoint();
         }
     }
 }

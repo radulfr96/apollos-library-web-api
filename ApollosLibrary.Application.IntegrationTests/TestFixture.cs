@@ -27,7 +27,6 @@ namespace ApollosLibrary.Application.IntegrationTests
         public IServiceCollection ServiceCollection { get; private set; }
         private readonly ApollosLibraryContext _context;
         private readonly Configuration _configuration;
-        private readonly Checkpoint _checkpoint;
 
         public TestFixture()
         {
@@ -50,6 +49,8 @@ namespace ApollosLibrary.Application.IntegrationTests
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
             });
             _context = new ApollosLibraryContext(optionsBuilder.Options);
+
+            _context.Database.Migrate();
 
             services.AddTransient<IPublisherUnitOfWork>(p => {
                 return new PublisherUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
@@ -83,12 +84,6 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
 
-            _checkpoint = new Checkpoint
-            {
-                SchemasToInclude = new string[] { "Author", "Book", "Genre", "Publisher" },
-                TablesToInclude = new Table[] { "Author", "Book", "Genre", "BookAuthor", "BookGenre", "Publisher" },
-            };
-
             ServiceCollection = services;
         }
 
@@ -100,9 +95,9 @@ namespace ApollosLibrary.Application.IntegrationTests
             }
         }
 
-        public void ResetCheckpoint()
+        ~TestFixture()
         {
-            _checkpoint.Reset(_configuration.ConnectionString).Wait();
+            _context.Database.EnsureDeleted();
         }
     }
 }
