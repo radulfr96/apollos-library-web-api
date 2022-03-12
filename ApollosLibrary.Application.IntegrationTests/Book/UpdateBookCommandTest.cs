@@ -86,10 +86,17 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
             bookGenerated.PublisherId = publisher1.PublisherId;
-            bookGenerated.Genres.Add(genre1);
-            bookGenerated.Genres.Add(genre2);
-            bookGenerated.Authors.Add(author1);
-            bookGenerated.Authors.Add(author2);
+            bookGenerated.Genres = new List<Domain.Genre>()
+            {
+                genre1,
+                genre2,
+            };
+
+            bookGenerated.Authors = new List<Domain.Author>()
+            {
+                author1,
+                author2
+            };
 
             _context.Books.Add(bookGenerated);
             _context.SaveChanges();

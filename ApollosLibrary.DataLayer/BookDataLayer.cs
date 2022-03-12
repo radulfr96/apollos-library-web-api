@@ -25,31 +25,29 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<Book> GetBook(int id)
         {
-            var book1 = _context.Books
+            return await _context.Books
                 .Where(b => b.BookId == id)
                 .Include(b => b.Genres)
                 .Include(b => b.Authors)
-                .FirstOrDefault();
-
-            var book = await (from b in _context.Books
-                    where b.BookId == id
-                    select b).FirstOrDefaultAsync();
-
-            return book;
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Book> GetBookByeISBN(string eisbn)
         {
-            return await (from b in _context.Books
-                    where b.EIsbn == eisbn
-                    select b).FirstOrDefaultAsync();
+            return await _context.Books
+                .Where(b => b.EIsbn == eisbn)
+                .Include(b => b.Genres)
+                .Include(b => b.Authors)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Book> GetBookByISBN(string isbn)
         {
-            return await (from b in _context.Books
-                    where b.Isbn == isbn
-                    select b).FirstOrDefaultAsync();
+            return await _context.Books
+                .Where(b => b.Isbn == isbn)
+                .Include(b => b.Genres)
+                .Include(b => b.Authors)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<Book>> GetBooks()

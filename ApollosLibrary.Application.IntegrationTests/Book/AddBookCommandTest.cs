@@ -102,7 +102,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var book = _context.Books
                                 .Include(b => b.Genres)
-                                .FirstOrDefault(a => a.BookId == bookGenerated.BookId);
+                                .FirstOrDefault(a => a.BookId == result.BookId);
 
             book.Genres.Should().HaveCount(2);
 

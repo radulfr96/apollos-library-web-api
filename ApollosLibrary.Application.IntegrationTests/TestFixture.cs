@@ -27,6 +27,7 @@ namespace ApollosLibrary.Application.IntegrationTests
         public IServiceCollection ServiceCollection { get; private set; }
         private readonly ApollosLibraryContext _context;
         private readonly Configuration _configuration;
+        private readonly Checkpoint _checkpoint;
 
         public TestFixture()
         {
@@ -48,29 +49,29 @@ namespace ApollosLibrary.Application.IntegrationTests
             {
                 opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
             });
-            _context = new ApollosLibraryContext(optionsBuilder.Options);
 
-            _context.Database.EnsureDeleted();
-            _context.SaveChanges();
-            _context.Database.Migrate();
-
-            services.AddTransient<IPublisherUnitOfWork>(p => {
+            services.AddTransient<IPublisherUnitOfWork>(p =>
+            {
                 return new PublisherUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
-            services.AddTransient<IAuthorUnitOfWork>(p => {
+            services.AddTransient<IAuthorUnitOfWork>(p =>
+            {
                 return new AuthorUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
-            services.AddTransient<IBookUnitOfWork>(p => {
+            services.AddTransient<IBookUnitOfWork>(p =>
+            {
                 return new BookUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
-            services.AddTransient<IGenreUnitOfWork>(p => {
+            services.AddTransient<IGenreUnitOfWork>(p =>
+            {
                 return new GenreUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
-            services.AddTransient<IReferenceUnitOfWork>(p => {
+            services.AddTransient<IReferenceUnitOfWork>(p =>
+            {
                 return new ReferenceUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
@@ -79,22 +80,43 @@ namespace ApollosLibrary.Application.IntegrationTests
                 return new UserService(p.GetRequiredService<IHttpContextAccessor>());
             });
 
-
             localConfig.Bind(_configuration);
 
             services.AddHttpContextAccessor();
 
             services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
 
+            var provider = services.BuildServiceProvider();
+
+            _context = provider.GetRequiredService<ApollosLibraryContext>();
+
+            if (!_context.Database.CanConnect())
+            {
+                _context.Database.Migrate();
+            }
+
+            _checkpoint = new Checkpoint
+            {
+                TablesToIgnore = new Table[] { "Countries", "FictionTypes", "FormTypes", "PublicationFormats" },
+            };
+
             ServiceCollection = services;
         }
 
         public Configuration Configuration
-        { 
+        {
             get
             {
                 return _configuration;
             }
+        }
+
+        public void ResetCheckpoint()
+        {
+            _checkpoint.Reset(_context.Database.GetConnectionString())
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
         }
     }
 }

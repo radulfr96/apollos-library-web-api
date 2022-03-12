@@ -30,7 +30,9 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<Genre> GetGenre(int id)
         {
-            return await _context.Genres.FirstOrDefaultAsync(g => g.GenreId == id);
+            return await _context.Genres
+                                .Include(g => g.Books)
+                                .FirstOrDefaultAsync(g => g.GenreId == id);
         }
 
         public async Task<List<Genre>> GetGenres()

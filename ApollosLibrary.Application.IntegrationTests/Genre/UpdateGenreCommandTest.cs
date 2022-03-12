@@ -82,7 +82,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
                 Name = newGenreDetails.Name,
-            });
+            }, opt => opt.Excluding(f => f.Books));
         }
     }
 }

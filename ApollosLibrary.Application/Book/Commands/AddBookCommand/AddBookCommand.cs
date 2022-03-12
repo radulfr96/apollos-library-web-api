@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
-
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
 using System.Collections.Generic;
@@ -134,6 +133,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 SeriesId = command.SeriesID,
                 Subtitle = command.Subtitle,
                 Title = command.Title,
+                Authors = new List<Domain.Author>()
             };
 
             await _bookUnitOfWork.Begin();

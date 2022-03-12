@@ -30,7 +30,10 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<Author> GetAuthor(int id)
         {
-            return await _context.Authors.Include("Country").FirstOrDefaultAsync(a => a.AuthorId == id);
+            return await _context.Authors
+                .Include(a => a.Country)
+                .Include(a => a.Books)
+                .FirstOrDefaultAsync(a => a.AuthorId == id);
         }
 
         public async Task<List<Author>> GetAuthors()
