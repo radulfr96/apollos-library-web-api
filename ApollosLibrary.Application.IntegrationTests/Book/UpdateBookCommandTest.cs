@@ -56,21 +56,21 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _contextAccessor.HttpContext = httpContext;
 
-            var publisher1 = PublisherGenerator.GetGenericPublisher("UK", userID);
+            var publisher1 = PublisherGenerator.GetGenericPublisher("GB", userID);
             _context.Publishers.Add(publisher1);
 
-            var publisher2 = PublisherGenerator.GetGenericPublisher("UK", userID);
+            var publisher2 = PublisherGenerator.GetGenericPublisher("GB", userID);
             _context.Publishers.Add(publisher2);
 
             _context.SaveChanges();
 
-            var author1 = AuthorGenerator.GetGenericAuthor(userID, "UK");
+            var author1 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author1);
 
-            var author2 = AuthorGenerator.GetGenericAuthor(userID, "UK");
+            var author2 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author2);
 
-            var author3 = AuthorGenerator.GetGenericAuthor(userID, "UK");
+            var author3 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author3);
 
             var genre1 = GenreGenerator.GetGenre(userID);

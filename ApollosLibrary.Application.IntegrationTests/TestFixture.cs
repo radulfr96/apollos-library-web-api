@@ -50,6 +50,8 @@ namespace ApollosLibrary.Application.IntegrationTests
             });
             _context = new ApollosLibraryContext(optionsBuilder.Options);
 
+            _context.Database.EnsureDeleted();
+            _context.SaveChanges();
             _context.Database.Migrate();
 
             services.AddTransient<IPublisherUnitOfWork>(p => {

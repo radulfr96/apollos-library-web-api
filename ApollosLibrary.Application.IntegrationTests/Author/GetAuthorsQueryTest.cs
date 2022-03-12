@@ -39,7 +39,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var authorGenerated1 = AuthorGenerator.GetGenericAuthor(new Guid(), "AU");
             var authorGenerated2 = AuthorGenerator.GetGenericAuthor(new Guid(), "US");
-            var authorGenerated3 = AuthorGenerator.GetGenericAuthor(new Guid(), "UK");
+            var authorGenerated3 = AuthorGenerator.GetGenericAuthor(new Guid(), "GB");
 
             var country1 = _context.Countries.FirstOrDefault(c => c.CountryId == authorGenerated1.CountryId);
             var country2 = _context.Countries.FirstOrDefault(c => c.CountryId == authorGenerated2.CountryId);

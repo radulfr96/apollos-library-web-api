@@ -59,10 +59,10 @@ namespace ApollosLibrary.Application.IntegrationTests
             var publisher = PublisherGenerator.GetGenericPublisher("AU", userID);
             _context.Publishers.Add(publisher);
 
-            var author1 = AuthorGenerator.GetGenericAuthor(userID, "UK");
+            var author1 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author1);
 
-            var author2 = AuthorGenerator.GetGenericAuthor(userID, "UK");
+            var author2 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author2);
 
             var genre1 = GenreGenerator.GetGenre(userID);
