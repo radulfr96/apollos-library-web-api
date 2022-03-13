@@ -13,7 +13,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBooksQuery
 
     public class BookListItemDTO
     {
-        public int BookID { get; set; }
+        public int BookId { get; set; }
         public string ISBN { get; set; }
         public string eISBN { get; set; }
         public string Title { get; set; }

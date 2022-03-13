@@ -70,7 +70,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 {
                     new BookListItemDTO()
                     {
-                        BookID = book1.BookId,
+                        BookId = book1.BookId,
                         eISBN = book1.EIsbn,
                         FictionType = fictionTypes.First(f => f.TypeId == book1.FictionTypeId).Name,
                         FormatType = formatTypes.First(f => f.TypeId == book1.FormTypeId).Name,
@@ -79,7 +79,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                     },
                     new BookListItemDTO()
                     {
-                        BookID = book2.BookId,
+                        BookId = book2.BookId,
                         eISBN = book2.EIsbn,
                         FictionType = fictionTypes.First(f => f.TypeId == book2.FictionTypeId).Name,
                         FormatType = formatTypes.First(f => f.TypeId == book2.FormTypeId).Name,
@@ -88,7 +88,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                     },
                     new BookListItemDTO()
                     {
-                        BookID = book3.BookId,
+                        BookId = book3.BookId,
                         eISBN = book3.EIsbn,
                         FictionType = fictionTypes.First(f => f.TypeId == book3.FictionTypeId).Name,
                         FormatType = formatTypes.First(f => f.TypeId == book3.FormTypeId).Name,

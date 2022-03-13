@@ -33,7 +33,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBooksQuery
 
             response.Books = books.Select(b => new BookListItemDTO()
             {
-                BookID = b.BookId,
+                BookId = b.BookId,
                 eISBN = b.EIsbn,
                 FictionType = b.FictionType.Name,
                 ISBN = b.Isbn,

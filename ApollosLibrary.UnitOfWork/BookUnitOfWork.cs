@@ -53,23 +53,23 @@ namespace ApollosLibrary.UnitOfWork
 
         public void Dispose()
         {
-            Dispose(true).Wait();
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected async virtual Task Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposed)
                 return;
 
             if (_context.Database.CurrentTransaction != null)
             {
-                await _context.Database.RollbackTransactionAsync();
+                _context.Database.RollbackTransaction();
             }
 
             if (disposing)
             {
-                await _context.DisposeAsync();
+                _context.Dispose();
             }
 
             disposed = true;
@@ -82,7 +82,7 @@ namespace ApollosLibrary.UnitOfWork
 
         ~BookUnitOfWork()
         {
-            Dispose(false).Wait();
+            Dispose(false);
         }
     }
 }
