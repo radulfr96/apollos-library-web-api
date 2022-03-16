@@ -12,13 +12,14 @@ namespace ApollosLibrary.UnitOfWork
 {
     public class BookUnitOfWork : IBookUnitOfWork
     {
+        private readonly ApollosLibraryContext _dbContext;
+        private IDbContextTransaction _transaction;
         private IBookDataLayer _bookDataLayer;
-        private readonly ApollosLibraryContext _context;
         private bool disposed = false;
 
-        public BookUnitOfWork(ApollosLibraryContext context)
+        public BookUnitOfWork(ApollosLibraryContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public IBookDataLayer BookDataLayer
@@ -27,7 +28,7 @@ namespace ApollosLibrary.UnitOfWork
             {
                 if (_bookDataLayer == null)
                 {
-                    _bookDataLayer = new BookDataLayer(_context);
+                    _bookDataLayer = new BookDataLayer(_dbContext);
                 }
                 return _bookDataLayer;
             }
@@ -35,19 +36,19 @@ namespace ApollosLibrary.UnitOfWork
 
         public async Task Begin()
         {
-            await _context.Database.BeginTransactionAsync();
+            await _dbContext.Database.BeginTransactionAsync();
         }
 
         public async Task Commit()
         {
-            await _context.Database.CommitTransactionAsync();
+            await _dbContext.Database.CommitTransactionAsync();
         }
 
         public async Task Rollback()
         {
-            if (_context.Database.CurrentTransaction != null)
+            if (_dbContext.Database.CurrentTransaction != null)
             {
-                await _context.Database.RollbackTransactionAsync();
+                await _dbContext.Database.RollbackTransactionAsync();
             }
         }
 
@@ -62,14 +63,13 @@ namespace ApollosLibrary.UnitOfWork
             if (disposed)
                 return;
 
-            if (_context.Database.CurrentTransaction != null)
-            {
-                _context.Database.RollbackTransaction();
-            }
-
             if (disposing)
             {
-                _context.Dispose();
+                if (_transaction != null)
+                {
+                    _transaction.Dispose();
+                }
+                _dbContext.Dispose();
             }
 
             disposed = true;
@@ -77,7 +77,7 @@ namespace ApollosLibrary.UnitOfWork
 
         public async Task Save()
         {
-            await _context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         ~BookUnitOfWork()
