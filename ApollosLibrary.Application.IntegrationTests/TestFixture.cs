@@ -26,7 +26,6 @@ namespace ApollosLibrary.Application.IntegrationTests
     {
         public IServiceCollection ServiceCollection { get; private set; }
         private readonly ApollosLibraryContext _context;
-        private readonly Checkpoint _checkpoint;
 
         public TestFixture()
         {
@@ -91,20 +90,12 @@ namespace ApollosLibrary.Application.IntegrationTests
                 _context.Database.Migrate();
             }
 
-            _checkpoint = new Checkpoint
-            {
-                TablesToIgnore = new Table[] { "Countries", "FictionTypes", "FormTypes", "PublicationFormats" },
-            };
-
             ServiceCollection = services;
         }
 
         public void ResetCheckpoint()
         {
-            _checkpoint.Reset(_context.Database.GetConnectionString())
-                .ConfigureAwait(false)
-                .GetAwaiter()
-                .GetResult();
+            _context.Dispose();
         }
     }
 }

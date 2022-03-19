@@ -52,29 +52,25 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(new GetAuthorsQuery() { });
 
-            result.Should().BeEquivalentTo(new GetAuthorsQueryDto()
+            result.Authors.Should().ContainEquivalentOf(new AuthorListItemDTO()
             {
-                Authors = new List<AuthorListItemDTO>()
-                {
-                    new AuthorListItemDTO()
-                    {
-                        AuthorId = authorGenerated1.AuthorId,
-                        Country = country1.Name,
-                        Name = $"{authorGenerated1.FirstName} {authorGenerated1.MiddleName} {authorGenerated1.LastName}"
-                    },
-                    new AuthorListItemDTO()
-                    {
-                        AuthorId = authorGenerated2.AuthorId,
-                        Country = country2.Name,
-                        Name = $"{authorGenerated2.FirstName} {authorGenerated2.MiddleName} {authorGenerated2.LastName}"
-                    },
-                    new AuthorListItemDTO()
-                    {
-                        AuthorId = authorGenerated3.AuthorId,
-                        Country = country3.Name,
-                        Name = $"{authorGenerated3.FirstName} {authorGenerated3.MiddleName} {authorGenerated3.LastName}"
-                    },
-                }
+                AuthorId = authorGenerated1.AuthorId,
+                Country = country1.Name,
+                Name = $"{authorGenerated1.FirstName} {authorGenerated1.MiddleName} {authorGenerated1.LastName}"
+            });
+
+            result.Authors.Should().ContainEquivalentOf(new AuthorListItemDTO()
+            {
+                AuthorId = authorGenerated2.AuthorId,
+                Country = country2.Name,
+                Name = $"{authorGenerated2.FirstName} {authorGenerated2.MiddleName} {authorGenerated2.LastName}"
+            });
+
+            result.Authors.Should().ContainEquivalentOf(new AuthorListItemDTO()
+            {
+                AuthorId = authorGenerated3.AuthorId,
+                Country = country3.Name,
+                Name = $"{authorGenerated3.FirstName} {authorGenerated3.MiddleName} {authorGenerated3.LastName}"
             });
         }
     }

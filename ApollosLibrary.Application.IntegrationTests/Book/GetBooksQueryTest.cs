@@ -64,38 +64,34 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(command);
 
-            result.Should().BeEquivalentTo(new GetBooksQueryDto()
+            result.Books.Should().ContainEquivalentOf(new BookListItemDTO()
             {
-                Books = new List<BookListItemDTO>()
-                {
-                    new BookListItemDTO()
-                    {
-                        BookId = book1.BookId,
-                        eISBN = book1.EIsbn,
-                        FictionType = fictionTypes.First(f => f.TypeId == book1.FictionTypeId).Name,
-                        FormatType = formatTypes.First(f => f.TypeId == book1.FormTypeId).Name,
-                        ISBN = book1.Isbn,
-                        Title = book1.Title,
-                    },
-                    new BookListItemDTO()
-                    {
-                        BookId = book2.BookId,
-                        eISBN = book2.EIsbn,
-                        FictionType = fictionTypes.First(f => f.TypeId == book2.FictionTypeId).Name,
-                        FormatType = formatTypes.First(f => f.TypeId == book2.FormTypeId).Name,
-                        ISBN = book2.Isbn,
-                        Title = book2.Title,
-                    },
-                    new BookListItemDTO()
-                    {
-                        BookId = book3.BookId,
-                        eISBN = book3.EIsbn,
-                        FictionType = fictionTypes.First(f => f.TypeId == book3.FictionTypeId).Name,
-                        FormatType = formatTypes.First(f => f.TypeId == book3.FormTypeId).Name,
-                        ISBN = book3.Isbn,
-                        Title = book3.Title,
-                    },
-                }
+                BookId = book1.BookId,
+                eISBN = book1.EIsbn,
+                FictionType = fictionTypes.First(f => f.TypeId == book1.FictionTypeId).Name,
+                FormatType = formatTypes.First(f => f.TypeId == book1.FormTypeId).Name,
+                ISBN = book1.Isbn,
+                Title = book1.Title,
+            });
+
+            result.Books.Should().ContainEquivalentOf(new BookListItemDTO()
+            {
+                BookId = book2.BookId,
+                eISBN = book2.EIsbn,
+                FictionType = fictionTypes.First(f => f.TypeId == book2.FictionTypeId).Name,
+                FormatType = formatTypes.First(f => f.TypeId == book2.FormTypeId).Name,
+                ISBN = book2.Isbn,
+                Title = book2.Title,
+            });
+
+            result.Books.Should().ContainEquivalentOf(new BookListItemDTO()
+            {
+                BookId = book3.BookId,
+                eISBN = book3.EIsbn,
+                FictionType = fictionTypes.First(f => f.TypeId == book3.FictionTypeId).Name,
+                FormatType = formatTypes.First(f => f.TypeId == book3.FormTypeId).Name,
+                ISBN = book3.Isbn,
+                Title = book3.Title,
             });
         }
     }

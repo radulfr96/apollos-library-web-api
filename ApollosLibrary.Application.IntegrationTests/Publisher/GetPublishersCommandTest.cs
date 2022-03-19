@@ -65,29 +65,25 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(query);
 
-            result.Should().BeEquivalentTo(new GetPublishersQueryDto()
+            result.Publishers.Should().ContainEquivalentOf(new PublisherListItemDTO()
             {
-                Publishers = new List<PublisherListItemDTO>()
-                {
-                    new PublisherListItemDTO()
-                    {
-                        Country = countries.First(c => c.CountryId == publisher1.CountryId).Name,
-                        Name = publisher1.Name,
-                        PublisherId = publisher1.PublisherId,
-                    },
-                    new PublisherListItemDTO()
-                    {
-                        Country = countries.First(c => c.CountryId == publisher2.CountryId).Name,
-                        Name = publisher2.Name,
-                        PublisherId = publisher2.PublisherId,
-                    },
-                    new PublisherListItemDTO()
-                    {
-                        Country = countries.First(c => c.CountryId == publisher3.CountryId).Name,
-                        Name = publisher3.Name,
-                        PublisherId = publisher3.PublisherId,
-                    },
-                },
+                Country = countries.First(c => c.CountryId == publisher1.CountryId).Name,
+                Name = publisher1.Name,
+                PublisherId = publisher1.PublisherId,
+            });
+
+            result.Publishers.Should().ContainEquivalentOf(new PublisherListItemDTO()
+            {
+                Country = countries.First(c => c.CountryId == publisher2.CountryId).Name,
+                Name = publisher2.Name,
+                PublisherId = publisher2.PublisherId,
+            });
+
+            result.Publishers.Should().ContainEquivalentOf(new PublisherListItemDTO()
+            {
+                Country = countries.First(c => c.CountryId == publisher3.CountryId).Name,
+                Name = publisher3.Name,
+                PublisherId = publisher3.PublisherId,
             });
         }
     }

@@ -60,21 +60,16 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(query);
 
-            result.Should().BeEquivalentTo(new GetGenresQueryDto()
+            result.Genres.Should().ContainEquivalentOf(new GenreDto()
             {
-                Genres = new List<GenreDto>()
-                {
-                    new GenreDto()
-                    {
-                        GenreId = genre1.GenreId,
-                        Name =  genre1.Name,
-                    },
-                    new GenreDto()
-                    {
-                        GenreId = genre2.GenreId,
-                        Name = genre2.Name,
-                    }
-                }
+                GenreId = genre1.GenreId,
+                Name = genre1.Name,
+            });
+
+            result.Genres.Should().ContainEquivalentOf(new GenreDto()
+            {
+                GenreId = genre2.GenreId,
+                Name = genre2.Name,
             });
         }
     }
