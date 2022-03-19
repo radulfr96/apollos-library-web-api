@@ -26,7 +26,6 @@ namespace ApollosLibrary.Application.IntegrationTests
     {
         public IServiceCollection ServiceCollection { get; private set; }
         private readonly ApollosLibraryContext _context;
-        private readonly Configuration _configuration;
         private readonly Checkpoint _checkpoint;
 
         public TestFixture()
@@ -39,16 +38,15 @@ namespace ApollosLibrary.Application.IntegrationTests
                 .AddEnvironmentVariables()
                 .Build();
 
-            _configuration = new Configuration();
+            var connectionString = localConfig.GetSection("ConnectionString").Value;
+            var conn = connectionString.Replace("{UniqueId}", DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss"));
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApollosLibraryContext>();
-            optionsBuilder.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
-
-            services.AddHttpContextAccessor();
             services.AddDbContext<ApollosLibraryContext>(opt =>
             {
-                opt.UseSqlServer(localConfig.GetSection("ConnectionString").Value);
+                opt.UseSqlServer(conn);
             });
+
+            services.AddHttpContextAccessor();
 
             services.AddTransient<IPublisherUnitOfWork>(p =>
             {
@@ -80,8 +78,6 @@ namespace ApollosLibrary.Application.IntegrationTests
                 return new UserService(p.GetRequiredService<IHttpContextAccessor>());
             });
 
-            localConfig.Bind(_configuration);
-
             services.AddHttpContextAccessor();
 
             services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
@@ -101,14 +97,6 @@ namespace ApollosLibrary.Application.IntegrationTests
             };
 
             ServiceCollection = services;
-        }
-
-        public Configuration Configuration
-        {
-            get
-            {
-                return _configuration;
-            }
         }
 
         public void ResetCheckpoint()
