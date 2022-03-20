@@ -23,7 +23,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         public int PublicationFormatID { get; set; }
         public int FictionTypeID { get; set; }
         public int FormTypeID { get; set; }
-        public int PublisherID { get; set; }
+        public int? PublisherID { get; set; }
         public byte[] CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
@@ -110,11 +110,16 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeID}]");
             }
 
-            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherID);
+            Domain.Publisher publisher = null;
 
-            if (publisher == null)
+            if (command.PublisherID.HasValue)
             {
-                throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherID}]");
+                publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherID.Value);
+
+                if (publisher == null)
+                {
+                    throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherID}]");
+                }
             }
 
             var book = new Domain.Book()

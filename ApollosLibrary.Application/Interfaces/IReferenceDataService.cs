@@ -10,7 +10,7 @@ namespace ApollosLibrary.Application.Interfaces
     public interface IReferenceDataService
     {
         string GetReferenceData();
-
         Task<List<CountryDTO>> GetCountries();
+        Task<BookReferenceDataDTO> GetBookReferenceData();
     }
 }

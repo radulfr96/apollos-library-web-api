@@ -8,7 +8,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBooksQuery
 {
     public class GetBooksQueryDto
     {
-        public List<BookListItemDTO> Books { get; set; }
+        public List<BookListItemDTO> Books { get; set; } = new List<BookListItemDTO>();
     }
 
     public class BookListItemDTO

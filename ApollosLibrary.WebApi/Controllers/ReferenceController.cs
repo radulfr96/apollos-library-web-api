@@ -33,5 +33,11 @@ namespace ApollosLibrary.WebApi.Controllers
         {
             return await _referenceService.GetCountries();
         }
+
+        [HttpGet("bookReferenceData")]
+        public async Task<BookReferenceDataDTO> GetBookReferenceData()
+        {
+            return await _referenceService.GetBookReferenceData();
+        }
     }
 }

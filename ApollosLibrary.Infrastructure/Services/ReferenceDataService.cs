@@ -43,5 +43,15 @@ namespace ApollosLibrary.Infrastructure.Services
 
             return response;
         }
+
+        public async Task<BookReferenceDataDTO> GetBookReferenceData()
+        {
+            return new BookReferenceDataDTO()
+            {
+                FictionTypes = await _referenceUnitOfWork.ReferenceDataLayer.GetFictionTypes(),
+                FormTypes = await _referenceUnitOfWork.ReferenceDataLayer.GetFormTypes(),
+                PublicationFormats = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormats(),
+            };
+        }
     }
 }

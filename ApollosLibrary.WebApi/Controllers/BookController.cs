@@ -53,7 +53,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <returns>Response that indicates the result</returns>
         [HttpGet("")]
-        public async Task<GetBooksQueryDto> GetBooks([FromRoute] int id)
+        public async Task<GetBooksQueryDto> GetBooks()
         {
             return await _mediator.Send(new GetBooksQuery());
         }

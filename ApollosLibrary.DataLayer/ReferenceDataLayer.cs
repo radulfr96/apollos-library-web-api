@@ -28,14 +28,29 @@ namespace ApollosLibrary.DataLayer
             return await _context.FictionTypes.FirstOrDefaultAsync(f => f.TypeId == fictionTypeId);
         }
 
+        public async Task<List<FictionType>> GetFictionTypes()
+        {
+            return await _context.FictionTypes.ToListAsync();
+        }
+
         public async Task<FormType> GetFormType(int formTypeId)
         {
             return await _context.FormTypes.FirstOrDefaultAsync(f => f.TypeId == formTypeId);
         }
 
+        public async Task<List<FormType>> GetFormTypes()
+        {
+            return await _context.FormTypes.ToListAsync();
+        }
+
         public async Task<PublicationFormat> GetPublicationFormat(int publicationFormatId)
         {
             return await _context.PublicationFormats.FirstOrDefaultAsync(f => f.TypeId == publicationFormatId);
+        }
+
+        public async Task<List<PublicationFormat>> GetPublicationFormats()
+        {
+            return await _context.PublicationFormats.ToListAsync();
         }
     }
 }
