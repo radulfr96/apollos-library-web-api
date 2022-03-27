@@ -24,7 +24,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         public int FictionTypeID { get; set; }
         public int FormTypeID { get; set; }
         public int? PublisherID { get; set; }
-        public byte[] CoverImage { get; set; }
+        public byte[] CoverImage { get; set; } = null;
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
     }
