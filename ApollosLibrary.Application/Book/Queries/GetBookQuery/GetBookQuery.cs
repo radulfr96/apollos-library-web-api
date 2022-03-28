@@ -39,12 +39,12 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             response.CoverImage = book.CoverImage == null ? null : Encoding.ASCII.GetBytes(book.CoverImage);
             response.Edition = book.Edition;
             response.eISBN = book.EIsbn;
-            response.FictionType = book.FictionTypeId;
-            response.FormType = book.FormTypeId;
+            response.FictionTypeId = book.FictionTypeId;
+            response.FormTypeId = book.FormTypeId;
             response.ISBN = book.Isbn;
             response.NumberInSeries = book.NumberInSeries;
-            response.PublicationFormat = book.PublicationFormatId;
-            response.Publisher = book.PublisherId;
+            response.PublicationFormatId = book.PublicationFormatId;
+            response.PublisherId = book.PublisherId;
             response.SeriesID = book.SeriesId;
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;

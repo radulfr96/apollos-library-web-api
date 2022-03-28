@@ -16,10 +16,10 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
         public int? SeriesID { get; set; }
         public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
-        public int PublicationFormat { get; set; }
-        public int FictionType { get; set; }
-        public int FormType { get; set; }
-        public int? Publisher { get; set; }
+        public int PublicationFormatId { get; set; }
+        public int FictionTypeId { get; set; }
+        public int FormTypeId { get; set; }
+        public int? PublisherId { get; set; }
         public byte[] CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
