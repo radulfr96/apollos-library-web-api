@@ -58,15 +58,15 @@ namespace ApollosLibrary.Application.IntegrationTests
             {
                 BookId = book.BookId,
                 Edition = book.Edition,
-                FictionType = book.FictionTypeId,
-                FormType = book.FormTypeId,
+                FictionTypeId = book.FictionTypeId,
+                FormTypeId = book.FormTypeId,
                 ISBN = book.Isbn,
                 NumberInSeries = book.NumberInSeries,
-                PublicationFormat = book.PublicationFormatId,
+                PublicationFormatId = book.PublicationFormatId,
                 SeriesId = book.SeriesId,
                 Subtitle = book.Subtitle,
                 Title = book.Title,
-                Publisher = publisher.PublisherId,
+                PublisherId = publisher.PublisherId,
             });
         }
     }

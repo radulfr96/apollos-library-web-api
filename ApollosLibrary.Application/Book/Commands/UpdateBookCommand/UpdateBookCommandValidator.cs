@@ -13,11 +13,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
     {
         public UpdateBookCommandValidator()
         {
-            When(b => string.IsNullOrEmpty(b.ISBN), () =>
-            {
-                RuleFor(b => b.EISBN).NotEmpty().WithErrorCode(ErrorCodeEnum.NoISBNOreISBNProvided.ToString());
-            });
-
             When(b => !string.IsNullOrEmpty(b.ISBN), () =>
             {
                 RuleFor(b => b.ISBN).Length(10, 13).WithErrorCode(ErrorCodeEnum.ISBNInvalidLength.ToString());
@@ -38,9 +33,15 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 RuleFor(b => b.Subtitle).Length(1, 200).WithErrorCode(ErrorCodeEnum.SubtitleInvalidLength.ToString());
             });
 
-            RuleFor(b => b.NumberInSeries).GreaterThanOrEqualTo(0).WithErrorCode(ErrorCodeEnum.NumberInSeriesInvalidValue.ToString());
+            When(b => b.NumberInSeries.HasValue, () =>
+            {
+                RuleFor(b => b.NumberInSeries).GreaterThanOrEqualTo(0).WithErrorCode(ErrorCodeEnum.NumberInSeriesInvalidValue.ToString());
+            });
 
-            RuleFor(b => b.Edition).GreaterThan(0).WithErrorCode(ErrorCodeEnum.EditionInvalidValue.ToString());
+            When(b => b.Edition.HasValue, () =>
+            {
+                RuleFor(b => b.Edition).GreaterThan(0).WithErrorCode(ErrorCodeEnum.EditionInvalidValue.ToString());
+            });
         }
 
         private bool BeValidISBN(string isbn)

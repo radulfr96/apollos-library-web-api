@@ -13,12 +13,6 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
     {
         public AddBookCommandValidator()
         {
-
-            When(b => string.IsNullOrEmpty(b.ISBN), () =>
-            {
-                RuleFor(b => b.EISBN).NotEmpty().WithErrorCode(ErrorCodeEnum.NoISBNOreISBNProvided.ToString());
-            });
-
             When(b => !string.IsNullOrEmpty(b.ISBN), () =>
             {
                 RuleFor(b => b.ISBN).Length(10, 13).WithErrorCode(ErrorCodeEnum.ISBNInvalidLength.ToString());
