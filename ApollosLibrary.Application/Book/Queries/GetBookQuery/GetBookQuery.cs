@@ -35,7 +35,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
                 throw new BookNotFoundException($"Unable to get find book with id {query.BookId}");
             }
 
-            response.BookID = book.BookId;
+            response.BookId = book.BookId;
             response.CoverImage = book.CoverImage == null ? null : Encoding.ASCII.GetBytes(book.CoverImage);
             response.Edition = book.Edition;
             response.eISBN = book.EIsbn;
@@ -45,7 +45,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             response.NumberInSeries = book.NumberInSeries;
             response.PublicationFormatId = book.PublicationFormatId;
             response.PublisherId = book.PublisherId;
-            response.SeriesID = book.SeriesId;
+            response.SeriesId = book.SeriesId;
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;
             response.Authors = book.Authors.Select(a => a.AuthorId).ToList();

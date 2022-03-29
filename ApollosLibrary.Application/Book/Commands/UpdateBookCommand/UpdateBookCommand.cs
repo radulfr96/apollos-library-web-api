@@ -14,7 +14,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
 {
     public class UpdateBookCommand : IRequest<UpdateBookCommandDto>
     {
-        public int BookID { get; set; }
+        public int BookId { get; set; }
         public string ISBN { get; set; }
         public string EISBN { get; set; }
         public string Title { get; set; }
@@ -22,10 +22,10 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public int? SeriesID { get; set; }
         public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
-        public int PublicationFormatID { get; set; }
-        public int FictionTypeID { get; set; }
-        public int FormTypeID { get; set; }
-        public int PublisherID { get; set; }
+        public int PublicationFormatId { get; set; }
+        public int FictionTypeId { get; set; }
+        public int FormTypeId { get; set; }
+        public int PublisherId { get; set; }
         public byte[] CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
@@ -63,11 +63,11 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         {
             var response = new UpdateBookCommandDto();
 
-            var book = await _bookUnitOfWork.BookDataLayer.GetBook(command.BookID);
+            var book = await _bookUnitOfWork.BookDataLayer.GetBook(command.BookId);
 
             if (book == null)
             {
-                throw new BookNotFoundException($"Unable to find book with id {command.BookID}");
+                throw new BookNotFoundException($"Unable to find book with id {command.BookId}");
             }
 
             if (!string.IsNullOrEmpty(command.ISBN))
@@ -99,32 +99,32 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                     throw new SeriesNotFoundException($"Unable to find series with id [{command.SeriesID}]");
             }
 
-            var publicationFormat = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormat(command.PublicationFormatID);
+            var publicationFormat = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormat(command.PublicationFormatId);
 
             if (publicationFormat == null)
             {
-                throw new PublicationFormatNotFoundException($"Unable to find publication format with id [{command.PublicationFormatID}]");
+                throw new PublicationFormatNotFoundException($"Unable to find publication format with id [{command.PublicationFormatId}]");
             }
 
-            var fictionType = await _referenceUnitOfWork.ReferenceDataLayer.GetFictionType(command.FictionTypeID);
+            var fictionType = await _referenceUnitOfWork.ReferenceDataLayer.GetFictionType(command.FictionTypeId);
 
             if (fictionType == null)
             {
-                throw new FictionTypeNotFoundException($"Unable to find fiction type with id [{command.FictionTypeID}]");
+                throw new FictionTypeNotFoundException($"Unable to find fiction type with id [{command.FictionTypeId}]");
             }
 
-            var formType = await _referenceUnitOfWork.ReferenceDataLayer.GetFormType(command.FormTypeID);
+            var formType = await _referenceUnitOfWork.ReferenceDataLayer.GetFormType(command.FormTypeId);
 
             if (formType == null)
             {
-                throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeID}]");
+                throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeId}]");
             }
 
-            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherID);
+            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherId);
 
             if (publisher == null)
             {
-                throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherID}]");
+                throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherId}]");
             }
 
             book.CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage);
@@ -132,12 +132,12 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             book.CreatedDate = _dateTimeService.Now;
             book.Edition = command.Edition;
             book.EIsbn = command.EISBN;
-            book.FictionTypeId = command.FictionTypeID;
-            book.FormTypeId = command.FormTypeID;
+            book.FictionTypeId = command.FictionTypeId;
+            book.FormTypeId = command.FormTypeId;
             book.Isbn = command.ISBN;
             book.NumberInSeries = command.NumberInSeries;
-            book.PublicationFormatId = command.PublicationFormatID;
-            book.PublisherId = command.PublisherID;
+            book.PublicationFormatId = command.PublicationFormatId;
+            book.PublisherId = command.PublisherId;
             book.SeriesId = command.SeriesID;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
@@ -146,8 +146,8 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
 
             await _bookUnitOfWork.Begin();
 
-            await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookID);
-            await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookID);
+            await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookId);
+            await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookId);
             await _bookUnitOfWork.Save();
 
             foreach (int authorId in command.Authors)

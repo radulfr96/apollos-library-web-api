@@ -17,13 +17,13 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         public string EISBN { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public int? SeriesID { get; set; }
+        public int? SeriesId { get; set; }
         public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
-        public int PublicationFormatID { get; set; }
-        public int FictionTypeID { get; set; }
-        public int FormTypeID { get; set; }
-        public int? PublisherID { get; set; }
+        public int PublicationFormatId { get; set; }
+        public int FictionTypeId { get; set; }
+        public int FormTypeId { get; set; }
+        public int? PublisherId { get; set; }
         public byte[] CoverImage { get; set; } = null;
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
@@ -81,44 +81,44 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 }
             }
 
-            if (command.SeriesID.HasValue)
+            if (command.SeriesId.HasValue)
             {
-                var series = await _bookUnitOfWork.BookDataLayer.GetSeries(command.SeriesID.Value);
+                var series = await _bookUnitOfWork.BookDataLayer.GetSeries(command.SeriesId.Value);
 
                 if (series == null)
-                    throw new SeriesNotFoundException($"Unable to find series with id [{command.SeriesID}]");
+                    throw new SeriesNotFoundException($"Unable to find series with id [{command.SeriesId}]");
             }
 
-            var publicationFormat = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormat(command.PublicationFormatID);
+            var publicationFormat = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormat(command.PublicationFormatId);
 
             if (publicationFormat == null)
             {
-                throw new PublicationFormatNotFoundException($"Unable to find publication format with id [{command.PublicationFormatID}]");
+                throw new PublicationFormatNotFoundException($"Unable to find publication format with id [{command.PublicationFormatId}]");
             }
 
-            var fictionType = await _referenceUnitOfWork.ReferenceDataLayer.GetFictionType(command.FictionTypeID);
+            var fictionType = await _referenceUnitOfWork.ReferenceDataLayer.GetFictionType(command.FictionTypeId);
 
             if (fictionType == null)
             {
-                throw new FictionTypeNotFoundException($"Unable to find fiction type with id [{command.FictionTypeID}]");
+                throw new FictionTypeNotFoundException($"Unable to find fiction type with id [{command.FictionTypeId}]");
             }
 
-            var formType = await _referenceUnitOfWork.ReferenceDataLayer.GetFormType(command.FormTypeID);
+            var formType = await _referenceUnitOfWork.ReferenceDataLayer.GetFormType(command.FormTypeId);
 
             if (formType == null)
             {
-                throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeID}]");
+                throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeId}]");
             }
 
             Domain.Publisher publisher = null;
 
-            if (command.PublisherID.HasValue)
+            if (command.PublisherId.HasValue)
             {
-                publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherID.Value);
+                publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherId.Value);
 
                 if (publisher == null)
                 {
-                    throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherID}]");
+                    throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherId}]");
                 }
             }
 
@@ -129,13 +129,13 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 CreatedDate = _dateTimeService.Now,
                 Edition = command.Edition,
                 EIsbn = command.EISBN,
-                FictionTypeId = command.FictionTypeID,
-                FormTypeId = command.FormTypeID,
+                FictionTypeId = command.FictionTypeId,
+                FormTypeId = command.FormTypeId,
                 Isbn = command.ISBN,
                 NumberInSeries = command.NumberInSeries,
-                PublicationFormatId = command.PublicationFormatID,
-                PublisherId = command.PublisherID,
-                SeriesId = command.SeriesID,
+                PublicationFormatId = command.PublicationFormatId,
+                PublisherId = command.PublisherId,
+                SeriesId = command.SeriesId,
                 Subtitle = command.Subtitle,
                 Title = command.Title,
                 Authors = new List<Domain.Author>()

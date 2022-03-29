@@ -56,14 +56,14 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             result.Should().BeEquivalentTo(new GetBookQueryDto()
             {
-                BookID = book.BookId,
+                BookId = book.BookId,
                 Edition = book.Edition,
                 FictionType = book.FictionTypeId,
                 FormType = book.FormTypeId,
                 ISBN = book.Isbn,
                 NumberInSeries = book.NumberInSeries,
                 PublicationFormat = book.PublicationFormatId,
-                SeriesID = book.SeriesId,
+                SeriesId = book.SeriesId,
                 Subtitle = book.Subtitle,
                 Title = book.Title,
                 Publisher = publisher.PublisherId,

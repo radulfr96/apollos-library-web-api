@@ -78,14 +78,14 @@ namespace ApollosLibrary.Application.IntegrationTests
             var command = new AddBookCommand()
             {
                 Edition = bookGenerated.Edition,
-                FictionTypeID = bookGenerated.FictionTypeId,
-                FormTypeID = bookGenerated.FormTypeId,
+                FictionTypeId = bookGenerated.FictionTypeId,
+                FormTypeId = bookGenerated.FormTypeId,
                 ISBN = bookGenerated.Isbn,
                 NumberInSeries = bookGenerated.NumberInSeries,
-                PublicationFormatID = bookGenerated.PublicationFormatId,
+                PublicationFormatId = bookGenerated.PublicationFormatId,
                 Subtitle = bookGenerated.Subtitle,
                 Title = bookGenerated.Title,
-                PublisherID = publisher.PublisherId,
+                PublisherId = publisher.PublisherId,
                 Genres = new List<int>()
                 {
                     genre1.GenreId,

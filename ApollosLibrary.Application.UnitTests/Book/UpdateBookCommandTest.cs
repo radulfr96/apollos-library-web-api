@@ -468,7 +468,7 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                PublicationFormatID = 1,
+                PublicationFormatId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -548,8 +548,8 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                PublicationFormatID = 1,
-                FictionTypeID = 1,
+                PublicationFormatId = 1,
+                FictionTypeId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -630,9 +630,9 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                PublicationFormatID = 1,
-                FictionTypeID = 1,
-                FormTypeID = 1,
+                PublicationFormatId = 1,
+                FictionTypeId = 1,
+                FormTypeId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -714,10 +714,10 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                PublicationFormatID = 1,
-                FictionTypeID = 1,
-                FormTypeID = 1,
-                PublisherID = 1,
+                PublicationFormatId = 1,
+                FictionTypeId = 1,
+                FormTypeId = 1,
+                PublisherId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -800,10 +800,10 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                PublicationFormatID = 1,
-                FictionTypeID = 1,
-                FormTypeID = 1,
-                PublisherID = 1,
+                PublicationFormatId = 1,
+                FictionTypeId = 1,
+                FormTypeId = 1,
+                PublisherId = 1,
                 Authors = new List<int>()
                 {
                     1,
@@ -891,10 +891,10 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                PublicationFormatID = 1,
-                FictionTypeID = 1,
-                FormTypeID = 1,
-                PublisherID = 1,
+                PublicationFormatId = 1,
+                FictionTypeId = 1,
+                FormTypeId = 1,
+                PublisherId = 1,
                 Genres = new List<int>()
                 {
                     1,
