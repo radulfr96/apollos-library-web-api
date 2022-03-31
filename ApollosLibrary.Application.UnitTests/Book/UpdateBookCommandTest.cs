@@ -33,25 +33,6 @@ namespace ApollosLibrary.Application.UnitTests
         }
 
         [Fact]
-        public void NoISBNorEISBN()
-        {
-            var command = new UpdateBookCommand();
-
-            var result = _validator.TestValidate(command);
-
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NoISBNOreISBNProvided.ToString()).Any());
-
-            command.ISBN = "";
-            command.EISBN = "";
-
-            result = _validator.TestValidate(command);
-
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NoISBNOreISBNProvided.ToString()).Any());
-        }
-
-        [Fact]
         public void TitleNotProvided()
         {
             var command = new UpdateBookCommand()

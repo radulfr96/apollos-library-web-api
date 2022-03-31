@@ -26,7 +26,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public int FictionTypeId { get; set; }
         public int FormTypeId { get; set; }
         public int? PublisherId { get; set; }
-        public byte[] CoverImage { get; set; }
+        public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
     }
@@ -78,7 +78,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 {
                     throw new ISBNAlreadyAddedException("Book with that ISBN already exists.");
                 }
-
             }
 
             if (!string.IsNullOrEmpty(command.EISBN))
@@ -120,14 +119,17 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeId}]");
             }
 
-            var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherId);
-
-            if (publisher == null)
+            if (command.PublisherId.HasValue)
             {
-                throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherId}]");
+                var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherId.Value);
+
+                if (publisher == null)
+                {
+                    throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherId}]");
+                }
             }
 
-            book.CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage);
+            book.CoverImage = command.CoverImage;
             book.CreatedBy = _userService.GetUserId();
             book.CreatedDate = _dateTimeService.Now;
             book.Edition = command.Edition;
