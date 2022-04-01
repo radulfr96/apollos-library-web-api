@@ -20,7 +20,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
         public int FictionTypeId { get; set; }
         public int FormTypeId { get; set; }
         public int? PublisherId { get; set; }
-        public byte[] CoverImage { get; set; }
+        public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
     }

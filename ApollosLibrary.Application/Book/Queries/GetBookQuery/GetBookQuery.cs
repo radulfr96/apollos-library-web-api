@@ -36,7 +36,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             }
 
             response.BookId = book.BookId;
-            response.CoverImage = book.CoverImage == null ? null : Encoding.ASCII.GetBytes(book.CoverImage);
+            response.CoverImage = book.CoverImage;
             response.Edition = book.Edition;
             response.eISBN = book.EIsbn;
             response.FictionTypeId = book.FictionTypeId;
