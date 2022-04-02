@@ -74,7 +74,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             {
                 var existingISBN = await _bookUnitOfWork.BookDataLayer.GetBookByISBN(command.ISBN);
 
-                if (existingISBN != null)
+                if (existingISBN != null && existingISBN.Isbn != command.ISBN)
                 {
                     throw new ISBNAlreadyAddedException("Book with that ISBN already exists.");
                 }
@@ -82,9 +82,9 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
 
             if (!string.IsNullOrEmpty(command.EISBN))
             {
-                var existingeISBN = await _bookUnitOfWork.BookDataLayer.GetBookByeISBN(command.EISBN);
+                var existingeEISBN = await _bookUnitOfWork.BookDataLayer.GetBookByeISBN(command.EISBN);
 
-                if (existingeISBN != null)
+                if (existingeEISBN != null && command.EISBN != existingeEISBN.EIsbn)
                 {
                     throw new ISBNAlreadyAddedException("Book with that eISBN already exists.");
                 }
