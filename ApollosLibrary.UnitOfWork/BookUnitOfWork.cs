@@ -10,7 +10,7 @@ using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.UnitOfWork
 {
-    public class BookUnitOfWork : IBookUnitOfWork
+    public class BookUnitOfWork : IBookUnitOfWork, IDisposable
     {
         private readonly ApollosLibraryContext _dbContext;
         private IDbContextTransaction _transaction;
@@ -36,12 +36,12 @@ namespace ApollosLibrary.UnitOfWork
 
         public async Task Begin()
         {
-            await _dbContext.Database.BeginTransactionAsync();
+            _transaction = await _dbContext.Database.BeginTransactionAsync();
         }
 
         public async Task Commit()
         {
-            await _dbContext.Database.CommitTransactionAsync();
+            await _transaction.CommitAsync();
         }
 
         public async Task Rollback()

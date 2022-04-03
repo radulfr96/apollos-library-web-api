@@ -12,6 +12,7 @@ using ApollosLibrary.Application.Book.Commands.AddBookCommand;
 using ApollosLibrary.Application.Book.Commands.UpdateBookCommand;
 using ApollosLibrary.Application.Book.Queries.GetBookQuery;
 using ApollosLibrary.Application.Book.Queries.GetBooksQuery;
+using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -70,6 +71,20 @@ namespace ApollosLibrary.WebApi.Controllers
         public async Task<UpdateBookCommandDto> UpdateBook(UpdateBookCommand command)
         {
             return await _mediator.Send(command);
+        }
+
+        /// <summary>
+        /// Used to delete a book
+        /// </summary>
+        /// <param name="request">the book id</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpDelete("{bookId}")]
+        public async Task<DeleteBookCommandDto> UpdateBook([FromRoute]int bookId)
+        {
+            return await _mediator.Send(new DeleteBookCommand()
+            {
+                BookId = bookId,
+            });
         }
     }
 }

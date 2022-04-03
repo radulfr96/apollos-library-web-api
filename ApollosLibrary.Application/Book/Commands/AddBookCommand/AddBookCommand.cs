@@ -110,7 +110,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeId}]");
             }
 
-            Domain.Publisher publisher = null;
+            Domain.Publisher publisher;
 
             if (command.PublisherId.HasValue)
             {

@@ -45,7 +45,6 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// <returns>The books</returns>
         Task<List<Book>> GetBooks();
 
-
         /// <summary>
         /// Used to get a series by its id
         /// </summary>
@@ -64,5 +63,11 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="bookId">The book id of the relationships to delete</param>
         Task DeleteBookAuthorRelationships(int bookId);
+
+        /// <summary>
+        /// USed to delete a book from the database
+        /// </summary>
+        /// <param name="bookId">THe id of the book</param>
+        Task DeleteBook(int bookId);
     }
 }

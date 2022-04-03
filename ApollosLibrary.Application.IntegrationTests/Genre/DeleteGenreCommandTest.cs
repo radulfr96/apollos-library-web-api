@@ -20,7 +20,6 @@ namespace ApollosLibrary.Application.IntegrationTests
     [Collection("IntegrationTestCollection")]
     public class DeleteGenreCommandTest : TestBase
     {
-        private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
@@ -30,7 +29,6 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-            _dateTime = mockDateTimeService.Object;
             services.AddSingleton(mockDateTimeService.Object);
 
             var provider = services.BuildServiceProvider();

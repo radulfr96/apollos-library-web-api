@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -28,15 +29,15 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any().Should().BeTrue();
 
             command.Name = "";
 
             result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -49,8 +50,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameInvalidLength.ToString()).Any().Should().BeTrue();
         }
     }
 }

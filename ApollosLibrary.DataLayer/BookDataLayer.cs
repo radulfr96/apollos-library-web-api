@@ -11,7 +11,7 @@ namespace ApollosLibrary.DataLayer
 {
     public class BookDataLayer : IBookDataLayer
     {
-        private ApollosLibraryContext _context;
+        private readonly ApollosLibraryContext _context;
 
         public BookDataLayer(ApollosLibraryContext context)
         {
@@ -88,6 +88,14 @@ namespace ApollosLibrary.DataLayer
 
             if (book != null)
                 book.Genres = new List<Genre>();
+        }
+
+        public async Task DeleteBook(int bookId)
+        {
+            var book = (await _context.Books.Include(b => b.Genres).FirstOrDefaultAsync(b => b.BookId == bookId));
+
+            if (book != null)
+                _context.Books.Remove(book);
         }
     }
 }

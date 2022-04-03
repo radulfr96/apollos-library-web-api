@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -51,7 +52,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var record = _context.Authors.FirstOrDefault(a => a.AuthorId == author.AuthorId);
 
-            Assert.NotNull(record);
+            record.Should().NotBeNull();
 
             var command = new DeleteAuthorCommand()
             {
@@ -62,7 +63,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var authorAfter = _context.Authors.FirstOrDefault(a => a.AuthorId == command.AuthorId);
 
-            Assert.Null(authorAfter);
+            authorAfter.Should().BeNull();
         }
     }
 }

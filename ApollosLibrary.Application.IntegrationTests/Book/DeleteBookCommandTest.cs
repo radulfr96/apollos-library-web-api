@@ -12,13 +12,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
     public class DeleteBookCommandTest : TestBase
     {
-        private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         public DeleteBookCommandTest(TestFixture fixture) : base(fixture)
@@ -28,7 +29,6 @@ namespace ApollosLibrary.Application.IntegrationTests
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
             services.AddSingleton(mockDateTimeService.Object);
-            _dateTime = mockDateTimeService.Object;
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
@@ -38,18 +38,27 @@ namespace ApollosLibrary.Application.IntegrationTests
         [Fact]
         public async Task DeleteBookCommand()
         {
-            //Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
-            //{
-            //    new Claim(ClaimTypes.Sid, "1"),
-            //});
+            Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
+            {
+                new Claim(ClaimTypes.Sid, "1"),
+            });
 
-            //var publisher = PublisherGenerator.GetGenericPublisher("AU");
-            //_context.Publishers.Add(publisher);
+            var book = BookGenerator.GetGenericPhysicalBook(Guid.NewGuid());
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
 
-            //var command = new DeleteBookCommand
+            var command = new DeleteBookCommand()
+            {
+                BookId = book.BookId,
+            };
 
-            //var result = await _mediatr.Send(command);
+            var result = await _mediatr.Send(command);
 
+            result.Should().NotBeNull();
+
+            var deletedBook = _context.Books.FirstOrDefault(b => b.BookId == command.BookId);
+
+            result.Should().NotBeNull();
         }
     }
 }

@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -42,15 +43,15 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any().Should().BeTrue();
 
             command.Title = "";
 
             result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -64,8 +65,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -75,13 +76,13 @@ namespace ApollosLibrary.Application.UnitTests
             {
                 ISBN = "9780356501086",
                 Title = "Heir Of Novron",
-                Subtitle = new Faker().Lorem.Random.String(201)
+                Subtitle = _faker.Lorem.Random.String(201)
             };
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SubtitleInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SubtitleInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -96,8 +97,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NumberInSeriesInvalidValue.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NumberInSeriesInvalidValue.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -113,8 +114,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.EditionInvalidValue.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.EditionInvalidValue.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -194,7 +195,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<BookNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<BookNotFoundException>();
         }
 
         [Fact]
@@ -275,11 +277,102 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<ISBNAlreadyAddedException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<ISBNAlreadyAddedException>();
         }
 
         [Fact]
         public async Task EISBNDuplicate()
+        {
+            var command = new UpdateBookCommand()
+            {
+                EISBN = "9780356501086",
+                Title = "Heir Of Novron",
+                NumberInSeries = 7,
+                Edition = 0,
+            };
+
+            var commandBook2 = new UpdateBookCommand()
+            {
+                EISBN = "9780356501090",
+                Title = "Test Book",
+                NumberInSeries = 1,
+                Edition = 0,
+            };
+
+            var mockUserService = new Mock<IUserService>();
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return mockUserService.Object;
+            });
+
+            var mockDateTimeService = new Mock<IDateTimeService>();
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return mockDateTimeService.Object;
+            });
+
+            var referenceDataLayer = new Mock<IReferenceDataLayer>();
+
+            var referenceUnitOfWork = new Mock<IReferenceUnitOfWork>();
+            referenceUnitOfWork.Setup(r => r.ReferenceDataLayer).Returns(referenceDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return referenceUnitOfWork.Object;
+            });
+
+            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+
+            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
+            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return publisherUnitOfWork.Object;
+            });
+
+            var bookDataLayer = new Mock<IBookDataLayer>();
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
+            bookDataLayer.Setup(d => d.GetBookByeISBN(It.IsAny<string>())).Returns(Task.FromResult(new Domain.Book()));
+
+            var bookUnitOfWork = new Mock<IBookUnitOfWork>();
+            bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return bookUnitOfWork.Object;
+            });
+
+            var authorUnitOfWork = new Mock<IAuthorUnitOfWork>();
+
+            var authorDataLayer = new Mock<IAuthorDataLayer>();
+            authorUnitOfWork.Setup(r => r.AuthorDataLayer).Returns(authorDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return authorUnitOfWork.Object;
+            });
+
+            var genreUnitOfWork = new Mock<IGenreUnitOfWork>();
+
+            var genreDataLayer = new Mock<IGenreDataLayer>();
+            genreUnitOfWork.Setup(r => r.GenreDataLayer).Returns(genreDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return genreUnitOfWork.Object;
+            });
+
+            var provider = _fixture.ServiceCollection.BuildServiceProvider();
+            var mediator = provider.GetRequiredService<IMediator>();
+
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<ISBNAlreadyAddedException>();
+        }
+
+        [Fact]
+        public async Task WhenEISBNIsSame_DuplicateErrorNotThrown()
         {
             var command = new UpdateBookCommand()
             {
@@ -356,7 +449,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<ISBNAlreadyAddedException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<ISBNAlreadyAddedException>();
         }
 
         [Fact]
@@ -437,7 +531,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<SeriesNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<SeriesNotFoundException>();
         }
 
         [Fact]
@@ -517,7 +612,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<PublicationFormatNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<PublicationFormatNotFoundException>();
         }
 
         [Fact]
@@ -599,7 +695,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<FictionTypeNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<FictionTypeNotFoundException>();
         }
 
         [Fact]
@@ -683,7 +780,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<FormTypeNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<FormTypeNotFoundException>();
         }
 
         [Fact]
@@ -769,7 +867,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<PublisherNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<PublisherNotFoundException>();
         }
 
         [Fact]
@@ -860,7 +959,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<AuthorNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<AuthorNotFoundException>();
         }
 
         [Fact]
@@ -952,7 +1052,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<GenreNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<GenreNotFoundException>();
         }
     }
 }

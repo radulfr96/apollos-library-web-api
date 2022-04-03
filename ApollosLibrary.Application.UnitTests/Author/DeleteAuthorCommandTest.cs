@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -57,7 +58,8 @@ namespace ApollosLibrary.Application.UnitTests
                 AuthorId = 1,
             };
 
-            await Assert.ThrowsAsync<AuthorNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<AuthorNotFoundException>();
         }
     }
 }

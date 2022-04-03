@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -39,15 +40,15 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any().Should().BeTrue();
 
             command.Firstname = "";
 
             result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameNotProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -60,8 +61,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Theory]
@@ -111,8 +112,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidFormat.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.FirstnameInvalidFormat.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -126,15 +127,15 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any().Should().BeTrue();
 
             command.Lastname = "";
 
             result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameNotProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -148,8 +149,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Theory]
@@ -200,8 +201,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidFormat.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.LastnameInvalidFormat.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -216,8 +217,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Theory]
@@ -269,8 +270,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidFormat.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.MiddlenameInvalidFormat.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -286,15 +287,15 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any().Should().BeTrue();
 
             command.CountryID = "";
 
             result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any().Should().BeTrue();
         }
 
 
@@ -312,8 +313,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.DecriptionInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.DecriptionInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -373,7 +374,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<CountryInvalidValueException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<CountryInvalidValueException>();
         }
 
         [Fact]
@@ -433,7 +435,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<AuthorNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<AuthorNotFoundException>();
         }
     }
 }

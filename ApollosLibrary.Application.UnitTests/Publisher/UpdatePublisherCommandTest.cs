@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -37,15 +38,15 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherNameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherNameNotProvided.ToString()).Any().Should().BeTrue();
 
             command.Name = "";
 
             result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherNameNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherNameNotProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -58,8 +59,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherNameInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherNameInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -73,8 +74,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.WebsiteInvalidLength.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.WebsiteInvalidLength.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -87,8 +88,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -104,8 +105,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -121,8 +122,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -138,8 +139,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -156,8 +157,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.True(result.IsValid);
-            Assert.True(result.Errors.Count == 0);
+            result.IsValid.Should().BeTrue();
+            result.Errors.Should().BeEmpty();
         }
 
         [Fact]
@@ -173,8 +174,8 @@ namespace ApollosLibrary.Application.UnitTests
 
             var result = _validator.TestValidate(command);
 
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any());
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
@@ -239,7 +240,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<PublisherNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<PublisherNotFoundException>();
         }
 
         [Fact]
@@ -311,7 +313,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<CountryInvalidValueException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<CountryInvalidValueException>();
         }
     }
 }
