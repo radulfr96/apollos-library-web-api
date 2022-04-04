@@ -19,7 +19,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public string EISBN { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public int? SeriesID { get; set; }
+        public List<int> Series { get; set; }
         public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormatId { get; set; }
@@ -37,6 +37,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         private readonly IPublisherUnitOfWork _publisherUnitOfWork;
         private readonly IGenreUnitOfWork _genreUnitOfWork;
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
+        private readonly ISeriesUnitOfWork _seriesUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
@@ -47,6 +48,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             , IPublisherUnitOfWork publisherUnitOfWork
             , IGenreUnitOfWork genreUnitOfWork
             , IAuthorUnitOfWork authorUnitOfWork
+            , ISeriesUnitOfWork seriesUnitOfWork
             , IUserService userService
             , IDateTimeService dateTimeService)
         {
@@ -56,6 +58,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             _referenceUnitOfWork = referenceUnitOfWork;
             _genreUnitOfWork = genreUnitOfWork;
             _authorUnitOfWork = authorUnitOfWork;
+            _seriesUnitOfWork = seriesUnitOfWork;
             _publisherUnitOfWork = publisherUnitOfWork;
         }
 
@@ -88,14 +91,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 {
                     throw new ISBNAlreadyAddedException("Book with that eISBN already exists.");
                 }
-            }
-
-            if (command.SeriesID.HasValue)
-            {
-                var series = await _bookUnitOfWork.BookDataLayer.GetSeries(command.SeriesID.Value);
-
-                if (series == null)
-                    throw new SeriesNotFoundException($"Unable to find series with id [{command.SeriesID}]");
             }
 
             var publicationFormat = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormat(command.PublicationFormatId);
@@ -140,7 +135,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             book.NumberInSeries = command.NumberInSeries;
             book.PublicationFormatId = command.PublicationFormatId;
             book.PublisherId = command.PublisherId;
-            book.SeriesId = command.SeriesID;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
             book.ModifiedBy = _userService.GetUserId();
@@ -151,6 +145,18 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookId);
             await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookId);
             await _bookUnitOfWork.Save();
+
+            foreach (int seriesId in command.Series)
+            {
+                var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
+
+                if (series == null)
+                {
+                    throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
+                }
+
+                series.Books.Add(book);
+            }
 
             foreach (int authorId in command.Authors)
             {

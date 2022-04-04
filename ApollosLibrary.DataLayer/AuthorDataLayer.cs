@@ -11,7 +11,7 @@ namespace ApollosLibrary.DataLayer
 {
     public class AuthorDataLayer : IAuthorDataLayer
     {
-        private ApollosLibraryContext _context;
+        private readonly ApollosLibraryContext _context;
 
         public AuthorDataLayer(ApollosLibraryContext context)
         {

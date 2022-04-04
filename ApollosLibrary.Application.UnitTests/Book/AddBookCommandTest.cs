@@ -25,12 +25,10 @@ namespace ApollosLibrary.Application.UnitTests
     public class AddBookCommandTest : TestBase
     {
         private readonly AddBookCommandValidator _validator;
-        private readonly Faker _faker;
 
         public AddBookCommandTest(TestFixture fixture) : base(fixture)
         {
             _validator = new AddBookCommandValidator();
-            _faker = new Faker();
         }
 
         [Fact]
@@ -289,7 +287,10 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                SeriesId = 1,
+                Series = new List<int>()
+                {
+                    1
+                },
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -325,7 +326,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
+            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Domain.Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -406,7 +407,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
+            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Domain.Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -489,7 +490,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
+            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Domain.Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -574,7 +575,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
+            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Domain.Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
@@ -661,7 +662,7 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
-            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
+            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Domain.Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
