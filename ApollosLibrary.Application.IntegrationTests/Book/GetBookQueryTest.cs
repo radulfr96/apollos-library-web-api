@@ -63,7 +63,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 ISBN = book.Isbn,
                 NumberInSeries = book.NumberInSeries,
                 PublicationFormatId = book.PublicationFormatId,
-                SeriesId = book.SeriesId,
+                Series = book.Series.Select(b => b.SeriesId).ToList(),
                 Subtitle = book.Subtitle,
                 Title = book.Title,
                 PublisherId = publisher.PublisherId,

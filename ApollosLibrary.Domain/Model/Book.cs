@@ -30,17 +30,13 @@ namespace ApollosLibrary.Domain
 
         public int? PublisherId { get; set; }
         public Publisher Publisher { get; set; }
-
-        public int? SeriesId { get; set; }
-        public Series Series { get; set; }
-
         public string CoverImage { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public Guid? ModifiedBy { get; set; }
         public ICollection<Author> Authors { get; set; }
-
+        public ICollection<Series> Series { get; set; }
         public ICollection<Genre> Genres { get; set; }
     }
 }

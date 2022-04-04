@@ -462,7 +462,10 @@ namespace ApollosLibrary.Application.UnitTests
                 Title = "Heir Of Novron",
                 NumberInSeries = 7,
                 Edition = 0,
-                SeriesID = 1,
+                Series = new List<int>()
+                {
+                    1
+                },
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -499,7 +502,7 @@ namespace ApollosLibrary.Application.UnitTests
 
             var bookDataLayer = new Mock<IBookDataLayer>();
             bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
-            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Series)null));
+            bookDataLayer.Setup(d => d.GetSeries(It.IsAny<int>())).Returns(Task.FromResult((Domain.Series)null));
 
             var bookUnitOfWork = new Mock<IBookUnitOfWork>();
             bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);

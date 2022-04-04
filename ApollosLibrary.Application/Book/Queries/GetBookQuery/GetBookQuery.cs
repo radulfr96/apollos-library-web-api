@@ -17,7 +17,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
 
     public class GetBookQueryHandler : IRequestHandler<GetBookQuery, GetBookQueryDto>
     {
-        public IBookUnitOfWork _bookUnitOfWork { get; set; }
+        private readonly IBookUnitOfWork _bookUnitOfWork;
 
         public GetBookQueryHandler(IBookUnitOfWork bookUnitOfWork)
         {
@@ -38,14 +38,14 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             response.BookId = book.BookId;
             response.CoverImage = book.CoverImage;
             response.Edition = book.Edition;
-            response.eISBN = book.EIsbn;
+            response.EISBN = book.EIsbn;
             response.FictionTypeId = book.FictionTypeId;
             response.FormTypeId = book.FormTypeId;
             response.ISBN = book.Isbn;
             response.NumberInSeries = book.NumberInSeries;
             response.PublicationFormatId = book.PublicationFormatId;
             response.PublisherId = book.PublisherId;
-            response.SeriesId = book.SeriesId;
+            response.Series = book.Series.Select(s => s.SeriesId).ToList();
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;
             response.Authors = book.Authors.Select(a => a.AuthorId).ToList();
