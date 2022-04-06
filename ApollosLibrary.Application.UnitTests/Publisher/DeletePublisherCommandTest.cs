@@ -12,14 +12,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FluentValidation.TestHelper;
+using ApollosLibrary.Application.Common.Enums;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class DeletePublisherCommandTest : TestBase
     {
+        private readonly DeletePublisherCommandValidator _validator;
+
         public DeletePublisherCommandTest(TestFixture fixture) : base(fixture)
         {
+            _validator = new DeletePublisherCommandValidator();
+        }
+
+        [Fact]
+        public void PublisherIdInvalidValue()
+        {
+            var command = new DeletePublisherCommand()
+            {
+                PubisherId = 0,
+            };
+
+            var result = _validator.TestValidate(command);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.PublisherIdInvalidValue.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]

@@ -14,13 +14,34 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using FluentValidation.TestHelper;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class DeleteAuthorCommandTest : TestBase
     {
-        public DeleteAuthorCommandTest(TestFixture fixture) : base(fixture) { }
+        private readonly DeleteAuthorCommandValidator _validator;
+
+        public DeleteAuthorCommandTest(TestFixture fixture) : base(fixture)
+        {
+            _validator = new DeleteAuthorCommandValidator();
+        }
+
+        [Fact]
+        public void AuthorIdInvalidValue()
+        {
+            var command = new DeleteAuthorCommand()
+            {
+                AuthorId = 0,
+            };
+
+            var result = _validator.TestValidate(command);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.AuthorIdInvalidValue.ToString()).Any().Should().BeTrue();
+        }
 
         [Fact]
         public async Task AuthorNotFound()

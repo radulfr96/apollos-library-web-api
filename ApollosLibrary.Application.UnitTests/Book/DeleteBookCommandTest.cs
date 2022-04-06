@@ -14,14 +14,34 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
+using FluentValidation.TestHelper;
+using FluentAssertions;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class DeleteBookCommandTest : TestBase
     {
+        private readonly DeleteBookCommandValidator _validator;
+
         public DeleteBookCommandTest(TestFixture fixture) : base(fixture)
         {
+            _validator = new DeleteBookCommandValidator();
+        }
+
+        [Fact]
+        public void BookIdInvalidValue()
+        {
+            var command = new DeleteBookCommand()
+            {
+                BookId = 0,
+            };
+
+            var result = _validator.TestValidate(command);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BookIdInvalidValue.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]

@@ -12,13 +12,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FluentValidation.TestHelper;
+using ApollosLibrary.Application.Common.Enums;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class GetBookQueryTest : TestBase
     {
-        public GetBookQueryTest(TestFixture fixture) : base(fixture) { }
+        private readonly GetBookQueryValidator _validator;
+
+        public GetBookQueryTest(TestFixture fixture) : base(fixture)
+        {
+            _validator = new GetBookQueryValidator();
+        }
+
+        [Fact]
+        public void BookIdInvalidValue()
+        {
+            var command = new GetBookQuery()
+            {
+                BookId = 0,
+            };
+
+            var result = _validator.TestValidate(command);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BookIdInvalidValue.ToString()).Any().Should().BeTrue();
+        }
 
         [Fact]
         public async Task BookNotFound()
@@ -94,7 +116,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<BookNotFoundException>(() => mediator.Send(command));
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<BookNotFoundException>();
         }
     }
 }

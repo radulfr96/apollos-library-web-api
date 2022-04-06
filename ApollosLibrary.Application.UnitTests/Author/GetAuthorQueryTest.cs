@@ -13,13 +13,34 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using FluentValidation.TestHelper;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class GetAuthorQueryTest : TestBase
     {
-        public GetAuthorQueryTest(TestFixture fixture) : base(fixture) { }
+        private readonly GetAuthorQueryValidator _validator;
+
+        public GetAuthorQueryTest(TestFixture fixture) : base(fixture)
+        {
+            _validator = new GetAuthorQueryValidator();
+        }
+
+        [Fact]
+        public void AuthorIdInvalidValue()
+        {
+            var command = new GetAuthorQuery()
+            {
+                AuthorId = 0,
+            };
+
+            var result = _validator.TestValidate(command);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.AuthorIdInvalidValue.ToString()).Any().Should().BeTrue();
+        }
 
         [Fact]
         public async Task GetAuthorAuthorNotFound()

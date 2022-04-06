@@ -13,14 +13,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using FluentValidation.TestHelper;
+using ApollosLibrary.Application.Common.Enums;
+using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
     public class DeleteGenreCommandTest : TestBase
     {
+        private readonly DeleteGenreCommandValidator _validator;
+
         public DeleteGenreCommandTest(TestFixture fixture) : base(fixture)
         {
+            _validator = new DeleteGenreCommandValidator();
+        }
+
+        [Fact]
+        public void GenreIdInvalidValue()
+        {
+            var command = new DeleteGenreCommand()
+            {
+                GenreId = 0,
+            };
+
+            var result = _validator.TestValidate(command);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreIdInvalidValue.ToString()).Any().Should().BeTrue();
         }
 
         [Fact]
