@@ -16,7 +16,6 @@ namespace ApollosLibrary.Domain
         public string EIsbn { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
 
         public int PublicationFormatId { get; set; }
@@ -36,7 +35,7 @@ namespace ApollosLibrary.Domain
         public DateTime? ModifiedDate { get; set; }
         public Guid? ModifiedBy { get; set; }
         public ICollection<Author> Authors { get; set; }
-        public ICollection<Series> Series { get; set; }
         public ICollection<Genre> Genres { get; set; }
+        public ICollection<SeriesOrder> SeriesOrders { get; set; }
     }
 }

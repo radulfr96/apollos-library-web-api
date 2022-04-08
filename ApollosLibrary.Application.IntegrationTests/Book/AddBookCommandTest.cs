@@ -80,7 +80,6 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FictionTypeId = bookGenerated.FictionTypeId,
                 FormTypeId = bookGenerated.FormTypeId,
                 ISBN = bookGenerated.Isbn,
-                NumberInSeries = bookGenerated.NumberInSeries,
                 PublicationFormatId = bookGenerated.PublicationFormatId,
                 Subtitle = bookGenerated.Subtitle,
                 Title = bookGenerated.Title,

@@ -42,10 +42,8 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             response.FictionTypeId = book.FictionTypeId;
             response.FormTypeId = book.FormTypeId;
             response.ISBN = book.Isbn;
-            response.NumberInSeries = book.NumberInSeries;
             response.PublicationFormatId = book.PublicationFormatId;
             response.PublisherId = book.PublisherId;
-            response.Series = book.Series.Select(s => s.SeriesId).ToList();
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;
             response.Authors = book.Authors.Select(a => a.AuthorId).ToList();

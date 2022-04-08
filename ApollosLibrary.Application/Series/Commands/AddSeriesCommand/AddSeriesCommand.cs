@@ -1,4 +1,5 @@
 ﻿using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Domain;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
 using System;
@@ -13,6 +14,7 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
     public class AddSeriesCommand : IRequest<AddSeriesCommandDto>
     {
         public string Name { get; set; }
+        public Dictionary<int, int> SeriesOrder = new();
     }
 
     public class AddSeriesCommandHandler : IRequestHandler<AddSeriesCommand, AddSeriesCommandDto>
@@ -31,7 +33,7 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
             _dateTimeService = dateTimeService;
         }
 
-        public async Task<AddSeriesCommandDto> Handle(AddSeriesCommand request, CancellationToken cancellationToken)
+        public async Task<AddSeriesCommandDto> Handle(AddSeriesCommand command, CancellationToken cancellationToken)
         {
             var response = new AddSeriesCommandDto();
 
@@ -39,7 +41,12 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
             {
                 CreatedBy = _userService.GetUserId(),
                 CreatedDate = _dateTimeService.Now,
-                Name = request.Name,
+                Name = command.Name,
+                SeriesOrders = command.SeriesOrder.Select(b => new SeriesOrder()
+                {
+                    BookId = b.Key,
+                    Number = b.Value,
+                }).ToList(),
             };
 
             await _seriesUnitOfWork.SeriesDataLayer.AddSeries(series);

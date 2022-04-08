@@ -19,8 +19,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public string EISBN { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public List<int> Series { get; set; }
-        public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormatId { get; set; }
         public int FictionTypeId { get; set; }
@@ -29,6 +27,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
+        public Dictionary<int, int> SeriesOrder { get; set; } = new Dictionary<int, int>();
     }
 
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>
@@ -37,7 +36,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         private readonly IPublisherUnitOfWork _publisherUnitOfWork;
         private readonly IGenreUnitOfWork _genreUnitOfWork;
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
-        private readonly ISeriesUnitOfWork _seriesUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
@@ -48,7 +46,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             , IPublisherUnitOfWork publisherUnitOfWork
             , IGenreUnitOfWork genreUnitOfWork
             , IAuthorUnitOfWork authorUnitOfWork
-            , ISeriesUnitOfWork seriesUnitOfWork
             , IUserService userService
             , IDateTimeService dateTimeService)
         {
@@ -58,7 +55,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             _referenceUnitOfWork = referenceUnitOfWork;
             _genreUnitOfWork = genreUnitOfWork;
             _authorUnitOfWork = authorUnitOfWork;
-            _seriesUnitOfWork = seriesUnitOfWork;
             _publisherUnitOfWork = publisherUnitOfWork;
         }
 
@@ -132,7 +128,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             book.FictionTypeId = command.FictionTypeId;
             book.FormTypeId = command.FormTypeId;
             book.Isbn = command.ISBN;
-            book.NumberInSeries = command.NumberInSeries;
             book.PublicationFormatId = command.PublicationFormatId;
             book.PublisherId = command.PublisherId;
             book.Subtitle = command.Subtitle;
@@ -145,18 +140,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookId);
             await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookId);
             await _bookUnitOfWork.Save();
-
-            foreach (int seriesId in command.Series)
-            {
-                var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
-
-                if (series == null)
-                {
-                    throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
-                }
-
-                series.Books.Add(book);
-            }
 
             foreach (int authorId in command.Authors)
             {

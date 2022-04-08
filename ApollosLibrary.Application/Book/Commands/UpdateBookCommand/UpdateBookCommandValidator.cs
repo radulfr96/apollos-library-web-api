@@ -33,11 +33,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 RuleFor(b => b.Subtitle).Length(1, 200).WithErrorCode(ErrorCodeEnum.SubtitleInvalidLength.ToString());
             });
 
-            When(b => b.NumberInSeries.HasValue, () =>
-            {
-                RuleFor(b => b.NumberInSeries).GreaterThanOrEqualTo(0).WithErrorCode(ErrorCodeEnum.NumberInSeriesInvalidValue.ToString());
-            });
-
             When(b => b.Edition.HasValue, () =>
             {
                 RuleFor(b => b.Edition).GreaterThan(0).WithErrorCode(ErrorCodeEnum.EditionInvalidValue.ToString());

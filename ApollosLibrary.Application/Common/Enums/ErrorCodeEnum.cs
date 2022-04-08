@@ -45,6 +45,8 @@ namespace ApollosLibrary.Application.Common.Enums
         BookIdInvalidValue = 32,
         GenreIdInvalidValue = 33,
         PublisherIdInvalidValue = 34,
+        SeriesNameNotProvided = 35,
+        BookOrderInvalidValue = 36,
 
         // Not Found Errors
         AuthorNotFound = 100,

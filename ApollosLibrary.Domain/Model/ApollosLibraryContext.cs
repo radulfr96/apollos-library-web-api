@@ -29,6 +29,7 @@ namespace ApollosLibrary.Domain
         public DbSet<PublicationFormat> PublicationFormats { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Series> Series { get; set; }
+        public DbSet<SeriesOrder> SeriesOrder { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

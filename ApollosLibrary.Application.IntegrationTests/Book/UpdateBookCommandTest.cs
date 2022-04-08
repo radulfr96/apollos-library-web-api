@@ -122,10 +122,8 @@ namespace ApollosLibrary.Application.IntegrationTests
                     genre3.GenreId,
                 },
                 ISBN = newBookDetails.Isbn,
-                NumberInSeries = newBookDetails.NumberInSeries,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
                 PublisherId = publisher2.PublisherId,
-                Series = newBookDetails.Series.Select(b => b.SeriesId).ToList(),
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
             };
@@ -146,10 +144,8 @@ namespace ApollosLibrary.Application.IntegrationTests
                 Isbn = newBookDetails.Isbn,
                 ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
-                NumberInSeries = newBookDetails.NumberInSeries,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
                 PublisherId = publisher2.PublisherId,
-                Series = newBookDetails.Series,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
             }, opt =>
