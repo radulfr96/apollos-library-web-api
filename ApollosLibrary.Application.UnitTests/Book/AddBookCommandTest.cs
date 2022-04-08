@@ -84,21 +84,6 @@ namespace ApollosLibrary.Application.UnitTests
         }
 
         [Fact]
-        public void NumberInSeriesInvalidValue()
-        {
-            var command = new AddBookCommand()
-            {
-                ISBN = "9780356501086",
-                Title = "Heir Of Novron",
-            };
-
-            var result = _validator.TestValidate(command);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.NumberInSeriesInvalidValue.ToString()).Any().Should().BeTrue();
-        }
-
-        [Fact]
         public void EditionInvalidValue()
         {
             var command = new AddBookCommand()
