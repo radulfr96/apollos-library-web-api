@@ -16,7 +16,7 @@ namespace ApollosLibrary.Application.UnitTests.Series
     [Collection("UnitTestCollection")]
     public class UpdateSeriesCommandTest : TestBase
     {
-        private UpdateSeriesCommandValidator _validator;
+        private readonly UpdateSeriesCommandValidator _validator;
 
         public UpdateSeriesCommandTest(TestFixture fixture) : base(fixture)
         {

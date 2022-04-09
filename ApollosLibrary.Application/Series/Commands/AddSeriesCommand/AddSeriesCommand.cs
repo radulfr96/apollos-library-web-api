@@ -1,4 +1,5 @@
-﻿using ApollosLibrary.Application.Interfaces;
+﻿using ApollosLibrary.Application.Common.Exceptions;
+using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Domain;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
@@ -20,15 +21,18 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
     public class AddSeriesCommandHandler : IRequestHandler<AddSeriesCommand, AddSeriesCommandDto>
     {
         private readonly ISeriesUnitOfWork _seriesUnitOfWork;
+        private readonly IBookUnitOfWork _bookUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
 
         public AddSeriesCommandHandler(
             ISeriesUnitOfWork seriesUnitOfWork
+            , IBookUnitOfWork bookUnitOfWork
             , IUserService userService
             , IDateTimeService dateTimeService)
         {
             _seriesUnitOfWork = seriesUnitOfWork;
+            _bookUnitOfWork = bookUnitOfWork;
             _userService = userService;
             _dateTimeService = dateTimeService;
         }
@@ -36,6 +40,16 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
         public async Task<AddSeriesCommandDto> Handle(AddSeriesCommand command, CancellationToken cancellationToken)
         {
             var response = new AddSeriesCommandDto();
+
+            foreach (var book in command.SeriesOrder)
+            {
+                var bookEntity = await _bookUnitOfWork.BookDataLayer.GetBook(book.Key);
+
+                if (bookEntity == null)
+                {
+                    throw new BookNotFoundException($"Unable to find book with id [{book.Key}]");
+                }
+            }
 
             var series = new Domain.Series()
             {

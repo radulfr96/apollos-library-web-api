@@ -46,12 +46,13 @@ namespace ApollosLibrary.Application.IntegrationTests
         {
             var userID = Guid.NewGuid();
 
-            var httpContext = new TestHttpContext();
-
-            httpContext.User = new TestPrincipal(new Claim[]
+            var httpContext = new TestHttpContext
             {
-                new Claim("userid", userID.ToString()),
-            });
+                User = new TestPrincipal(new Claim[]
+                {
+                    new Claim("userid", userID.ToString()),
+                })
+            };
 
             _contextAccessor.HttpContext = httpContext;
 

@@ -22,7 +22,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         public int FictionTypeId { get; set; }
         public int FormTypeId { get; set; }
         public int? PublisherId { get; set; }
-        public byte[] CoverImage { get; set; } = null;
+        public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
     }
@@ -114,7 +114,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
 
             var book = new Domain.Book()
             {
-                CoverImage = command.CoverImage == null ? null : Convert.ToBase64String(command.CoverImage),
+                CoverImage = command.CoverImage ?? null,
                 CreatedBy = _userService.GetUserId(),
                 CreatedDate = _dateTimeService.Now,
                 Edition = command.Edition,

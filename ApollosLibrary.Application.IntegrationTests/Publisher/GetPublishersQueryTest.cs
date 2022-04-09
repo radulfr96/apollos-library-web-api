@@ -18,13 +18,13 @@ using ApollosLibrary.Domain;
 namespace ApollosLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class GetPublishersCommandTest : TestBase
+    public class GetPublishersQueryTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
-        public GetPublishersCommandTest(TestFixture fixture) : base(fixture)
+        public GetPublishersQueryTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 

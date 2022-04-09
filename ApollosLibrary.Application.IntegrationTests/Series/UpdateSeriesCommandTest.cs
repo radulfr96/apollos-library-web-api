@@ -19,14 +19,14 @@ using ApollosLibrary.Domain;
 namespace ApollosLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class UpdatePublisherCommandTest : TestBase
+    public class UpdateSeriesCommandTest : TestBase
     {
         private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public UpdatePublisherCommandTest(TestFixture fixture) : base(fixture)
+        public UpdateSeriesCommandTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 
@@ -46,12 +46,12 @@ namespace ApollosLibrary.Application.IntegrationTests
         {
             var userID = Guid.NewGuid();
 
-            var httpContext = new TestHttpContext
+            var httpContext = new TestHttpContext()
             {
                 User = new TestPrincipal(new Claim[]
                 {
                     new Claim("userid", userID.ToString()),
-                })
+                }),
             };
 
             _contextAccessor.HttpContext = httpContext;
