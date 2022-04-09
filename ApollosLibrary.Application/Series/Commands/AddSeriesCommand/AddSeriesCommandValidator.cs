@@ -16,6 +16,7 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
 
             RuleFor(c => c.SeriesOrder).ForEach(s =>
             {
+                s.Must(s => s.Key > 0).WithErrorCode(ErrorCodeEnum.BookIdInvalidValue.ToString());
                 s.Must(s => s.Value > 0).WithErrorCode(ErrorCodeEnum.BookOrderInvalidValue.ToString());
             });
         }
