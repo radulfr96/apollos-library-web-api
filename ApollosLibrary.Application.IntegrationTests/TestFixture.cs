@@ -67,6 +67,11 @@ namespace ApollosLibrary.Application.IntegrationTests
                 return new GenreUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
+            services.AddTransient<ISeriesUnitOfWork>(p =>
+            {
+                return new SeriesUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
+            });
+
             services.AddTransient<IReferenceUnitOfWork>(p =>
             {
                 return new ReferenceUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());

@@ -23,9 +23,9 @@ namespace ApollosLibrary.DataLayer
             await _context.Series.AddAsync(series);
         }
 
-        public async Task DeleteSeries(Series series)
+        public async Task DeleteSeries(int id)
         {
-            await Task.FromResult(_context.Series.Remove(series));
+            _context.Series.Remove(await _context.Series.FirstOrDefaultAsync(g => g.SeriesId == id));
         }
 
         public async Task<Series> GetSeries(int id)

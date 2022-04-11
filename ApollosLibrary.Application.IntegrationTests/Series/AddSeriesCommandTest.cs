@@ -82,7 +82,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 SeriesOrder = new Dictionary<int, int>(),
             };
 
-            command.SeriesOrder.Add(seriesGenerated.SeriesOrders.First().BookId, seriesGenerated.SeriesOrders.First().Number);
+            command.SeriesOrder.Add(bookResult.BookId, seriesGenerated.SeriesOrders.First().Number);
 
             var result = await _mediatr.Send(command);
 
@@ -102,7 +102,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 BookId = bookResult.BookId,
                 SeriesId = result.SeriesId,
                 Number = series.SeriesOrders.First().Number,
-            });
+            }, opt => opt.Excluding(f => f.Series).Excluding(f => f.Book).Excluding(f => f.OrderId));
         }
     }
 }

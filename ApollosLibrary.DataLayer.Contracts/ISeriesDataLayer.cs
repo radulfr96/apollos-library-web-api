@@ -35,7 +35,7 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// Used to remove an series from the database
         /// </summary>
         /// <param name="id">The id of the series to be deleted</param>
-        Task DeleteSeries(Series series);
+        Task DeleteSeries(int id);
 
         /// <summary>
         /// Used to get the next number for a book in a series

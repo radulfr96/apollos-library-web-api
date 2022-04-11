@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using ApollosLibrary.Application.Common.Exceptions;
+using ApollosLibrary.UnitOfWork.Contracts;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +17,27 @@ namespace ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand
 
     public class DeleteSeriesCommandHandler : IRequestHandler<DeleteSeriesCommand, DeleteSeriesCommandDto>
     {
-        public Task<DeleteSeriesCommandDto> Handle(DeleteSeriesCommand request, CancellationToken cancellationToken)
+        private readonly ISeriesUnitOfWork _seriesUnitOfWork;
+        public DeleteSeriesCommandHandler(ISeriesUnitOfWork seriesUnitOfWork)
         {
-            throw new NotImplementedException();
+            _seriesUnitOfWork = seriesUnitOfWork;
+        }
+
+        public async Task<DeleteSeriesCommandDto> Handle(DeleteSeriesCommand command, CancellationToken cancellationToken)
+        {
+            var response = new DeleteSeriesCommandDto();
+
+            var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(command.SeriesId);
+
+            if (series == null)
+            {
+                throw new SeriesNotFoundException($"Unable to find series with id {command.SeriesId}");
+            }
+
+            await _seriesUnitOfWork.SeriesDataLayer.DeleteSeries(command.SeriesId);
+            await _seriesUnitOfWork.Save();
+
+            return response;
         }
     }
 }

@@ -26,5 +26,16 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
                 }))
                 .Generate();
         }
+
+        public static Domain.Series GetSeriesNoOrders(Guid createBy)
+        {
+            var faker = new Faker();
+
+            return new Faker<Domain.Series>()
+                .RuleFor(b => b.CreatedBy, createBy)
+                .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
+                .RuleFor(b => b.Name, f => f.Name.Random.AlphaNumeric(8))
+                .Generate();
+        }
     }
 }

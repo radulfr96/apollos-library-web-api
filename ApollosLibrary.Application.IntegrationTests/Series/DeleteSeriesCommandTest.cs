@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Publisher.Commands.DeletePublisherCommand;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand;
+using Microsoft.AspNetCore.Http;
+using ApollosLibrary.Application.Book.Commands.AddBookCommand;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -23,6 +25,7 @@ namespace ApollosLibrary.Application.IntegrationTests
         private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public DeleteSeriesCommandTest(TestFixture fixture) : base(fixture)
         {
@@ -36,31 +39,57 @@ namespace ApollosLibrary.Application.IntegrationTests
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
             _context = provider.GetRequiredService<ApollosLibraryContext>();
+            _contextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
 
         [Fact]
-        public async Task DeletePublisher()
+        public async Task DeleteSeries()
         {
-            Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
+            var userID = Guid.NewGuid();
+
+            var httpContext = new TestHttpContext
             {
-                new Claim(ClaimTypes.Sid, "1"),
-            });
+                User = new TestPrincipal(new Claim[]
+                {
+                    new Claim("userid", userID.ToString()),
+                })
+            };
 
-            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", new Guid());
+            _contextAccessor.HttpContext = httpContext;
 
-            _context.Publishers.Add(publisherGenerated);
+            var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
+
+            var bookCommand = new AddBookCommand()
+            {
+                CoverImage = bookGenerated.CoverImage,
+                Edition = bookGenerated.Edition,
+                EISBN = bookGenerated.EIsbn,
+                ISBN = bookGenerated.Isbn,
+                FictionTypeId = bookGenerated.FictionTypeId,
+                FormTypeId = bookGenerated.FormTypeId,
+                PublicationFormatId = bookGenerated.PublicationFormatId,
+                Subtitle = bookGenerated.Subtitle,
+                Title = bookGenerated.Title,
+            };
+
+            var bookResult = await _mediatr.Send(bookCommand);
+
+            var seriesGenerated = SeriesGenerator.GetSeriesNoOrders(new Guid());
+
+            _context.Series.Add(seriesGenerated);
+
             _context.SaveChanges();
 
-            var command = new DeletePublisherCommand()
+            var command = new DeleteSeriesCommand()
             {
-                PubisherId = publisherGenerated.PublisherId,
+                SeriesId = seriesGenerated.SeriesId,
             };
 
             await _mediatr.Send(command);
 
-            var publisher = _context.Publishers.FirstOrDefault(p => p.PublisherId == command.PubisherId);
+            var series = _context.Series.FirstOrDefault(p => p.SeriesId == command.SeriesId);
 
-            publisher.IsDeleted.Should().BeTrue();
+            series.Should().BeNull();
         }
     }
 }
