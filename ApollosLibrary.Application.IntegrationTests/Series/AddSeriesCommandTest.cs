@@ -22,7 +22,6 @@ namespace ApollosLibrary.Application.IntegrationTests
     [Collection("IntegrationTestCollection")]
     public class AddSeriesCommandTest : TestBase
     {
-        private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -30,11 +29,6 @@ namespace ApollosLibrary.Application.IntegrationTests
         public AddSeriesCommandTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
-
-            var mockDateTimeService = new Mock<IDateTimeService>();
-            mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-            _dateTime = mockDateTimeService.Object;
-            services.AddSingleton(mockDateTimeService.Object);
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
@@ -79,10 +73,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             var command = new AddSeriesCommand()
             {
                 Name = seriesGenerated.Name,
-                SeriesOrder = new Dictionary<int, int>(),
             };
-
-            command.SeriesOrder.Add(bookResult.BookId, seriesGenerated.SeriesOrders.First().Number);
 
             var result = await _mediatr.Send(command);
 
@@ -94,15 +85,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                CreatedBy = series.CreatedBy,
                CreatedDate = series.CreatedDate,
                Name = series.Name,
-            }, opt => opt.Excluding(f => f.SeriesOrders));
-
-            series.SeriesOrders.Should().HaveCount(1);
-            series.SeriesOrders.First().Should().BeEquivalentTo(new SeriesOrder()
-            {
-                BookId = bookResult.BookId,
-                SeriesId = result.SeriesId,
-                Number = series.SeriesOrders.First().Number,
-            }, opt => opt.Excluding(f => f.Series).Excluding(f => f.Book).Excluding(f => f.OrderId));
+            });
         }
     }
 }

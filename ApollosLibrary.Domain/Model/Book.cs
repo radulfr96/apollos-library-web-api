@@ -38,6 +38,6 @@ namespace ApollosLibrary.Domain
         public Guid? ModifiedBy { get; set; }
         public ICollection<Author> Authors { get; set; }
         public ICollection<Genre> Genres { get; set; }
-        public ICollection<SeriesOrder> SeriesOrders { get; set; }
+        public ICollection<Series> Series { get; set; }
     }
 }

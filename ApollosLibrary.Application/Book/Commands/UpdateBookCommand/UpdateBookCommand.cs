@@ -27,7 +27,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
-        public Dictionary<int, int> SeriesOrder { get; set; } = new Dictionary<int, int>();
+        public List<int> Series { get; set; } = new List<int>();
     }
 
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>
@@ -39,6 +39,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
+        private readonly ISeriesUnitOfWork _seriesUnitOfWork;
 
         public UpdateBookCommandHandler(
             IBookUnitOfWork bookUnitOfWork
@@ -47,7 +48,8 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             , IGenreUnitOfWork genreUnitOfWork
             , IAuthorUnitOfWork authorUnitOfWork
             , IUserService userService
-            , IDateTimeService dateTimeService)
+            , IDateTimeService dateTimeService
+            , ISeriesUnitOfWork seriesUnitOfWork)
         {
             _bookUnitOfWork = bookUnitOfWork;
             _userService = userService;
@@ -56,6 +58,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             _genreUnitOfWork = genreUnitOfWork;
             _authorUnitOfWork = authorUnitOfWork;
             _publisherUnitOfWork = publisherUnitOfWork;
+            _seriesUnitOfWork = seriesUnitOfWork;
         }
 
         public async Task<UpdateBookCommandDto> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
@@ -139,6 +142,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
 
             await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookId);
             await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookId);
+            await _bookUnitOfWork.BookDataLayer.DeleteBookSeriesRelationships(command.BookId);
             await _bookUnitOfWork.Save();
 
             foreach (int authorId in command.Authors)
@@ -163,6 +167,18 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 }
 
                 genre.Books.Add(book);
+            }
+
+            foreach (int seriesId in command.Series)
+            {
+                var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
+
+                if (series == null)
+                {
+                    throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
+                }
+
+                series.Books.Add(book);
             }
 
             await _bookUnitOfWork.Save();

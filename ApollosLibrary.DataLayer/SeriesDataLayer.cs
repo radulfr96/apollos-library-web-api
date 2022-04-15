@@ -31,30 +31,13 @@ namespace ApollosLibrary.DataLayer
         public async Task<Series> GetSeries(int id)
         {
             return await _context.Series
+                .Include(s => s.Books)
                 .FirstOrDefaultAsync(a => a.SeriesId == id);
         }
 
         public async Task<List<Series>> GetMultiSeries()
         {
             return await _context.Series.ToListAsync();
-        }
-
-        public async Task<int> GetNextBookNumberInSeries(int id)
-        {
-            var last = await _context.SeriesOrder
-                .Where(s => s.SeriesId == id)
-                .OrderBy(s => s.Number)
-                .LastOrDefaultAsync();
-
-            return last == null ? 1 : last.Number + 1;
-        }
-
-        public async Task DeleteSeriesOrder(int id)
-        {
-            var series = (await _context.Series.Include(b => b.SeriesOrders).FirstOrDefaultAsync(b => b.SeriesId == id));
-
-            if (series != null)
-                series.SeriesOrders = new List<SeriesOrder>();
         }
     }
 }

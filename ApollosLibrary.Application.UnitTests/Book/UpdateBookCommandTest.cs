@@ -945,5 +945,107 @@ namespace ApollosLibrary.Application.UnitTests
             Func<Task> act = () => mediator.Send(command);
             await act.Should().ThrowAsync<GenreNotFoundException>();
         }
+
+        [Fact]
+        public async Task SeriesNotFound()
+        {
+            var command = new UpdateBookCommand()
+            {
+                ISBN = "9780356501086",
+                Title = "Heir Of Novron",
+                Edition = 0,
+                PublicationFormatId = 1,
+                FictionTypeId = 1,
+                FormTypeId = 1,
+                PublisherId = 1,
+                Series = new List<int>()
+                {
+                    1,
+                }
+            };
+
+            var mockUserService = new Mock<IUserService>();
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return mockUserService.Object;
+            });
+
+            var mockDateTimeService = new Mock<IDateTimeService>();
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return mockDateTimeService.Object;
+            });
+
+            var referenceDataLayer = new Mock<IReferenceDataLayer>();
+            referenceDataLayer.Setup(d => d.GetPublicationFormat(It.IsAny<int>())).Returns(Task.FromResult(new PublicationFormat()));
+            referenceDataLayer.Setup(d => d.GetFictionType(It.IsAny<int>())).Returns(Task.FromResult(new FictionType()));
+            referenceDataLayer.Setup(d => d.GetFormType(It.IsAny<int>())).Returns(Task.FromResult(new FormType()));
+
+            var referenceUnitOfWork = new Mock<IReferenceUnitOfWork>();
+            referenceUnitOfWork.Setup(r => r.ReferenceDataLayer).Returns(referenceDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return referenceUnitOfWork.Object;
+            });
+
+            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Publisher()));
+
+            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
+            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return publisherUnitOfWork.Object;
+            });
+
+            var bookDataLayer = new Mock<IBookDataLayer>();
+            bookDataLayer.Setup(d => d.GetBook(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Book()));
+
+            var bookUnitOfWork = new Mock<IBookUnitOfWork>();
+            bookUnitOfWork.Setup(b => b.BookDataLayer).Returns(bookDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return bookUnitOfWork.Object;
+            });
+
+            var authorUnitOfWork = new Mock<IAuthorUnitOfWork>();
+
+            var authorDataLayer = new Mock<IAuthorDataLayer>();
+            authorUnitOfWork.Setup(r => r.AuthorDataLayer).Returns(authorDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return authorUnitOfWork.Object;
+            });
+
+            var genreUnitOfWork = new Mock<IGenreUnitOfWork>();
+
+            var genreDataLayer = new Mock<IGenreDataLayer>();
+            genreUnitOfWork.Setup(s => s.GenreDataLayer).Returns(genreDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return genreUnitOfWork.Object;
+            });
+
+            var seriesUnitOfWork = new Mock<ISeriesUnitOfWork>();
+
+            var seriesDataLayer = new Mock<ISeriesDataLayer>();
+            seriesUnitOfWork.Setup(s => s.SeriesDataLayer).Returns(seriesDataLayer.Object);
+
+            _fixture.ServiceCollection.AddTransient(services =>
+            {
+                return seriesUnitOfWork.Object;
+            });
+
+            var provider = _fixture.ServiceCollection.BuildServiceProvider();
+            var mediator = provider.GetRequiredService<IMediator>();
+
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<SeriesNotFoundException>();
+        }
     }
 }

@@ -65,6 +65,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task DeleteBookAuthorRelationships(int bookId);
 
         /// <summary>
+        /// Used to delete a books series relationships
+        /// </summary>
+        /// <param name="bookId">The book id of the relationships to delete</param>
+        Task DeleteBookSeriesRelationships(int bookId);
+
+        /// <summary>
         /// USed to delete a book from the database
         /// </summary>
         /// <param name="bookId">THe id of the book</param>

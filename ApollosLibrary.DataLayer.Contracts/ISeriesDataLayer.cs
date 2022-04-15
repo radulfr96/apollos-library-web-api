@@ -42,12 +42,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Next number in series</returns>
-        Task<int> GetNextBookNumberInSeries(int id);
+        //Task<int> GetNextBookNumberInSeries(int id);
 
         /// <summary>
         /// Used to delete all of the series order records
         /// </summary>
         /// <param name="id">Id of series</param>
-        Task DeleteSeriesOrder(int id);
+        // Task DeleteSeriesOrder(int id);
     }
 }

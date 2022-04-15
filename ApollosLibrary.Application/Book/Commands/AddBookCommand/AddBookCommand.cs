@@ -25,6 +25,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
+        public List<int> Series { get; set; } = new List<int>();
     }
 
     public class AddBookCommandHandler : IRequestHandler<AddBookCommand, AddBookCommandDto>
@@ -36,6 +37,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         private readonly IGenreUnitOfWork _genreUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
+        private readonly ISeriesUnitOfWork _seriesUnitOfWork;
 
         public AddBookCommandHandler(
             IBookUnitOfWork bookUnitOfWork
@@ -44,7 +46,8 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
             , IAuthorUnitOfWork authorUnitOfWork
             , IGenreUnitOfWork genreUnitOfWork
             , IUserService userService
-            , IDateTimeService dateTimeService)
+            , IDateTimeService dateTimeService
+            , ISeriesUnitOfWork seriesUnitOfWork)
         {
             _bookUnitOfWork = bookUnitOfWork;
             _userService = userService;
@@ -53,6 +56,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
             _publisherUnitOfWork = publisherUnitOfWork;
             _authorUnitOfWork = authorUnitOfWork;
             _genreUnitOfWork = genreUnitOfWork;
+            _seriesUnitOfWork = seriesUnitOfWork;
         }
 
         public async Task<AddBookCommandDto> Handle(AddBookCommand command, CancellationToken cancellationToken)
@@ -157,6 +161,18 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 }
 
                 genre.Books.Add(book);
+            }
+
+            foreach (int seriesId in command.Series)
+            {
+                var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
+
+                if (series == null)
+                {
+                    throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
+                }
+
+                series.Books.Add(book);
             }
 
             await _bookUnitOfWork.Save();

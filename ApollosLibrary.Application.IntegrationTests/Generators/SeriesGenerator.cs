@@ -17,13 +17,6 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
                 .RuleFor(b => b.CreatedBy, createBy)
                 .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
                 .RuleFor(b => b.Name, f => f.Name.Random.AlphaNumeric(8))
-                .RuleFor(b => b.SeriesOrders, new Faker().Make(1, (f) =>
-                {
-                    return new Domain.SeriesOrder()
-                    {
-                        Number = faker.Random.Int(1, 10), 
-                    };
-                }))
                 .Generate();
         }
 

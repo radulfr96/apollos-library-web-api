@@ -13,7 +13,6 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
         public string EISBN { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public List<int> Series { get; set; }
         public decimal? NumberInSeries { get; set; }
         public int? Edition { get; set; }
         public int PublicationFormatId { get; set; }
@@ -23,5 +22,6 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
         public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
+        public List<int> Series { get; set; } = new List<int>();
     }
 }

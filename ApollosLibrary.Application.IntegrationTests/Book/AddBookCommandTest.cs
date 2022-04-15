@@ -70,6 +70,12 @@ namespace ApollosLibrary.Application.IntegrationTests
             var genre2 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre2);
 
+            var series1 = SeriesGenerator.GetSeries(userID);
+            _context.Series.Add(series1);
+
+            var series2 = SeriesGenerator.GetSeries(userID);
+            _context.Series.Add(series2);
+
             _context.SaveChanges();
 
             var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
@@ -93,18 +99,27 @@ namespace ApollosLibrary.Application.IntegrationTests
                 {
                     author1.AuthorId,
                     author2.AuthorId,
-                }
+                },
+                Series = new List<int>()
+                {
+                    series1.SeriesId,
+                    series2.SeriesId,
+                },
             };
 
             var result = await _mediatr.Send(command);
 
             var book = _context.Books
                                 .Include(b => b.Genres)
+                                .Include(b => b.Authors)
+                                .Include(b => b.Series)
                                 .FirstOrDefault(a => a.BookId == result.BookId);
 
             book.Genres.Should().HaveCount(2);
 
             book.Authors.Should().HaveCount(2);
+
+            book.Series.Should().HaveCount(2);
         }
     }
 }

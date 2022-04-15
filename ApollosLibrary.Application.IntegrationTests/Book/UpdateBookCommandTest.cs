@@ -83,6 +83,15 @@ namespace ApollosLibrary.Application.IntegrationTests
             var genre3 = GenreGenerator.GetGenre(userID);
             _context.Genres.Add(genre3);
 
+            var series1 = SeriesGenerator.GetSeries(userID);
+            _context.Series.Add(series1);
+
+            var series2 = SeriesGenerator.GetSeries(userID);
+            _context.Series.Add(series2);
+
+            var series3 = SeriesGenerator.GetSeries(userID);
+            _context.Series.Add(series3);
+
             _context.SaveChanges();
 
             var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
@@ -97,6 +106,12 @@ namespace ApollosLibrary.Application.IntegrationTests
             {
                 author1,
                 author2
+            };
+
+            bookGenerated.Series = new List<Domain.Series>()
+            {
+                series1,
+                series2,
             };
 
             _context.Books.Add(bookGenerated);
@@ -126,6 +141,11 @@ namespace ApollosLibrary.Application.IntegrationTests
                 PublisherId = publisher2.PublisherId,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
+                Series = new List<int>()
+                {
+                    series2.SeriesId,
+                    series3.SeriesId,
+                }
             };
 
             var result = await _mediatr.Send(command);
@@ -154,7 +174,8 @@ namespace ApollosLibrary.Application.IntegrationTests
             .Excluding(f => f.PublicationFormat)
             .Excluding(f => f.Publisher)
             .Excluding(f => f.Authors)
-            .Excluding(f => f.Genres));
+            .Excluding(f => f.Genres)
+            .Excluding(f => f.Series));
 
             var bookEntity = _context.Books.Include(b => b.Authors).Include(b => b.Genres).FirstOrDefault(a => a.BookId == bookGenerated.BookId);
 
@@ -172,6 +193,14 @@ namespace ApollosLibrary.Application.IntegrationTests
             {
                 author2,
                 author3,
+            });
+
+            bookEntity.Series.Should().HaveCount(2);
+
+            bookEntity.Series.Should().Contain(new List<Domain.Series>()
+            {
+                series2,
+                series3,
             });
         }
     }

@@ -29,6 +29,7 @@ namespace ApollosLibrary.DataLayer
                 .Where(b => b.BookId == id)
                 .Include(b => b.Genres)
                 .Include(b => b.Authors)
+                .Include(b => b.Series)
                 .FirstOrDefaultAsync();
         }
 
@@ -38,6 +39,7 @@ namespace ApollosLibrary.DataLayer
                 .Where(b => b.EIsbn == eisbn)
                 .Include(b => b.Genres)
                 .Include(b => b.Authors)
+                .Include(b => b.Series)
                 .FirstOrDefaultAsync();
         }
 
@@ -47,6 +49,7 @@ namespace ApollosLibrary.DataLayer
                 .Where(b => b.Isbn == isbn)
                 .Include(b => b.Genres)
                 .Include(b => b.Authors)
+                .Include(b => b.Series)
                 .FirstOrDefaultAsync();
         }
 
@@ -88,6 +91,14 @@ namespace ApollosLibrary.DataLayer
 
             if (book != null)
                 book.Genres = new List<Genre>();
+        }
+
+        public async Task DeleteBookSeriesRelationships(int bookId)
+        {
+            var book = (await _context.Books.Include(b => b.Series).FirstOrDefaultAsync(b => b.BookId == bookId));
+
+            if (book != null)
+                book.Series = new List<Series>();
         }
 
         public async Task DeleteBook(int bookId)
