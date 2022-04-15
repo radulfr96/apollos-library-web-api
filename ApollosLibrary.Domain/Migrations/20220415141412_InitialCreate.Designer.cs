@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    [Migration("20220306062647_InitialCreate")]
+    [Migration("20220415141412_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,16 +104,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("NumberInSeries")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("PublicationFormatId")
                         .HasColumnType("int");
 
                     b.Property<int?>("PublisherId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<string>("Subtitle")
@@ -131,8 +125,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasIndex("PublicationFormatId");
 
                     b.HasIndex("PublisherId");
-
-                    b.HasIndex("SeriesId");
 
                     b.ToTable("Books");
                 });
@@ -1609,6 +1601,18 @@ namespace ApollosLibrary.Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeriesId"), 1L, 1);
 
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -1647,6 +1651,21 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("BookGenre");
                 });
 
+            modelBuilder.Entity("BookSeries", b =>
+                {
+                    b.Property<int>("BooksBookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksBookId", "SeriesId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("BookSeries");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Author", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.Country", "Country")
@@ -1680,10 +1699,6 @@ namespace ApollosLibrary.Domain.Migrations
                         .WithMany()
                         .HasForeignKey("PublisherId");
 
-                    b.HasOne("ApollosLibrary.Domain.Series", "Series")
-                        .WithMany("Books")
-                        .HasForeignKey("SeriesId");
-
                     b.Navigation("FictionType");
 
                     b.Navigation("FormType");
@@ -1691,8 +1706,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("PublicationFormat");
 
                     b.Navigation("Publisher");
-
-                    b.Navigation("Series");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Publisher", b =>
@@ -1734,9 +1747,19 @@ namespace ApollosLibrary.Domain.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ApollosLibrary.Domain.Series", b =>
+            modelBuilder.Entity("BookSeries", b =>
                 {
-                    b.Navigation("Books");
+                    b.HasOne("ApollosLibrary.Domain.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksBookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApollosLibrary.Domain.Series", null)
+                        .WithMany()
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

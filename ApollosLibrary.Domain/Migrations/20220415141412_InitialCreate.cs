@@ -96,7 +96,11 @@ namespace ApollosLibrary.Domain.Migrations
                 {
                     SeriesId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,13 +172,11 @@ namespace ApollosLibrary.Domain.Migrations
                     EIsbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NumberInSeries = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Edition = table.Column<int>(type: "int", nullable: true),
                     PublicationFormatId = table.Column<int>(type: "int", nullable: false),
                     FictionTypeId = table.Column<int>(type: "int", nullable: false),
                     FormTypeId = table.Column<int>(type: "int", nullable: false),
                     PublisherId = table.Column<int>(type: "int", nullable: true),
-                    SeriesId = table.Column<int>(type: "int", nullable: true),
                     CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -207,11 +209,6 @@ namespace ApollosLibrary.Domain.Migrations
                         column: x => x.PublisherId,
                         principalTable: "Publishers",
                         principalColumn: "PublisherId");
-                    table.ForeignKey(
-                        name: "FK_Books_Series_SeriesId",
-                        column: x => x.SeriesId,
-                        principalTable: "Series",
-                        principalColumn: "SeriesId");
                 });
 
             migrationBuilder.CreateTable(
@@ -259,6 +256,30 @@ namespace ApollosLibrary.Domain.Migrations
                         column: x => x.GenresGenreId,
                         principalTable: "Genres",
                         principalColumn: "GenreId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookSeries",
+                columns: table => new
+                {
+                    BooksBookId = table.Column<int>(type: "int", nullable: false),
+                    SeriesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookSeries", x => new { x.BooksBookId, x.SeriesId });
+                    table.ForeignKey(
+                        name: "FK_BookSeries_Books_BooksBookId",
+                        column: x => x.BooksBookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookSeries_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "SeriesId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -625,8 +646,8 @@ namespace ApollosLibrary.Domain.Migrations
                 column: "PublisherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_SeriesId",
-                table: "Books",
+                name: "IX_BookSeries_SeriesId",
+                table: "BookSeries",
                 column: "SeriesId");
 
             migrationBuilder.CreateIndex(
@@ -644,16 +665,22 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "BookGenre");
 
             migrationBuilder.DropTable(
+                name: "BookSeries");
+
+            migrationBuilder.DropTable(
                 name: "ErrorCodes");
 
             migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
+                name: "Genres");
+
+            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Series");
 
             migrationBuilder.DropTable(
                 name: "FictionTypes");
@@ -666,9 +693,6 @@ namespace ApollosLibrary.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "Publishers");
-
-            migrationBuilder.DropTable(
-                name: "Series");
 
             migrationBuilder.DropTable(
                 name: "Countries");
