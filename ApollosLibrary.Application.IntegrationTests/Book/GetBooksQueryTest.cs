@@ -39,20 +39,20 @@ namespace ApollosLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisher = PublisherGenerator.GetGenericPublisher("AU", new Guid());
-            _context.Publishers.Add(publisher);
+            var Business = BusinessGenerator.GetGenericBusiness("AU", new Guid());
+            _context.Business.Add(Business);
             _context.SaveChanges();
 
             var book1 = BookGenerator.GetGenericPhysicalBook(new Guid());
-            book1.PublisherId = publisher.PublisherId;
+            book1.BusinessId = Business.BusinessId;
             _context.Books.Add(book1);
 
             var book2 = BookGenerator.GetGenericPhysicalBook(new Guid());
-            book2.PublisherId = publisher.PublisherId;
+            book2.BusinessId = Business.BusinessId;
             _context.Books.Add(book2);
 
             var book3 = BookGenerator.GetGenericPhysicalBook(new Guid());
-            book3.PublisherId = publisher.PublisherId;
+            book3.BusinessId = Business.BusinessId;
             _context.Books.Add(book3);
 
             _context.SaveChanges();

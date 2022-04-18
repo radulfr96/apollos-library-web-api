@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Common.Exceptions
 {
-    public class PublisherNotFoundException : BadRequestException
+    public class BusinessNotFoundException : BadRequestException
     {
-        public PublisherNotFoundException(string message) : base(ErrorCodeEnum.PublisherNotFound, message)
+        public BusinessNotFoundException(string message) : base(ErrorCodeEnum.BusinessNotFound, message)
         {
         }
     }

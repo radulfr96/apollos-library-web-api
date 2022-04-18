@@ -29,8 +29,8 @@ namespace ApollosLibrary.Domain
         public int FormTypeId { get; set; }
         public FormType FormType { get; set; }
 
-        public int? PublisherId { get; set; }
-        public Publisher Publisher { get; set; }
+        public int? BusinessId { get; set; }
+        public Business Business { get; set; }
         public string CoverImage { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }

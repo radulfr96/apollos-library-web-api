@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Publisher.Queries.GetPublisherQuery;
+using ApollosLibrary.Application.Business.Queries.GetBusinessQuery;
 using System;
 using System.Security.Claims;
 using System.Threading;
@@ -17,7 +17,6 @@ namespace ApollosLibrary.Application.IntegrationTests
     [Collection("IntegrationTestCollection")]
     public class GetSeriesQueryTest : TestBase
     {
-        private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
@@ -27,7 +26,6 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-            _dateTime = mockDateTimeService.Object;
             services.AddSingleton(mockDateTimeService.Object);
 
             var provider = services.BuildServiceProvider();
@@ -36,35 +34,35 @@ namespace ApollosLibrary.Application.IntegrationTests
         }
 
         [Fact]
-        public async Task GetPublisherQuery()
+        public async Task GetBusinessQuery()
         {
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", new Guid());
+            var BusinessGenerated = BusinessGenerator.GetGenericBusiness("AU", new Guid());
 
-            _context.Publishers.Add(publisherGenerated);
+            _context.Business.Add(BusinessGenerated);
             _context.SaveChanges();
 
-            var query = new GetPublisherQuery()
+            var query = new GetBusinessQuery()
             {
-                PublisherId = publisherGenerated.PublisherId,
+                BusinessId = BusinessGenerated.BusinessId,
             };
 
             var result = await _mediatr.Send(query);
 
-            result.Should().BeEquivalentTo(new GetPublisherQueryDto()
+            result.Should().BeEquivalentTo(new GetBusinessQueryDto()
             {
-                City = publisherGenerated.City,
-                CountryID = publisherGenerated.CountryId,
-                Name = publisherGenerated.Name,
-                Postcode = publisherGenerated.Postcode,
-                PublisherId = publisherGenerated.PublisherId,
-                State = publisherGenerated.State,
-                StreetAddress = publisherGenerated.StreetAddress,
-                Website = publisherGenerated.Website,
+                City = BusinessGenerated.City,
+                CountryID = BusinessGenerated.CountryId,
+                Name = BusinessGenerated.Name,
+                Postcode = BusinessGenerated.Postcode,
+                BusinessId = BusinessGenerated.BusinessId,
+                State = BusinessGenerated.State,
+                StreetAddress = BusinessGenerated.StreetAddress,
+                Website = BusinessGenerated.Website,
             });
         }
     }

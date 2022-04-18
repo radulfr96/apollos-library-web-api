@@ -55,8 +55,8 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _contextAccessor.HttpContext = httpContext;
 
-            var publisher = PublisherGenerator.GetGenericPublisher("AU", userID);
-            _context.Publishers.Add(publisher);
+            var Business = BusinessGenerator.GetGenericBusiness("AU", userID);
+            _context.Business.Add(Business);
 
             var author1 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author1);
@@ -89,7 +89,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 PublicationFormatId = bookGenerated.PublicationFormatId,
                 Subtitle = bookGenerated.Subtitle,
                 Title = bookGenerated.Title,
-                PublisherId = publisher.PublisherId,
+                BusinessId = Business.BusinessId,
                 Genres = new List<int>()
                 {
                     genre1.GenreId,

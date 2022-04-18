@@ -62,7 +62,7 @@ namespace ApollosLibrary.WebApi
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
-            services.AddTransient<IPublisherUnitOfWork, PublisherUnitOfWork>();
+            services.AddTransient<IBusinessUnitOfWork, BusinessUnitOfWork>();
             services.AddTransient<IAuthorUnitOfWork, AuthorUnitOfWork>();
             services.AddTransient<IBookUnitOfWork, BookUnitOfWork>();
             services.AddTransient<IGenreUnitOfWork,GenreUnitOfWork>();

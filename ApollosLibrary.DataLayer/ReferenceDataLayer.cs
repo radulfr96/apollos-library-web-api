@@ -23,6 +23,11 @@ namespace ApollosLibrary.DataLayer
             return await _context.Countries.ToListAsync();
         }
 
+        public async Task<List<BusinessType>> GetBusinessTypes()
+        {
+            return await _context.BusinessTypes.ToListAsync();
+        }
+
         public async Task<FictionType> GetFictionType(int fictionTypeId)
         {
             return await _context.FictionTypes.FirstOrDefaultAsync(f => f.TypeId == fictionTypeId);

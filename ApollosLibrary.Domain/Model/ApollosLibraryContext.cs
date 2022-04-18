@@ -27,7 +27,8 @@ namespace ApollosLibrary.Domain
         public DbSet<FormType> FormTypes { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<PublicationFormat> PublicationFormats { get; set; }
-        public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<BusinessType> BusinessTypes { get; set; }
+        public DbSet<Business> Business { get; set; }
         public DbSet<Series> Series { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,6 +44,20 @@ namespace ApollosLibrary.Domain
                 {
                     TypeId = 2,
                     Name = "Fiction",
+                }
+            });
+
+            modelBuilder.Entity<BusinessType>().HasData(new List<BusinessType>()
+            {
+                new BusinessType()
+                {
+                    BusinessTypeId = 1,
+                    Name = "Publisher",
+                },
+                new BusinessType()
+                {
+                    BusinessTypeId = 2,
+                    Name = "Bookshop",
                 }
             });
 

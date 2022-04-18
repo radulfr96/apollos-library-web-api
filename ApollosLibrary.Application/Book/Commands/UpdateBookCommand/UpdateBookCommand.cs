@@ -23,7 +23,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public int PublicationFormatId { get; set; }
         public int FictionTypeId { get; set; }
         public int FormTypeId { get; set; }
-        public int? PublisherId { get; set; }
+        public int? BusinessId { get; set; }
         public string CoverImage { get; set; }
         public List<int> Genres { get; set; } = new List<int>();
         public List<int> Authors { get; set; } = new List<int>();
@@ -33,7 +33,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>
     {
         private readonly IBookUnitOfWork _bookUnitOfWork;
-        private readonly IPublisherUnitOfWork _publisherUnitOfWork;
+        private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
         private readonly IGenreUnitOfWork _genreUnitOfWork;
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
@@ -44,7 +44,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
         public UpdateBookCommandHandler(
             IBookUnitOfWork bookUnitOfWork
             , IReferenceUnitOfWork referenceUnitOfWork
-            , IPublisherUnitOfWork publisherUnitOfWork
+            , IBusinessUnitOfWork BusinessUnitOfWork
             , IGenreUnitOfWork genreUnitOfWork
             , IAuthorUnitOfWork authorUnitOfWork
             , IUserService userService
@@ -57,7 +57,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             _referenceUnitOfWork = referenceUnitOfWork;
             _genreUnitOfWork = genreUnitOfWork;
             _authorUnitOfWork = authorUnitOfWork;
-            _publisherUnitOfWork = publisherUnitOfWork;
+            _BusinessUnitOfWork = BusinessUnitOfWork;
             _seriesUnitOfWork = seriesUnitOfWork;
         }
 
@@ -113,13 +113,13 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeId}]");
             }
 
-            if (command.PublisherId.HasValue)
+            if (command.BusinessId.HasValue)
             {
-                var publisher = await _publisherUnitOfWork.PublisherDataLayer.GetPublisher(command.PublisherId.Value);
+                var Business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId.Value);
 
-                if (publisher == null)
+                if (Business == null)
                 {
-                    throw new PublisherNotFoundException($"Unable to find publisher with id [{command.PublisherId}]");
+                    throw new BusinessNotFoundException($"Unable to find Business with id [{command.BusinessId}]");
                 }
             }
 
@@ -132,7 +132,7 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             book.FormTypeId = command.FormTypeId;
             book.Isbn = command.ISBN;
             book.PublicationFormatId = command.PublicationFormatId;
-            book.PublisherId = command.PublisherId;
+            book.BusinessId = command.BusinessId;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
             book.ModifiedBy = _userService.GetUserId();

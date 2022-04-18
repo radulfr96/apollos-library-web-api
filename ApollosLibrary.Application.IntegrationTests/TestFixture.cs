@@ -47,9 +47,9 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             services.AddHttpContextAccessor();
 
-            services.AddTransient<IPublisherUnitOfWork>(p =>
+            services.AddTransient<IBusinessUnitOfWork>(p =>
             {
-                return new PublisherUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
+                return new BusinessUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
             services.AddTransient<IAuthorUnitOfWork>(p =>

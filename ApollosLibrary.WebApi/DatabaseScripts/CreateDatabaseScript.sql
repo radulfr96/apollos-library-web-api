@@ -22,7 +22,7 @@ CREATE SCHEMA [Book]
 GO
 
 
-CREATE SCHEMA [Publisher]
+CREATE SCHEMA [Business]
 GO
 
 CREATE SCHEMA [Author]
@@ -106,9 +106,9 @@ CREATE TABLE [dbo].[Country]
 	[Name] VARCHAR(80) NOT NULL,
 )
 
-CREATE TABLE [Publisher].[Publisher]
+CREATE TABLE [Business].[Business]
 (
-	[PublisherID] INT PRIMARY KEY IDENTITY NOT NULL,
+	[BusinessID] INT PRIMARY KEY IDENTITY NOT NULL,
 	[Name] VARCHAR(200) NOT NULL,
 	[Website] VARCHAR(200),
 	[Street Address] VARCHAR(100) NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE [Publisher].[Publisher]
 	[CreatedBy] UNIQUEIDENTIFIER,
 	[ModifiedDate] DATETIME,
 	[ModifiedBy] UNIQUEIDENTIFIER,
-	CONSTRAINT FK_PublisherCountry
+	CONSTRAINT FK_BusinessCountry
 	FOREIGN KEY ([CountryID]) REFERENCES [dbo].[Country] (CountryID),
 )
 
@@ -155,7 +155,7 @@ CREATE TABLE [Book].[Book]
 	[PublicationFormatID] INT NOT NULL,
 	[FictionTypeID] INT NOT NULL,
 	[FormTypeID] INT NOT NULL,
-	[PublisherID] INT NOT NULL,
+	[BusinessID] INT NOT NULL,
 	[CoverImage] TEXT,
 	[CreatedDate] DATETIME NOT NULL,
 	[CreatedBy] UNIQUEIDENTIFIER NOT NULL,
@@ -174,9 +174,9 @@ CREATE TABLE [Book].[Book]
 	CONSTRAINT FK_FormTypeBook
 	FOREIGN KEY ([FormTypeID]) 
 	REFERENCES [Book].[FormType] (TypeID),
-	CONSTRAINT FK_BookPublisher
-	FOREIGN KEY (PublisherID)
-	REFERENCES Publisher.Publisher (PublisherID),
+	CONSTRAINT FK_BookBusiness
+	FOREIGN KEY (BusinessID)
+	REFERENCES Business.Business (BusinessID),
 )
 
 CREATE TABLE [Book].[BookGenre]

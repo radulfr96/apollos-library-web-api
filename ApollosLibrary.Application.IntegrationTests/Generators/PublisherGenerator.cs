@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using ApollosLibrary.Application.Common.Enums;
+using Bogus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.IntegrationTests.Generators
 {
-    public static class PublisherGenerator
+    public static class BusinessGenerator
     {
-        public static Domain.Publisher GetGenericPublisher(string countryId, Guid userId)
+        public static Domain.Business GetGenericBusiness(string countryId, Guid userId)
         {
-            return new Faker<Domain.Publisher>()
+            return new Faker<Domain.Business>()
                 .RuleFor(p => p.City, f => f.Address.City())
                 .RuleFor(p => p.CountryId, countryId)
+                .RuleFor(p => p.BusinessTypeId, f => (int)f.Random.Enum<BusinessTypeEnum>())
                 .RuleFor(p => p.CreatedBy, userId)
                 .RuleFor(p => p.CreatedDate, f => f.Date.Recent())
                 .RuleFor(p => p.IsDeleted, false)

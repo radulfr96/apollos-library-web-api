@@ -37,12 +37,12 @@ namespace ApollosLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var publisher = PublisherGenerator.GetGenericPublisher("AU", new Guid());
-            _context.Publishers.Add(publisher);
+            var Business = BusinessGenerator.GetGenericBusiness("AU", new Guid());
+            _context.Business.Add(Business);
             _context.SaveChanges();
 
             var book = BookGenerator.GetGenericPhysicalBook(new Guid());
-            book.PublisherId = publisher.PublisherId;
+            book.BusinessId = Business.BusinessId;
             _context.Books.Add(book);
 
             _context.SaveChanges();
@@ -64,7 +64,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 PublicationFormatId = book.PublicationFormatId,
                 Subtitle = book.Subtitle,
                 Title = book.Title,
-                PublisherId = publisher.PublisherId,
+                BusinessId = Business.BusinessId,
             });
         }
     }

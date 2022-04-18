@@ -34,6 +34,12 @@ namespace ApollosLibrary.WebApi.Controllers
             return await _referenceService.GetCountries();
         }
 
+        [HttpGet("businesstypes")]
+        public async Task<List<CountryDTO>> GetBusinessTypes()
+        {
+            return await _referenceService.GetCountries();
+        }
+
         [HttpGet("bookReferenceData")]
         public async Task<BookReferenceDataDTO> GetBookReferenceData()
         {

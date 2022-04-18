@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Publisher.Commands.UpdatePublisherCommand;
+using ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Application.Series.Commands.AddSeriesCommand;
+using Bogus;
+using ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -42,59 +45,48 @@ namespace ApollosLibrary.Application.IntegrationTests
         }
 
         [Fact]
-        public async Task UpdatePublisherCommand()
+        public async Task UpdateSeriesCommand()
         {
             var userID = Guid.NewGuid();
 
-            var httpContext = new TestHttpContext()
+            var httpContext = new TestHttpContext
             {
                 User = new TestPrincipal(new Claim[]
                 {
                     new Claim("userid", userID.ToString()),
-                }),
+                })
             };
 
             _contextAccessor.HttpContext = httpContext;
 
-            var publisherGenerated = PublisherGenerator.GetGenericPublisher("AU", userID);
-
-            _context.Publishers.Add(publisherGenerated);
-            _context.SaveChanges();
-
-            var newPublisherDetails = PublisherGenerator.GetGenericPublisher("US", userID);
-
-            var command = new UpdatePublisherCommand()
+            var seriesCommand = new AddSeriesCommand()
             {
-                City = newPublisherDetails.City,
-                CountryID = newPublisherDetails.CountryId,
-                Name = newPublisherDetails.Name,
-                Postcode = newPublisherDetails.Postcode,
-                PublisherId = publisherGenerated.PublisherId,
-                State = newPublisherDetails.State,
-                StreetAddress = newPublisherDetails.StreetAddress,
-                Website = newPublisherDetails.Website,
+                Name = new Faker().Random.AlphaNumeric(10),
             };
 
-            await _mediatr.Send(command);
+            var seriesResult = await _mediatr.Send(seriesCommand);
 
-            var publisher = _context.Publishers.FirstOrDefault(p => p.PublisherId == publisherGenerated.PublisherId);
+            var seriesGenerated = SeriesGenerator.GetSeries(userID);
 
-            publisher.Should().BeEquivalentTo(new Domain.Publisher()
+            var command = new UpdateSeriesCommand()
             {
-                City = newPublisherDetails.City,
-                CountryId = newPublisherDetails.CountryId,
-                CreatedBy = userID,
-                CreatedDate = publisherGenerated.CreatedDate,
-                IsDeleted = false,
-                ModifiedBy = userID,
-                ModifiedDate = _dateTime.Now,
-                Name = newPublisherDetails.Name,
-                Postcode = newPublisherDetails.Postcode,
-                PublisherId = publisherGenerated.PublisherId,
-                State = newPublisherDetails.State,
-                StreetAddress = newPublisherDetails.StreetAddress,
-                Website = newPublisherDetails.Website,
-            }, opt => opt.Excluding(f => f.Country));
+                SeriesId = seriesResult.SeriesId,
+                Name = new Faker().Random.AlphaNumeric(10),
+            };
+
+            var result = await _mediatr.Send(command);
+
+            var series = _context.Series.FirstOrDefault(p => p.SeriesId == seriesResult.SeriesId);
+
+            series.Should().BeEquivalentTo(new Domain.Series()
+            {
+                SeriesId = seriesResult.SeriesId,
+                CreatedBy = series.CreatedBy,
+                CreatedDate = series.CreatedDate,
+                Name = command.Name,
+                ModifiedBy = series.ModifiedBy,
+                ModifiedDate = series.ModifiedDate,
+            }, opt => opt.Excluding(f => f.Books));
         }
     }
 }

@@ -72,14 +72,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();

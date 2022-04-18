@@ -57,11 +57,11 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _contextAccessor.HttpContext = httpContext;
 
-            var publisher1 = PublisherGenerator.GetGenericPublisher("GB", userID);
-            _context.Publishers.Add(publisher1);
+            var Business1 = BusinessGenerator.GetGenericBusiness("GB", userID);
+            _context.Business.Add(Business1);
 
-            var publisher2 = PublisherGenerator.GetGenericPublisher("GB", userID);
-            _context.Publishers.Add(publisher2);
+            var Business2 = BusinessGenerator.GetGenericBusiness("GB", userID);
+            _context.Business.Add(Business2);
 
             _context.SaveChanges();
 
@@ -95,7 +95,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             _context.SaveChanges();
 
             var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
-            bookGenerated.PublisherId = publisher1.PublisherId;
+            bookGenerated.BusinessId = Business1.BusinessId;
             bookGenerated.Genres = new List<Domain.Genre>()
             {
                 genre1,
@@ -138,7 +138,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 },
                 ISBN = newBookDetails.Isbn,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
-                PublisherId = publisher2.PublisherId,
+                BusinessId = Business2.BusinessId,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
                 Series = new List<int>()
@@ -165,14 +165,14 @@ namespace ApollosLibrary.Application.IntegrationTests
                 ModifiedBy = userID,
                 ModifiedDate = _dateTime.Now,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
-                PublisherId = publisher2.PublisherId,
+                BusinessId = Business2.BusinessId,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
             }, opt =>
             opt.Excluding(f => f.FictionType)
             .Excluding(f => f.FormType)
             .Excluding(f => f.PublicationFormat)
-            .Excluding(f => f.Publisher)
+            .Excluding(f => f.Business)
             .Excluding(f => f.Authors)
             .Excluding(f => f.Genres)
             .Excluding(f => f.Series));

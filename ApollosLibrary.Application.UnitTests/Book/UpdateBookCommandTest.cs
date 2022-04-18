@@ -133,14 +133,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -213,14 +213,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -301,14 +301,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -382,14 +382,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -464,14 +464,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -546,14 +546,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -630,14 +630,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -678,7 +678,7 @@ namespace ApollosLibrary.Application.UnitTests
         }
 
         [Fact]
-        public async Task PublisherNotFound()
+        public async Task BusinessNotFound()
         {
             var command = new UpdateBookCommand()
             {
@@ -688,7 +688,7 @@ namespace ApollosLibrary.Application.UnitTests
                 PublicationFormatId = 1,
                 FictionTypeId = 1,
                 FormTypeId = 1,
-                PublisherId = 1,
+                BusinessId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -716,14 +716,14 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(u => u.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(u => u.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -760,7 +760,7 @@ namespace ApollosLibrary.Application.UnitTests
             var mediator = provider.GetRequiredService<IMediator>();
 
             Func<Task> act = () => mediator.Send(command);
-            await act.Should().ThrowAsync<PublisherNotFoundException>();
+            await act.Should().ThrowAsync<BusinessNotFoundException>();
         }
 
         [Fact]
@@ -774,7 +774,7 @@ namespace ApollosLibrary.Application.UnitTests
                 PublicationFormatId = 1,
                 FictionTypeId = 1,
                 FormTypeId = 1,
-                PublisherId = 1,
+                BusinessId = 1,
                 Authors = new List<int>()
                 {
                     1,
@@ -806,15 +806,15 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
-            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Publisher()));
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
+            BusinessDataLayer.Setup(d => d.GetBusiness(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Business()));
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -865,7 +865,7 @@ namespace ApollosLibrary.Application.UnitTests
                 PublicationFormatId = 1,
                 FictionTypeId = 1,
                 FormTypeId = 1,
-                PublisherId = 1,
+                BusinessId = 1,
                 Genres = new List<int>()
                 {
                     1,
@@ -897,15 +897,15 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
-            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Publisher()));
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
+            BusinessDataLayer.Setup(d => d.GetBusiness(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Business()));
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();
@@ -957,7 +957,7 @@ namespace ApollosLibrary.Application.UnitTests
                 PublicationFormatId = 1,
                 FictionTypeId = 1,
                 FormTypeId = 1,
-                PublisherId = 1,
+                BusinessId = 1,
                 Series = new List<int>()
                 {
                     1,
@@ -989,15 +989,15 @@ namespace ApollosLibrary.Application.UnitTests
                 return referenceUnitOfWork.Object;
             });
 
-            var publisherDataLayer = new Mock<IPublisherDataLayer>();
-            publisherDataLayer.Setup(d => d.GetPublisher(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Publisher()));
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
+            BusinessDataLayer.Setup(d => d.GetBusiness(It.IsAny<int>())).Returns(Task.FromResult(new Domain.Business()));
 
-            var publisherUnitOfWork = new Mock<IPublisherUnitOfWork>();
-            publisherUnitOfWork.Setup(r => r.PublisherDataLayer).Returns(publisherDataLayer.Object);
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
+            BusinessUnitOfWork.Setup(r => r.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return publisherUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var bookDataLayer = new Mock<IBookDataLayer>();

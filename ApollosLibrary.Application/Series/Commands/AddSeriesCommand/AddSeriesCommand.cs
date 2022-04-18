@@ -25,7 +25,6 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
 
         public AddSeriesCommandHandler(
             ISeriesUnitOfWork seriesUnitOfWork
-            , IBookUnitOfWork bookUnitOfWork
             , IUserService userService
             , IDateTimeService dateTimeService)
         {

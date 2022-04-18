@@ -43,7 +43,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
             response.FormTypeId = book.FormTypeId;
             response.ISBN = book.Isbn;
             response.PublicationFormatId = book.PublicationFormatId;
-            response.PublisherId = book.PublisherId;
+            response.BusinessId = book.BusinessId;
             response.Subtitle = book.Subtitle;
             response.Title = book.Title;
             response.Authors = book.Authors.Select(a => a.AuthorId).ToList();
