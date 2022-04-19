@@ -25,12 +25,12 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<Business> GetBusiness(int id)
         {
-            return await _context.Business.FirstOrDefaultAsync(p => p.BusinessId == id);
+            return await _context.Business.FirstOrDefaultAsync(b => b.BusinessId == id);
         }
 
-        public async Task<List<Business>> GetBusinesss()
+        public async Task<List<Business>> GetBusinesses()
         {
-            return await _context.Business.Include("Country").Where(p => p.IsDeleted == null || p.IsDeleted == false).ToListAsync();
+            return await _context.Business.Include(b => b.Country).Include(b => b.Type).Where(b => b.IsDeleted == null || b.IsDeleted == false).ToListAsync();
         }
     }
 }

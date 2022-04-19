@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Application.Series.Queries.GetMultiSeriesQuery;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -37,51 +38,48 @@ namespace ApollosLibrary.Application.IntegrationTests
         }
 
         [Fact]
-        public async Task GetBusinessQuery()
+        public async Task GetMultiSeriesQuery()
         {
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var Business1 = BusinessGenerator.GetGenericBusiness("AU", new Guid());
-            _context.Business.Add(Business1);
+            var series1 = SeriesGenerator.GetSeries(new Guid());
+            _context.Series.Add(series1);
 
-            var Business2 = BusinessGenerator.GetGenericBusiness("AU", new Guid());
-            _context.Business.Add(Business2);
+            var series2 = SeriesGenerator.GetSeries(new Guid());
+            _context.Series.Add(series2);
 
-            var Business3 = BusinessGenerator.GetGenericBusiness("AU", new Guid());
-            _context.Business.Add(Business3);
+            var series3 = SeriesGenerator.GetSeries(new Guid());
+            _context.Series.Add(series3);
 
             _context.SaveChanges();
 
             var countries = _context.Countries.ToList();
 
-            var query = new GetBusinesssQuery()
+            var query = new GetMultiSeriesQuery()
             {
             };
 
             var result = await _mediatr.Send(query);
 
-            result.Businesss.Should().ContainEquivalentOf(new BusinessListItemDTO()
+            result.Series.Should().ContainEquivalentOf(new SeriesListItemDTO()
             {
-                Country = countries.First(c => c.CountryId == Business1.CountryId).Name,
-                Name = Business1.Name,
-                BusinessId = Business1.BusinessId,
+                SeriesId = series1.SeriesId,
+                Name = series1.Name,
             });
 
-            result.Businesss.Should().ContainEquivalentOf(new BusinessListItemDTO()
+            result.Series.Should().ContainEquivalentOf(new SeriesListItemDTO()
             {
-                Country = countries.First(c => c.CountryId == Business2.CountryId).Name,
-                Name = Business2.Name,
-                BusinessId = Business2.BusinessId,
+                SeriesId = series2.SeriesId,
+                Name = series2.Name,
             });
 
-            result.Businesss.Should().ContainEquivalentOf(new BusinessListItemDTO()
+            result.Series.Should().ContainEquivalentOf(new SeriesListItemDTO()
             {
-                Country = countries.First(c => c.CountryId == Business3.CountryId).Name,
-                Name = Business3.Name,
-                BusinessId = Business3.BusinessId,
+                SeriesId = series3.SeriesId,
+                Name = series3.Name,
             });
         }
     }

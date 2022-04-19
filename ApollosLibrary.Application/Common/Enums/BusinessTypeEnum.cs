@@ -8,7 +8,7 @@ namespace ApollosLibrary.Application.Common.Enums
 {
     public enum BusinessTypeEnum
     {
-        Business = 1,
+        Publisher = 1,
         Bookshop = 2,
     }
 }

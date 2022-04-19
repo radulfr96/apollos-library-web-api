@@ -8,13 +8,14 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinesssQuery
 {
     public class GetBusinesssQueryDto
     {
-        public List<BusinessListItemDTO> Businesss { get; set; } = new List<BusinessListItemDTO>();
+        public List<BusinessListItemDTO> Businesses { get; set; } = new List<BusinessListItemDTO>();
     }
 
     public class BusinessListItemDTO
     {
         public int BusinessId { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public string Country { get; set; }
     }
 }

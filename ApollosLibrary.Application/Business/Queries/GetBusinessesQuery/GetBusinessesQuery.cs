@@ -26,17 +26,18 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinesssQuery
         {
             var response = new GetBusinesssQueryDto();
 
-            var Businesss = await _BusinessUnitOfWork.BusinessDataLayer.GetBusinesss();
+            var Businesss = await _BusinessUnitOfWork.BusinessDataLayer.GetBusinesses();
 
             if (Businesss.Count == 0)
             {
                 return response;
             }
 
-            response.Businesss = Businesss.Select(p => new BusinessListItemDTO()
+            response.Businesses = Businesss.Select(p => new BusinessListItemDTO()
             {
                 Country = p.Country.Name,
                 Name = p.Name,
+                Type = p.Type.Name,
                 BusinessId = p.BusinessId
             }).ToList();
 

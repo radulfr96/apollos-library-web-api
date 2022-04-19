@@ -29,6 +29,6 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// Used to get all Businesss
         /// </summary>
         /// <returns>The list of Businesss</returns>
-        Task<List<Business>> GetBusinesss();
+        Task<List<Business>> GetBusinesses();
     }
 }

@@ -11,6 +11,7 @@ namespace ApollosLibrary.Application.Interfaces
     {
         string GetReferenceData();
         Task<List<CountryDTO>> GetCountries();
+        Task<List<BusinessTypeDTO>> GetBusinessTypes();
         Task<BookReferenceDataDTO> GetBookReferenceData();
     }
 }

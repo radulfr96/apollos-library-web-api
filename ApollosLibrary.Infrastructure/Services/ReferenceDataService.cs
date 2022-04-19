@@ -44,6 +44,22 @@ namespace ApollosLibrary.Infrastructure.Services
             return response;
         }
 
+        public async Task<List<BusinessTypeDTO>> GetBusinessTypes()
+        {
+            var response = new List<BusinessTypeDTO>();
+
+            var businessTypes = await _referenceUnitOfWork.ReferenceDataLayer.GetBusinessTypes();
+
+            response = businessTypes.Select(b => new BusinessTypeDTO()
+            {
+                BusinessTypeId = b.BusinessTypeId,
+                Name = b.Name,
+            })
+            .ToList();
+
+            return response;
+        }
+
         public async Task<BookReferenceDataDTO> GetBookReferenceData()
         {
             return new BookReferenceDataDTO()
