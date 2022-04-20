@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    [Migration("20220418072416_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220420113906_AddedMissingLibrarySeedData")]
+    partial class AddedMissingLibrarySeedData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,7 +182,35 @@ namespace ApollosLibrary.Domain.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Businesss");
+                    b.ToTable("Business");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.BusinessType", b =>
+                {
+                    b.Property<int>("BusinessTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusinessTypeId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BusinessTypeId");
+
+                    b.ToTable("BusinessTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            BusinessTypeId = 1,
+                            Name = "Publisher"
+                        },
+                        new
+                        {
+                            BusinessTypeId = 2,
+                            Name = "Bookshop"
+                        });
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Country", b =>
@@ -1565,21 +1593,147 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("ApollosLibrary.Domain.Model.BusinessType", b =>
+            modelBuilder.Entity("ApollosLibrary.Domain.Library", b =>
                 {
-                    b.Property<int>("BusinessTypeId")
+                    b.Property<int>("LibraryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusinessTypeId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LibraryId"), 1L, 1);
 
-                    b.Property<string>("TypeName")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LibraryId");
+
+                    b.ToTable("Libraries");
+
+                    b.HasData(
+                        new
+                        {
+                            LibraryId = 1,
+                            UserId = new Guid("e7f12974-73dd-48d6-aa79-95fe1ded101e")
+                        });
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>
+                {
+                    b.Property<int>("EntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EntryId"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("EntryId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("LibraryEntries");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
+                {
+                    b.Property<Guid>("SubscriptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubscriptionId");
+
+                    b.HasIndex("SubscriptionTypeId");
+
+                    b.ToTable("Subscriptions");
+
+                    b.HasData(
+                        new
+                        {
+                            SubscriptionId = new Guid("a4f1538b-f4c9-440b-bf1c-98a791bc4ef7"),
+                            ExpiryDate = new DateTime(2102, 4, 20, 21, 39, 5, 883, DateTimeKind.Local).AddTicks(3334),
+                            JoinDate = new DateTime(2022, 4, 20, 21, 39, 5, 883, DateTimeKind.Local).AddTicks(3364),
+                            SubscriptionTypeId = 1
+                        });
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.SubscriptionType", b =>
+                {
+                    b.Property<int>("SubscriptionTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionTypeId"), 1L, 1);
+
+                    b.Property<decimal>("MonthlyRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SubscriptionName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BusinessTypeId");
+                    b.HasKey("SubscriptionTypeId");
 
-                    b.ToTable("BusinessType");
+                    b.ToTable("SubscriptionTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            SubscriptionTypeId = 1,
+                            MonthlyRate = 0.00m,
+                            SubscriptionName = "Staff Member"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 2,
+                            MonthlyRate = 10.00m,
+                            SubscriptionName = "Individual Subscription"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 3,
+                            MonthlyRate = 30.00m,
+                            SubscriptionName = "Family Subscription"
+                        });
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.UserSubscription", b =>
+                {
+                    b.Property<int>("UserSubscrptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSubscrptionId"), 1L, 1);
+
+                    b.Property<Guid>("SubscriptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserSubscrptionId");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("UserSubscriptions");
+
+                    b.HasData(
+                        new
+                        {
+                            UserSubscrptionId = 1,
+                            SubscriptionId = new Guid("a4f1538b-f4c9-440b-bf1c-98a791bc4ef7"),
+                            UserId = new Guid("e7f12974-73dd-48d6-aa79-95fe1ded101e")
+                        });
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.PublicationFormat", b =>
@@ -1732,7 +1886,7 @@ namespace ApollosLibrary.Domain.Migrations
 
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
                 {
-                    b.HasOne("ApollosLibrary.Domain.Model.BusinessType", "Type")
+                    b.HasOne("ApollosLibrary.Domain.BusinessType", "Type")
                         .WithMany()
                         .HasForeignKey("BusinessTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1745,6 +1899,39 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Model.SubscriptionType", "SubscriptionType")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubscriptionType");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.UserSubscription", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Model.Subscription", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>

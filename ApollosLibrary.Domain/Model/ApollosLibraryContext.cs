@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ApollosLibrary.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,12 @@ namespace ApollosLibrary.Domain
         public DbSet<BusinessType> BusinessTypes { get; set; }
         public DbSet<Business> Business { get; set; }
         public DbSet<Series> Series { get; set; }
+        public DbSet<Library> Libraries { get; set; }
+        public DbSet<LibraryEntry> LibraryEntries { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
+        public DbSet<UserSubscription> UserSubscriptions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -195,6 +202,53 @@ namespace ApollosLibrary.Domain
             var countries = JsonConvert.DeserializeObject<List<Country>>(countryString);
 
             modelBuilder.Entity<Country>().HasData(countries);
+
+            modelBuilder.Entity<SubscriptionType>().HasData(new List<SubscriptionType>()
+            {
+                new SubscriptionType()
+                {
+                    MonthlyRate = 0.00m,
+                    SubscriptionName = "Staff Member",
+                    SubscriptionTypeId = 1,
+                },
+                new SubscriptionType()
+                {
+                    MonthlyRate = 10.00m,
+                    SubscriptionName = "Individual Subscription",
+                    SubscriptionTypeId = 2,
+                },
+                new SubscriptionType()
+                {
+                    MonthlyRate = 30.00m,
+                    SubscriptionName = "Family Subscription",
+                    SubscriptionTypeId = 3,
+                },
+            });
+
+            var subscriptionId = Guid.NewGuid();
+
+            modelBuilder.Entity<Subscription>().HasData(new Subscription()
+            {
+                SubscriptionTypeId = 1,
+                ExpiryDate = DateTime.Now.AddYears(80),
+                JoinDate = DateTime.Now,
+                SubscriptionId = subscriptionId,
+            });
+
+            var userId = Guid.Parse("e7f12974-73dd-48d6-aa79-95fe1ded101e");
+
+            modelBuilder.Entity<UserSubscription>().HasData(new UserSubscription()
+            {
+                SubscriptionId = subscriptionId,
+                UserId = userId,
+                UserSubscrptionId = 1,
+            });
+
+            modelBuilder.Entity<Library>().HasData(new Library()
+            {
+                LibraryId = 1,
+                UserId = userId,
+            });
         }
     }
 }

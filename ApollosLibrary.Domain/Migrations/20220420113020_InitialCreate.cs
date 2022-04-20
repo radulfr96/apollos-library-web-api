@@ -10,16 +10,16 @@ namespace ApollosLibrary.Domain.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BusinessType",
+                name: "BusinessTypes",
                 columns: table => new
                 {
                     BusinessTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BusinessType", x => x.BusinessTypeId);
+                    table.PrimaryKey("PK_BusinessTypes", x => x.BusinessTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,6 +91,19 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Libraries",
+                columns: table => new
+                {
+                    LibraryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Libraries", x => x.LibraryId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PublicationFormats",
                 columns: table => new
                 {
@@ -121,6 +134,20 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubscriptionTypes",
+                columns: table => new
+                {
+                    SubscriptionTypeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubscriptionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MonthlyRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionTypes", x => x.SubscriptionTypeId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Authors",
                 columns: table => new
                 {
@@ -147,7 +174,7 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Businesss",
+                name: "Business",
                 columns: table => new
                 {
                     BusinessId = table.Column<int>(type: "int", nullable: false)
@@ -168,18 +195,38 @@ namespace ApollosLibrary.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Businesss", x => x.BusinessId);
+                    table.PrimaryKey("PK_Business", x => x.BusinessId);
                     table.ForeignKey(
-                        name: "FK_Businesss_BusinessType_BusinessTypeId",
+                        name: "FK_Business_BusinessTypes_BusinessTypeId",
                         column: x => x.BusinessTypeId,
-                        principalTable: "BusinessType",
+                        principalTable: "BusinessTypes",
                         principalColumn: "BusinessTypeId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Businesss_Countries_CountryId",
+                        name: "FK_Business_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "CountryId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubscriptionTypeId = table.Column<int>(type: "int", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.SubscriptionId);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_SubscriptionTypes_SubscriptionTypeId",
+                        column: x => x.SubscriptionTypeId,
+                        principalTable: "SubscriptionTypes",
+                        principalColumn: "SubscriptionTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -207,9 +254,9 @@ namespace ApollosLibrary.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
-                        name: "FK_Books_Businesss_BusinessId",
+                        name: "FK_Books_Business_BusinessId",
                         column: x => x.BusinessId,
-                        principalTable: "Businesss",
+                        principalTable: "Business",
                         principalColumn: "BusinessId");
                     table.ForeignKey(
                         name: "FK_Books_FictionTypes_FictionTypeId",
@@ -228,6 +275,26 @@ namespace ApollosLibrary.Domain.Migrations
                         column: x => x.PublicationFormatId,
                         principalTable: "PublicationFormats",
                         principalColumn: "TypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserSubscriptions",
+                columns: table => new
+                {
+                    UserSubscrptionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSubscriptions", x => x.UserSubscrptionId);
+                    table.ForeignKey(
+                        name: "FK_UserSubscriptions_Subscriptions_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscriptions",
+                        principalColumn: "SubscriptionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -303,6 +370,35 @@ namespace ApollosLibrary.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "LibraryEntries",
+                columns: table => new
+                {
+                    EntryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LibraryEntries", x => x.EntryId);
+                    table.ForeignKey(
+                        name: "FK_LibraryEntries_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "BusinessTypes",
+                columns: new[] { "BusinessTypeId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Publisher" },
+                    { 2, "Bookshop" }
+                });
+
             migrationBuilder.InsertData(
                 table: "Countries",
                 columns: new[] { "CountryId", "Name" },
@@ -347,9 +443,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "BZ", "Belize" },
                     { "CA", "Canada" },
                     { "CC", "Cocos (Keeling) Islands" },
-                    { "CD", "Congo, the Democratic Republic of the" },
-                    { "CF", "Central African Republic" },
-                    { "CG", "Congo" }
+                    { "CD", "Congo, the Democratic Republic of the" }
                 });
 
             migrationBuilder.InsertData(
@@ -357,6 +451,8 @@ namespace ApollosLibrary.Domain.Migrations
                 columns: new[] { "CountryId", "Name" },
                 values: new object[,]
                 {
+                    { "CF", "Central African Republic" },
+                    { "CG", "Congo" },
                     { "CH", "Switzerland" },
                     { "CI", "CÃ´te d'Ivoire" },
                     { "CK", "Cook Islands" },
@@ -396,9 +492,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "GE", "Georgia" },
                     { "GF", "French Guiana" },
                     { "GG", "Guernsey" },
-                    { "GH", "Ghana" },
-                    { "GI", "Gibraltar" },
-                    { "GL", "Greenland" }
+                    { "GH", "Ghana" }
                 });
 
             migrationBuilder.InsertData(
@@ -406,6 +500,8 @@ namespace ApollosLibrary.Domain.Migrations
                 columns: new[] { "CountryId", "Name" },
                 values: new object[,]
                 {
+                    { "GI", "Gibraltar" },
+                    { "GL", "Greenland" },
                     { "GM", "Gambia" },
                     { "GN", "Guinea" },
                     { "GP", "Guadeloupe" },
@@ -445,9 +541,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "KP", "Korea, Democratic People's Republic of" },
                     { "KR", "Korea, Republic of" },
                     { "KW", "Kuwait" },
-                    { "KY", "Cayman Islands" },
-                    { "KZ", "Kazakhstan" },
-                    { "LA", "Lao People's Democratic Republic" }
+                    { "KY", "Cayman Islands" }
                 });
 
             migrationBuilder.InsertData(
@@ -455,6 +549,8 @@ namespace ApollosLibrary.Domain.Migrations
                 columns: new[] { "CountryId", "Name" },
                 values: new object[,]
                 {
+                    { "KZ", "Kazakhstan" },
+                    { "LA", "Lao People's Democratic Republic" },
                     { "LB", "Lebanon" },
                     { "LC", "Saint Lucia" },
                     { "LI", "Liechtenstein" },
@@ -494,9 +590,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "NF", "Norfolk Island" },
                     { "NG", "Nigeria" },
                     { "NI", "Nicaragua" },
-                    { "NL", "Netherlands" },
-                    { "NO", "Norway" },
-                    { "NP", "Nepal" }
+                    { "NL", "Netherlands" }
                 });
 
             migrationBuilder.InsertData(
@@ -504,6 +598,8 @@ namespace ApollosLibrary.Domain.Migrations
                 columns: new[] { "CountryId", "Name" },
                 values: new object[,]
                 {
+                    { "NO", "Norway" },
+                    { "NP", "Nepal" },
                     { "NR", "Nauru" },
                     { "NU", "Niue" },
                     { "NZ", "New Zealand" },
@@ -543,9 +639,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "SN", "Senegal" },
                     { "SO", "Somalia" },
                     { "SR", "Suriname" },
-                    { "SS", "South Sudan" },
-                    { "ST", "Sao Tome and Principe" },
-                    { "SV", "El Salvador" }
+                    { "SS", "South Sudan" }
                 });
 
             migrationBuilder.InsertData(
@@ -553,6 +647,8 @@ namespace ApollosLibrary.Domain.Migrations
                 columns: new[] { "CountryId", "Name" },
                 values: new object[,]
                 {
+                    { "ST", "Sao Tome and Principe" },
+                    { "SV", "El Salvador" },
                     { "SX", "Sint Maarten (Dutch part)" },
                     { "SY", "Syrian Arab Republic" },
                     { "SZ", "Swaziland" },
@@ -597,22 +693,19 @@ namespace ApollosLibrary.Domain.Migrations
             migrationBuilder.InsertData(
                 table: "FictionTypes",
                 columns: new[] { "TypeId", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Non-Fiction" },
-                    { 2, "Fiction" }
-                });
+                values: new object[] { 1, "Non-Fiction" });
 
             migrationBuilder.InsertData(
-                table: "FormTypes",
+                table: "FictionTypes",
                 columns: new[] { "TypeId", "Name" },
-                values: new object[] { 1, "Novel" });
+                values: new object[] { 2, "Fiction" });
 
             migrationBuilder.InsertData(
                 table: "FormTypes",
                 columns: new[] { "TypeId", "Name" },
                 values: new object[,]
                 {
+                    { 1, "Novel" },
                     { 2, "Novella" },
                     { 3, "Screenplay" },
                     { 4, "Manuscript" },
@@ -628,6 +721,16 @@ namespace ApollosLibrary.Domain.Migrations
                     { 1, "Printed" },
                     { 2, "eBook" },
                     { 3, "Audio Book" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SubscriptionTypes",
+                columns: new[] { "SubscriptionTypeId", "MonthlyRate", "SubscriptionName" },
+                values: new object[,]
+                {
+                    { 1, 0.00m, "Staff Member" },
+                    { 2, 10.00m, "Individual Subscription" },
+                    { 3, 30.00m, "Family Subscription" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -671,14 +774,29 @@ namespace ApollosLibrary.Domain.Migrations
                 column: "SeriesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Businesss_BusinessTypeId",
-                table: "Businesss",
+                name: "IX_Business_BusinessTypeId",
+                table: "Business",
                 column: "BusinessTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Businesss_CountryId",
-                table: "Businesss",
+                name: "IX_Business_CountryId",
+                table: "Business",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibraryEntries_BookId",
+                table: "LibraryEntries",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_SubscriptionTypeId",
+                table: "Subscriptions",
+                column: "SubscriptionTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSubscriptions_SubscriptionId",
+                table: "UserSubscriptions",
+                column: "SubscriptionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -696,19 +814,31 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "ErrorCodes");
 
             migrationBuilder.DropTable(
+                name: "Libraries");
+
+            migrationBuilder.DropTable(
+                name: "LibraryEntries");
+
+            migrationBuilder.DropTable(
+                name: "UserSubscriptions");
+
+            migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "Books");
-
-            migrationBuilder.DropTable(
                 name: "Series");
 
             migrationBuilder.DropTable(
-                name: "Businesss");
+                name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
+
+            migrationBuilder.DropTable(
+                name: "Business");
 
             migrationBuilder.DropTable(
                 name: "FictionTypes");
@@ -720,7 +850,10 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "PublicationFormats");
 
             migrationBuilder.DropTable(
-                name: "BusinessType");
+                name: "SubscriptionTypes");
+
+            migrationBuilder.DropTable(
+                name: "BusinessTypes");
 
             migrationBuilder.DropTable(
                 name: "Countries");

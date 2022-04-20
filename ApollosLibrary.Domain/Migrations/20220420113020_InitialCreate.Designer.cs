@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    [Migration("20220418095358_FixedModel")]
-    partial class FixedModel
+    [Migration("20220420113020_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1593,6 +1593,125 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.Library", b =>
+                {
+                    b.Property<int>("LibraryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LibraryId"), 1L, 1);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LibraryId");
+
+                    b.ToTable("Libraries");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>
+                {
+                    b.Property<int>("EntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EntryId"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("EntryId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("LibraryEntries");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
+                {
+                    b.Property<Guid>("SubscriptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubscriptionId");
+
+                    b.HasIndex("SubscriptionTypeId");
+
+                    b.ToTable("Subscriptions");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.SubscriptionType", b =>
+                {
+                    b.Property<int>("SubscriptionTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionTypeId"), 1L, 1);
+
+                    b.Property<decimal>("MonthlyRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SubscriptionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SubscriptionTypeId");
+
+                    b.ToTable("SubscriptionTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            SubscriptionTypeId = 1,
+                            MonthlyRate = 0.00m,
+                            SubscriptionName = "Staff Member"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 2,
+                            MonthlyRate = 10.00m,
+                            SubscriptionName = "Individual Subscription"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 3,
+                            MonthlyRate = 30.00m,
+                            SubscriptionName = "Family Subscription"
+                        });
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.UserSubscription", b =>
+                {
+                    b.Property<int>("UserSubscrptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSubscrptionId"), 1L, 1);
+
+                    b.Property<Guid>("SubscriptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserSubscrptionId");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("UserSubscriptions");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.PublicationFormat", b =>
                 {
                     b.Property<int>("TypeId")
@@ -1756,6 +1875,39 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Model.SubscriptionType", "SubscriptionType")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubscriptionType");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.UserSubscription", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Model.Subscription", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>

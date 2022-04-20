@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220420113717_AddedMissingSeedData")]
+    partial class AddedMissingSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1605,13 +1607,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasKey("LibraryId");
 
                     b.ToTable("Libraries");
-
-                    b.HasData(
-                        new
-                        {
-                            LibraryId = 1,
-                            UserId = new Guid("e7f12974-73dd-48d6-aa79-95fe1ded101e")
-                        });
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>
@@ -1659,9 +1654,9 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("a4f1538b-f4c9-440b-bf1c-98a791bc4ef7"),
-                            ExpiryDate = new DateTime(2102, 4, 20, 21, 39, 5, 883, DateTimeKind.Local).AddTicks(3334),
-                            JoinDate = new DateTime(2022, 4, 20, 21, 39, 5, 883, DateTimeKind.Local).AddTicks(3364),
+                            SubscriptionId = new Guid("70ad9aa8-d5ba-40bb-8330-58ad28508b3c"),
+                            ExpiryDate = new DateTime(2102, 4, 20, 21, 37, 17, 358, DateTimeKind.Local).AddTicks(1579),
+                            JoinDate = new DateTime(2022, 4, 20, 21, 37, 17, 358, DateTimeKind.Local).AddTicks(1612),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -1729,7 +1724,7 @@ namespace ApollosLibrary.Domain.Migrations
                         new
                         {
                             UserSubscrptionId = 1,
-                            SubscriptionId = new Guid("a4f1538b-f4c9-440b-bf1c-98a791bc4ef7"),
+                            SubscriptionId = new Guid("70ad9aa8-d5ba-40bb-8330-58ad28508b3c"),
                             UserId = new Guid("e7f12974-73dd-48d6-aa79-95fe1ded101e")
                         });
                 });
