@@ -1,5 +1,6 @@
 ﻿using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,44 @@ namespace ApollosLibrary.DataLayer
 {
     public class LibraryDataLayer : ILibraryDataLayer
     {
-        public Task AddLibrary(Library library)
+        public ApollosLibraryContext _context;
+
+        public LibraryDataLayer(ApollosLibraryContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteLibraryEntry(int id)
+        public async Task AddLibrary(Library library)
         {
-            throw new NotImplementedException();
+            await _context.Libraries.AddAsync(library);
         }
 
-        public Task<List<LibraryEntry>> GetLibrary(int libraryId)
+        public async Task DeleteLibraryEntry(int id)
         {
-            throw new NotImplementedException();
+            var library = await _context.Libraries.FirstOrDefaultAsync(l => l.LibraryId == id);
+
+            if (library != null)
+            {
+                await Task.Run(() =>
+                {
+                    _context.Libraries.Remove(library);
+                });
+            }
         }
 
-        public Task<LibraryEntry> GetLibraryEntry(int id)
+        public async Task<List<LibraryEntry>> GetLibrary(int libraryId)
         {
-            throw new NotImplementedException();
+            return await _context.LibraryEntries.Where(l => l.LibraryId == libraryId).ToListAsync();
         }
 
-        public Task<int> GetLibraryIdByUserId(Guid userId)
+        public async Task<LibraryEntry> GetLibraryEntry(int id)
         {
-            throw new NotImplementedException();
+            return await _context.LibraryEntries.FirstOrDefaultAsync(l => l.EntryId == id);
+        }
+
+        public async Task<int> GetLibraryIdByUserId(Guid userId)
+        {
+            return (await _context.Libraries.FirstOrDefaultAsync(l => l.UserId == userId)).LibraryId;
         }
     }
 }

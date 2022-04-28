@@ -14,5 +14,6 @@ namespace ApollosLibrary.Domain
         [Key]
         public int LibraryId { get; set; }
         public Guid UserId { get; set; }
+        public List<LibraryEntry> LibraryEntries { get; set; } = new List<LibraryEntry>();
     }
 }

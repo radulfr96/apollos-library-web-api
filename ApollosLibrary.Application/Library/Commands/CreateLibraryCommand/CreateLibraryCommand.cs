@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ApollosLibrary.UnitOfWork.Contracts;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,26 @@ namespace ApollosLibrary.Application.Library.Commands.CreateLibraryCommand
 
     public class CreateLibraryCommandHandler : IRequestHandler<CreateLibraryCommand, CreateLibraryCommandDto>
     {
-        public CreateLibraryCommandHandler()
-        {
+        public readonly ILibraryUnitOfWork _libraryUnitOfWork;
 
+        public CreateLibraryCommandHandler(ILibraryUnitOfWork libraryUnitOfWork)
+        {
+            _libraryUnitOfWork = libraryUnitOfWork;
         }
 
-        public Task<CreateLibraryCommandDto> Handle(CreateLibraryCommand request, CancellationToken cancellationToken)
+        public async Task<CreateLibraryCommandDto> Handle(CreateLibraryCommand command, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var library = new Domain.Library()
+            {
+                UserId = command.UserId,
+            };
+
+            await _libraryUnitOfWork.LibraryDataLayer.AddLibrary(library);
+
+            return new CreateLibraryCommandDto()
+            {
+                LibraryId = library.LibraryId,
+            };
         }
     }
 }

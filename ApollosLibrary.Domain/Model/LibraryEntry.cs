@@ -15,5 +15,7 @@ namespace ApollosLibrary.Domain
         public int BookId { get; set; }
         public Book Book { get; set; }
         public int Quantity { get; set; }
+        public int LibraryId { get; set; }
+        public Library Library { get; set; }
     }
 }
