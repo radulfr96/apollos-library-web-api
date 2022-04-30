@@ -22,10 +22,16 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
     public class AddLibraryEntryCommandHandler : IRequestHandler<AddLibraryEntryCommand, AddLibraryEntryCommandDto>
     {
         private readonly ILibraryUnitOfWork _libraryUnitOfWork;
+        private readonly IBookUnitOfWork _bookUnitOfWork;
         private readonly IUserService _userService;
 
-        public AddLibraryEntryCommandHandler(ILibraryUnitOfWork libraryUnitOfWork, IUserService userService)
+        public AddLibraryEntryCommandHandler(
+            ILibraryUnitOfWork libraryUnitOfWork
+            , IBookUnitOfWork bookUnitOfWork
+            , IUserService userService
+            )
         {
+            _bookUnitOfWork = bookUnitOfWork;
             _libraryUnitOfWork = libraryUnitOfWork;
             _userService = userService;
         }
@@ -46,7 +52,7 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
                 throw new UserCannotModifyLibraryException($"User does not have permission to modify library with id of [{command.LibraryId}]");
             }
 
-            var book = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntries(command.LibraryId);
+            var book = await _bookUnitOfWork.BookDataLayer.GetBook(command.BookId);
 
             if (book == null)
             {

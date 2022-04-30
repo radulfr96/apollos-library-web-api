@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Common.Exceptions
 {
-    internal class UserCannotModifyLibraryException : ForbiddenException
+    public class UserCannotModifyLibraryException : ForbiddenException
     {
         public UserCannotModifyLibraryException(string message) : base(ErrorCodeEnum.WebsiteInvalidLength, message)
 
