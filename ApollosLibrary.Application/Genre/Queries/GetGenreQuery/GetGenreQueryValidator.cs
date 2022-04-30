@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Genre.Queries.GetGenreQuery
     {
         public GetGenreQueryValidator()
         {
-            RuleFor(c => c.GenreId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.GenreIdInvalidValue.ToString());
+            RuleFor(c => c.GenreId).GreaterThan(0);
         }
     }
 }

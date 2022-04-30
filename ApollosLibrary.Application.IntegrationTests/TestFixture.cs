@@ -77,6 +77,11 @@ namespace ApollosLibrary.Application.IntegrationTests
                 return new ReferenceUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
+            services.AddTransient<ILibraryUnitOfWork>(p =>
+            {
+                return new LibraryUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
+            });
+
             services.AddSingleton<IUserService>(p =>
             {
                 return new UserService(p.GetRequiredService<IHttpContextAccessor>());
@@ -98,9 +103,9 @@ namespace ApollosLibrary.Application.IntegrationTests
             ServiceCollection = services;
         }
 
-        public void ResetCheckpoint()
+        public void DeleteDatabase()
         {
-            _context.Dispose();
+            _context.Database.EnsureCreated();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace ApollosLibrary.UnitOfWork
             _dbContext = dbContext;
         }
 
-        public ILibraryDataLayer GenreDataLayer
+        public ILibraryDataLayer LibraryDataLayer
         {
             get
             {

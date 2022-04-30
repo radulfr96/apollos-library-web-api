@@ -39,7 +39,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BusinessIdInvalidValue.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.BusinessId);
         }
 
         [Fact]

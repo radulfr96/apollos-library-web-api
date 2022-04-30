@@ -23,5 +23,10 @@ namespace ApollosLibrary.Infrastructure.Services
         {
             return Guid.Parse(_httpContext.User.Claims.FirstOrDefault(c => c.Type == "userid").Value);
         }
+
+        public int GetLibraryId()
+        {
+            return int.Parse(_httpContext.User.Claims.FirstOrDefault(c => c.Type == "libraryid").Value);
+        }
     }
 }

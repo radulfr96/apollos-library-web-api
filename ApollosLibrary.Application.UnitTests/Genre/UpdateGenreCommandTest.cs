@@ -23,12 +23,10 @@ namespace ApollosLibrary.Application.UnitTests
     public class UpdateGenreCommandTest : TestBase
     {
         private readonly UpdateGenreCommandValidator _validator;
-        private readonly Faker _faker;
 
         public UpdateGenreCommandTest(TestFixture fixture) : base(fixture)
         {
             _validator = new UpdateGenreCommandValidator();
-            _faker = new Faker();
         }
 
         [Fact]
@@ -39,14 +37,14 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
 
             command.Name = "";
 
             result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
 
         [Fact]
@@ -60,7 +58,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameInvalidLength.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
 
         [Fact]

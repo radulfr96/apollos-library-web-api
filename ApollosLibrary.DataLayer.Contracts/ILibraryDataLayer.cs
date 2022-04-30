@@ -19,10 +19,16 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task AddLibrary(Library library);
 
         /// <summary>
+        /// Used to add a library entry
+        /// </summary>
+        /// <param name="entry">The entry to be added</param>
+        Task AddLibraryEntry(LibraryEntry entry);
+
+        /// <summary>
         /// Used to get the id of the library for the user
         /// </summary>
         /// <param name="userId">The user id to look up the library</param>
-        /// <returns></returns>
+        /// <returns>The id of the users library</returns>
         Task<int> GetLibraryIdByUserId(Guid userId);
 
         /// <summary>
@@ -37,7 +43,14 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="libraryId">The id of the library to returned</param>
         /// <returns>The list of genres</returns>
-        Task<List<LibraryEntry>> GetLibrary(int libraryId);
+        Task<List<LibraryEntry>> GetLibraryEntries(int libraryId);
+
+        /// <summary>
+        /// Used to get the library object for the user
+        /// </summary>
+        /// <param name="libraryId">Id of the library to be found</param>
+        /// <returns>The library required</returns>
+        Task<Library> GetLibrary(int libraryId);
 
         /// <summary>
         /// Used to remove a library entry from the database

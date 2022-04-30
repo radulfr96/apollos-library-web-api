@@ -30,14 +30,14 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
 
             command.Name = "";
 
             result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.GenreNameInvalidLength.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
     }
 }

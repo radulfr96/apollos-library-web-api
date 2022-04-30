@@ -23,6 +23,11 @@ namespace ApollosLibrary.DataLayer
             await _context.Libraries.AddAsync(library);
         }
 
+        public async Task AddLibraryEntry(LibraryEntry entry)
+        {
+            await _context.LibraryEntries.AddAsync(entry);
+        }
+
         public async Task DeleteLibraryEntry(int id)
         {
             var library = await _context.Libraries.FirstOrDefaultAsync(l => l.LibraryId == id);
@@ -36,7 +41,12 @@ namespace ApollosLibrary.DataLayer
             }
         }
 
-        public async Task<List<LibraryEntry>> GetLibrary(int libraryId)
+        public async Task<Library> GetLibrary(int libraryId)
+        {
+            return await _context.Libraries.FirstOrDefaultAsync(l => l.LibraryId == libraryId);
+        }
+
+        public async Task<List<LibraryEntry>> GetLibraryEntries(int libraryId)
         {
             return await _context.LibraryEntries.Where(l => l.LibraryId == libraryId).ToListAsync();
         }

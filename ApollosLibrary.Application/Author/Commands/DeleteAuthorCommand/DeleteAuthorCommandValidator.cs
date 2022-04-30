@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Author.Commands.DeleteAuthorCommand
     {
         public DeleteAuthorCommandValidator()
         {
-            RuleFor(c => c.AuthorId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.AuthorIdInvalidValue.ToString());
+            RuleFor(c => c.AuthorId).GreaterThan(0);
         }
     }
 }

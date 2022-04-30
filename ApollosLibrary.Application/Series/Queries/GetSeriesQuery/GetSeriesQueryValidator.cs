@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Series.Queries.GetSeriesQuery
     {
         public GetSeriesQueryValidator()
         {
-            RuleFor(c => c.SeriesId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.SeriesIdInvalidValue.ToString());
+            RuleFor(c => c.SeriesId).GreaterThan(0);
         }
     }
 }

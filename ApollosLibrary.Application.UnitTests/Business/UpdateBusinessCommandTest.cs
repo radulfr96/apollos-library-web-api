@@ -39,14 +39,14 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BusinessNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
 
             command.Name = "";
 
             result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BusinessNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BusinessNameInvalidLength.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.WebsiteInvalidLength.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Website);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f);
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f);
         }
 
         [Fact]
@@ -140,25 +140,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.InvalidAddressProvided.ToString()).Any().Should().BeTrue();
-        }
-
-        [Fact]
-        public void PubliherAddressValidValueNoState()
-        {
-            var command = new UpdateBusinessCommand()
-            {
-                Name = new Faker().Random.AlphaNumeric(50),
-                StreetAddress = new Faker().Address.StreetAddress(),
-                City = new Faker().Address.City(),
-                Postcode = new Faker().Address.ZipCode(),
-                CountryID = "AU",
-            };
-
-            var result = _validator.TestValidate(command);
-
-            result.IsValid.Should().BeTrue();
-            result.Errors.Should().BeEmpty();
+            result.ShouldHaveValidationErrorFor(f => f);
         }
 
         [Fact]
@@ -175,7 +157,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.CountryNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.CountryID);
         }
 
         [Fact]

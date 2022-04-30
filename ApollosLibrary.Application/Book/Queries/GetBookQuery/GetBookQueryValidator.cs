@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
     {
         public GetBookQueryValidator()
         {
-            RuleFor(b => b.BookId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.BookIdInvalidValue.ToString());
+            RuleFor(b => b.BookId).GreaterThan(0);
         }
     }
 }

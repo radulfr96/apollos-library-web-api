@@ -53,12 +53,12 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var command = new DeleteBusinessCommand()
             {
-                PubisherId = BusinessGenerated.BusinessId,
+                BusinessId = BusinessGenerated.BusinessId,
             };
 
             await _mediatr.Send(command);
 
-            var Business = _context.Business.FirstOrDefault(p => p.BusinessId == command.PubisherId);
+            var Business = _context.Business.FirstOrDefault(p => p.BusinessId == command.BusinessId);
 
             Business.IsDeleted.Should().BeTrue();
         }

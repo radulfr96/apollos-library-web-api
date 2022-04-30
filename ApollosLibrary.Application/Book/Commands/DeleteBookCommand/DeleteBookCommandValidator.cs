@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Book.Commands.DeleteBookCommand
     {
         public DeleteBookCommandValidator()
         {
-            RuleFor(c => c.BookId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.BookIdInvalidValue.ToString());
+            RuleFor(c => c.BookId).GreaterThan(0);
         }
     }
 }

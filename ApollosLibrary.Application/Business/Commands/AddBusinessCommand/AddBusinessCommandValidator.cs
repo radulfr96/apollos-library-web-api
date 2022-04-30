@@ -12,20 +12,20 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
     {
         public AddBusinessCommandValidator()
         {
-            RuleFor(p => p.Name).NotEmpty().WithErrorCode(ErrorCodeEnum.BusinessNameNotProvided.ToString());
-            RuleFor(p => p.Name).Length(1, 200).WithErrorCode(ErrorCodeEnum.BusinessNameInvalidLength.ToString());
+            RuleFor(p => p.Name).NotEmpty();
+            RuleFor(p => p.Name).Length(1, 200);
 
             When(p => !string.IsNullOrEmpty(p.Website), () =>
             {
-                RuleFor(p => p.Website).Length(1, 200).WithErrorCode(ErrorCodeEnum.WebsiteInvalidLength.ToString());
+                RuleFor(p => p.Website).Length(1, 200);
             });
 
             When(p => string.IsNullOrEmpty(p.Website), () =>
             {
-                RuleFor(p => p).Must(BeValidAddress).WithErrorCode(ErrorCodeEnum.InvalidAddressProvided.ToString());
+                RuleFor(p => p).Must(BeValidAddress);
             });
 
-            RuleFor(p => p.CountryID).NotEmpty().WithErrorCode(ErrorCodeEnum.CountryNotProvided.ToString());
+            RuleFor(p => p.CountryID).NotEmpty();
         }
 
         private bool BeValidAddress(AddBusinessCommand command)

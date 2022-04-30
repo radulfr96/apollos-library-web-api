@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinessQuery
     {
         public GetBusinessQueryValidator()
         {
-            RuleFor(q => q.BusinessId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.BusinessIdInvalidValue.ToString());
+            RuleFor(q => q.BusinessId).GreaterThan(0);
         }
     }
 }

@@ -44,14 +44,14 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.ISBN);
 
             command.Title = "";
 
             result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.ISBN);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.TitleInvalidLength.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Title);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SubtitleInvalidLength.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Subtitle);
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace ApollosLibrary.Application.UnitTests
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.EditionInvalidValue.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Edition);
         }
 
         [Fact]

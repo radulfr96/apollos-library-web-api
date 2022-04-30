@@ -15,25 +15,25 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         {
             When(b => !string.IsNullOrEmpty(b.ISBN), () =>
             {
-                RuleFor(b => b.ISBN).Length(10, 13).WithErrorCode(ErrorCodeEnum.ISBNInvalidLength.ToString());
-                RuleFor(b => b.ISBN).Must(BeValidISBN).WithErrorCode(ErrorCodeEnum.ISBNInvalidLength.ToString());
+                RuleFor(b => b.ISBN).Length(10, 13);
+                RuleFor(b => b.ISBN).Must(BeValidISBN);
             });
 
             When(b => !string.IsNullOrEmpty(b.EISBN), () =>
             {
-                RuleFor(b => b.EISBN).Length(10, 13).WithErrorCode(ErrorCodeEnum.eISBNInvalidLength.ToString());
-                RuleFor(b => b.EISBN).Must(BeValidISBN).WithErrorCode(ErrorCodeEnum.eISBNInvalidFormat.ToString());
+                RuleFor(b => b.EISBN).Length(10, 13);
+                RuleFor(b => b.EISBN).Must(BeValidISBN);
             });
 
-            RuleFor(b => b.Title).NotEmpty().WithErrorCode(ErrorCodeEnum.TitleNotProvided.ToString());
-            RuleFor(b => b.Title).Length(1, 200).WithErrorCode(ErrorCodeEnum.TitleInvalidLength.ToString());
+            RuleFor(b => b.Title).NotEmpty();
+            RuleFor(b => b.Title).Length(1, 200);
 
             When(b => !string.IsNullOrEmpty(b.Subtitle), () =>
             {
-                RuleFor(b => b.Subtitle).Length(1, 200).WithErrorCode(ErrorCodeEnum.SubtitleInvalidLength.ToString());
+                RuleFor(b => b.Subtitle).Length(1, 200);
             });
 
-            RuleFor(b => b.Edition).GreaterThan(0).WithErrorCode(ErrorCodeEnum.EditionInvalidValue.ToString());
+            RuleFor(b => b.Edition).GreaterThan(0);
         }
 
         private bool BeValidISBN(string isbn)

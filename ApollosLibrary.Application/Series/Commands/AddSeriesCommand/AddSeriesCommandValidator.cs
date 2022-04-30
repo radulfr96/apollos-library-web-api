@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
     {
         public AddSeriesCommandValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithErrorCode(ErrorCodeEnum.SeriesNameNotProvided.ToString());
+            RuleFor(x => x.Name).NotEmpty();
         }
     }
 }

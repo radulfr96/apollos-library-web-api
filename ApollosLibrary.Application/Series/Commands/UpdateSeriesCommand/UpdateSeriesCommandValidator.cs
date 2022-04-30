@@ -12,9 +12,9 @@ namespace ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand
     {
         public UpdateSeriesCommandValidator()
         {
-            RuleFor(c => c.SeriesId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.SeriesIdInvalidValue.ToString());
+            RuleFor(c => c.SeriesId).GreaterThan(0);
 
-            RuleFor(c => c.Name).NotEmpty().WithErrorCode(ErrorCodeEnum.SeriesNameNotProvided.ToString());
+            RuleFor(c => c.Name).NotEmpty();
         }
     }
 }

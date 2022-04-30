@@ -8,5 +8,6 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
 {
     public class AddLibraryEntryCommandDto
     {
+        public int LibraryEntryId { get; set; }
     }
 }

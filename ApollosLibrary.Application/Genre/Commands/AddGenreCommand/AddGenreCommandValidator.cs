@@ -12,8 +12,8 @@ namespace ApollosLibrary.Application.Genre.Commands.AddGenreCommand
     {
         public AddGenreCommandValidator()
         {
-            RuleFor(g => g.Name).NotEmpty().WithErrorCode(ErrorCodeEnum.GenreNameNotProvided.ToString());
-            RuleFor(g => g.Name).Length(1, 50).WithErrorCode(ErrorCodeEnum.GenreNameInvalidLength.ToString());
+            RuleFor(g => g.Name).NotEmpty();
+            RuleFor(g => g.Name).Length(1, 50);
         }
     }
 }

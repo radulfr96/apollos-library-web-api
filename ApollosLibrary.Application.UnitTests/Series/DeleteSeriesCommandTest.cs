@@ -29,7 +29,7 @@ namespace ApollosLibrary.Application.UnitTests.Series
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SeriesIdInvalidValue.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.SeriesId);
         }
     }
 }

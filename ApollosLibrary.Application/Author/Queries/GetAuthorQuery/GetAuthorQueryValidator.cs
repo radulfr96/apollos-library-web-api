@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Author.Queries.GetAuthorQuery
     {
         public GetAuthorQueryValidator()
         {
-            RuleFor(q => q.AuthorId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.AuthorIdInvalidValue.ToString());
+            RuleFor(q => q.AuthorId).GreaterThan(0);
         }
     }
 }

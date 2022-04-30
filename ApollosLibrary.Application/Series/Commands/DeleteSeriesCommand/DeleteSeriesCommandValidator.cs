@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand
     {
         public DeleteSeriesCommandValidator()
         {
-            RuleFor(c => c.SeriesId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.SeriesIdInvalidValue.ToString());
+            RuleFor(c => c.SeriesId).GreaterThan(0);
         }
     }
 }

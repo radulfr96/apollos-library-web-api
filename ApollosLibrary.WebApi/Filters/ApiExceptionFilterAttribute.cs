@@ -35,6 +35,7 @@ namespace ApollosLibrary.WebApi.Filters
                 { typeof(NotFoundException), HandleObjectNotFoundException },
                 { typeof(SystemErrorException), HandleUnknownException },
                 { typeof(UnauthorizedException), HandleUnauthorizedException },
+                { typeof(ForbiddenException), HandleForbiddenException },
                 { typeof(Application.Common.Exceptions.ValidationException), HandleValidationException }
             };
 
@@ -56,8 +57,6 @@ namespace ApollosLibrary.WebApi.Filters
                 _exceptionHandlers[type].Invoke(context);
                 return;
             }
-
-
         }
 
         private void HandleUnknownException(ExceptionContext context)
@@ -170,6 +169,29 @@ namespace ApollosLibrary.WebApi.Filters
             context.Result = new ObjectResult(errors)
             {
                 StatusCode = StatusCodes.Status403Forbidden
+            };
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleForbiddenException(ExceptionContext context)
+        {
+            var exception = context.Exception as UnauthorizedException;
+            List<string> errors = new();
+
+            string message = ErrorCodeTranslation.GetErrorMessageFromCode((int)exception.ErrorCode);
+            //_logger.Warn("Authorisation Error {ErrorCode}: {ErrorValue}", exception.ErrorCode, exception.Message);
+            if (message == null)
+            {
+                message = ErrorCodeTranslation.GetErrorMessageFromCode((int)ErrorCodeEnum.SystemError);
+                //_logger.Error("Cannot find ErrorCode {ErrorCode}", exception.ErrorCode);
+            }
+
+            errors.Add(message);
+
+            context.Result = new ObjectResult(errors)
+            {
+                StatusCode = StatusCodes.Status403Forbidden,
             };
 
             context.ExceptionHandled = true;

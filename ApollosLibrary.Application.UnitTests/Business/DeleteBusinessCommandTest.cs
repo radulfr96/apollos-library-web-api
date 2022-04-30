@@ -33,13 +33,13 @@ namespace ApollosLibrary.Application.UnitTests
         {
             var command = new DeleteBusinessCommand()
             {
-                PubisherId = 0,
+                BusinessId = 0,
             };
 
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.BusinessIdInvalidValue.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.BusinessId);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace ApollosLibrary.Application.UnitTests
         {
             var command = new DeleteBusinessCommand()
             {
-                PubisherId = 1,
+                BusinessId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();

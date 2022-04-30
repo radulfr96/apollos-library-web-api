@@ -23,12 +23,10 @@ namespace ApollosLibrary.Application.UnitTests.Series
     public class AddSeriesCommandTest : TestBase
     {
         private readonly AddSeriesCommandValidator _validator;
-        private readonly Faker _faker;
 
         public AddSeriesCommandTest(TestFixture fixture) : base(fixture)
         {
             _validator = new();
-            _faker = new();
         }
 
         [Fact]
@@ -39,14 +37,14 @@ namespace ApollosLibrary.Application.UnitTests.Series
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SeriesNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
 
             command.Name = "";
 
             result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.ErrorCode).Where(e => e == ErrorCodeEnum.SeriesNameNotProvided.ToString()).Any().Should().BeTrue();
+            result.ShouldHaveValidationErrorFor(f => f.Name);
         }
     }
 }

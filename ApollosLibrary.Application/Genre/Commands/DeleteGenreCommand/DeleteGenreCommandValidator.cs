@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Genre.Commands.DeleteGenreCommand
     {
         public DeleteGenreCommandValidator()
         {
-            RuleFor(c => c.GenreId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.GenreIdInvalidValue.ToString());
+            RuleFor(c => c.GenreId).GreaterThan(0);
         }
     }
 }

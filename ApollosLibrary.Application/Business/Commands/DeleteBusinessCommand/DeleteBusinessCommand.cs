@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand
 {
     public class DeleteBusinessCommand : IRequest<DeleteBusinessCommandDto>
     {
-        public int PubisherId { get; set; }
+        public int BusinessId { get; set; }
     }
 
     public class DeleteBusinessCommandHandler : IRequestHandler<DeleteBusinessCommand, DeleteBusinessCommandDto>
@@ -28,11 +28,11 @@ namespace ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand
         {
             var response = new DeleteBusinessCommandDto();
 
-            var Business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(command.PubisherId);
+            var Business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);
 
             if (Business == null)
             {
-                throw new BusinessNotFoundException($"Unable to find Business with id {command.PubisherId}");
+                throw new BusinessNotFoundException($"Unable to find Business with id {command.BusinessId}");
             }
 
             Business.IsDeleted = true;

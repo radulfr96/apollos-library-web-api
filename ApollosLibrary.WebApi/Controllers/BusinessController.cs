@@ -78,7 +78,7 @@ namespace ApollosLibrary.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<DeleteBusinessCommandDto> DeleteBusiness([FromRoute] int id)
         {
-            return await _mediator.Send(new DeleteBusinessCommand() { PubisherId = id });
+            return await _mediator.Send(new DeleteBusinessCommand() { BusinessId = id });
         }
     }
 }

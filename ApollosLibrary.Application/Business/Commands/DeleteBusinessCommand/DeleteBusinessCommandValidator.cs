@@ -12,7 +12,7 @@ namespace ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand
     {
         public DeleteBusinessCommandValidator()
         {
-            RuleFor(c => c.PubisherId).GreaterThan(0).WithErrorCode(ErrorCodeEnum.BusinessIdInvalidValue.ToString());
+            RuleFor(c => c.BusinessId).GreaterThan(0);
         }
     }
 }
