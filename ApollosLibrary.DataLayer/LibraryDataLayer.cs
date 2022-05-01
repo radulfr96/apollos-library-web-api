@@ -58,7 +58,10 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<LibraryEntry> GetLibraryEntry(int id)
         {
-            return await _context.LibraryEntries.FirstOrDefaultAsync(l => l.EntryId == id);
+            return await _context.LibraryEntries
+                                    .Include(e => e.Library)
+                                    .Include(e => e.Book)
+                                    .FirstOrDefaultAsync(l => l.EntryId == id);
         }
 
         public async Task<int?> GetLibraryIdByUserId(Guid userId)

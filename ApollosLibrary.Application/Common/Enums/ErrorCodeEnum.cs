@@ -27,6 +27,7 @@ namespace ApollosLibrary.Application.Common.Enums
         FormTypeNotFound = 108,
         BusinessTypeNotFound = 109,
         LibraryNotFound = 110,
+        LibraryEntryNotFound = 111,
 
         // User Forbidden Exception
         UserCannotModifyLibrary = 200,

@@ -82,7 +82,6 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
                 await _libraryUnitOfWork.Save();
             }
 
-
             return response;
         }
     }
