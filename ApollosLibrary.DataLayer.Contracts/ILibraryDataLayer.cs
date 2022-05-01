@@ -29,7 +29,7 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="userId">The user id to look up the library</param>
         /// <returns>The id of the users library</returns>
-        Task<int> GetLibraryIdByUserId(Guid userId);
+        Task<int?> GetLibraryIdByUserId(Guid userId);
 
         /// <summary>
         /// Used to get a library entry by its id

@@ -56,9 +56,9 @@ namespace ApollosLibrary.DataLayer
             return await _context.LibraryEntries.FirstOrDefaultAsync(l => l.EntryId == id);
         }
 
-        public async Task<int> GetLibraryIdByUserId(Guid userId)
+        public async Task<int?> GetLibraryIdByUserId(Guid userId)
         {
-            return (await _context.Libraries.FirstOrDefaultAsync(l => l.UserId == userId)).LibraryId;
+            return (await _context.Libraries.FirstOrDefaultAsync(l => l.UserId == userId))?.LibraryId;
         }
     }
 }
