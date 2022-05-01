@@ -51,7 +51,7 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="libraryId">The id of the library to returned</param>
         /// <returns>The list of genres</returns>
-        Task<List<LibraryEntry>> GetLibraryEntries(int libraryId);
+        Task<List<LibraryEntry>> GetLibraryEntriesByUserId(Guid userId);
 
         /// <summary>
         /// Used to get the library object for the user

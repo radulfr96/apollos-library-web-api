@@ -46,9 +46,13 @@ namespace ApollosLibrary.DataLayer
             return await _context.Libraries.FirstOrDefaultAsync(l => l.LibraryId == libraryId);
         }
 
-        public async Task<List<LibraryEntry>> GetLibraryEntries(int libraryId)
+        public async Task<List<LibraryEntry>> GetLibraryEntriesByUserId(Guid userId)
         {
-            return await _context.LibraryEntries.Where(l => l.LibraryId == libraryId).ToListAsync();
+            return await _context.LibraryEntries
+                                    .Include(l => l.Library)
+                                    .Include(l => l.Book)
+                                    .ThenInclude(b => b.Authors)
+                                    .Where(l => l.Library.UserId == userId).ToListAsync();
         }
 
         public async Task<LibraryEntry> GetLibraryEntry(int libraryId, int bookId)
@@ -60,7 +64,6 @@ namespace ApollosLibrary.DataLayer
         {
             return await _context.LibraryEntries
                                     .Include(e => e.Library)
-                                    .Include(e => e.Book)
                                     .FirstOrDefaultAsync(l => l.EntryId == id);
         }
 
