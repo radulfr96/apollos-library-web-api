@@ -41,7 +41,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
         }
 
         [Fact]
-        public async Task CreateLibraryCommand()
+        public async Task AddLibraryEntryCommand_NewEntry()
         {
             var userID = Guid.NewGuid();
 
@@ -94,6 +94,90 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
                 BookId = createBookResult.BookId,
                 Quantity = addLibraryEntryCommand.Quantity,
             }, 
+            opt => opt.Excluding(f => f.EntryId)
+                      .Excluding(f => f.Book)
+                      .Excluding(f => f.Library));
+        }
+
+        [Fact]
+        public async Task AddLibraryEntryCommand_ExistingEntry()
+        {
+            var userID = Guid.NewGuid();
+
+            var httpContext = new TestHttpContext
+            {
+                User = new TestPrincipal(new Claim[]
+                {
+                    new Claim("userid", userID.ToString()),
+                })
+            };
+
+            _contextAccessor.HttpContext = httpContext;
+
+            var createLibraryCommand = new CreateLibraryCommand() { };
+
+            var createResult = await _mediatr.Send(createLibraryCommand);
+
+            var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
+
+            var addBookCommand = new AddBookCommand()
+            {
+                Edition = bookGenerated.Edition,
+                FictionTypeId = bookGenerated.FictionTypeId,
+                FormTypeId = bookGenerated.FormTypeId,
+                ISBN = bookGenerated.Isbn,
+                PublicationFormatId = bookGenerated.PublicationFormatId,
+                Subtitle = bookGenerated.Subtitle,
+                Title = bookGenerated.Title,
+            };
+
+            var createBookResult = await _mediatr.Send(addBookCommand);
+
+            var addLibraryEntryCommand = new AddLibraryEntryCommand()
+            {
+                LibraryId = createResult.LibraryId,
+                Quantity = 1,
+                BookId = createBookResult.BookId,
+            };
+
+            var entryResult = await _mediatr.Send(addLibraryEntryCommand);
+
+            var entry = _context.LibraryEntries
+                                  .FirstOrDefault(l => l.EntryId == entryResult.LibraryEntryId
+                                  && l.BookId == createBookResult.BookId);
+
+            entry.Should().NotBeNull();
+            entry.Should().BeEquivalentTo(new Domain.LibraryEntry()
+            {
+                LibraryId = createResult.LibraryId,
+                BookId = createBookResult.BookId,
+                Quantity = addLibraryEntryCommand.Quantity,
+            },
+            opt => opt.Excluding(f => f.EntryId)
+                      .Excluding(f => f.Book)
+                      .Excluding(f => f.Library));
+
+            var update = new AddLibraryEntryCommand()
+            {
+                BookId = createBookResult.BookId,
+                LibraryId = createResult.LibraryId,
+                Quantity = 10,
+            };
+
+            var duplicateResult = await _mediatr.Send(update);
+            duplicateResult.LibraryEntryId.Should().Be(entryResult.LibraryEntryId);
+
+            entry = _context.LibraryEntries
+                                  .FirstOrDefault(l => l.EntryId == entryResult.LibraryEntryId
+                                  && l.BookId == createBookResult.BookId);
+
+            entry.Should().NotBeNull();
+            entry.Should().BeEquivalentTo(new Domain.LibraryEntry()
+            {
+                LibraryId = update.LibraryId,
+                BookId = update.BookId,
+                Quantity = update.Quantity,
+            },
             opt => opt.Excluding(f => f.EntryId)
                       .Excluding(f => f.Book)
                       .Excluding(f => f.Library));

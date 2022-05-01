@@ -51,6 +51,11 @@ namespace ApollosLibrary.DataLayer
             return await _context.LibraryEntries.Where(l => l.LibraryId == libraryId).ToListAsync();
         }
 
+        public async Task<LibraryEntry> GetLibraryEntry(int libraryId, int bookId)
+        {
+            return await _context.LibraryEntries.FirstOrDefaultAsync(e => e.LibraryId == libraryId && e.BookId == bookId);
+        }
+
         public async Task<LibraryEntry> GetLibraryEntry(int id)
         {
             return await _context.LibraryEntries.FirstOrDefaultAsync(l => l.EntryId == id);

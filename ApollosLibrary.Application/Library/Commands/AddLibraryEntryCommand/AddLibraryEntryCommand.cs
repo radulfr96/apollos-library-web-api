@@ -59,17 +59,29 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
                 throw new BookNotFoundException($"Unable to find book with id of [{command.BookId}]");
             }
 
-            var entry = new LibraryEntry()
+            var existingEntry = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntry(library.LibraryId, book.BookId);
+
+            if (existingEntry == null)
             {
-                BookId = command.BookId,
-                LibraryId = command.LibraryId,
-                Quantity = command.Quantity,
-            };
+                var entry = new LibraryEntry()
+                {
+                    BookId = command.BookId,
+                    LibraryId = command.LibraryId,
+                    Quantity = command.Quantity,
+                };
 
-            await _libraryUnitOfWork.LibraryDataLayer.AddLibraryEntry(entry);
-            await _libraryUnitOfWork.Save();
+                await _libraryUnitOfWork.LibraryDataLayer.AddLibraryEntry(entry);
+                await _libraryUnitOfWork.Save();
 
-            response.LibraryEntryId = entry.EntryId;
+                response.LibraryEntryId = entry.EntryId;
+            }
+            else
+            {
+                existingEntry.Quantity = command.Quantity;
+                response.LibraryEntryId = existingEntry.EntryId;
+                await _libraryUnitOfWork.Save();
+            }
+
 
             return response;
         }
