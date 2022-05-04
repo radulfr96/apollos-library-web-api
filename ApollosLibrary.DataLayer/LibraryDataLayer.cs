@@ -30,13 +30,13 @@ namespace ApollosLibrary.DataLayer
 
         public async Task DeleteLibraryEntry(int id)
         {
-            var library = await _context.Libraries.FirstOrDefaultAsync(l => l.LibraryId == id);
+            var entry = await _context.LibraryEntries.FirstOrDefaultAsync(l => l.EntryId == id);
 
-            if (library != null)
+            if (entry != null)
             {
                 await Task.Run(() =>
                 {
-                    _context.Libraries.Remove(library);
+                    _context.LibraryEntries.Remove(entry);
                 });
             }
         }
