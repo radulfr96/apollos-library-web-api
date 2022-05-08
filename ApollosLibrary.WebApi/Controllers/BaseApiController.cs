@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ApollosLibrary.WebApi.Filters;
 using NLog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -15,6 +16,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// This is used as the base for all of the api controllers as all them will need
     /// the methods and attributes contained within this object
     /// </summary>
+    [Authorize]
     [ApiController]
     [ServiceFilter(typeof(ApiExceptionFilterAttribute))]
     public class BaseApiController : ControllerBase

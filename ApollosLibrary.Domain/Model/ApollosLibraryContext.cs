@@ -234,21 +234,6 @@ namespace ApollosLibrary.Domain
                 JoinDate = DateTime.Now,
                 SubscriptionId = subscriptionId,
             });
-
-            var userId = Guid.Parse("e7f12974-73dd-48d6-aa79-95fe1ded101e");
-
-            modelBuilder.Entity<UserSubscription>().HasData(new UserSubscription()
-            {
-                SubscriptionId = subscriptionId,
-                UserId = userId,
-                UserSubscrptionId = 1,
-            });
-
-            modelBuilder.Entity<Library>().HasData(new Library()
-            {
-                LibraryId = 1,
-                UserId = userId,
-            });
         }
     }
 }

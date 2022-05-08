@@ -16,7 +16,6 @@ using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class BookController : BaseApiController
     {

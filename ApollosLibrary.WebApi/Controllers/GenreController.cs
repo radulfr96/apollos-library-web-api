@@ -19,9 +19,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// <summary>
     /// Controller used as an endpoint for genre functions
     /// </summary>
-    [Authorize]
     [Route("api/genre")]
-    [ApiController]
     public class GenreController : BaseApiController
     {
         private readonly IMediator _mediator;

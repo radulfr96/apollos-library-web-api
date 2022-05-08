@@ -15,7 +15,6 @@ using ApollosLibrary.Domain;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class ReferenceController : BaseApiController
     {

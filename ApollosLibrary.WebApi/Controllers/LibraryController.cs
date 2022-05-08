@@ -1,9 +1,12 @@
-﻿using ApollosLibrary.Application.Library.Commands.CreateLibraryCommand;
+﻿using ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand;
+using ApollosLibrary.Application.Library.Commands.CreateLibraryCommand;
 using ApollosLibrary.Application.Library.Commands.DeleteLibraryEntryCommand;
 using ApollosLibrary.Application.Library.Commands.UpdateLibraryEntryCommand;
 using ApollosLibrary.Application.Library.Queries.GetLibraryEntriesQuery;
+using ApollosLibrary.Application.Library.Queries.GetLibraryEntryQuery;
 using ApollosLibrary.Application.Library.Queries.GetUserLibraryIdQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +15,6 @@ using System.Threading.Tasks;
 namespace ApollosLibrary.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class LibraryController : BaseApiController
     {
         private readonly IMediator _mediator;
@@ -30,6 +32,16 @@ namespace ApollosLibrary.WebApi.Controllers
         public async Task<CreateLibraryCommandDto> CreateLibrary()
         {
             return await _mediator.Send(new CreateLibraryCommand());
+        }
+
+        /// <summary>
+        /// Used to create a library entry
+        /// </summary>
+        /// <returns>Response that indicates the result</returns>
+        [HttpPost("addentry")]
+        public async Task<AddLibraryEntryCommandDto> AddLibraryEntry([FromBody] AddLibraryEntryCommand command)
+        {
+            return await _mediator.Send(command);
         }
 
         /// <summary>
@@ -53,12 +65,22 @@ namespace ApollosLibrary.WebApi.Controllers
         }
 
         /// <summary>
+        /// Used to get a library entry
+        /// </summary>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("entry/{id}")]
+        public async Task<GetLibraryEntryQueryDto> GetLibraryEntry([FromRoute] int id)
+        {
+            return await _mediator.Send(new GetLibraryEntryQuery() { EntryId = id });
+        }
+
+        /// <summary>
         /// Used to update a library entry
         /// </summary>
         /// <param name="request">The information used to update the entry</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
-        public async Task<UpdateLibraryEntryCommandDto> UpdateGenre([FromBody] UpdateLibraryEntryCommand command)
+        public async Task<UpdateLibraryEntryCommandDto> UpdateLibraryEntry([FromBody] UpdateLibraryEntryCommand command)
         {
             return await _mediator.Send(command);
         }
@@ -69,7 +91,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <param name="id">The id of the entry to be deleted</param>
         /// <returns>Response that indicates the result</returns>
         [HttpDelete("{id}")]
-        public async Task<DeleteLibraryEntryCommandDto> DeleteBusiness([FromRoute] int id)
+        public async Task<DeleteLibraryEntryCommandDto> DeleteLibraryEntry([FromRoute] int id)
         {
             return await _mediator.Send(new DeleteLibraryEntryCommand() { LibraryEntryId = id });
         }

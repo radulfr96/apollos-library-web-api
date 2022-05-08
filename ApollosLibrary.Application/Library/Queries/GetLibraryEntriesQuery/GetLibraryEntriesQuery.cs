@@ -27,20 +27,21 @@ namespace ApollosLibrary.Application.Library.Queries.GetLibraryEntriesQuery
 
         public async Task<GetLibraryEntriesQueryDto> Handle(GetLibraryEntriesQuery request, CancellationToken cancellationToken)
         {
-            return new GetLibraryEntriesQueryDto()
-            {
-                LibraryEntries = (await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntriesByUserId(_userService.GetUserId()))
+            var response = new GetLibraryEntriesQueryDto();
+
+            response.LibraryEntries = (await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntriesByUserId(_userService.GetUserId()))
                                     .Select(e => new LibraryEntryListItemDTO()
                                     {
                                         EntryId = e.EntryId,
                                         Title = e.Book.Title,
                                         Quantity = e.Quantity,
-                                        Author = e.Book.Authors.Count() > 1 
+                                        Author = e.Book.Authors.Count() > 1
                                                 ? $"{GetAuthorCredit(e.Book.Authors.First())} et al."
                                                 : $"{GetAuthorCredit(e.Book.Authors.First())}",
 
-                                    }).ToList(),
-            };
+                                    }).ToList();
+
+            return response;
         }
 
         private string GetAuthorCredit(Domain.Author author)

@@ -16,7 +16,6 @@ using ApollosLibrary.Application.Business.Queries.GetBusinesssQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class BusinessController : BaseApiController
     {

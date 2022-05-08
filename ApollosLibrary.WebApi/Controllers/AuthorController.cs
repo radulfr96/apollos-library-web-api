@@ -16,7 +16,7 @@ using ApollosLibrary.Application.Author.Queries.GetAuthorsQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     public class AuthorController : BaseApiController
     {
