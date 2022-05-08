@@ -77,7 +77,6 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
 
             var addLibraryEntryCommand = new AddLibraryEntryCommand()
             {
-                LibraryId = createResult.LibraryId,
                 Quantity = 1,
                 BookId = createBookResult.BookId,
             };

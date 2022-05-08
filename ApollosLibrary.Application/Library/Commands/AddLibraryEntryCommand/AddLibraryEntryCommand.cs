@@ -15,7 +15,6 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
     public class AddLibraryEntryCommand : IRequest<AddLibraryEntryCommandDto>
     {
         public int BookId { get; set; }
-        public int LibraryId { get; set; }
         public int Quantity { get; set; }
     }
 
@@ -40,16 +39,18 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
         {
             var response = new AddLibraryEntryCommandDto();
 
-            var library = await _libraryUnitOfWork.LibraryDataLayer.GetLibrary(command.LibraryId);
+            var libraryId = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryIdByUserId(_userService.GetUserId());
 
-            if (library == null)
+            if (libraryId == null)
             {
-                throw new LibraryNotFoundException($"Unable to find library with id of [{command.LibraryId}]");
-            }
+                var library = new Domain.Library()
+                {
+                    UserId = _userService.GetUserId(),
+                };
 
-            if (library.UserId != _userService.GetUserId())
-            {
-                throw new UserCannotModifyLibraryException($"User does not have permission to modify library with id of [{command.LibraryId}]");
+                await _libraryUnitOfWork.LibraryDataLayer.AddLibrary(library);
+                await _libraryUnitOfWork.Save();
+                libraryId = library.LibraryId;
             }
 
             var book = await _bookUnitOfWork.BookDataLayer.GetBook(command.BookId);
@@ -59,14 +60,14 @@ namespace ApollosLibrary.Application.Library.Commands.AddLibraryEntryCommand
                 throw new BookNotFoundException($"Unable to find book with id of [{command.BookId}]");
             }
 
-            var existingEntry = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntry(library.LibraryId, book.BookId);
+            var existingEntry = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntry(libraryId.Value, book.BookId);
 
             if (existingEntry == null)
             {
                 var entry = new LibraryEntry()
                 {
                     BookId = command.BookId,
-                    LibraryId = command.LibraryId,
+                    LibraryId = libraryId.Value,
                     Quantity = command.Quantity,
                 };
 

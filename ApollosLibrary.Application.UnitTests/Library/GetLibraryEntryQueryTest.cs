@@ -23,12 +23,10 @@ namespace ApollosLibrary.Application.UnitTests.Library
     public class GetLibraryEntryQueryTest : TestBase
     {
         private readonly GetLibraryEntryQueryValidator _validator;
-        private readonly Faker _faker;
 
         public GetLibraryEntryQueryTest(TestFixture fixture) : base(fixture)
         {
             _validator = new GetLibraryEntryQueryValidator();
-            _faker = new Faker();
             _fixture = fixture;
         }
 

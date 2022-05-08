@@ -21,8 +21,8 @@ namespace ApollosLibrary.WebApi.Controllers
     [ServiceFilter(typeof(ApiExceptionFilterAttribute))]
     public class BaseApiController : ControllerBase
     {
-        protected static Logger s_logger = LogManager.GetCurrentClassLogger();
-        private IConfiguration _config;
+        protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly IConfiguration _config;
 
         public BaseApiController(IConfiguration config)
         {
@@ -42,7 +42,7 @@ namespace ApollosLibrary.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                s_logger.Error(ex, "Unable to determine a users role");
+                _logger.Error(ex, "Unable to determine a users role");
             }
 
             return result;

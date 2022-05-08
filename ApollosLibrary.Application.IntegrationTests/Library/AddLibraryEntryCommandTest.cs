@@ -76,7 +76,6 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
 
             var addLibraryEntryCommand = new AddLibraryEntryCommand()
             {
-                LibraryId = createResult.LibraryId,
                 Quantity = 1,
                 BookId = createBookResult.BookId,
             };
@@ -135,7 +134,6 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
 
             var addLibraryEntryCommand = new AddLibraryEntryCommand()
             {
-                LibraryId = createResult.LibraryId,
                 Quantity = 1,
                 BookId = createBookResult.BookId,
             };
@@ -160,7 +158,6 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
             var update = new AddLibraryEntryCommand()
             {
                 BookId = createBookResult.BookId,
-                LibraryId = createResult.LibraryId,
                 Quantity = 10,
             };
 
@@ -174,13 +171,13 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
             entry.Should().NotBeNull();
             entry.Should().BeEquivalentTo(new Domain.LibraryEntry()
             {
-                LibraryId = update.LibraryId,
                 BookId = update.BookId,
                 Quantity = update.Quantity,
             },
             opt => opt.Excluding(f => f.EntryId)
                       .Excluding(f => f.Book)
-                      .Excluding(f => f.Library));
+                      .Excluding(f => f.Library)
+                      .Excluding(f => f.LibraryId));
         }
     }
 }
