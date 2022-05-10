@@ -13,7 +13,7 @@ namespace ApollosLibrary.Application.Library.Commands.UpdateLibraryEntryCommand
 {
     public class UpdateLibraryEntryCommand : IRequest<UpdateLibraryEntryCommandDto>
     {
-        public int LibraryEntryId { get; set; }
+        public int EntryId { get; set; }
         public int Quantity { get; set; }
     }
 
@@ -32,11 +32,11 @@ namespace ApollosLibrary.Application.Library.Commands.UpdateLibraryEntryCommand
         {
             var response = new UpdateLibraryEntryCommandDto();
 
-            var entry = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntry(command.LibraryEntryId);
+            var entry = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntry(command.EntryId);
 
             if (entry == null)
             {
-                throw new LibraryEntryNotFoundException($"Unable to find library entry with id [{command.LibraryEntryId}]");
+                throw new LibraryEntryNotFoundException($"Unable to find library entry with id [{command.EntryId}]");
             }
 
             if (entry.Library.UserId != _userService.GetUserId())

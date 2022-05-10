@@ -100,7 +100,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
 
             var command = new UpdateLibraryEntryCommand()
             {
-                LibraryEntryId = addEntryResult.LibraryEntryId,
+                EntryId = addEntryResult.LibraryEntryId,
                 Quantity = 10,
             };
 

@@ -38,7 +38,7 @@ namespace ApollosLibrary.Application.UnitTests.Library
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(f => f.LibraryEntryId);
+            result.ShouldHaveValidationErrorFor(f => f.EntryId);
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace ApollosLibrary.Application.UnitTests.Library
         {
             var command = new UpdateLibraryEntryCommand()
             {
-                LibraryEntryId = _faker.Random.Int(1),
+                EntryId = _faker.Random.Int(1),
             };
 
             var result = _validator.TestValidate(command);
@@ -61,7 +61,7 @@ namespace ApollosLibrary.Application.UnitTests.Library
             var userId = Guid.NewGuid();
             var command = new UpdateLibraryEntryCommand()
             {
-                LibraryEntryId = 1,
+                EntryId = 1,
                 Quantity = 1,
             };
 
@@ -101,7 +101,7 @@ namespace ApollosLibrary.Application.UnitTests.Library
             var userId = Guid.NewGuid();
             var command = new UpdateLibraryEntryCommand()
             {
-                LibraryEntryId = 1,
+                EntryId = 1,
                 Quantity = 1,
             };
 

@@ -11,7 +11,7 @@ namespace ApollosLibrary.Application.Library.Commands.UpdateLibraryEntryCommand
     {
         public UpdateLibraryEntryCommandValidator()
         {
-            RuleFor(c => c.LibraryEntryId).GreaterThan(0);
+            RuleFor(c => c.EntryId).GreaterThan(0);
             RuleFor(c => c.Quantity).GreaterThan(0);
         }
     }
