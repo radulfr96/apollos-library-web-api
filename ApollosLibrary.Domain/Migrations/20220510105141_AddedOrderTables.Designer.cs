@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220510105141_AddedOrderTables")]
+    partial class AddedOrderTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1633,57 +1635,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("LibraryEntries");
                 });
 
-            modelBuilder.Entity("ApollosLibrary.Domain.Model.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
-
-                    b.Property<int>("BusinessId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex("BusinessId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.Model.OrderItem", b =>
-                {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderItemId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItems");
-                });
-
             modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
                 {
                     b.Property<Guid>("SubscriptionId")
@@ -1708,9 +1659,9 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("5c789bdf-7e5c-4f85-8852-39794c678605"),
-                            ExpiryDate = new DateTime(2102, 5, 10, 21, 7, 52, 404, DateTimeKind.Local).AddTicks(9909),
-                            JoinDate = new DateTime(2022, 5, 10, 21, 7, 52, 404, DateTimeKind.Local).AddTicks(9940),
+                            SubscriptionId = new Guid("cf376d85-4155-49f0-91a1-81de73021ba6"),
+                            ExpiryDate = new DateTime(2102, 5, 10, 20, 51, 41, 347, DateTimeKind.Local).AddTicks(4939),
+                            JoinDate = new DateTime(2022, 5, 10, 20, 51, 41, 347, DateTimeKind.Local).AddTicks(4974),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -1959,28 +1910,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Library");
                 });
 
-            modelBuilder.Entity("ApollosLibrary.Domain.Model.Order", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.Business", "Business")
-                        .WithMany()
-                        .HasForeignKey("BusinessId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Business");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.Model.OrderItem", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.Model.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.Model.SubscriptionType", "SubscriptionType")
@@ -2051,11 +1980,6 @@ namespace ApollosLibrary.Domain.Migrations
             modelBuilder.Entity("ApollosLibrary.Domain.Library", b =>
                 {
                     b.Navigation("LibraryEntries");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.Model.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

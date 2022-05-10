@@ -10,12 +10,16 @@ namespace ApollosLibrary.Domain.Model
 {
     #nullable disable
 
-    public class SubscriptionType
+    public class OrderItem
     {
         [Key]
-        public int SubscriptionTypeId { get; set; }
-        public string SubscriptionName { get; set; }
+        public int OrderItemId { get; set; }
+        public int BookId { get; set; }
+        public int Quantity { get; set; }
         [Column(TypeName = "decimal(10,2)")]
-        public decimal MonthlyRate { get; set; }
+        public decimal Price { get; set; }
+
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
     }
 }
