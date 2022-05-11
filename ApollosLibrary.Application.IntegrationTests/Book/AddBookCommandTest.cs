@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -55,8 +56,9 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _contextAccessor.HttpContext = httpContext;
 
-            var Business = BusinessGenerator.GetGenericBusiness("AU", userID);
-            _context.Business.Add(Business);
+            var business = BusinessGenerator.GetGenericBusiness("AU", userID);
+            business.BusinessTypeId = (int)BusinessTypeEnum.Publisher;
+            _context.Business.Add(business);
 
             var author1 = AuthorGenerator.GetGenericAuthor(userID, "GB");
             _context.Authors.Add(author1);
@@ -89,7 +91,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 PublicationFormatId = bookGenerated.PublicationFormatId,
                 Subtitle = bookGenerated.Subtitle,
                 Title = bookGenerated.Title,
-                BusinessId = Business.BusinessId,
+                BusinessId = business.BusinessId,
                 Genres = new List<int>()
                 {
                     genre1.GenreId,

@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.3.6" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageReference Include="FluentValidation" Version="11.0.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.0.1" />
     <PackageReference Include="MediatR" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.2" />
-    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.5" />
+    <PackageReference Include="NLog" Version="4.7.15" />
   </ItemGroup>
 
   <ItemGroup>

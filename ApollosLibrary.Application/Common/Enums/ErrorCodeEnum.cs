@@ -11,9 +11,11 @@ namespace ApollosLibrary.Application.Common.Enums
         SystemError = 0,
 
         // Validation Errors
-        CountryInvalidValue = 10,
-        ISBNAlreadyAdded = 13,
-        WebsiteInvalidLength = 28,
+        CountryInvalidValue = 1,
+        ISBNAlreadyAdded = 2,
+        WebsiteInvalidLength = 3,
+        BusinessIsNotABookshop = 4,
+        BusinessIsNotAPublisher = 5,
 
         // Not Found Errors
         AuthorNotFound = 100,

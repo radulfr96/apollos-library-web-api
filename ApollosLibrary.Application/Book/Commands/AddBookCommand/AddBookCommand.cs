@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
 {
@@ -32,7 +33,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
     {
         private readonly IBookUnitOfWork _bookUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
-        private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
+        private readonly IBusinessUnitOfWork _businessUnitOfWork;
         private readonly IAuthorUnitOfWork _authorUnitOfWork;
         private readonly IGenreUnitOfWork _genreUnitOfWork;
         private readonly IUserService _userService;
@@ -42,7 +43,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         public AddBookCommandHandler(
             IBookUnitOfWork bookUnitOfWork
             , IReferenceUnitOfWork referenceUnitOfWork
-            , IBusinessUnitOfWork BusinessUnitOfWork
+            , IBusinessUnitOfWork businessUnitOfWork
             , IAuthorUnitOfWork authorUnitOfWork
             , IGenreUnitOfWork genreUnitOfWork
             , IUserService userService
@@ -53,7 +54,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
             _userService = userService;
             _dateTimeService = dateTimeService;
             _referenceUnitOfWork = referenceUnitOfWork;
-            _BusinessUnitOfWork = BusinessUnitOfWork;
+            _businessUnitOfWork = businessUnitOfWork;
             _authorUnitOfWork = authorUnitOfWork;
             _genreUnitOfWork = genreUnitOfWork;
             _seriesUnitOfWork = seriesUnitOfWork;
@@ -104,15 +105,19 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 throw new FormTypeNotFoundException($"Unable to find form type with id [{command.FormTypeId}]");
             }
 
-            Domain.Business Business;
+            Domain.Business business;
 
             if (command.BusinessId.HasValue)
             {
-                Business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId.Value);
+                business = await _businessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId.Value);
 
-                if (Business == null)
+                if (business == null)
                 {
                     throw new BusinessNotFoundException($"Unable to find Business with id [{command.BusinessId}]");
+                }
+                else if (business.BusinessTypeId != (int)BusinessTypeEnum.Publisher)
+                {
+                    throw new BusinessIsNotPublisherException($"Business with id of [{command.BusinessId}] is not a publisher");
                 }
             }
 
