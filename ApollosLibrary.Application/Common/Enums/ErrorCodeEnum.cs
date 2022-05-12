@@ -30,8 +30,10 @@ namespace ApollosLibrary.Application.Common.Enums
         BusinessTypeNotFound = 109,
         LibraryNotFound = 110,
         LibraryEntryNotFound = 111,
+        OrderNotFound = 112,
 
         // User Forbidden Exception
         UserCannotModifyLibrary = 200,
+        UserCannotModifyOrder = 201,
     }
 }

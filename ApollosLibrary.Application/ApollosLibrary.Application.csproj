@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Order\Commands\DeleteOrderCommand\" />
-    <Folder Include="Order\Commands\UpdateOrderCommand\" />
     <Folder Include="Order\Queries\GetOrderQuery\" />
     <Folder Include="Order\Queries\GetOrdersQuery\" />
   </ItemGroup>

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Common.Exceptions
 {
-    public class BusinessIsNotBookshopException : BadRequestException
+    public class OrderNotFoundException : NotFoundException
     {
-        public BusinessIsNotBookshopException(string message = null) : base(ErrorCodeEnum.BusinessIsNotABookshop, message)
+        public OrderNotFoundException(string message) : base(ErrorCodeEnum.OrderNotFound, message)
         {
         }
     }

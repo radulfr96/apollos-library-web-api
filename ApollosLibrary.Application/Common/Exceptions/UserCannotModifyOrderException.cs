@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Common.Exceptions
 {
-    public class BusinessIsNotBookshopException : BadRequestException
+    public class UserCannotModifyOrderException : ForbiddenException
     {
-        public BusinessIsNotBookshopException(string message = null) : base(ErrorCodeEnum.BusinessIsNotABookshop, message)
+        public UserCannotModifyOrderException(string message) : base(ErrorCodeEnum.UserCannotModifyOrder, message)
         {
         }
     }

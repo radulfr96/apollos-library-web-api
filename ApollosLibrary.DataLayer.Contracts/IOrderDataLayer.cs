@@ -37,5 +37,11 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <param name="id">The id of the order to be deleted</param>
         Task DeleteOrder(int id);
+
+        /// <summary>
+        /// Used to delete an orders items
+        /// </summary>
+        /// <param name="orderId">Id of the order to remove items from</param>
+        Task DeleteOrderItems(int orderId);
     }
 }

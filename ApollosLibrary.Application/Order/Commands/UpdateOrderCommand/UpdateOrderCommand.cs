@@ -10,10 +10,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
+namespace ApollosLibrary.Application.Order.Commands.UpdateOrderCommand
 {
-    public class AddOrderCommand : IRequest<AddOrderCommandDto>
+    public class UpdateOrderCommand : IRequest<UpdateOrderCommandDto>
     {
+        public int OrderId { get; set; }
         public int BusinessId { get; set; }
         public DateTime OrderDate { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
@@ -26,14 +27,14 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
         }
     }
 
-    public class AddOrderCommandHandler : IRequestHandler<AddOrderCommand, AddOrderCommandDto>
+    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, UpdateOrderCommandDto>
     {
         private readonly IOrderUnitOfWork _orderUnitOfWork;
         private readonly IBookUnitOfWork _bookUnitOfWork;
         private readonly IBusinessUnitOfWork _businessUnitOfWork;
         private readonly IUserService _userService;
 
-        public AddOrderCommandHandler(
+        public UpdateOrderCommandHandler(
             IOrderUnitOfWork orderUnitOfWork
             , IBookUnitOfWork bookUnitOfWork
             , IBusinessUnitOfWork businessUnitOfWork
@@ -45,8 +46,19 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
             _userService = userService;
         }
 
-        public async Task<AddOrderCommandDto> Handle(AddOrderCommand command, CancellationToken cancellationToken)
+        public async Task<UpdateOrderCommandDto> Handle(UpdateOrderCommand command, CancellationToken cancellationToken)
         {
+            var order = await _orderUnitOfWork.OrderDataLayer.GetOrder(command.OrderId);
+
+            if (order == null)
+            {
+                throw new OrderNotFoundException($"Unable to find order with id of [{command.OrderId}]");
+            }
+            else if (order.UserId != _userService.GetUserId())
+            {
+                throw new UserCannotModifyOrderException($"You do not have permission to modify order with id [{command.OrderId}]");
+            }
+
             var business = await _businessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);
 
             if (business == null)
@@ -68,26 +80,22 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
                 }
             }
 
-            var order = new Domain.Order()
-            {
-                BusinessId = command.BusinessId,
-                OrderDate = command.OrderDate,
-                UserId = _userService.GetUserId(),
-                OrderItems = command.OrderItems.Select(i => new Domain.OrderItem()
-                {
-                    BookId = i.BookId,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                }).ToList(),
-            };
+            order.OrderDate = command.OrderDate;
+            order.BusinessId = command.BusinessId;
+            order.OrderDate = command.OrderDate;
 
-            await _orderUnitOfWork.OrderDataLayer.AddOrder(order);
+            await _orderUnitOfWork.OrderDataLayer.DeleteOrderItems(command.OrderId);
+
+            order.OrderItems = command.OrderItems.Select(o => new Domain.OrderItem()
+            {
+                BookId = o.BookId,
+                Price = o.Price,
+                Quantity = o.Quantity,
+            }).ToList();
+
             await _orderUnitOfWork.Save();
 
-            return new AddOrderCommandDto()
-            {
-                OrderId = order.OrderId,
-            };
+            return new UpdateOrderCommandDto();
         }
     }
 }

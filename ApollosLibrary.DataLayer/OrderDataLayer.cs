@@ -40,5 +40,13 @@ namespace ApollosLibrary.DataLayer
         {
             return await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
         }
+
+        public async Task DeleteOrderItems(int orderId)
+        {
+            var order = (await _context.Orders.Include(b => b.OrderItems).FirstOrDefaultAsync(b => b.OrderId == orderId));
+
+            if (order != null)
+                order.OrderItems = new ();
+        }
     }
 }
