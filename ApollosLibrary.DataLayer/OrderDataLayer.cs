@@ -33,6 +33,7 @@ namespace ApollosLibrary.DataLayer
         {
             return await _context.Orders
                 .Include(s => s.OrderItems)
+                .ThenInclude(s => s.Book)
                 .FirstOrDefaultAsync(a => a.OrderId == id);
         }
 

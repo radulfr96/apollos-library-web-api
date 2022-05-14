@@ -135,6 +135,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                 BookId = book1.BookId,
                 Price = order.OrderItems[0].Price,
                 Quantity = order.OrderItems[0].Quantity,
+                Title = book1.Title,
             });
 
             result.OrderItems[1].Should().BeEquivalentTo(new OrderItemDTO()
@@ -142,6 +143,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                 BookId = book2.BookId,
                 Price = order.OrderItems[1].Price,
                 Quantity = order.OrderItems[1].Quantity,
+                Title = book2.Title,
             });
         }
     }

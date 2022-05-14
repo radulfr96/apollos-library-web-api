@@ -50,6 +50,7 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrderQuery
                 OrderItems = order.OrderItems.Select(i => new OrderItemDTO()
                 {
                     BookId = i.BookId,
+                    Title = i.Book.Title,
                     Price = i.Price,
                     Quantity = i.Quantity
                 }).ToList(),
