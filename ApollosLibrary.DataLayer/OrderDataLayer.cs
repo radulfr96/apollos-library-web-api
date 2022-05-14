@@ -24,9 +24,9 @@ namespace ApollosLibrary.DataLayer
             await _context.Orders.AddAsync(series);
         }
 
-        public async Task DeleteOrder(int id)
+        public void DeleteOrder(Order order)
         {
-            _context.Orders.Remove(await _context.Orders.FirstOrDefaultAsync(g => g.OrderId == id));
+            _context.Orders.Remove(order);
         }
 
         public async Task<Order> GetOrder(int id)
