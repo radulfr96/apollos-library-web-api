@@ -69,7 +69,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="command">the request with the book information</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPatch("")]
+        [HttpPut("")]
         public async Task<UpdateBookCommandDto> UpdateBook(UpdateBookCommand command)
         {
             return await _mediator.Send(command);

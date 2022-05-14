@@ -66,7 +66,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="command">The information used to update the author</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPatch("")]
+        [HttpPut("")]
         public async Task<UpdateAuthorCommandDto> UpdateGenre([FromBody] UpdateAuthorCommand command)
         {
             return await _mediator.Send(command);

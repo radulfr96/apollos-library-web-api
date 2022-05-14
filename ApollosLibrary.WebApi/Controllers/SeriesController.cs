@@ -62,7 +62,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="request">The information used to update the series</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPatch("")]
+        [HttpPut("")]
         public async Task<UpdateSeriesCommandDto> UpdateGenre([FromBody] UpdateSeriesCommand command)
         {
             return await _mediator.Send(command);

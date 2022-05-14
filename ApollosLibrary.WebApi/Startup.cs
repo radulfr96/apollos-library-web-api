@@ -33,6 +33,7 @@ using ApollosLibrary.UnitOfWork.Contracts;
 using ApollosLibrary.WebApi.Filters;
 using NLog;
 using ApollosLibrary.Domain;
+using System.IO;
 
 namespace ApollosLibrary.WebApi
 {
@@ -69,6 +70,7 @@ namespace ApollosLibrary.WebApi
             services.AddTransient<IReferenceUnitOfWork, ReferenceUnitOfWork>();
             services.AddTransient<ISeriesUnitOfWork, SeriesUnitOfWork>();
             services.AddTransient<ILibraryUnitOfWork, LibraryUnitOfWork>();
+            services.AddTransient<IOrderUnitOfWork, OrderUnitOfWork>();
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
             services.AddScoped<DbContext, ApollosLibraryContext>();
@@ -97,6 +99,8 @@ namespace ApollosLibrary.WebApi
                 {
                     {securityScheme, new string[] { }}
                 });
+                var filePath = Path.Combine(AppContext.BaseDirectory, "ApollosLibrary.xml");
+                c.IncludeXmlComments(filePath);
             });
 
             services.AddControllers();

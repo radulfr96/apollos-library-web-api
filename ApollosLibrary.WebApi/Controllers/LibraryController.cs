@@ -82,7 +82,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="command">The information used to update the entry</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpPatch("")]
+        [HttpPut("")]
         public async Task<UpdateLibraryEntryCommandDto> UpdateLibraryEntry([FromBody] UpdateLibraryEntryCommand command)
         {
             return await _mediator.Send(command);
