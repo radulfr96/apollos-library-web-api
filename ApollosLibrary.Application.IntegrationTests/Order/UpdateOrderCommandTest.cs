@@ -1,6 +1,7 @@
 ﻿using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Application.Order;
 using ApollosLibrary.Application.Order.Commands.AddOrderCommand;
 using ApollosLibrary.Application.Order.Commands.UpdateOrderCommand;
 using ApollosLibrary.Domain;
@@ -99,7 +100,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                 {
                     new OrderItem()
                     {
-                        BookId = book1.BookId,
+                        Book = book1,
                         Price = 10.00m,
                         Quantity = 1,
                     }
@@ -115,9 +116,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                 OrderId = order.OrderId,
                 BusinessId = business2.BusinessId,
                 OrderDate = _dateTimeService.Now.AddDays(2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = book2.BookId,
                         Price = 15.00m,
@@ -147,7 +148,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                 OrderId = command.OrderId,
                 Price = command.OrderItems.First().Price,
                 Quantity = command.OrderItems.First().Quantity,
-            }, opt => opt.Excluding(f => f.OrderItemId).Excluding(f => f.Order));
+            }, opt => opt.Excluding(f => f.OrderItemId).Excluding(f => f.Order).Excluding(f => f.Book));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Application.Order;
 using ApollosLibrary.Application.Order.Commands.AddOrderCommand;
 using ApollosLibrary.Application.Order.Commands.UpdateOrderCommand;
 using ApollosLibrary.DataLayer.Contracts;
@@ -103,9 +104,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 0,
                     }
@@ -126,9 +127,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = -1.00m,
@@ -150,9 +151,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,
@@ -175,9 +176,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,
@@ -240,9 +241,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,
@@ -300,7 +301,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             var mediator = provider.GetRequiredService<IMediator>();
 
             Func<Task> act = () => mediator.Send(command);
-            await act.Should().ThrowAsync<UserCannotModifyOrderException>();
+            await act.Should().ThrowAsync<UserCannotAccessOrderException>();
         }
 
         [Fact]
@@ -313,9 +314,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,
@@ -391,9 +392,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
                 OrderId = 1,
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<UpdateOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new UpdateOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,

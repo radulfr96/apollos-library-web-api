@@ -18,13 +18,6 @@ namespace ApollosLibrary.Application.Order.Commands.UpdateOrderCommand
         public int BusinessId { get; set; }
         public DateTime OrderDate { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
-
-        public class OrderItemDTO
-        {
-            public int BookId { get; set; }
-            public int Quantity { get; set; }
-            public decimal Price { get; set; }
-        }
     }
 
     public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, UpdateOrderCommandDto>
@@ -56,7 +49,7 @@ namespace ApollosLibrary.Application.Order.Commands.UpdateOrderCommand
             }
             else if (order.UserId != _userService.GetUserId())
             {
-                throw new UserCannotModifyOrderException($"You do not have permission to modify order with id [{command.OrderId}]");
+                throw new UserCannotAccessOrderException($"You do not have permission to modify order with id [{command.OrderId}]");
             }
 
             var business = await _businessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);

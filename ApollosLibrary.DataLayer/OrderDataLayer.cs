@@ -38,7 +38,10 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<List<Order>> GetOrders(Guid userId)
         {
-            return await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
+            return await _context.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task DeleteOrderItems(int orderId)

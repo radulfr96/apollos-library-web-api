@@ -20,7 +20,7 @@ namespace ApollosLibrary.Application.Order.Commands.UpdateOrderCommand
             RuleForEach(c => c.OrderItems).SetValidator(new OrderItemValidator());
         }
 
-        public class OrderItemValidator : AbstractValidator<UpdateOrderCommand.OrderItemDTO>
+        public class OrderItemValidator : AbstractValidator<OrderItemDTO>
         {
             public OrderItemValidator()
             {

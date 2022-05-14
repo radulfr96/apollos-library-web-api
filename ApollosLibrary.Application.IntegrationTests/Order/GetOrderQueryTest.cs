@@ -1,12 +1,12 @@
 ﻿using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Order.Commands.DeleteOrderCommand;
+using ApollosLibrary.Application.Order;
+using ApollosLibrary.Application.Order.Queries.GetOrderQuery;
 using ApollosLibrary.Domain;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
@@ -20,14 +20,14 @@ using Xunit;
 namespace ApollosLibrary.Application.IntegrationTests.Order
 {
     [Collection("IntegrationTestCollection")]
-    public class DeleteOrderCommandTest : TestBase
+    public class GetOrderQueryTest : TestBase
     {
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IDateTimeService _dateTimeService;
 
-        public DeleteOrderCommandTest(TestFixture fixture) : base(fixture)
+        public GetOrderQueryTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 
@@ -43,7 +43,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
         }
 
         [Fact]
-        public async Task UpdateOrderCommand()
+        public async Task GetOrderQuery()
         {
             var userID = Guid.NewGuid();
 
@@ -101,7 +101,13 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                         Book = book1,
                         Price = 10.00m,
                         Quantity = 1,
-                    }
+                    },
+                    new OrderItem()
+                    {
+                        Book = book2,
+                        Price = 10.00m,
+                        Quantity = 1,
+                    },
                 },
             };
 
@@ -109,18 +115,34 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
 
             _context.SaveChanges();
 
-            var command = new DeleteOrderCommand()
+            var command = new GetOrderQuery()
             {
                 OrderId = order.OrderId,
             };
 
             var result = await _mediatr.Send(command);
 
-            var orderDeleted = _context.Orders.FirstOrDefault(o => o.OrderId == command.OrderId);
-            orderDeleted.Should().BeNull();
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(new GetOrderQueryDto()
+            {
+                BusinessId = order.BusinessId,
+                OrderDate = order.OrderDate,
+                OrderId = order.OrderId,
+            }, opt => opt.Excluding(f => f.OrderItems));
 
-            var orderItems = _context.OrderItems.Where(o => o.OrderId == command.OrderId);
-            orderItems.Should().BeEmpty();
+            result.OrderItems[0].Should().BeEquivalentTo(new OrderItemDTO()
+            {
+                BookId = book1.BookId,
+                Price = order.OrderItems[0].Price,
+                Quantity = order.OrderItems[0].Quantity,
+            });
+
+            result.OrderItems[1].Should().BeEquivalentTo(new OrderItemDTO()
+            {
+                BookId = book2.BookId,
+                Price = order.OrderItems[1].Price,
+                Quantity = order.OrderItems[1].Quantity,
+            });
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ApollosLibrary.Application.Order.Commands.DeleteOrderCommand
             }
             else if (order.UserId != _userService.GetUserId())
             {
-                throw new UserCannotModifyOrderException($"User is unauthourized to modify order [{command.OrderId}]");
+                throw new UserCannotAccessOrderException($"User is unauthourized to modify order [{command.OrderId}]");
             }
 
             _orderUnitOfWork.OrderDataLayer.DeleteOrder(order);

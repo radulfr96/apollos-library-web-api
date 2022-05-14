@@ -17,13 +17,6 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
         public int BusinessId { get; set; }
         public DateTime OrderDate { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
-
-        public class OrderItemDTO
-        {
-            public int BookId { get; set; }
-            public int Quantity { get; set; }
-            public decimal Price { get; set; }
-        }
     }
 
     public class AddOrderCommandHandler : IRequestHandler<AddOrderCommand, AddOrderCommandDto>

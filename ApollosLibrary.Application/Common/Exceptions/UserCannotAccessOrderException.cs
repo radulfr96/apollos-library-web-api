@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Common.Exceptions
 {
-    public class UserCannotModifyOrderException : ForbiddenException
+    public class UserCannotAccessOrderException : ForbiddenException
     {
-        public UserCannotModifyOrderException(string message) : base(ErrorCodeEnum.UserCannotModifyOrder, message)
+        public UserCannotAccessOrderException(string message) : base(ErrorCodeEnum.UserCannotAccessOrder, message)
         {
         }
     }

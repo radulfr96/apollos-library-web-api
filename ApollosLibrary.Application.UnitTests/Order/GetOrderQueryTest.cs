@@ -1,6 +1,6 @@
 ﻿using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Order.Commands.DeleteOrderCommand;
+using ApollosLibrary.Application.Order.Queries.GetOrderQuery;
 using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.UnitOfWork.Contracts;
 using FluentAssertions;
@@ -18,29 +18,29 @@ using Xunit;
 namespace ApollosLibrary.Application.UnitTests.Order
 {
     [Collection("UnitTestCollection")]
-    public class DeleteOrderCommandTest : TestBase
+    public class GetOrderQueryTest : TestBase
     {
-        private readonly DeleteOrderCommandValidator _validator;
+        private readonly GetOrderQueryValidator _validator;
         private readonly IDateTimeService _dateTimeService;
 
-        public DeleteOrderCommandTest(TestFixture fixture) : base(fixture)
+        public GetOrderQueryTest(TestFixture fixture) : base(fixture)
         {
             var dateTimeService = new Mock<IDateTimeService>();
             dateTimeService.Setup(s => s.Now).Returns(new DateTime(2022, 05, 11, 21, 32, 00));
             _dateTimeService = dateTimeService.Object;
 
-            _validator = new DeleteOrderCommandValidator();
+            _validator = new GetOrderQueryValidator();
         }
 
         [Fact]
         public void OrderIdInvalidValue()
         {
-            var command = new DeleteOrderCommand()
+            var query = new GetOrderQuery()
             {
                 OrderId = 0,
             };
 
-            var result = _validator.TestValidate(command);
+            var result = _validator.TestValidate(query);
 
             result.IsValid.Should().BeFalse();
             result.ShouldHaveValidationErrorFor(f => f.OrderId);
@@ -49,7 +49,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
         [Fact]
         public async Task OrderIsNotFound()
         {
-            var command = new DeleteOrderCommand()
+            var query = new GetOrderQuery()
             {
                 OrderId = 1,
             };
@@ -74,7 +74,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            Func<Task> act = () => mediator.Send(command);
+            Func<Task> act = () => mediator.Send(query);
             await act.Should().ThrowAsync<OrderNotFoundException>();
         }
 
@@ -83,7 +83,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
         {
             var userId = Guid.NewGuid();
 
-            var command = new DeleteOrderCommand()
+            var command = new GetOrderQuery()
             {
                 OrderId = 1,
             };

@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Order\Queries\GetOrderQuery\" />
     <Folder Include="Order\Queries\GetOrdersQuery\" />
   </ItemGroup>
 

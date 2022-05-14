@@ -34,6 +34,6 @@ namespace ApollosLibrary.Application.Common.Enums
 
         // User Forbidden Exception
         UserCannotModifyLibrary = 200,
-        UserCannotModifyOrder = 201,
+        UserCannotAccessOrder = 201,
     }
 }

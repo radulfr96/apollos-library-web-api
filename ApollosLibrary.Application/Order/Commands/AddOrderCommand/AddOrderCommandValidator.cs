@@ -20,7 +20,7 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
         }
     }
 
-    public class OrderItemValidator : AbstractValidator<AddOrderCommand.OrderItemDTO>
+    public class OrderItemValidator : AbstractValidator<OrderItemDTO>
     {
         public OrderItemValidator()
         {

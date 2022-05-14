@@ -1,6 +1,7 @@
 ﻿using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Application.Order;
 using ApollosLibrary.Application.Order.Commands.AddOrderCommand;
 using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.UnitOfWork.Contracts;
@@ -84,9 +85,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<AddOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new AddOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 0,
                     }
@@ -106,9 +107,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<AddOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new AddOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = -1.00m,
@@ -129,9 +130,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<AddOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new AddOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,
@@ -153,9 +154,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<AddOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new AddOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,
@@ -220,9 +221,9 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 BusinessId = 1,
                 OrderDate = _dateTimeService.Now.AddDays(-2),
-                OrderItems = new List<AddOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new AddOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = 1,
                         Price = 15.00m,

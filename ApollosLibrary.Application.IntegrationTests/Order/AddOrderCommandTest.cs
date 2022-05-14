@@ -1,6 +1,7 @@
 ﻿using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Application.Order;
 using ApollosLibrary.Application.Order.Commands.AddOrderCommand;
 using ApollosLibrary.Domain;
 using FluentAssertions;
@@ -89,9 +90,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             {
                 BusinessId = business.BusinessId,
                 OrderDate = _dateTimeService.Now,
-                OrderItems = new List<AddOrderCommand.OrderItemDTO>()
+                OrderItems = new List<OrderItemDTO>()
                 {
-                    new AddOrderCommand.OrderItemDTO()
+                    new OrderItemDTO()
                     {
                         BookId = book.BookId,
                         Price = 10.00m,
@@ -121,7 +122,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                 OrderId = result.OrderId,
                 Price = order.OrderItems.First().Price,
                 Quantity = order.OrderItems.First().Quantity,
-            }, opt => opt.Excluding(f => f.OrderItemId).Excluding(f => f.Order));
+            }, opt => opt.Excluding(f => f.OrderItemId).Excluding(f => f.Order).Excluding(f => f.Book));
         }
     }
 }
