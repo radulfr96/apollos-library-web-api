@@ -16,7 +16,9 @@ using ApollosLibrary.Application.Author.Queries.GetAuthorsQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
-
+    /// <summary>
+    /// Used to manage author records
+    /// </summary>
     [Route("api/[controller]")]
     public class AuthorController : BaseApiController
     {
@@ -62,7 +64,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to update a author
         /// </summary>
-        /// <param name="request">The information used to update the author</param>
+        /// <param name="command">The information used to update the author</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
         public async Task<UpdateAuthorCommandDto> UpdateGenre([FromBody] UpdateAuthorCommand command)

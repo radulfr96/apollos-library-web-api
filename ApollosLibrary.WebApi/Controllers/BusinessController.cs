@@ -16,6 +16,9 @@ using ApollosLibrary.Application.Business.Queries.GetBusinesssQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
+    /// <summary>
+    /// Used to manage business entries
+    /// </summary>
     [Route("api/[controller]")]
     public class BusinessController : BaseApiController
     {
@@ -29,7 +32,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to add a new Business
         /// </summary>
-        /// <param name="request">The request with the Business information</param>
+        /// <param name="command">The request with the Business information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPost("")]
         public async Task<AddBusinessCommandDto> AddBusiness([FromBody] AddBusinessCommand command)
@@ -61,7 +64,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to update a Business
         /// </summary>
-        /// <param name="request">The information used to update the Business</param>
+        /// <param name="command">The information used to update the Business</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
         public async Task<UpdateBusinessCommandDto> UpdateGenre([FromBody] UpdateBusinessCommand command)

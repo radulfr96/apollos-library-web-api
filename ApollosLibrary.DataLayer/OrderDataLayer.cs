@@ -40,6 +40,7 @@ namespace ApollosLibrary.DataLayer
         public async Task<List<Order>> GetOrders(Guid userId)
         {
             return await _context.Orders
+                .Include(o => o.Business)
                 .Include(o => o.OrderItems)
                 .Where(o => o.UserId == userId)
                 .ToListAsync();

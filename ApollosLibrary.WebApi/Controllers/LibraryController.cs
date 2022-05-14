@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
+    /// <summary>
+    /// Used to manage a users library
+    /// </summary>
     [Route("api/[controller]")]
     public class LibraryController : BaseApiController
     {
@@ -77,7 +80,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to update a library entry
         /// </summary>
-        /// <param name="request">The information used to update the entry</param>
+        /// <param name="command">The information used to update the entry</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
         public async Task<UpdateLibraryEntryCommandDto> UpdateLibraryEntry([FromBody] UpdateLibraryEntryCommand command)

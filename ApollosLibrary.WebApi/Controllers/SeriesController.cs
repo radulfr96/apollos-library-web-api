@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
+    /// <summary>
+    /// Used to manage the series entries in the system
+    /// </summary>
     [Route("api/[controller]")]
     public class SeriesController : BaseApiController
     {

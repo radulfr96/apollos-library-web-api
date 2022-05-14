@@ -32,7 +32,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to add a new genre
         /// </summary>
-        /// <param name="request">The request with the genre information</param>
+        /// <param name="command">The request with the genre information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPost("")]
         public async Task<AddGenreCommandDto> AddGenre([FromBody] AddGenreCommand command)
@@ -64,7 +64,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to update a genre
         /// </summary>
-        /// <param name="request">The information used to update the genre</param>
+        /// <param name="command">The information used to update the genre</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
         public async Task<UpdateGenreCommandDto> UpdateGenre([FromBody] UpdateGenreCommand command)

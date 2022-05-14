@@ -16,6 +16,9 @@ using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
+    /// <summary>
+    /// Used to manage books in system
+    /// </summary>
     [Route("api/[controller]")]
     public class BookController : BaseApiController
     {
@@ -29,7 +32,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to add a book
         /// </summary>
-        /// <param name="request">the request with the book information</param>
+        /// <param name="command">the request with the book information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPost("")]
         public async Task<AddBookCommandDto> AddBook([FromBody] AddBookCommand command)
@@ -64,7 +67,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to update a book
         /// </summary>
-        /// <param name="request">the request with the book information</param>
+        /// <param name="command">the request with the book information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPatch("")]
         public async Task<UpdateBookCommandDto> UpdateBook(UpdateBookCommand command)
@@ -75,7 +78,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to delete a book
         /// </summary>
-        /// <param name="request">the book id</param>
+        /// <param name="bookId">the book id</param>
         /// <returns>Response that indicates the result</returns>
         [HttpDelete("{bookId}")]
         public async Task<DeleteBookCommandDto> UpdateBook([FromRoute]int bookId)

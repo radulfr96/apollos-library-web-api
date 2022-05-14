@@ -17,8 +17,4 @@
     <ProjectReference Include="..\ApollosLibrary.UnitOfWork\ApollosLibrary.UnitOfWork.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Order\Queries\GetOrdersQuery\" />
-  </ItemGroup>
-
 </Project>
