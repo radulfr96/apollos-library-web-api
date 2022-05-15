@@ -8,10 +8,10 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrdersQuery
 {
     public class GetOrdersQueryDto
     {
-        public List<OrderDTO> Orders = new List<OrderDTO>();
+        public List<OrderListItem> Orders = new List<OrderListItem>();
     }
 
-    public class OrderDTO
+    public class OrderListItem
     {
         public int OrderId { get; set; }
         public string Bookshop { get; set; }

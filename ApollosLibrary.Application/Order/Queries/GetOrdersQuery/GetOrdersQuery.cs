@@ -32,7 +32,7 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrdersQuery
 
             var response = new GetOrdersQueryDto()
             {
-                Orders = orders.Select(o => new OrderDTO()
+                Orders = orders.Select(o => new OrderListItem()
                 {
                     Bookshop = o.Business.Name,
                     NumberOfItems = o.OrderItems.Count(),

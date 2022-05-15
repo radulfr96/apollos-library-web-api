@@ -148,16 +148,16 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             result.Orders.Should().HaveCount(2);
             result.Should().BeEquivalentTo(new GetOrdersQueryDto()
             {
-                Orders = new List<OrderDTO>()
+                Orders = new List<OrderListItem>()
                 {
-                    new OrderDTO()
+                    new OrderListItem()
                     {
                         Bookshop = business1.Name,
                         NumberOfItems = 2,
                         OrderId = order1.OrderId,
                         Total = (order1.OrderItems[0].Quantity * order1.OrderItems[0].Price) + (order1.OrderItems[1].Quantity * order1.OrderItems[1].Price),
                     },
-                    new OrderDTO()
+                    new OrderListItem()
                     {
                         Bookshop = business2.Name,
                         NumberOfItems = 2,
