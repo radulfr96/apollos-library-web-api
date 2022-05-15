@@ -153,6 +153,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                     new OrderListItem()
                     {
                         Bookshop = business1.Name,
+                        OrderDate = _dateTimeService.Now,
                         NumberOfItems = 2,
                         OrderId = order1.OrderId,
                         Total = (order1.OrderItems[0].Quantity * order1.OrderItems[0].Price) + (order1.OrderItems[1].Quantity * order1.OrderItems[1].Price),
@@ -160,6 +161,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                     new OrderListItem()
                     {
                         Bookshop = business2.Name,
+                        OrderDate = _dateTimeService.Now,
                         NumberOfItems = 2,
                         OrderId = order2.OrderId,
                         Total = (order2.OrderItems[0].Quantity * order2.OrderItems[0].Price) + (order2.OrderItems[1].Quantity * order2.OrderItems[1].Price),

@@ -43,7 +43,8 @@ namespace ApollosLibrary.WebApi.Controllers
         [HttpGet("")]
         public async Task<GetOrdersQueryDto> GetOrders()
         {
-            return await _mediator.Send(new GetOrdersQuery());
+            var respomse = await _mediator.Send(new GetOrdersQuery());
+            return respomse;
         }
 
         /// <summary>

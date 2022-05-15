@@ -28,13 +28,12 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrdersQuery
 
         public async Task<GetOrdersQueryDto> Handle(GetOrdersQuery query, CancellationToken cancellationToken)
         {
-            var orders = await _orderUnitOfWork.OrderDataLayer.GetOrders(_userService.GetUserId());
-
             var response = new GetOrdersQueryDto()
             {
-                Orders = orders.Select(o => new OrderListItem()
+                Orders = (await _orderUnitOfWork.OrderDataLayer.GetOrders(_userService.GetUserId())).Select(o => new OrderListItem()
                 {
                     Bookshop = o.Business.Name,
+                    OrderDate = o.OrderDate,
                     NumberOfItems = o.OrderItems.Count(),
                     OrderId = o.OrderId,
                     Total = GetOrderTotal(o.OrderItems),

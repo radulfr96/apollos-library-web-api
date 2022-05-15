@@ -15,6 +15,7 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrdersQuery
     {
         public int OrderId { get; set; }
         public string Bookshop { get; set; }
+        public DateTime OrderDate { get; set; }
         public int NumberOfItems { get; set; }
         public decimal Total { get; set; }
     }
