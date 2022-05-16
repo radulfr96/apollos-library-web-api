@@ -8,7 +8,7 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrdersQuery
 {
     public class GetOrdersQueryDto
     {
-        public List<OrderListItem> Orders = new List<OrderListItem>();
+        public List<OrderListItem> Orders { get; set; } = new List<OrderListItem>();
     }
 
     public class OrderListItem
