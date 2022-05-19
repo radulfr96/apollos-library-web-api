@@ -51,7 +51,9 @@ namespace ApollosLibrary.Application.Order.Queries.GetOrderQuery
                 {
                     BookId = i.BookId,
                     Title = i.Book.Title,
-                    Price = i.Price,
+                    eISBN = i.Book.EIsbn,
+                    ISBN = i.Book.Isbn,
+                    UnitPrice = i.Price,
                     Quantity = i.Quantity
                 }).ToList(),
             };

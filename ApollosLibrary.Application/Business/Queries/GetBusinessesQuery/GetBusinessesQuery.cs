@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.Application.Business.Queries.GetBusinesssQuery
 {
     public class GetBusinesssQuery : IRequest<GetBusinesssQueryDto>
     {
+        public BusinessTypeEnum? BusinessType { get; set; }
     }
 
     public class GetBusinessQueryHandler : IRequestHandler<GetBusinesssQuery, GetBusinesssQueryDto>
@@ -22,7 +24,7 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinesssQuery
             _BusinessUnitOfWork = BusinessUnitOfWork;
         }
 
-        public async Task<GetBusinesssQueryDto> Handle(GetBusinesssQuery request, CancellationToken cancellationToken)
+        public async Task<GetBusinesssQueryDto> Handle(GetBusinesssQuery query, CancellationToken cancellationToken)
         {
             var response = new GetBusinesssQueryDto();
 
@@ -33,13 +35,16 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinesssQuery
                 return response;
             }
 
-            response.Businesses = Businesss.Select(p => new BusinessListItemDTO()
-            {
-                Country = p.Country.Name,
-                Name = p.Name,
-                Type = p.Type.Name,
-                BusinessId = p.BusinessId
-            }).ToList();
+            response.Businesses = Businesss
+                .Where(b => !query.BusinessType.HasValue || (int)query.BusinessType.Value == b.BusinessTypeId)
+                .Select(b => new BusinessListItemDTO()
+                {
+                    Country = b.Country.Name,
+                    Name = b.Name,
+                    Type = b.Type.Name,
+                    BusinessId = b.BusinessId
+                })
+                .ToList();
 
             return response;
         }

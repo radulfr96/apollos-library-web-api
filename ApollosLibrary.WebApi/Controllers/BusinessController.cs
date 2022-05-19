@@ -13,6 +13,7 @@ using ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand;
 using ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand;
 using ApollosLibrary.Application.Business.Queries.GetBusinessQuery;
 using ApollosLibrary.Application.Business.Queries.GetBusinesssQuery;
+using ApollosLibrary.Application.Common.Enums;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -48,6 +49,32 @@ namespace ApollosLibrary.WebApi.Controllers
         public async Task<GetBusinesssQueryDto> GetBusinesss()
         {
             return await _mediator.Send(new GetBusinesssQuery());
+        }
+
+        /// <summary>
+        /// Used to get bookshops
+        /// </summary>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("bookshops")]
+        public async Task<GetBusinesssQueryDto> GetBookshops()
+        {
+            return await _mediator.Send(new GetBusinesssQuery()
+            {
+                BusinessType = BusinessTypeEnum.Bookshop,
+            });
+        }
+
+        /// <summary>
+        /// Used to get publishers
+        /// </summary>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("publishers")]
+        public async Task<GetBusinesssQueryDto> GetPublishers()
+        {
+            return await _mediator.Send(new GetBusinesssQuery()
+            {
+                BusinessType = BusinessTypeEnum.Publisher,
+            });
         }
 
         /// <summary>

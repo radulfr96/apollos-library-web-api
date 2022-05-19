@@ -82,7 +82,7 @@ namespace ApollosLibrary.Application.Order.Commands.UpdateOrderCommand
             order.OrderItems = command.OrderItems.Select(o => new Domain.OrderItem()
             {
                 BookId = o.BookId,
-                Price = o.Price,
+                Price = o.UnitPrice,
                 Quantity = o.Quantity,
             }).ToList();
 

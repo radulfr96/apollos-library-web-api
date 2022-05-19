@@ -121,7 +121,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                     new OrderItemDTO()
                     {
                         BookId = book2.BookId,
-                        Price = 15.00m,
+                        UnitPrice = 15.00m,
                         Quantity = 2,
                     },
                 },
@@ -146,7 +146,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             {
                 BookId = book2.BookId,
                 OrderId = command.OrderId,
-                Price = command.OrderItems.First().Price,
+                Price = command.OrderItems.First().UnitPrice,
                 Quantity = command.OrderItems.First().Quantity,
             }, opt => opt.Excluding(f => f.OrderItemId).Excluding(f => f.Order).Excluding(f => f.Book));
         }

@@ -10,7 +10,9 @@ namespace ApollosLibrary.Application.Order
     {
         public int BookId { get; set; }
         public string Title { get; set; }
+        public string ISBN { get; set; }
+        public string eISBN { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public decimal UnitPrice { get; set; }
     }
 }

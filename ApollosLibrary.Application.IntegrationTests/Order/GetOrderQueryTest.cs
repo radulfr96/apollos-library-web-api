@@ -133,7 +133,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             result.OrderItems[0].Should().BeEquivalentTo(new OrderItemDTO()
             {
                 BookId = book1.BookId,
-                Price = order.OrderItems[0].Price,
+                UnitPrice = order.OrderItems[0].Price,
+                ISBN = book1.Isbn,
+                eISBN = book1.EIsbn,
                 Quantity = order.OrderItems[0].Quantity,
                 Title = book1.Title,
             });
@@ -141,7 +143,9 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             result.OrderItems[1].Should().BeEquivalentTo(new OrderItemDTO()
             {
                 BookId = book2.BookId,
-                Price = order.OrderItems[1].Price,
+                UnitPrice = order.OrderItems[1].Price,
+                ISBN = book2.Isbn,
+                eISBN = book2.EIsbn,
                 Quantity = order.OrderItems[1].Quantity,
                 Title = book2.Title,
             });

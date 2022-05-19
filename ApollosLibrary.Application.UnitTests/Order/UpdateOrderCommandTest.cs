@@ -132,7 +132,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
                     new OrderItemDTO()
                     {
                         BookId = 1,
-                        Price = -1.00m,
+                        UnitPrice = -1.00m,
                     }
                 }
             };
@@ -140,7 +140,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor("OrderItems[0].Price");
+            result.ShouldHaveValidationErrorFor("OrderItems[0].UnitPrice");
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
                     new OrderItemDTO()
                     {
                         BookId = 1,
-                        Price = 15.00m,
+                        UnitPrice = 15.00m,
                         Quantity = 0,
                     }
                 }
@@ -181,7 +181,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
                     new OrderItemDTO()
                     {
                         BookId = 1,
-                        Price = 15.00m,
+                        UnitPrice = 15.00m,
                         Quantity = 1,
                     }
                 }
@@ -246,7 +246,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
                     new OrderItemDTO()
                     {
                         BookId = 1,
-                        Price = 15.00m,
+                        UnitPrice = 15.00m,
                         Quantity = 1,
                     }
                 }
@@ -319,7 +319,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
                     new OrderItemDTO()
                     {
                         BookId = 1,
-                        Price = 15.00m,
+                        UnitPrice = 15.00m,
                         Quantity = 1,
                     }
                 }
@@ -397,7 +397,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
                     new OrderItemDTO()
                     {
                         BookId = 1,
-                        Price = 15.00m,
+                        UnitPrice = 15.00m,
                         Quantity = 1,
                     }
                 }

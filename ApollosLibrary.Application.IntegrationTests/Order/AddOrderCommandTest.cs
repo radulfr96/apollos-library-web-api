@@ -95,7 +95,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
                     new OrderItemDTO()
                     {
                         BookId = book.BookId,
-                        Price = 10.00m,
+                        UnitPrice = 10.00m,
                         Quantity = 1,
                     },
                 },

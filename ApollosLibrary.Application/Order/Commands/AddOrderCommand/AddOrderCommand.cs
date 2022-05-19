@@ -69,7 +69,7 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
                 OrderItems = command.OrderItems.Select(i => new Domain.OrderItem()
                 {
                     BookId = i.BookId,
-                    Price = i.Price,
+                    Price = i.UnitPrice,
                     Quantity = i.Quantity,
                 }).ToList(),
             };

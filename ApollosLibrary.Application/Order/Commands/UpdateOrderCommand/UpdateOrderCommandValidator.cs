@@ -25,7 +25,7 @@ namespace ApollosLibrary.Application.Order.Commands.UpdateOrderCommand
             public OrderItemValidator()
             {
                 RuleFor(i => i.BookId).GreaterThan(0);
-                RuleFor(i => i.Price).GreaterThanOrEqualTo(0.00m);
+                RuleFor(i => i.UnitPrice).GreaterThanOrEqualTo(0.00m);
                 RuleFor(i => i.Quantity).GreaterThan(0);
             }
         }
