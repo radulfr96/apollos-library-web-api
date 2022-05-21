@@ -39,6 +39,13 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<LibraryEntry> GetLibraryEntry(int id);
 
         /// <summary>
+        /// Used to get book ids in a users library by its id
+        /// </summary>
+        /// <param name="id">The id of the library vontaining the books</param>
+        /// <returns>The books in the library</returns>
+        Task<List<Book>> GetLibraryBooks(int libraryId);
+
+        /// <summary>
         /// Used to get a library entry by book id and library id
         /// </summary>
         /// <param name="bookId">The id of the book in the entry</param>

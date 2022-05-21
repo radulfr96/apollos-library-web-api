@@ -27,19 +27,35 @@ namespace ApollosLibrary.Application.Library.Queries.GetLibraryEntriesQuery
 
         public async Task<GetLibraryEntriesQueryDto> Handle(GetLibraryEntriesQuery request, CancellationToken cancellationToken)
         {
+            var userId = _userService.GetUserId();
+            var library = await _libraryUnitOfWork.LibraryDataLayer.GetLibraryIdByUserId(userId);
+
+            if (!library.HasValue)
+            {
+                var newLibrary = new Domain.Library()
+                {
+                    UserId = userId,
+                };
+
+                await _libraryUnitOfWork.LibraryDataLayer.AddLibrary(newLibrary);
+                await _libraryUnitOfWork.Save();
+
+                library = newLibrary.LibraryId;
+            }
+
             var response = new GetLibraryEntriesQueryDto
             {
                 LibraryEntries = (await _libraryUnitOfWork.LibraryDataLayer.GetLibraryEntriesByUserId(_userService.GetUserId()))
-                                    .Select(e => new LibraryEntryListItemDTO()
-                                    {
-                                        EntryId = e.EntryId,
-                                        Title = e.Book.Title,
-                                        Quantity = e.Quantity,
-                                        Author = e.Book.Authors.Count > 1
-                                                ? $"{GetAuthorCredit(e.Book.Authors.First())} et al."
-                                                : $"{GetAuthorCredit(e.Book.Authors.First())}",
+                                .Select(e => new LibraryEntryListItemDTO()
+                                {
+                                    EntryId = e.EntryId,
+                                    Title = e.Book.Title,
+                                    Quantity = e.Quantity,
+                                    Author = e.Book.Authors.Count > 1
+                                            ? $"{GetAuthorCredit(e.Book.Authors.First())} et al."
+                                            : $"{GetAuthorCredit(e.Book.Authors.First())}",
 
-                                    }).ToList()
+                                }).ToList()
             };
 
             return response;

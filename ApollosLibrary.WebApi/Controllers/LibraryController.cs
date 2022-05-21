@@ -68,6 +68,16 @@ namespace ApollosLibrary.WebApi.Controllers
         }
 
         /// <summary>
+        /// Used to get a users library books
+        /// </summary>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("books")]
+        public async Task<GetUserLibraryIdQueryDto> GetLibraryBooks()
+        {
+            return await _mediator.Send(new GetUserLibraryIdQuery());
+        }
+
+        /// <summary>
         /// Used to get a library entry
         /// </summary>
         /// <returns>Response that indicates the result</returns>
