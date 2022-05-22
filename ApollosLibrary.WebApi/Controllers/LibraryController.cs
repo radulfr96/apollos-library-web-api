@@ -2,6 +2,7 @@
 using ApollosLibrary.Application.Library.Commands.CreateLibraryCommand;
 using ApollosLibrary.Application.Library.Commands.DeleteLibraryEntryCommand;
 using ApollosLibrary.Application.Library.Commands.UpdateLibraryEntryCommand;
+using ApollosLibrary.Application.Library.Queries.GetBooksInLibraryQuery;
 using ApollosLibrary.Application.Library.Queries.GetLibraryEntriesQuery;
 using ApollosLibrary.Application.Library.Queries.GetLibraryEntryQuery;
 using ApollosLibrary.Application.Library.Queries.GetUserLibraryIdQuery;
@@ -72,9 +73,9 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <returns>Response that indicates the result</returns>
         [HttpGet("books")]
-        public async Task<GetUserLibraryIdQueryDto> GetLibraryBooks()
+        public async Task<GetBooksLibraryInQueryDto> GetLibraryBooks()
         {
-            return await _mediator.Send(new GetUserLibraryIdQuery());
+            return await _mediator.Send(new GetBooksInLibraryQuery());
         }
 
         /// <summary>

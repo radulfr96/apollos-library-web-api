@@ -50,6 +50,7 @@ namespace ApollosLibrary.DataLayer
         {
             return await _context.LibraryEntries
                 .Include(e => e.Book)
+                .ThenInclude(b => b.Authors)
                 .Where(l => l.LibraryId == libraryId)
                 .Select(l => l.Book)
                 .ToListAsync();
