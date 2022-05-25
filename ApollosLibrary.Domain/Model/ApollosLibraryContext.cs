@@ -210,20 +210,38 @@ namespace ApollosLibrary.Domain
                 new SubscriptionType()
                 {
                     MonthlyRate = 0.00m,
+                    SubscriptionName = "Signed Up",
+                    SubscriptionTypeId = 0,
+                    Purchasable = false,
+                    IsAvailable = true,
+                    MaxUsers = 1,
+                },
+                new SubscriptionType()
+                {
+                    MonthlyRate = 0.00m,
                     SubscriptionName = "Staff Member",
                     SubscriptionTypeId = 1,
+                    Purchasable= false,
+                    IsAvailable = true,
+                    MaxUsers = 1,
                 },
                 new SubscriptionType()
                 {
                     MonthlyRate = 10.00m,
                     SubscriptionName = "Individual Subscription",
                     SubscriptionTypeId = 2,
+                    Purchasable = true,
+                    IsAvailable = true,
+                    MaxUsers = 1,
                 },
                 new SubscriptionType()
                 {
                     MonthlyRate = 30.00m,
                     SubscriptionName = "Family Subscription",
                     SubscriptionTypeId = 3,
+                    Purchasable = true,
+                    IsAvailable = false,
+                    MaxUsers = 5,
                 },
             });
 

@@ -17,5 +17,8 @@ namespace ApollosLibrary.Domain.Model
         public string SubscriptionName { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal MonthlyRate { get; set; }
+        public bool Purchasable { get; set; }
+        public bool IsAvailable { get; set; }
+        public int MaxUsers { get; set; }
     }
 }
