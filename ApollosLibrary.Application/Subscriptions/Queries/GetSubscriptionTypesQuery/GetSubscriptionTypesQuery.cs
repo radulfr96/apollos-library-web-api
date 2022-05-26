@@ -12,6 +12,7 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionTypesQ
 {
     public class GetSubscriptionTypesQuery : IRequest<GetSubsriptionTypesQueryDto>
     {
+        public bool PurchasableOnly {  get; set; }
     }
 
     public class GetSubscriptionTypesQueryHandler : IRequestHandler<GetSubscriptionTypesQuery, GetSubsriptionTypesQueryDto>
@@ -23,9 +24,9 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionTypesQ
             _subscriptionUnitOfWork = subscriptionUnitOfWork;
         }
 
-        public async Task<GetSubsriptionTypesQueryDto> Handle(GetSubscriptionTypesQuery request, CancellationToken cancellationToken)
+        public async Task<GetSubsriptionTypesQueryDto> Handle(GetSubscriptionTypesQuery query, CancellationToken cancellationToken)
         {
-            var types = await _subscriptionUnitOfWork.SubscriptionDataLayer.GetSubscriptionTypes();
+            var types = await _subscriptionUnitOfWork.SubscriptionDataLayer.GetSubscriptionTypes(query.PurchasableOnly);
 
             return new GetSubsriptionTypesQueryDto()
             {

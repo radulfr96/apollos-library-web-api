@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Domain.Model
+namespace ApollosLibrary.Domain
 {
     # nullable disable
     public class Subscription

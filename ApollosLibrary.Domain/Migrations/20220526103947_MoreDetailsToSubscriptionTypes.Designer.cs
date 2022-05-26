@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220526103947_MoreDetailsToSubscriptionTypes")]
+    partial class MoreDetailsToSubscriptionTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1633,6 +1635,124 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("LibraryEntries");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
+                {
+                    b.Property<Guid>("SubscriptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubscriptionId");
+
+                    b.HasIndex("SubscriptionTypeId");
+
+                    b.ToTable("Subscriptions");
+
+                    b.HasData(
+                        new
+                        {
+                            SubscriptionId = new Guid("2b3755e8-0c16-496b-98e0-e626791a7acf"),
+                            ExpiryDate = new DateTime(2102, 5, 26, 20, 39, 47, 85, DateTimeKind.Local).AddTicks(2543),
+                            JoinDate = new DateTime(2022, 5, 26, 20, 39, 47, 85, DateTimeKind.Local).AddTicks(2579),
+                            SubscriptionTypeId = 1
+                        });
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.SubscriptionType", b =>
+                {
+                    b.Property<int>("SubscriptionTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionTypeId"), 1L, 1);
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxUsers")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MonthlyRate")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<bool>("Purchasable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubscriptionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SubscriptionTypeId");
+
+                    b.ToTable("SubscriptionTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            SubscriptionTypeId = -1,
+                            IsAvailable = true,
+                            MaxUsers = 1,
+                            MonthlyRate = 0.00m,
+                            Purchasable = false,
+                            SubscriptionName = "Signed Up"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 1,
+                            IsAvailable = true,
+                            MaxUsers = 1,
+                            MonthlyRate = 0.00m,
+                            Purchasable = false,
+                            SubscriptionName = "Staff Member"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 2,
+                            IsAvailable = true,
+                            MaxUsers = 1,
+                            MonthlyRate = 10.00m,
+                            Purchasable = true,
+                            SubscriptionName = "Individual Subscription"
+                        },
+                        new
+                        {
+                            SubscriptionTypeId = 3,
+                            IsAvailable = false,
+                            MaxUsers = 5,
+                            MonthlyRate = 30.00m,
+                            Purchasable = true,
+                            SubscriptionName = "Family Subscription"
+                        });
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.UserSubscription", b =>
+                {
+                    b.Property<int>("UserSubscrptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSubscrptionId"), 1L, 1);
+
+                    b.Property<Guid>("SubscriptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserSubscrptionId");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("UserSubscriptions");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -1745,129 +1865,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasKey("SeriesId");
 
                     b.ToTable("Series");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
-                {
-                    b.Property<Guid>("SubscriptionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SubscriptionTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SubscriptionId");
-
-                    b.HasIndex("SubscriptionTypeId");
-
-                    b.ToTable("Subscriptions");
-
-                    b.HasData(
-                        new
-                        {
-                            SubscriptionId = new Guid("670e13af-246c-4c8e-a17f-aa25d23bc10b"),
-                            ExpiryDate = new DateTime(2102, 5, 26, 21, 35, 2, 89, DateTimeKind.Local).AddTicks(6342),
-                            JoinDate = new DateTime(2022, 5, 26, 21, 35, 2, 89, DateTimeKind.Local).AddTicks(6410),
-                            SubscriptionTypeId = 1
-                        });
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.SubscriptionType", b =>
-                {
-                    b.Property<int>("SubscriptionTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionTypeId"), 1L, 1);
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MaxUsers")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("MonthlyRate")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<bool>("Purchasable")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("StripePriceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubscriptionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SubscriptionTypeId");
-
-                    b.ToTable("SubscriptionTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            SubscriptionTypeId = -1,
-                            IsAvailable = true,
-                            MaxUsers = 1,
-                            MonthlyRate = 0.00m,
-                            Purchasable = false,
-                            SubscriptionName = "Signed Up"
-                        },
-                        new
-                        {
-                            SubscriptionTypeId = 1,
-                            IsAvailable = true,
-                            MaxUsers = 1,
-                            MonthlyRate = 0.00m,
-                            Purchasable = false,
-                            SubscriptionName = "Staff Member"
-                        },
-                        new
-                        {
-                            SubscriptionTypeId = 2,
-                            IsAvailable = true,
-                            MaxUsers = 1,
-                            MonthlyRate = 10.00m,
-                            Purchasable = true,
-                            StripePriceId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
-                            SubscriptionName = "Individual Subscription"
-                        },
-                        new
-                        {
-                            SubscriptionTypeId = 3,
-                            IsAvailable = false,
-                            MaxUsers = 5,
-                            MonthlyRate = 30.00m,
-                            Purchasable = true,
-                            StripePriceId = "price_1L3euyHSN4IIrwiZvJYhpH2T",
-                            SubscriptionName = "Family Subscription"
-                        });
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.UserSubscription", b =>
-                {
-                    b.Property<int>("UserSubscrptionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSubscrptionId"), 1L, 1);
-
-                    b.Property<Guid>("SubscriptionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserSubscrptionId");
-
-                    b.HasIndex("SubscriptionId");
-
-                    b.ToTable("UserSubscriptions");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
@@ -1993,6 +1990,28 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Library");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.Subscription", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Model.SubscriptionType", "SubscriptionType")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubscriptionType");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Model.UserSubscription", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Model.Subscription", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subscription");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Order", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.Business", "Business")
@@ -2021,28 +2040,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.SubscriptionType", "SubscriptionType")
-                        .WithMany()
-                        .HasForeignKey("SubscriptionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubscriptionType");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.UserSubscription", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.Subscription", "Subscription")
-                        .WithMany()
-                        .HasForeignKey("SubscriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>

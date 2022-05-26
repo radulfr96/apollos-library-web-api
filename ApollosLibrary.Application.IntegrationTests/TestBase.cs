@@ -20,6 +20,7 @@ namespace ApollosLibrary.Application.IntegrationTests
         public void Dispose()
         {
             _fixture.DeleteDatabase();
+            GC.SuppressFinalize(this);
         }
     }
 }

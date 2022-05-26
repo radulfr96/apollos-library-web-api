@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Domain.Model
+namespace ApollosLibrary.Domain
 {
     #nullable disable
 
@@ -17,6 +17,7 @@ namespace ApollosLibrary.Domain.Model
         public string SubscriptionName { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal MonthlyRate { get; set; }
+        public string StripePriceId { get; set; }
         public bool Purchasable { get; set; }
         public bool IsAvailable { get; set; }
         public int MaxUsers { get; set; }

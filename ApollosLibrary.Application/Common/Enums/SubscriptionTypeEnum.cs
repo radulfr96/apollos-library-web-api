@@ -8,7 +8,7 @@ namespace ApollosLibrary.Application.Common.Enums
 {
     public enum SubscriptionTypeEnum
     {
-        SignedUp = 0,
+        SignedUp = -1,
         Staff = 1,
         Individual = 2,
         Family = 3,

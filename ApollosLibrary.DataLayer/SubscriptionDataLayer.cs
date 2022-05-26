@@ -1,6 +1,5 @@
 ﻿using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.Domain;
-using ApollosLibrary.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,9 +18,17 @@ namespace ApollosLibrary.DataLayer
             _context = context;
         }
 
-        public async Task<List<SubscriptionType>> GetSubscriptionTypes()
+        public async Task<List<SubscriptionType>> GetSubscriptionTypes(bool purchasableOnly)
         {
-            return await _context.SubscriptionTypes.ToListAsync();
+            if (purchasableOnly)
+            {
+                return await _context.SubscriptionTypes
+                .Where(t => t.Purchasable)
+                .ToListAsync();
+            }
+
+            return await _context.SubscriptionTypes
+                .ToListAsync();
         }
 
         public async Task<UserSubscription> GetUserSubscription(Guid userId)

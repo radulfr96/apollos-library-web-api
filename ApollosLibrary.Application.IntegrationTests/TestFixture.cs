@@ -87,6 +87,11 @@ namespace ApollosLibrary.Application.IntegrationTests
                 return new OrderUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
+            services.AddTransient<ISubscriptionUnitOfWork>(p =>
+            {
+                return new SubscriptionUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
+            });
+
             services.AddSingleton<IUserService>(p =>
             {
                 return new UserService(p.GetRequiredService<IHttpContextAccessor>());

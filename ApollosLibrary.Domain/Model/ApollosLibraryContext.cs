@@ -1,5 +1,4 @@
-﻿using ApollosLibrary.Domain.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -211,7 +210,7 @@ namespace ApollosLibrary.Domain
                 {
                     MonthlyRate = 0.00m,
                     SubscriptionName = "Signed Up",
-                    SubscriptionTypeId = 0,
+                    SubscriptionTypeId = -1,
                     Purchasable = false,
                     IsAvailable = true,
                     MaxUsers = 1,
@@ -228,6 +227,7 @@ namespace ApollosLibrary.Domain
                 new SubscriptionType()
                 {
                     MonthlyRate = 10.00m,
+                    StripePriceId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
                     SubscriptionName = "Individual Subscription",
                     SubscriptionTypeId = 2,
                     Purchasable = true,
@@ -237,6 +237,7 @@ namespace ApollosLibrary.Domain
                 new SubscriptionType()
                 {
                     MonthlyRate = 30.00m,
+                    StripePriceId = "price_1L3euyHSN4IIrwiZvJYhpH2T",
                     SubscriptionName = "Family Subscription",
                     SubscriptionTypeId = 3,
                     Purchasable = true,

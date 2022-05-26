@@ -1,6 +1,5 @@
 ﻿using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.Domain;
-using ApollosLibrary.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
