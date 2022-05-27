@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220527133706_AddedDescriptionToSubType")]
+    partial class AddedDescriptionToSubType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1771,9 +1773,9 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("c03b4b46-3f09-4bf6-b03c-cc87a89c339b"),
-                            ExpiryDate = new DateTime(2102, 5, 27, 23, 44, 3, 72, DateTimeKind.Local).AddTicks(4158),
-                            JoinDate = new DateTime(2022, 5, 27, 23, 44, 3, 72, DateTimeKind.Local).AddTicks(4196),
+                            SubscriptionId = new Guid("15305563-2441-45c5-b023-0dc7f59d6de7"),
+                            ExpiryDate = new DateTime(2102, 5, 27, 23, 37, 5, 489, DateTimeKind.Local).AddTicks(7020),
+                            JoinDate = new DateTime(2022, 5, 27, 23, 37, 5, 489, DateTimeKind.Local).AddTicks(7090),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -1844,7 +1846,7 @@ namespace ApollosLibrary.Domain.Migrations
                         new
                         {
                             SubscriptionTypeId = 3,
-                            Description = "This subscription is for families keeping track of their own libraries. Each user will have their own library.",
+                            Description = "This subscription is for families keeping track of their own libraries.Each user will have their own library.",
                             IsAvailable = false,
                             MaxUsers = 5,
                             MonthlyRate = 30.00m,

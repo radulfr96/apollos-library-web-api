@@ -21,5 +21,6 @@ namespace ApollosLibrary.Domain
         public bool Purchasable { get; set; }
         public bool IsAvailable { get; set; }
         public int MaxUsers { get; set; }
+        public string Description { get; set; }
     }
 }

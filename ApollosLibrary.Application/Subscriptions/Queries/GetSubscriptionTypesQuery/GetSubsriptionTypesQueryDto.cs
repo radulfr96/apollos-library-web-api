@@ -18,5 +18,7 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionTypesQ
         public string SubscriptionName { get; set; }
         public int MaxUsers { get; set; }
         public decimal Cost { get; set; }
+        public string PriceId { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -36,6 +36,8 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionTypesQ
                     MaxUsers = t.MaxUsers,
                     SubscriptionName = t.SubscriptionName,
                     SubscriptionType = (SubscriptionTypeEnum)t.SubscriptionTypeId,
+                    PriceId = t.StripePriceId,
+                    Description = t.Description,
                 })
                 .ToList(),
             };

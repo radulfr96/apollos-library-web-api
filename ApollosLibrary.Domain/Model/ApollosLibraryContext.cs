@@ -233,6 +233,7 @@ namespace ApollosLibrary.Domain
                     Purchasable = true,
                     IsAvailable = true,
                     MaxUsers = 1,
+                    Description = "This subscription is for individuals keeping track of their own library.",
                 },
                 new SubscriptionType()
                 {
@@ -243,6 +244,7 @@ namespace ApollosLibrary.Domain
                     Purchasable = true,
                     IsAvailable = false,
                     MaxUsers = 5,
+                    Description = "This subscription is for families keeping track of their own libraries. Each user will have their own library.",
                 },
             });
 
