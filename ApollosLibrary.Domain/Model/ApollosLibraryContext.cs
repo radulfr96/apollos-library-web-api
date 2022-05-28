@@ -227,7 +227,7 @@ namespace ApollosLibrary.Domain
                 new SubscriptionType()
                 {
                     MonthlyRate = 10.00m,
-                    StripePriceId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
+                    StripeProductId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
                     SubscriptionName = "Individual Subscription",
                     SubscriptionTypeId = 2,
                     Purchasable = true,
@@ -238,7 +238,7 @@ namespace ApollosLibrary.Domain
                 new SubscriptionType()
                 {
                     MonthlyRate = 30.00m,
-                    StripePriceId = "price_1L3euyHSN4IIrwiZvJYhpH2T",
+                    StripeProductId = "prod_LlBHeWO1QAe9Dx",
                     SubscriptionName = "Family Subscription",
                     SubscriptionTypeId = 3,
                     Purchasable = true,

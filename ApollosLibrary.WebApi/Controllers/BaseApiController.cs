@@ -22,7 +22,7 @@ namespace ApollosLibrary.WebApi.Controllers
     public class BaseApiController : ControllerBase
     {
         protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IConfiguration _config;
+        protected readonly IConfiguration _config;
 
         public BaseApiController(IConfiguration config)
         {

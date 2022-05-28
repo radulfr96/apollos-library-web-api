@@ -61,7 +61,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
                     SubscriptionName = "Individual Subscription",
                     SubscriptionType = SubscriptionTypeEnum.Individual,
                     MaxUsers = 1,
-                    PriceId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
+                    PriceId = "prod_LlBGpg7ytim1dy",
                     Description = "This subscription is for individuals keeping track of their own library.",
                 },
                 new SubscriptionTypeDTO()
@@ -70,7 +70,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
                     SubscriptionName = "Family Subscription",
                     SubscriptionType = SubscriptionTypeEnum.Family,
                     MaxUsers = 5,
-                    PriceId = "price_1L3euyHSN4IIrwiZvJYhpH2T",
+                    PriceId = "prod_LlBHeWO1QAe9Dx",
                     Description = "This subscription is for families keeping track of their own libraries. Each user will have their own library.",
                 },
             });
@@ -94,7 +94,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
                     SubscriptionName = "Individual Subscription",
                     SubscriptionType = SubscriptionTypeEnum.Individual,
                     MaxUsers = 1,
-                    PriceId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
+                    PriceId = "prod_LlBGpg7ytim1dy",
                     Description = "This subscription is for individuals keeping track of their own library.",
                 },
                 new SubscriptionTypeDTO()
@@ -103,7 +103,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
                     SubscriptionName = "Family Subscription",
                     SubscriptionType = SubscriptionTypeEnum.Family,
                     MaxUsers = 5,
-                    PriceId = "price_1L3euyHSN4IIrwiZvJYhpH2T",
+                    PriceId = "prod_LlBHeWO1QAe9Dx",
                     Description = "This subscription is for families keeping track of their own libraries. Each user will have their own library.",
                 },
             });

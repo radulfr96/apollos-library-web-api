@@ -140,10 +140,13 @@ namespace ApollosLibrary.WebApi
 
             app.UseHttpsRedirection();
 
-            app.UseCors(x => x
-                .AllowAnyOrigin()
+            app.UseCors(opt => 
+                opt
+                .SetIsOriginAllowed(x =>_ = true)
+                .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowCredentials()
+            );
 
             app.UseSwagger();
             app.UseSwaggerUI();
