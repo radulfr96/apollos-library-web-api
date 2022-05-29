@@ -23,7 +23,7 @@ namespace ApollosLibrary.WebApi.Controllers
     {
         private readonly IMediator _mediatr;
 
-        public SubscriptionController(IConfiguration configuration, IMediator mediatr) : base (configuration)
+        public SubscriptionController(IConfiguration configuration, IMediator mediatr) : base(configuration)
         {
             _mediatr = mediatr;
             StripeConfiguration.ApiKey = configuration.GetSection("Stripe").GetSection("APIKey").Value;
@@ -43,19 +43,29 @@ namespace ApollosLibrary.WebApi.Controllers
             });
         }
 
+        public class CreateCheckoutRequest
+        {
+            public string ProductId { get; set; }
+        }
+
+        public class CreateCheckoutResponse
+        {
+            public string CheckoutURL { get; set; }
+        }
+
         /// <summary>
         /// Used to start a checkout section for a subscription
         /// </summary>
-        /// <param name="priceId">The price id of the subscription</param>
+        /// <param name="request">Request with the Stripe product id of the subscription</param>
         /// <returns>Result</returns>
-        [HttpPost("create-checkout-session/{priceId}")]
-        public async Task<StatusCodeResult> CreateCheckout([FromRoute] string productId)
+        [HttpPost("create-checkout-session")]
+        public async Task<CreateCheckoutResponse> CreateCheckout([FromBody] CreateCheckoutRequest request)
         {
-            var domain = _config.GetRequiredSection("HostURL").Value;
+            var domain = _config.GetRequiredSection("FrontEndURL").Value;
 
             var priceOptions = new PriceListOptions
             {
-                Product = productId
+                Product = request.ProductId,
             };
             var priceService = new PriceService();
             StripeList<Price> prices = await priceService.ListAsync(priceOptions);
@@ -71,27 +81,38 @@ namespace ApollosLibrary.WebApi.Controllers
                   },
                 },
                 Mode = "subscription",
-                SuccessUrl = domain + "?success=true&session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = domain + "?canceled=true",
+                SuccessUrl = domain + "/subscriptions?success=true&session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = domain + "/subscriptions?canceled=true",
             };
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
+            return new CreateCheckoutResponse()
+            {
+                CheckoutURL = session.Url,
+            };
+        }
 
-            Response.Headers.Add("Location", session.Url);
-            return new StatusCodeResult(303);
+        public class CreatePortalSessionRequest
+        {
+            public string SessionId { get; set; }
+        }
+
+        public class CreatePortalSessionResponse
+        {
+            public string PortalURL { get; set; }
         }
 
         [HttpPost("create-portal-session")]
-        public async Task<StatusCodeResult> CreatePortalSession([FromRoute]string session_id)
+        public async Task<CreatePortalSessionResponse> CreatePortalSession([FromBody] CreatePortalSessionRequest request)
         {
             // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
             // Typically this is stored alongside the authenticated user in your database.
             var checkoutService = new SessionService();
-            var checkoutSession = checkoutService.Get(session_id);
+            var checkoutSession = checkoutService.Get(request.SessionId);
 
             // This is the URL to which your customer will return after
             // they are done managing billing in the Customer Portal.
-            var returnUrl = _config.GetRequiredSection("HostURL").Value;
+            var returnUrl = _config.GetRequiredSection("FrontEndURL").Value;
 
             var options = new Stripe.BillingPortal.SessionCreateOptions
             {
@@ -101,8 +122,10 @@ namespace ApollosLibrary.WebApi.Controllers
             var service = new Stripe.BillingPortal.SessionService();
             var session = service.Create(options);
 
-            Response.Headers.Add("Location", session.Url);
-            return new StatusCodeResult(303);
+            return new CreatePortalSessionResponse()
+            {
+                PortalURL = session.Url,
+            };
         }
 
         [HttpPost("webhook")]
