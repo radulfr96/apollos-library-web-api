@@ -136,7 +136,7 @@ namespace ApollosLibrary.WebApi.Controllers
             // If you are testing with the CLI, find the secret by running 'stripe listen'
             // If you are using an endpoint defined with the API or dashboard, look in your webhook settings
             // at https://dashboard.stripe.com/webhooks
-            const string endpointSecret = "whsec_12345";
+            string endpointSecret = _config.GetSection("Stripe").GetSection("EndpointSecret").Value;
             try
             {
                 var stripeEvent = EventUtility.ParseEvent(json);
