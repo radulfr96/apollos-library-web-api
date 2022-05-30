@@ -16,6 +16,7 @@ namespace ApollosLibrary.Application.Common.Enums
         WebsiteInvalidLength = 3,
         BusinessIsNotABookshop = 4,
         BusinessIsNotAPublisher = 5,
+        StripeSubscriptionMissingUserId = 6,
 
         // Not Found Errors
         AuthorNotFound = 100,
@@ -31,6 +32,8 @@ namespace ApollosLibrary.Application.Common.Enums
         LibraryNotFound = 110,
         LibraryEntryNotFound = 111,
         OrderNotFound = 112,
+        SubscriptionNotFound = 113,
+        SubscriptionTypeNotFound = 114,
 
         // User Forbidden Exception
         UserCannotModifyLibrary = 200,

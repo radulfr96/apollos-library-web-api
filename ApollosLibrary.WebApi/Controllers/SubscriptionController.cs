@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using Microsoft.Build.Framework;
+using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Application.Subscriptions.Commands.StripeSubCreatedCommand;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -18,14 +20,19 @@ namespace ApollosLibrary.WebApi.Controllers
     /// Used to manage a users subscription
     /// </summary>
     [Route("api/[controller]")]
-    [ApiController]
     public class SubscriptionController : BaseApiController
     {
         private readonly IMediator _mediatr;
+        private readonly IUserService _userService;
 
-        public SubscriptionController(IConfiguration configuration, IMediator mediatr) : base(configuration)
+        public SubscriptionController(
+            IConfiguration configuration
+            , IMediator mediatr
+            , IUserService userService
+            ) : base(configuration)
         {
             _mediatr = mediatr;
+            _userService = userService;
             StripeConfiguration.ApiKey = configuration.GetSection("Stripe").GetSection("APIKey").Value;
         }
 
@@ -74,16 +81,22 @@ namespace ApollosLibrary.WebApi.Controllers
             {
                 LineItems = new List<SessionLineItemOptions>
                 {
-                  new SessionLineItemOptions
-                  {
-                    Price = prices.Data[0].Id,
-                    Quantity = 1,
-                  },
+                    new SessionLineItemOptions
+                    {
+                        Price = prices.Data[0].Id,
+                        Quantity = 1,
+                    },
+                },
+                SubscriptionData = new SessionSubscriptionDataOptions()
+                {
+                    Metadata = new Dictionary<string, string>(),
                 },
                 Mode = "subscription",
                 SuccessUrl = domain + "/subscriptions?success=true&session_id={CHECKOUT_SESSION_ID}",
                 CancelUrl = domain + "/subscriptions?canceled=true",
             };
+
+            options.SubscriptionData.Metadata.Add("userId", _userService.GetUserId().ToString());
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
             return new CreateCheckoutResponse()
@@ -128,6 +141,7 @@ namespace ApollosLibrary.WebApi.Controllers
             };
         }
 
+        [AllowAnonymous]
         [HttpPost("webhook")]
         public async Task<IActionResult> StripeWebhook()
         {
@@ -137,6 +151,8 @@ namespace ApollosLibrary.WebApi.Controllers
             // If you are using an endpoint defined with the API or dashboard, look in your webhook settings
             // at https://dashboard.stripe.com/webhooks
             string endpointSecret = _config.GetSection("Stripe").GetSection("EndpointSecret").Value;
+
+            var customerService = new CustomerService();
             try
             {
                 var stripeEvent = EventUtility.ParseEvent(json);
@@ -146,27 +162,29 @@ namespace ApollosLibrary.WebApi.Controllers
                 if (stripeEvent.Type == Events.CustomerSubscriptionDeleted)
                 {
                     var subscription = stripeEvent.Data.Object as Subscription;
+                    subscription.Customer = customerService.Get(subscription.CustomerId);
                     _logger.Warn("A subscription was canceled.", subscription.Id);
                     // Then define and call a method to handle the successful payment intent.
-                    // handleSubscriptionCanceled(subscription);
+                    await _mediatr.Send(new StripeSubUpdateCommand()
+                    {
+                        StripeSubscription = subscription,
+                    });
                 }
                 else if (stripeEvent.Type == Events.CustomerSubscriptionUpdated)
                 {
                     var subscription = stripeEvent.Data.Object as Subscription;
+                    subscription.Customer = customerService.Get(subscription.CustomerId);
                     _logger.Debug("A subscription was updated.", subscription.Id);
                     // Then define and call a method to handle the successful payment intent.
-                    // handleSubscriptionUpdated(subscription);
-                }
-                else if (stripeEvent.Type == Events.CustomerSubscriptionCreated)
-                {
-                    var subscription = stripeEvent.Data.Object as Subscription;
-                    _logger.Debug("A subscription was created.", subscription.Id);
-                    // Then define and call a method to handle the successful payment intent.
-                    // handleSubscriptionUpdated(subscription);
+                    await _mediatr.Send(new StripeSubUpdateCommand()
+                    {
+                        StripeSubscription = subscription,
+                    });
                 }
                 else if (stripeEvent.Type == Events.CustomerSubscriptionTrialWillEnd)
                 {
                     var subscription = stripeEvent.Data.Object as Subscription;
+                    subscription.Customer = customerService.Get(subscription.CustomerId);
                     _logger.Debug("A subscription trial will end", subscription.Id);
                     // Then define and call a method to handle the successful payment intent.
                     // handleSubscriptionUpdated(subscription);
