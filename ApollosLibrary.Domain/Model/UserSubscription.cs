@@ -14,6 +14,7 @@ namespace ApollosLibrary.Domain
         [Key]
         public int UserSubscrptionId { get; set; }
         public Guid UserId { get; set; }
+        public string Email { get; set; }
         public Guid SubscriptionId { get; set; }
         public Subscription Subscription { get; set; }
     }

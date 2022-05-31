@@ -254,7 +254,7 @@ namespace ApollosLibrary.Domain
             {
                 SubscriptionTypeId = 1,
                 ExpiryDate = DateTime.Now.AddYears(80),
-                JoinDate = DateTime.Now,
+                SubscriptionDate = DateTime.Now,
                 SubscriptionId = subscriptionId,
             });
         }

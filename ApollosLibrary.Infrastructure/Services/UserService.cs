@@ -23,5 +23,10 @@ namespace ApollosLibrary.Infrastructure.Services
         {
             return Guid.Parse(_httpContext.User.Claims.FirstOrDefault(c => c.Type == "userid").Value);
         }
+
+        public string GetUserEmail()
+        {
+            return _httpContext.User.Claims.FirstOrDefault(c => c.Type == "username").Value;
+        }
     }
 }

@@ -40,7 +40,6 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get subscriptions that are purchasable by users
         /// </summary>
         /// <returns>The subscriptions</returns>
-        [AllowAnonymous]
         [HttpGet("")]
         public async Task<GetSubsriptionTypesQueryDto> GetPaidSubscriptions()
         {
@@ -48,6 +47,12 @@ namespace ApollosLibrary.WebApi.Controllers
             {
                 PurchasableOnly = true,
             });
+        }
+
+        [HttpGet("subscription")]
+        public async Task<> GetUserSubscription()
+        {
+
         }
 
         public class CreateCheckoutRequest

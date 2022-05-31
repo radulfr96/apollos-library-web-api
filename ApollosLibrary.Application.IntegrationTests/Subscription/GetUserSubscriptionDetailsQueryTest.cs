@@ -64,7 +64,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
                 {
                     SubscriptionTypeId = (int)SubscriptionTypeEnum.Individual,
                     ExpiryDate = _dateTimeService.Now.AddMonths(1),
-                    JoinDate = _dateTimeService.Now,
+                    SubscriptionDate = _dateTimeService.Now,
                 }
             };
 

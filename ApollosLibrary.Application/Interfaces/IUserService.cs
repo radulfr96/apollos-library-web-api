@@ -9,5 +9,7 @@ namespace ApollosLibrary.Application.Interfaces
     public interface IUserService
     {
         Guid GetUserId();
+
+        string GetUserEmail();
     }
 }
