@@ -15,5 +15,7 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<List<SubscriptionType>> GetSubscriptionTypes(bool purchasableOnly);
 
         Task<UserSubscription> GetUserSubscription(Guid userId);
+
+        Task AddUserSubscription(UserSubscription userSubscription);
     }
 }

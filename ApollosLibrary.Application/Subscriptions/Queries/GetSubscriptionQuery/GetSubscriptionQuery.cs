@@ -54,6 +54,9 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
                         SubscriptionUsers = new List<Domain.UserSubscription>(),
                     }
                 };
+
+                await _subscriptionUnitOfWork.SubscriptionDataLayer.AddUserSubscription(subscription);
+                await _subscriptionUnitOfWork.Save();
             }
 
             response.JoinDate = subscription.Subscription.SubscriptionDate;

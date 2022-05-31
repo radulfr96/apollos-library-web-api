@@ -36,7 +36,14 @@ namespace ApollosLibrary.DataLayer
             return await _context.UserSubscriptions
                 .Include(us => us.Subscription)
                 .ThenInclude(s => s.SubscriptionType)
+                .Include(s => s.Subscription)
+                .ThenInclude(s => s.SubscriptionUsers)
                 .FirstOrDefaultAsync(us => us.UserId == userId);
+        }
+
+        public async Task AddUserSubscription(UserSubscription userSubscription)
+        {
+            await _context.AddAsync(userSubscription);
         }
     }
 }
