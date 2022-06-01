@@ -14,8 +14,7 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
         public DateTime JoinDate { get; set; }
         public DateTime? Expiry { get; set; }
         public bool SubscriptionAdmin { get; set; }
-
-        public List<SubscriptionUserDTO> SubscriptionUsers = new List<SubscriptionUserDTO>();
+        public List<SubscriptionUserDTO> SubscriptionUsers { get; set; } = new List<SubscriptionUserDTO>();
     }
 
     public class SubscriptionUserDTO
