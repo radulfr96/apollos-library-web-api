@@ -31,6 +31,12 @@ namespace ApollosLibrary.DataLayer
                 .ToListAsync();
         }
 
+        public async Task<SubscriptionType> GetSubscriptionType(int subscriptionTypeId)
+        {
+            return await _context.SubscriptionTypes
+                .FirstOrDefaultAsync(s => s.SubscriptionTypeId == subscriptionTypeId);
+        }
+
         public async Task<UserSubscription> GetUserSubscription(Guid userId)
         {
             return await _context.UserSubscriptions

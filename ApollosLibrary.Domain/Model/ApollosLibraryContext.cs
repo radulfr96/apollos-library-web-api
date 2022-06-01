@@ -227,7 +227,7 @@ namespace ApollosLibrary.Domain
                 new SubscriptionType()
                 {
                     MonthlyRate = 10.00m,
-                    StripeProductId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
+                    StripeProductId = "prod_LlBGpg7ytim1dy",
                     SubscriptionName = "Individual Subscription",
                     SubscriptionTypeId = 2,
                     Purchasable = true,

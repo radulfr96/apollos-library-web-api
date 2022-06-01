@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
 {
-    public class GetSubscriptionQueryDto
+    public class GetSubscriptionQueryDTO
     {
         public SubscriptionTypeEnum SubscriptionType { get; set; }
         public string SubscriptionName { get; set; }

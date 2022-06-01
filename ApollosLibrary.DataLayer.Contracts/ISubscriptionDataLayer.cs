@@ -16,6 +16,8 @@ namespace ApollosLibrary.DataLayer.Contracts
 
         Task<UserSubscription> GetUserSubscription(Guid userId);
 
+        Task<SubscriptionType> GetSubscriptionType(int subscriptionTypeId);
+
         Task AddUserSubscription(UserSubscription userSubscription);
     }
 }

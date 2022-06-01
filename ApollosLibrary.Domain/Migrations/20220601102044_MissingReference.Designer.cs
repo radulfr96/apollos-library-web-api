@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220601102044_MissingReference")]
+    partial class MissingReference
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1777,10 +1779,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("167841e4-3721-4963-bc22-8eb4a3598074"),
-                            ExpiryDate = new DateTime(2102, 6, 1, 20, 37, 59, 402, DateTimeKind.Local).AddTicks(4172),
+                            SubscriptionId = new Guid("6d8a6039-f74b-436b-8940-2a7d979d9673"),
+                            ExpiryDate = new DateTime(2102, 6, 1, 20, 20, 43, 638, DateTimeKind.Local).AddTicks(2512),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 1, 20, 37, 59, 402, DateTimeKind.Local).AddTicks(4211),
+                            SubscriptionDate = new DateTime(2022, 6, 1, 20, 20, 43, 638, DateTimeKind.Local).AddTicks(2551),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -1845,7 +1847,7 @@ namespace ApollosLibrary.Domain.Migrations
                             MaxUsers = 1,
                             MonthlyRate = 10.00m,
                             Purchasable = true,
-                            StripeProductId = "prod_LlBGpg7ytim1dy",
+                            StripeProductId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
                             SubscriptionName = "Individual Subscription"
                         },
                         new

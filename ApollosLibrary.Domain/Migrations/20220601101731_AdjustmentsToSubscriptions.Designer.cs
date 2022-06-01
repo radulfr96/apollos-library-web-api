@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220601101731_AdjustmentsToSubscriptions")]
+    partial class AdjustmentsToSubscriptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1777,10 +1779,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("167841e4-3721-4963-bc22-8eb4a3598074"),
-                            ExpiryDate = new DateTime(2102, 6, 1, 20, 37, 59, 402, DateTimeKind.Local).AddTicks(4172),
+                            SubscriptionId = new Guid("6c12b1da-8b98-4c71-b1fe-df55a7da957a"),
+                            ExpiryDate = new DateTime(2102, 6, 1, 20, 17, 31, 115, DateTimeKind.Local).AddTicks(2644),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 1, 20, 37, 59, 402, DateTimeKind.Local).AddTicks(4211),
+                            SubscriptionDate = new DateTime(2022, 6, 1, 20, 17, 31, 115, DateTimeKind.Local).AddTicks(2681),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -1845,7 +1847,7 @@ namespace ApollosLibrary.Domain.Migrations
                             MaxUsers = 1,
                             MonthlyRate = 10.00m,
                             Purchasable = true,
-                            StripeProductId = "prod_LlBGpg7ytim1dy",
+                            StripeProductId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
                             SubscriptionName = "Individual Subscription"
                         },
                         new
@@ -2041,7 +2043,7 @@ namespace ApollosLibrary.Domain.Migrations
             modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.SubscriptionType", "SubscriptionType")
-                        .WithMany("Subscriptions")
+                        .WithMany()
                         .HasForeignKey("SubscriptionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2118,11 +2120,6 @@ namespace ApollosLibrary.Domain.Migrations
             modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
                 {
                     b.Navigation("SubscriptionUsers");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.SubscriptionType", b =>
-                {
-                    b.Navigation("Subscriptions");
                 });
 #pragma warning restore 612, 618
         }

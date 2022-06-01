@@ -60,7 +60,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
 
             var response = await _mediatr.Send(new GetSubscriptionQuery());
 
-            response.Should().BeEquivalentTo(new GetSubscriptionQueryDto()
+            response.Should().BeEquivalentTo(new GetSubscriptionQueryDTO()
             {
                 JoinDate = _dateTimeService.Now,
                 SubscriptionAdmin = true,
@@ -113,6 +113,25 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
             };
 
             _context.Subscriptions.Add(subscription);
+            _context.SaveChanges();
+
+            var result = await _mediatr.Send(new GetSubscriptionQuery());
+
+            result.Should().BeEquivalentTo(new GetSubscriptionQueryDTO()
+            {
+                Expiry = subscription.ExpiryDate,
+                JoinDate = subscription.SubscriptionDate,
+                SubscriptionAdmin = true,
+                SubscriptionType = (SubscriptionTypeEnum)subscription.SubscriptionTypeId,
+                SubscriptionUsers = new List<SubscriptionUserDTO>()
+                {
+                    new SubscriptionUserDTO()
+                    {
+                        Email = userSubscriptionOtherUser.Email,
+                        UserId = userSubscriptionOtherUser.UserId,
+                    }
+                }
+            }, opt => opt.Excluding(f => f.SubscriptionName));
         }
     }
 }

@@ -13,6 +13,7 @@ using System;
 using Microsoft.Build.Framework;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Subscriptions.Commands.StripeSubCreatedCommand;
+using ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -50,9 +51,9 @@ namespace ApollosLibrary.WebApi.Controllers
         }
 
         [HttpGet("subscription")]
-        public async Task<> GetUserSubscription()
+        public async Task<GetSubscriptionQueryDTO> GetUserSubscription()
         {
-
+            return await _mediatr.Send(new GetSubscriptionQuery());
         }
 
         public class CreateCheckoutRequest

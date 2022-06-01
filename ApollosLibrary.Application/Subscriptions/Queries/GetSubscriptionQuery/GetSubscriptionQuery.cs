@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
 {
-    public class GetSubscriptionQuery : IRequest<GetSubscriptionQueryDto>
+    public class GetSubscriptionQuery : IRequest<GetSubscriptionQueryDTO>
     {
     }
 
-    public class GetSubscriptionQueryHandler : IRequestHandler<GetSubscriptionQuery, GetSubscriptionQueryDto>
+    public class GetSubscriptionQueryHandler : IRequestHandler<GetSubscriptionQuery, GetSubscriptionQueryDTO>
     {
         private readonly IUserService _userService;
         private readonly ISubscriptionUnitOfWork _subscriptionUnitOfWork;
@@ -31,9 +31,9 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
             _dateTimeService = dateTimeService;
         }
 
-        public async Task<GetSubscriptionQueryDto> Handle(GetSubscriptionQuery request, CancellationToken cancellationToken)
+        public async Task<GetSubscriptionQueryDTO> Handle(GetSubscriptionQuery request, CancellationToken cancellationToken)
         {
-            var response = new GetSubscriptionQueryDto();
+            var response = new GetSubscriptionQueryDTO();
 
             var userId = _userService.GetUserId();
 
@@ -41,6 +41,8 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
 
             if (subscription == null)
             {
+                var subType = await _subscriptionUnitOfWork.SubscriptionDataLayer.GetSubscriptionType((int)SubscriptionTypeEnum.SignedUp);
+
                 subscription = new Domain.UserSubscription()
                 {
                     Email = _userService.GetUserEmail(),
@@ -50,6 +52,7 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
                         SubscriptionAdmin = userId,
                         SubscriptionDate = _dateTimeService.Now,
                         SubscriptionTypeId = (int)SubscriptionTypeEnum.SignedUp,
+                        SubscriptionType = subType,
                         SubscriptionId = Guid.NewGuid(),
                         SubscriptionUsers = new List<Domain.UserSubscription>(),
                     }
