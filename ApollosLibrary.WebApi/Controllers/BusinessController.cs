@@ -14,12 +14,14 @@ using ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand;
 using ApollosLibrary.Application.Business.Queries.GetBusinessQuery;
 using ApollosLibrary.Application.Business.Queries.GetBusinesssQuery;
 using ApollosLibrary.Application.Common.Enums;
+using ApollosLibrary.WebApi.Filters;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
     /// <summary>
     /// Used to manage business entries
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class BusinessController : BaseApiController
     {

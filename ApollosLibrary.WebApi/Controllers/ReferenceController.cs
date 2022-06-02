@@ -12,12 +12,14 @@ using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Infrastructure.Services;
 using ApollosLibrary.UnitOfWork;
 using ApollosLibrary.Domain;
+using ApollosLibrary.WebApi.Filters;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
     /// <summary>
     /// Used to get reference data used by the system
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class ReferenceController : BaseApiController
     {

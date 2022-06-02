@@ -13,12 +13,14 @@ using ApollosLibrary.Application.Book.Commands.UpdateBookCommand;
 using ApollosLibrary.Application.Book.Queries.GetBookQuery;
 using ApollosLibrary.Application.Book.Queries.GetBooksQuery;
 using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
+using ApollosLibrary.WebApi.Filters;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
     /// <summary>
     /// Used to manage books in system
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class BookController : BaseApiController
     {

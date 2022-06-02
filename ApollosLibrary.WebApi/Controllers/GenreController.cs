@@ -19,6 +19,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// <summary>
     /// Controller used as an endpoint for genre functions
     /// </summary>
+    [Authorize(Roles = "administrator")]
     [Route("api/genre")]
     public class GenreController : BaseApiController
     {

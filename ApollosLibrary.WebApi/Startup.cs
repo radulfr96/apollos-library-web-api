@@ -56,6 +56,7 @@ namespace ApollosLibrary.WebApi
             services.AddMediatR(typeof(Startup));
 
             services.AddScoped<ApiExceptionFilterAttribute>();
+            services.AddScoped<SubscriptionFilterAttribute>();
 
             services.AddDbContext<ApollosLibraryContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
 

@@ -3,6 +3,7 @@ using ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand;
 using ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand;
 using ApollosLibrary.Application.Series.Queries.GetMultiSeriesQuery;
 using ApollosLibrary.Application.Series.Queries.GetSeriesQuery;
+using ApollosLibrary.WebApi.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// <summary>
     /// Used to manage the series entries in the system
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class SeriesController : BaseApiController
     {

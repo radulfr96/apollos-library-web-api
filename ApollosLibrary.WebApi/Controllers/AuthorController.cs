@@ -13,12 +13,14 @@ using ApollosLibrary.Application.Author.Commands.DeleteAuthorCommand;
 using ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand;
 using ApollosLibrary.Application.Author.Queries.GetAuthorQuery;
 using ApollosLibrary.Application.Author.Queries.GetAuthorsQuery;
+using ApollosLibrary.WebApi.Filters;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
     /// <summary>
     /// Used to manage author records
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class AuthorController : BaseApiController
     {

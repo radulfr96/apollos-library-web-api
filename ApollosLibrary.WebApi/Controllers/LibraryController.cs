@@ -6,6 +6,7 @@ using ApollosLibrary.Application.Library.Queries.GetBooksInLibraryQuery;
 using ApollosLibrary.Application.Library.Queries.GetLibraryEntriesQuery;
 using ApollosLibrary.Application.Library.Queries.GetLibraryEntryQuery;
 using ApollosLibrary.Application.Library.Queries.GetUserLibraryIdQuery;
+using ApollosLibrary.WebApi.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// <summary>
     /// Used to manage a users library
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class LibraryController : BaseApiController
     {

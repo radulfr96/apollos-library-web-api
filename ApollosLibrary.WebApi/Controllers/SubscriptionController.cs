@@ -176,6 +176,17 @@ namespace ApollosLibrary.WebApi.Controllers
                         StripeSubscription = subscription,
                     });
                 }
+                else if (stripeEvent.Type == Events.CustomerSubscriptionCreated)
+                {
+                    var subscription = stripeEvent.Data.Object as Subscription;
+                    subscription.Customer = customerService.Get(subscription.CustomerId);
+                    _logger.Debug("A subscription was created.", subscription.Id);
+                    // Then define and call a method to handle the successful payment intent.
+                    await _mediatr.Send(new StripeSubUpdateCommand()
+                    {
+                        StripeSubscription = subscription,
+                    });
+                }
                 else if (stripeEvent.Type == Events.CustomerSubscriptionUpdated)
                 {
                     var subscription = stripeEvent.Data.Object as Subscription;

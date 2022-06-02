@@ -3,6 +3,7 @@ using ApollosLibrary.Application.Order.Commands.DeleteOrderCommand;
 using ApollosLibrary.Application.Order.Commands.UpdateOrderCommand;
 using ApollosLibrary.Application.Order.Queries.GetOrderQuery;
 using ApollosLibrary.Application.Order.Queries.GetOrdersQuery;
+using ApollosLibrary.WebApi.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// <summary>
     /// Used to manage a users orders
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class OrderController : BaseApiController
     {
