@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-# nullable disable
-
 namespace ApollosLibrary.Domain
 {
-    public class Series
+    public class SeriesRecord
     {
+        public int SeriesRecordId { get; set; }
+        public bool ReportedVersion { get; set; }
         public int SeriesId { get; set; }
+        public Series Series { get; set; }
         public string Name { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? CreatedBy { get; set; }
-        public ICollection<Book> Books { get; set; }
-        public ICollection<SeriesRecord> SeriesRecords { get; set; }
     }
 }

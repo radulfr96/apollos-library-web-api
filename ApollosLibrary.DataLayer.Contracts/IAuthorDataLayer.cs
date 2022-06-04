@@ -19,6 +19,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task AddAuthor(Author author);
 
         /// <summary>
+        /// Used to add a historical author record
+        /// </summary>
+        /// <param name="record">The author record to be added</param>
+        Task AddAuthorRecord(AuthorRecord record);
+
+        /// <summary>
         /// Used to get a author by its id
         /// </summary>
         /// <param name="id">The id of the author to be found</param>

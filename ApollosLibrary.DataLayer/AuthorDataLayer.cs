@@ -23,6 +23,11 @@ namespace ApollosLibrary.DataLayer
             await _context.Authors.AddAsync(author);
         }
 
+        public async Task AddAuthorRecord(AuthorRecord record)
+        {
+            await _context.AuthorRecords.AddAsync(record);
+        }
+
         public async Task DeleteAuthor(Author author)
         {
             await Task.FromResult(_context.Authors.Remove(author));

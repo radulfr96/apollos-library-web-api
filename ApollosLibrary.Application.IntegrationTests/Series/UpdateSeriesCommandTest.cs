@@ -84,8 +84,6 @@ namespace ApollosLibrary.Application.IntegrationTests
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = command.Name,
-                ModifiedBy = series.ModifiedBy,
-                ModifiedDate = series.ModifiedDate,
             }, opt => opt.Excluding(f => f.Books));
         }
     }

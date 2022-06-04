@@ -123,23 +123,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 }
             }
 
-            book.CoverImage = command.CoverImage;
-            book.CreatedBy = _userService.GetUserId();
-            book.CreatedDate = _dateTimeService.Now;
-            book.Edition = command.Edition;
-            book.EIsbn = command.EISBN;
-            book.FictionTypeId = command.FictionTypeId;
-            book.FormTypeId = command.FormTypeId;
-            book.Isbn = command.ISBN;
-            book.PublicationFormatId = command.PublicationFormatId;
-            book.BusinessId = command.BusinessId;
-            book.Subtitle = command.Subtitle;
-            book.Title = command.Title;
-            book.ModifiedBy = _userService.GetUserId();
-            book.ModifiedDate = _dateTimeService.Now;
-
-            await _bookUnitOfWork.Begin();
-
             await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(command.BookId);
             await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(command.BookId);
             await _bookUnitOfWork.BookDataLayer.DeleteBookSeriesRelationships(command.BookId);
@@ -180,6 +163,43 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
 
                 series.Books.Add(book);
             }
+
+
+            var bookRecord = new Domain.BookRecord()
+            {
+                BookId = command.BookId,
+                BusinessId = book.BusinessId,
+                CoverImage = book.CoverImage,
+                CreatedBy = book.CreatedBy,
+                CreatedDate = book.CreatedDate,
+                Edition = book.Edition,
+                EIsbn = book.EIsbn,
+                FictionTypeId = book.FictionTypeId,
+                FormTypeId = book.FormTypeId,
+                Isbn = book.Isbn,
+                PublicationFormatId = book.PublicationFormatId,
+                Subtitle = book.Subtitle,
+                Title = book.Title,
+            };
+
+            await _bookUnitOfWork.Begin();
+            await _bookUnitOfWork.BookDataLayer.AddBookRecord(bookRecord);
+            await _bookUnitOfWork.Save();
+
+            book.CoverImage = command.CoverImage;
+            book.CreatedBy = _userService.GetUserId();
+            book.CreatedDate = _dateTimeService.Now;
+            book.Edition = command.Edition;
+            book.EIsbn = command.EISBN;
+            book.FictionTypeId = command.FictionTypeId;
+            book.FormTypeId = command.FormTypeId;
+            book.Isbn = command.ISBN;
+            book.PublicationFormatId = command.PublicationFormatId;
+            book.BusinessId = command.BusinessId;
+            book.Subtitle = command.Subtitle;
+            book.Title = command.Title;
+            book.ModifiedBy = _userService.GetUserId();
+            book.ModifiedDate = _dateTimeService.Now;
 
             await _bookUnitOfWork.Save();
             await _bookUnitOfWork.Commit();

@@ -73,8 +73,6 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
             business.CountryId = command.CountryID;
             business.BusinessTypeId = command.BusinessTypeId;
             business.IsDeleted = false;
-            business.ModifiedBy = _userService.GetUserId();
-            business.ModifiedDate = _dateTimeService.Now;
             business.Name = command.Name;
             business.Postcode = command.Postcode;
             business.State = command.State;

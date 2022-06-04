@@ -19,6 +19,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task AddBook(Book book);
 
         /// <summary>
+        /// Used to add a book historical record
+        /// </summary>
+        /// <param name="record">the book record to add</param>
+        Task AddBookRecord(BookRecord record);
+
+        /// <summary>
         /// Used to get a book by its ISBN
         /// </summary>
         /// <param name="isbn">The ISBN of the book to be found</param>

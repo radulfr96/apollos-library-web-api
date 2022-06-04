@@ -20,7 +20,9 @@ namespace ApollosLibrary.Domain
         }
 
         public DbSet<Author> Authors { get; set; }
+        public DbSet<AuthorRecord> AuthorRecords { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<BookRecord> BookRecords { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<ErrorCode> ErrorCodes { get; set; }
         public DbSet<FictionType> FictionTypes { get; set; }
@@ -29,7 +31,9 @@ namespace ApollosLibrary.Domain
         public DbSet<PublicationFormat> PublicationFormats { get; set; }
         public DbSet<BusinessType> BusinessTypes { get; set; }
         public DbSet<Business> Business { get; set; }
+        public DbSet<BusinessRecord> BusinessRecords { get; set; }
         public DbSet<Series> Series { get; set; }
+        public DbSet<SeriesRecord> SeriesRecords { get; set; }
         public DbSet<Library> Libraries { get; set; }
         public DbSet<LibraryEntry> LibraryEntries { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }

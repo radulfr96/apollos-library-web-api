@@ -88,8 +88,6 @@ namespace ApollosLibrary.Application.IntegrationTests
                 CreatedDate = BusinessGenerated.CreatedDate,
                 BusinessTypeId = newBusinessDetails.BusinessTypeId,
                 IsDeleted = false,
-                ModifiedBy = userID,
-                ModifiedDate = _dateTime.Now,
                 Name = newBusinessDetails.Name,
                 Postcode = newBusinessDetails.Postcode,
                 BusinessId = BusinessGenerated.BusinessId,

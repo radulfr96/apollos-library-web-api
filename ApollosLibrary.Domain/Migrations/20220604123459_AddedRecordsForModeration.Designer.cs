@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220604123459_AddedRecordsForModeration")]
+    partial class AddedRecordsForModeration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,58 +53,17 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("AuthorId");
 
                     b.HasIndex("CountryId");
 
                     b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.AuthorRecord", b =>
-                {
-                    b.Property<int>("AuthorRecordId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorRecordId"), 1L, 1);
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MiddleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ReportedVersion")
-                        .HasColumnType("bit");
-
-                    b.HasKey("AuthorRecordId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("AuthorRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Book", b =>
@@ -168,74 +129,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("ApollosLibrary.Domain.BookRecord", b =>
-                {
-                    b.Property<int>("BookRecordId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookRecordId"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BusinessId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CoverImage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EIsbn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Edition")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FictionTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FormTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Isbn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PublicationFormatId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("ReportedVersion")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Subtitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BookRecordId");
-
-                    b.HasIndex("BusinessId");
-
-                    b.HasIndex("FictionTypeId");
-
-                    b.HasIndex("FormTypeId");
-
-                    b.HasIndex("PublicationFormatId");
-
-                    b.ToTable("BookRecords");
-                });
-
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
                 {
                     b.Property<int>("BusinessId")
@@ -262,6 +155,12 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -284,69 +183,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Business");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.BusinessRecord", b =>
-                {
-                    b.Property<int>("BusinessRecordId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusinessRecordId"), 1L, 1);
-
-                    b.Property<int>("BusinessId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BusinessTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Postcode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ReportedVersion")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Website")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BusinessRecordId");
-
-                    b.HasIndex("BusinessTypeId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("BusinessRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.BusinessType", b =>
@@ -1899,41 +1735,18 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SeriesId");
 
                     b.ToTable("Series");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.SeriesRecord", b =>
-                {
-                    b.Property<int>("SeriesRecordId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeriesRecordId"), 1L, 1);
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ReportedVersion")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("SeriesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SeriesRecordId");
-
-                    b.ToTable("SeriesRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
@@ -1969,10 +1782,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("688ab592-2feb-4497-9477-51fc9be8379a"),
-                            ExpiryDate = new DateTime(2102, 6, 4, 22, 48, 23, 235, DateTimeKind.Local).AddTicks(9409),
+                            SubscriptionId = new Guid("d2e55007-b499-4324-acad-70f399591167"),
+                            ExpiryDate = new DateTime(2102, 6, 4, 22, 34, 32, 368, DateTimeKind.Local).AddTicks(9479),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 4, 22, 48, 23, 235, DateTimeKind.Local).AddTicks(9443),
+                            SubscriptionDate = new DateTime(2022, 6, 4, 22, 34, 32, 368, DateTimeKind.Local).AddTicks(9524),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -2131,51 +1944,7 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("ApollosLibrary.Domain.AuthorRecord", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
             modelBuilder.Entity("ApollosLibrary.Domain.Book", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.Business", "Business")
-                        .WithMany()
-                        .HasForeignKey("BusinessId");
-
-                    b.HasOne("ApollosLibrary.Domain.FictionType", "FictionType")
-                        .WithMany()
-                        .HasForeignKey("FictionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApollosLibrary.Domain.FormType", "FormType")
-                        .WithMany()
-                        .HasForeignKey("FormTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApollosLibrary.Domain.PublicationFormat", "PublicationFormat")
-                        .WithMany()
-                        .HasForeignKey("PublicationFormatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Business");
-
-                    b.Navigation("FictionType");
-
-                    b.Navigation("FormType");
-
-                    b.Navigation("PublicationFormat");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.BookRecord", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.Business", "Business")
                         .WithMany()
@@ -2219,25 +1988,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasOne("ApollosLibrary.Domain.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("ApollosLibrary.Domain.BusinessRecord", b =>
-                {
-                    b.HasOne("ApollosLibrary.Domain.BusinessType", "Type")
-                        .WithMany()
-                        .HasForeignKey("BusinessTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApollosLibrary.Domain.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Country");
 

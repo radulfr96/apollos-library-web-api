@@ -54,15 +54,34 @@ namespace ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand
                 throw new CountryInvalidValueException($"Unable to find country with code [{command.CountryID}]");
             }
 
+            await _authorUnitOfWork.Begin();
+
+            var authorRecord = new Domain.AuthorRecord()
+            {
+                AuthorId = command.AuthorId,
+                CountryId = author.CountryId,
+                CreatedBy = author.CreatedBy,
+                CreatedDate = author.CreatedDate,
+                Description = author.Description,
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                MiddleName = author.MiddleName,
+            };
+
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(authorRecord);
+            await _authorUnitOfWork.Save();
+
             author.FirstName = command.Firstname;
             author.MiddleName = command.Middlename;
             author.LastName = command.Lastname;
             author.CountryId = command.CountryID;
             author.Description = command.Description;
-            author.ModifiedBy = _userService.GetUserId();
-            author.ModifiedDate = _dateTimeService.Now;
+            author.CreatedDate = _dateTimeService.Now;
+            author.CreatedBy = _userService.GetUserId();
 
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(authorRecord);
             await _authorUnitOfWork.Save();
+            await _authorUnitOfWork.Commit();
 
             return response;
         }

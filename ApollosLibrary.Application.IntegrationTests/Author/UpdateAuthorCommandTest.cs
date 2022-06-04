@@ -89,8 +89,6 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FirstName = newAuthorDetails.FirstName,
                 LastName = newAuthorDetails.LastName,
                 MiddleName = newAuthorDetails.MiddleName,
-                ModifiedBy = userID,
-                ModifiedDate = _dateTime.Now,
             }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books));
         }
     }

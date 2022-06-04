@@ -46,9 +46,6 @@ namespace ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand
 
             series.Name = command.Name;
 
-            series.ModifiedDate = _dateTimeService.Now;
-            series.ModifiedBy = _userService.GetUserId();
-
             await _seriesUnitOfWork.Save();
 
             return response;

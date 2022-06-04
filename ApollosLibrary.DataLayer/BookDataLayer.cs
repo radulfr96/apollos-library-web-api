@@ -23,6 +23,11 @@ namespace ApollosLibrary.DataLayer
             await _context.Books.AddAsync(book);
         }
 
+        public async Task AddBookRecord(BookRecord record)
+        {
+            await _context.BookRecords.AddAsync(record);
+        }
+
         public async Task<Book> GetBook(int id)
         {
             return await _context.Books

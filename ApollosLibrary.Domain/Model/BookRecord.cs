@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-# nullable disable
-
 namespace ApollosLibrary.Domain
 {
-    public class Book
+    public class BookRecord
     {
-        [Key]
+        public int BookRecordId { get; set; }
+        public bool ReportedVersion { get; set; }
         public int BookId { get; set; }
+        public Book Book { get; set; }
         public string Isbn { get; set; }
         public string EIsbn { get; set; }
         public string Title { get; set; }
@@ -34,11 +32,5 @@ namespace ApollosLibrary.Domain
         public string CoverImage { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public Guid? ModifiedBy { get; set; }
-        public ICollection<Author> Authors { get; set; }
-        public ICollection<Genre> Genres { get; set; }
-        public ICollection<Series> Series { get; set; }
-        public ICollection<BookRecord> BookRecords { get; set; }
     }
 }
