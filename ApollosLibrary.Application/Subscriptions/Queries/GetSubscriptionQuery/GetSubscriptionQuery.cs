@@ -67,6 +67,7 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
             response.Expiry = subscription.Subscription.ExpiryDate;
             response.SubscriptionType = (SubscriptionTypeEnum)subscription.Subscription.SubscriptionTypeId;
             response.SubscriptionAdmin = subscription.Subscription.SubscriptionAdmin == userId;
+            response.StripeCustomerId = subscription.Subscription.StripeCustomerId;
             response.SubscriptionUsers = subscription.Subscription.SubscriptionUsers
                                                     .Where(su => su.UserId != userId)
                                                     .Select(su => new SubscriptionUserDTO()

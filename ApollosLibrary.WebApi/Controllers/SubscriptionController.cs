@@ -34,7 +34,6 @@ namespace ApollosLibrary.WebApi.Controllers
         {
             _mediatr = mediatr;
             _userService = userService;
-            StripeConfiguration.ApiKey = configuration.GetSection("Stripe").GetSection("APIKey").Value;
         }
 
         /// <summary>
@@ -76,6 +75,8 @@ namespace ApollosLibrary.WebApi.Controllers
         {
             var domain = _config.GetRequiredSection("FrontEndURL").Value;
 
+            var subscription = await _mediatr.Send(new GetSubscriptionQuery());
+
             var priceOptions = new PriceListOptions
             {
                 Product = request.ProductId,
@@ -97,6 +98,8 @@ namespace ApollosLibrary.WebApi.Controllers
                 {
                     Metadata = new Dictionary<string, string>(),
                 },
+                Customer = subscription.StripeCustomerId,
+                
                 Mode = "subscription",
                 SuccessUrl = domain + "/subscriptions?success=true&session_id={CHECKOUT_SESSION_ID}",
                 CancelUrl = domain + "/subscriptions?canceled=true",
@@ -181,7 +184,7 @@ namespace ApollosLibrary.WebApi.Controllers
                     var subscription = stripeEvent.Data.Object as Subscription;
                     subscription.Customer = customerService.Get(subscription.CustomerId);
                     _logger.Debug("A subscription was created.", subscription.Id);
-                    // Then define and call a method to handle the successful payment intent.
+
                     await _mediatr.Send(new StripeSubUpdateCommand()
                     {
                         StripeSubscription = subscription,
@@ -192,7 +195,7 @@ namespace ApollosLibrary.WebApi.Controllers
                     var subscription = stripeEvent.Data.Object as Subscription;
                     subscription.Customer = customerService.Get(subscription.CustomerId);
                     _logger.Debug("A subscription was updated.", subscription.Id);
-                    // Then define and call a method to handle the successful payment intent.
+
                     await _mediatr.Send(new StripeSubUpdateCommand()
                     {
                         StripeSubscription = subscription,

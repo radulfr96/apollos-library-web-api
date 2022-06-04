@@ -16,6 +16,7 @@ namespace ApollosLibrary.Domain
         public DateTime SubscriptionDate { get; set; }
         public Guid SubscriptionAdmin { get; set; }
         public string StripeSubscriptionId { get; set; }
+        public string StripeCustomerId { get; set; }
         public ICollection<UserSubscription> SubscriptionUsers { get; set; }
     }
 }

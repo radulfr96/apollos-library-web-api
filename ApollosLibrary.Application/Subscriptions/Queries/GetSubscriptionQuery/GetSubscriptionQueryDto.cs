@@ -11,6 +11,8 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
     {
         public SubscriptionTypeEnum SubscriptionType { get; set; }
         public string SubscriptionName { get; set; }
+        public string StripeCustomerId { get; set; }
+        public string Email { get; set; }
         public DateTime JoinDate { get; set; }
         public DateTime? Expiry { get; set; }
         public bool SubscriptionAdmin { get; set; }

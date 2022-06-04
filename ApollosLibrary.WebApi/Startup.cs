@@ -34,6 +34,7 @@ using ApollosLibrary.WebApi.Filters;
 using NLog;
 using ApollosLibrary.Domain;
 using System.IO;
+using Stripe;
 
 namespace ApollosLibrary.WebApi
 {
@@ -107,7 +108,7 @@ namespace ApollosLibrary.WebApi
 
             services.AddControllers();
 
-
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe").GetSection("APIKey").Value;
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());
 
             services.AddAuthentication("Bearer")

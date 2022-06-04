@@ -21,10 +21,12 @@ namespace ApollosLibrary.Application.Subscriptions.Commands.StripeSubCreatedComm
     public class StripeSubCreatedCommandHandler : IRequestHandler<StripeSubUpdateCommand, StripeSubUpdateCommandDto>
     {
         private readonly ISubscriptionUnitOfWork _subscriptionUnitOfWork;
+        private readonly ILibraryUnitOfWork _libraryUnitOfWork;
 
-        public StripeSubCreatedCommandHandler(ISubscriptionUnitOfWork subscriptionUnitOfWork)
+        public StripeSubCreatedCommandHandler(ISubscriptionUnitOfWork subscriptionUnitOfWork, ILibraryUnitOfWork libraryUnitOfWork)
         {
             _subscriptionUnitOfWork = subscriptionUnitOfWork;
+            _libraryUnitOfWork = libraryUnitOfWork;
         }
 
         public async Task<StripeSubUpdateCommandDto> Handle(StripeSubUpdateCommand request, CancellationToken cancellationToken)
@@ -58,7 +60,15 @@ namespace ApollosLibrary.Application.Subscriptions.Commands.StripeSubCreatedComm
             }
 
             sub.Subscription.SubscriptionTypeId = type.SubscriptionTypeId;
+            sub.Subscription.StripeCustomerId = request.StripeSubscription.CustomerId;
+            var library = new Domain.Library()
+            {
+                UserId = Guid.Parse(userId.Value),
+            };
 
+            await _libraryUnitOfWork.LibraryDataLayer.AddLibrary(library);
+
+            await _libraryUnitOfWork.Save();
             await _subscriptionUnitOfWork.Save();
 
             return new StripeSubUpdateCommandDto();
