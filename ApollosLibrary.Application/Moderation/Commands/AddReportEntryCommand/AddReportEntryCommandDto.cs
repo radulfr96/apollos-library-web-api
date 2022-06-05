@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Common.Enums
+namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
 {
-    public enum FictionTypeEnum
+    public class AddReportEntryCommandDto
     {
-        Fiction = 1,
-        NonFiction = 2
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using FluentValidation.TestHelper;
-using ApollosLibrary.Application.Common.Enums;
+
 using ApollosLibrary.Application.Genre.Commands.AddGenreCommand;
 using System;
 using System.Collections.Generic;

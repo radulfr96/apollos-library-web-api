@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Common.Enums
+namespace ApollosLibrary.Domain.Enums
 {
     public enum BusinessTypeEnum
     {

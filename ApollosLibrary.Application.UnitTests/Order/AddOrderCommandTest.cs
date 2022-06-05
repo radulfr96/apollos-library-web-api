@@ -1,9 +1,9 @@
-﻿using ApollosLibrary.Application.Common.Enums;
-using ApollosLibrary.Application.Common.Exceptions;
+﻿using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Order;
 using ApollosLibrary.Application.Order.Commands.AddOrderCommand;
 using ApollosLibrary.DataLayer.Contracts;
+using ApollosLibrary.Domain.Enums;
 using ApollosLibrary.UnitOfWork.Contracts;
 using FluentAssertions;
 using FluentValidation.TestHelper;

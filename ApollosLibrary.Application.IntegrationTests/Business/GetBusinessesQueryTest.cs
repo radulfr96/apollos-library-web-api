@@ -14,7 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
-using ApollosLibrary.Application.Common.Enums;
+using ApollosLibrary.Domain.Enums;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -91,12 +91,14 @@ namespace ApollosLibrary.Application.IntegrationTests
 
         public string GetBusinessTypeName(BusinessTypeEnum type)
         {
-            switch(type)
+            switch (type)
             {
                 case BusinessTypeEnum.Bookshop:
                     return "Bookshop";
                 case BusinessTypeEnum.Publisher:
                     return "Publisher";
+                default:
+                    break;
             }
 
             return "";

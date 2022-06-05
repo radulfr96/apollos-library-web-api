@@ -1,6 +1,6 @@
-﻿using ApollosLibrary.Application.Common.Enums;
-using ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionTypesQuery;
+﻿using ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionTypesQuery;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Domain.Enums;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;

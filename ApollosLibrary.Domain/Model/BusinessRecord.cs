@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Domain
 {
+    #nullable disable
     public class BusinessRecord
     {
         public int BusinessRecordId { get; set; }

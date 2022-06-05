@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Domain
 {
+    #nullable disable
+
     public class SeriesRecord
     {
         public int SeriesRecordId { get; set; }

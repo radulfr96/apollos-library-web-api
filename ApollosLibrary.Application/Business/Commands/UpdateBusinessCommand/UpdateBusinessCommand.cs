@@ -28,20 +28,14 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
     {
         private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
-        private readonly IUserService _userService;
-        private readonly IDateTimeService _dateTimeService;
 
         public UpdateBusinessCommandHandler(
             IBusinessUnitOfWork BusinessUnitOfWork
             , IReferenceUnitOfWork referenceUnitOfWork
-            , IUserService userService
-            , IDateTimeService dateTimeService
             )
         {
             _BusinessUnitOfWork = BusinessUnitOfWork;
             _referenceUnitOfWork = referenceUnitOfWork;
-            _userService = userService;
-            _dateTimeService = dateTimeService;
         }
 
         public async Task<UpdateBusinessCommandDto> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)

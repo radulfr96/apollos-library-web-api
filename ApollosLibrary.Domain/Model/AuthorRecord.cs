@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Domain
 {
+    #nullable disable
+
     public class AuthorRecord
     {
         public int AuthorRecordId { get; set; }

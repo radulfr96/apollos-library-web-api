@@ -1,4 +1,4 @@
-﻿using ApollosLibrary.Application.Common.Enums;
+﻿
 using ApollosLibrary.Application.Series.Queries.GetSeriesQuery;
 using FluentAssertions;
 using FluentValidation.TestHelper;

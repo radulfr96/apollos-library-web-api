@@ -10,7 +10,7 @@ namespace ApollosLibrary.UnitOfWork
 {
     public class ReferenceUnitOfWork : IReferenceUnitOfWork
     {
-        private ApollosLibraryContext _context;
+        private readonly ApollosLibraryContext _context;
         private IReferenceDataLayer _referenceDataLayer;
 
         public ReferenceUnitOfWork(ApollosLibraryContext context)

@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using FluentValidation.TestHelper;
-using ApollosLibrary.Application.Common.Enums;
+
 using FluentAssertions;
 
 namespace ApollosLibrary.Application.UnitTests

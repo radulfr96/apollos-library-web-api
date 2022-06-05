@@ -13,8 +13,8 @@ using ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand;
 using ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand;
 using ApollosLibrary.Application.Business.Queries.GetBusinessQuery;
 using ApollosLibrary.Application.Business.Queries.GetBusinesssQuery;
-using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.WebApi.Filters;
+using ApollosLibrary.Domain.Enums;
 
 namespace ApollosLibrary.WebApi.Controllers
 {

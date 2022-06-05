@@ -1,10 +1,10 @@
-﻿using ApollosLibrary.Application.Common.Enums;
-using ApollosLibrary.Application.IntegrationTests.Generators;
+﻿using ApollosLibrary.Application.IntegrationTests.Generators;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Order;
 using ApollosLibrary.Application.Order.Commands.AddOrderCommand;
 using ApollosLibrary.Application.Order.Commands.UpdateOrderCommand;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Domain.Enums;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;

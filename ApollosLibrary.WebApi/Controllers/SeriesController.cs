@@ -30,7 +30,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to add a new series
         /// </summary>
-        /// <param name="request">The request with the series information</param>
+        /// <param name="command">The request with the series information</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPost("")]
         public async Task<AddSeriesCommandDto> AddSeries([FromBody] AddSeriesCommand command)
@@ -62,7 +62,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <summary>
         /// Used to update a series
         /// </summary>
-        /// <param name="request">The information used to update the series</param>
+        /// <param name="command">The information used to update the series</param>
         /// <returns>Response that indicates the result</returns>
         [HttpPut("")]
         public async Task<UpdateSeriesCommandDto> UpdateGenre([FromBody] UpdateSeriesCommand command)

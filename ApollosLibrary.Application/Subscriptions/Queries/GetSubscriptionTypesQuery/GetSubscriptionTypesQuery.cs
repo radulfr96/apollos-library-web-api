@@ -1,4 +1,4 @@
-﻿using ApollosLibrary.Application.Common.Enums;
+﻿using ApollosLibrary.Domain.Enums;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
 using System;

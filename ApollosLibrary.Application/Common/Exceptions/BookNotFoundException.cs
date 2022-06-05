@@ -1,5 +1,5 @@
-﻿using ApollosLibrary.Application.Common.Enums;
-using ApollosLibrary.Application.Common.Exceptions;
+﻿using ApollosLibrary.Application.Common.Exceptions;
+using ApollosLibrary.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

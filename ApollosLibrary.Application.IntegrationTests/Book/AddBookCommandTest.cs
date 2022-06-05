@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
-using ApollosLibrary.Application.Common.Enums;
+using ApollosLibrary.Domain.Enums;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {

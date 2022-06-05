@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ApollosLibrary.Application.Common.Enums;
 using ApollosLibrary.Application.Common.Exceptions;
 using Newtonsoft.Json;
 using NLog;
@@ -10,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApollosLibrary.Domain.Enums;
 
 namespace ApollosLibrary.WebApi.Filters
 {

@@ -1,5 +1,4 @@
-﻿using ApollosLibrary.Application.Common.Enums;
-using ApollosLibrary.Application.Common.Exceptions;
+﻿using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Domain;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;

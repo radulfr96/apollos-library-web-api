@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using ApollosLibrary.Application.Common.Enums;
+
 
 namespace ApollosLibrary.Application.UnitTests
 {

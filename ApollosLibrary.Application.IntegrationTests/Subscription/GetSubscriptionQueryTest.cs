@@ -1,7 +1,7 @@
-﻿using ApollosLibrary.Application.Common.Enums;
-using ApollosLibrary.Application.Interfaces;
+﻿using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Domain.Enums;
 using Bogus;
 using FluentAssertions;
 using MediatR;

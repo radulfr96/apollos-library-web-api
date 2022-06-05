@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ApollosLibrary.Application.Book.Queries.GetBooksQuery;
-using ApollosLibrary.Application.Common.Enums;
+
 using ApollosLibrary.Application.IntegrationTests.Generators;
 using System;
 using System.Collections.Generic;

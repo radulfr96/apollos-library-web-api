@@ -1,5 +1,5 @@
 ﻿using ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand;
-using ApollosLibrary.Application.Common.Enums;
+
 using ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand;
 using Bogus;
 using FluentAssertions;

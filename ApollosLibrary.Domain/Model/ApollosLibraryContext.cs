@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ApollosLibrary.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace ApollosLibrary.Domain
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
+        public DbSet<EntryReport> EntryReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

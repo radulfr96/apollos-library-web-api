@@ -142,7 +142,7 @@ namespace ApollosLibrary.WebApi.Controllers
                 ReturnUrl = returnUrl,
             };
             var service = new Stripe.BillingPortal.SessionService();
-            var session = service.Create(options);
+            var session = await service.CreateAsync(options);
 
             return new CreatePortalSessionResponse()
             {
