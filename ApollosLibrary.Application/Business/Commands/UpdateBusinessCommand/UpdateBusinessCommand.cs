@@ -26,7 +26,7 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
 
     public class UpdateBusinessCommandHandler : IRequestHandler<UpdateBusinessCommand, UpdateBusinessCommandDto>
     {
-        private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
+        private readonly IBusinessUnitOfWork _businessUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
 
         public UpdateBusinessCommandHandler(
@@ -34,7 +34,7 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
             , IReferenceUnitOfWork referenceUnitOfWork
             )
         {
-            _BusinessUnitOfWork = BusinessUnitOfWork;
+            _businessUnitOfWork = BusinessUnitOfWork;
             _referenceUnitOfWork = referenceUnitOfWork;
         }
 
@@ -42,7 +42,7 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
         {
             var response = new UpdateBusinessCommandDto();
 
-            var business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);
+            var business = await _businessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);
 
             if (business == null)
             {
@@ -72,7 +72,23 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
             business.State = command.State;
             business.StreetAddress = command.StreetAddress;
             business.Website = command.Website;
-            await _BusinessUnitOfWork.Save();
+
+            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
+            {
+                BusinessId = business.BusinessId,
+                BusinessTypeId = business.BusinessTypeId,
+                City = business.City,
+                CountryId = business.CountryId,
+                CreatedBy = business.CreatedBy,
+                CreatedDate = business.CreatedDate,
+                IsDeleted = true,
+                Name = business.Name,
+                Postcode = business.Postcode,
+                State = business.State,
+                StreetAddress = business.StreetAddress,
+                Website = business.Website,
+            });
+            await _businessUnitOfWork.Save();
 
             return response;
         }

@@ -17,34 +17,54 @@ namespace ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand
 
     public class DeleteBusinessCommandHandler : IRequestHandler<DeleteBusinessCommand, DeleteBusinessCommandDto>
     {
-        private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
+        private readonly IBusinessUnitOfWork _businessUnitOfWork;
 
-        public DeleteBusinessCommandHandler(IBusinessUnitOfWork BusinessUnitOfWork)
+        public DeleteBusinessCommandHandler(IBusinessUnitOfWork businessUnitOfWork)
         {
-            _BusinessUnitOfWork = BusinessUnitOfWork;
+            _businessUnitOfWork = businessUnitOfWork;
         }
 
         public async Task<DeleteBusinessCommandDto> Handle(DeleteBusinessCommand command, CancellationToken cancellationToken)
         {
             var response = new DeleteBusinessCommandDto();
 
-            var Business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);
+            var business = await _businessUnitOfWork.BusinessDataLayer.GetBusiness(command.BusinessId);
 
-            if (Business == null)
+            if (business == null)
             {
                 throw new BusinessNotFoundException($"Unable to find Business with id {command.BusinessId}");
             }
 
-            Business.IsDeleted = true;
-            Business.Name = "Deleted";
-            Business.City = "Deleted";
-            Business.Postcode = "0000";
-            Business.State = "Deleted";
-            Business.StreetAddress = "Deleted";
-            Business.Website = "";
-            Business.CountryId = "AU";
+            business.IsDeleted = true;
+            business.Name = "Deleted";
+            business.City = "Deleted";
+            business.Postcode = "0000";
+            business.State = "Deleted";
+            business.StreetAddress = "Deleted";
+            business.Website = "";
+            business.CountryId = "AU";
 
-            await _BusinessUnitOfWork.Save();
+            await _businessUnitOfWork.Begin();
+            await _businessUnitOfWork.Save();
+
+            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
+            {
+                BusinessId = business.BusinessId,
+                BusinessTypeId = business.BusinessTypeId,
+                City = business.City,
+                CountryId = business.CountryId,
+                CreatedBy = business.CreatedBy,
+                CreatedDate = business.CreatedDate,
+                IsDeleted = true,
+                Name = business.Name,
+                Postcode = business.Postcode,
+                State = business.State,
+                StreetAddress = business.StreetAddress,
+                Website = business.Website,
+            });
+
+            await _businessUnitOfWork.Save();
+            await _businessUnitOfWork.Commit();
 
             return response;
         }

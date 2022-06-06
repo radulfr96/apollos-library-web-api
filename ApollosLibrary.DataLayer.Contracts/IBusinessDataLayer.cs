@@ -19,6 +19,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task AddBusiness(Business Business);
 
         /// <summary>
+        /// USed to handle adding record
+        /// </summary>
+        /// <param name="record">Record to add</param>
+        Task AddBusinessRecord(BusinessRecord record);
+
+        /// <summary>
         /// Used to get a Business by its id
         /// </summary>
         /// <param name="id">The id of the Business to be found</param>

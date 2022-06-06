@@ -19,6 +19,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task AddSeries(Series series);
 
         /// <summary>
+        /// Used to add a series record
+        /// </summary>
+        /// <param name="series">The series record to be added</param>
+        Task AddSeriesRecord(SeriesRecord record);
+
+        /// <summary>
         /// Used to get a series by its id
         /// </summary>
         /// <param name="id">The id of the series to be found</param>

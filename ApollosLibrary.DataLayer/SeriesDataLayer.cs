@@ -23,6 +23,11 @@ namespace ApollosLibrary.DataLayer
             await _context.Series.AddAsync(series);
         }
 
+        public async Task AddSeriesRecord(SeriesRecord record)
+        {
+            await _context.SeriesRecords.AddAsync(record);
+        }
+
         public async Task DeleteSeries(int id)
         {
             _context.Series.Remove(await _context.Series.FirstOrDefaultAsync(g => g.SeriesId == id));
@@ -32,12 +37,12 @@ namespace ApollosLibrary.DataLayer
         {
             return await _context.Series
                 .Include(s => s.Books)
-                .FirstOrDefaultAsync(a => a.SeriesId == id);
+                .FirstOrDefaultAsync(a => a.SeriesId == id && !a.IsDeleted);
         }
 
         public async Task<List<Series>> GetMultiSeries()
         {
-            return await _context.Series.ToListAsync();
+            return await _context.Series.Where(a => !a.IsDeleted).ToListAsync();
         }
     }
 }

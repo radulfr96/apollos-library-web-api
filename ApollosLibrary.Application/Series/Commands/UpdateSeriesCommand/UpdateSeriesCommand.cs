@@ -46,6 +46,15 @@ namespace ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand
 
             series.Name = command.Name;
 
+            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(new Domain.SeriesRecord()
+            {
+                CreatedBy = series.CreatedBy,
+                CreatedDate = series.CreatedDate,
+                Name = series.Name,
+                IsDeleted = true,
+                SeriesId = series.SeriesId,
+            });
+
             await _seriesUnitOfWork.Save();
 
             return response;

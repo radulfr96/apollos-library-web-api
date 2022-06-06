@@ -25,18 +25,18 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
 
     public class AddBusinessCommandHandler : IRequestHandler<AddBusinessCommand, AddBusinessCommandDto>
     {
-        private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
+        private readonly IBusinessUnitOfWork _businessUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
 
         public AddBusinessCommandHandler(
-            IBusinessUnitOfWork BusinessUnitOfWork
+            IBusinessUnitOfWork businessUnitOfWork
             , IReferenceUnitOfWork referenceUnitOfWork
             , IUserService userService
             , IDateTimeService dateTimeService)
         {
-            _BusinessUnitOfWork = BusinessUnitOfWork;
+            _businessUnitOfWork = businessUnitOfWork;
             _referenceUnitOfWork = referenceUnitOfWork;
             _userService = userService;
             _dateTimeService = dateTimeService;
@@ -60,7 +60,9 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
                 throw new BusinessTypeNotFoundException($"Unable to find BusinessType with code [{command.BusinessTypeId}]");
             }
 
-            var Business = new Domain.Business()
+            await _businessUnitOfWork.Begin();
+
+            var business = new Domain.Business()
             {
                 CreatedBy = _userService.GetUserId(),
                 CreatedDate = _dateTimeService.Now,
@@ -74,11 +76,29 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
                 Website = command.Website,
                 Name = command.Name,
             };
+            await _businessUnitOfWork.BusinessDataLayer.AddBusiness(business);
+            await _businessUnitOfWork.Save();
 
-            await _BusinessUnitOfWork.BusinessDataLayer.AddBusiness(Business);
-            await _BusinessUnitOfWork.Save();
+            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
+            {
+                BusinessId = business.BusinessId,
+                BusinessTypeId = business.BusinessTypeId,
+                City = business.City,
+                CountryId = business.CountryId,
+                CreatedBy = business.CreatedBy,
+                CreatedDate = business.CreatedDate,
+                IsDeleted = false,
+                Name = business.Name,
+                Postcode = business.Postcode,
+                State = business.State,
+                StreetAddress = business.StreetAddress,
+                Website = business.Website,
+            });
 
-            response.BusinessId = Business.BusinessId;
+            await _businessUnitOfWork.Save();
+            await _businessUnitOfWork.Commit();
+
+            response.BusinessId = business.BusinessId;
 
             return response;
         }

@@ -31,7 +31,7 @@ namespace ApollosLibrary.DataLayer
         public async Task<Book> GetBook(int id)
         {
             return await _context.Books
-                .Where(b => b.BookId == id)
+                .Where(b => b.BookId == id && !b.IsDeleted)
                 .Include(b => b.Genres)
                 .Include(b => b.Authors)
                 .Include(b => b.Series)
@@ -60,7 +60,7 @@ namespace ApollosLibrary.DataLayer
 
         public async Task<List<Book>> GetBooks()
         {
-            var books = await _context.Books.ToListAsync();
+            var books = await _context.Books.Where(b => !b.IsDeleted).ToListAsync();
 
             var fictionTypes = await _context.FictionTypes.ToListAsync();
             var formTypes = await _context.FormTypes.ToListAsync();

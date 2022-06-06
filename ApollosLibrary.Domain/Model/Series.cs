@@ -12,6 +12,7 @@ namespace ApollosLibrary.Domain
     {
         public int SeriesId { get; set; }
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? CreatedBy { get; set; }
         public ICollection<Book> Books { get; set; }
