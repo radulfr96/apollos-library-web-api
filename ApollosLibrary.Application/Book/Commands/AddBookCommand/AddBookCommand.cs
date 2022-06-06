@@ -64,24 +64,16 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
         {
             var response = new AddBookCommandDto();
 
+            Domain.Book book = null;
+
             if (!string.IsNullOrEmpty(command.EISBN))
             {
-                var existingISBN = await _bookUnitOfWork.BookDataLayer.GetBookByeISBN(command.EISBN);
-
-                if (existingISBN != null)
-                {
-                    throw new ISBNAlreadyAddedException("Book with that eISBN already exists.");
-                }
+                book = await _bookUnitOfWork.BookDataLayer.GetBookByeISBN(command.EISBN);
             }
 
-            if (!string.IsNullOrEmpty(command.ISBN))
+            if (!string.IsNullOrEmpty(command.ISBN) && book == null)
             {
-                var existingeISBN = await _bookUnitOfWork.BookDataLayer.GetBookByISBN(command.ISBN);
-
-                if (existingeISBN != null)
-                {
-                    throw new ISBNAlreadyAddedException("Book with that ISBN already exists.");
-                }
+                book = await _bookUnitOfWork.BookDataLayer.GetBookByISBN(command.ISBN);
             }
 
             var publicationFormat = await _referenceUnitOfWork.ReferenceDataLayer.GetPublicationFormat(command.PublicationFormatId);
@@ -121,69 +113,156 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 }
             }
 
-            var book = new Domain.Book()
-            {
-                CoverImage = command.CoverImage ?? null,
-                CreatedBy = _userService.GetUserId(),
-                CreatedDate = _dateTimeService.Now,
-                Edition = command.Edition,
-                EIsbn = command.EISBN,
-                FictionTypeId = command.FictionTypeId,
-                FormTypeId = command.FormTypeId,
-                Isbn = command.ISBN,
-                PublicationFormatId = command.PublicationFormatId,
-                BusinessId = command.BusinessId,
-                Subtitle = command.Subtitle,
-                Title = command.Title,
-                Authors = new List<Domain.Author>()
-            };
-
             await _bookUnitOfWork.Begin();
 
-            await _bookUnitOfWork.BookDataLayer.AddBook(book);
-
-            await _bookUnitOfWork.Save();
-
-            foreach (int authorId in command.Authors)
+            if (book == null)
             {
-                var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(authorId);
-
-                if (author == null)
+                book = new Domain.Book()
                 {
-                    throw new AuthorNotFoundException($"Unable to find author with id [{authorId}]");
+                    CoverImage = command.CoverImage ?? null,
+                    CreatedBy = _userService.GetUserId(),
+                    CreatedDate = _dateTimeService.Now,
+                    Edition = command.Edition,
+                    EIsbn = command.EISBN,
+                    FictionTypeId = command.FictionTypeId,
+                    FormTypeId = command.FormTypeId,
+                    Isbn = command.ISBN,
+                    PublicationFormatId = command.PublicationFormatId,
+                    BusinessId = command.BusinessId,
+                    Subtitle = command.Subtitle,
+                    Title = command.Title,
+                    Authors = new List<Domain.Author>()
+                };
+
+                await _bookUnitOfWork.Begin();
+
+                await _bookUnitOfWork.BookDataLayer.AddBook(book);
+
+                await _bookUnitOfWork.Save();
+
+                foreach (int authorId in command.Authors)
+                {
+                    var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(authorId);
+
+                    if (author == null)
+                    {
+                        throw new AuthorNotFoundException($"Unable to find author with id [{authorId}]");
+                    }
+
+                    author.Books.Add(book);
                 }
 
-                author.Books.Add(book);
-            }
-
-            foreach (int genreId in command.Genres)
-            {
-                var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(genreId);
-
-                if (genre == null)
+                foreach (int genreId in command.Genres)
                 {
-                    throw new GenreNotFoundException($"Unable to find genre with id [{genreId}]");
+                    var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(genreId);
+
+                    if (genre == null)
+                    {
+                        throw new GenreNotFoundException($"Unable to find genre with id [{genreId}]");
+                    }
+
+                    genre.Books.Add(book);
                 }
 
-                genre.Books.Add(book);
-            }
-
-            foreach (int seriesId in command.Series)
-            {
-                var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
-
-                if (series == null)
+                foreach (int seriesId in command.Series)
                 {
-                    throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
+                    var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
+
+                    if (series == null)
+                    {
+                        throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
+                    }
+
+                    series.Books.Add(book);
                 }
 
-                series.Books.Add(book);
+                await _bookUnitOfWork.Save();
+                await _bookUnitOfWork.Commit();
+            }
+            else
+            {
+                await _bookUnitOfWork.BookDataLayer.DeleteBookAuthorRelationships(book.BookId);
+                await _bookUnitOfWork.BookDataLayer.DeleteBookGenreRelationships(book.BookId);
+                await _bookUnitOfWork.BookDataLayer.DeleteBookSeriesRelationships(book.BookId);
+                await _bookUnitOfWork.Save();
+
+                foreach (int authorId in command.Authors)
+                {
+                    var author = await _authorUnitOfWork.AuthorDataLayer.GetAuthor(authorId);
+
+                    if (author == null)
+                    {
+                        throw new AuthorNotFoundException($"Unable to find author with id [{authorId}]");
+                    }
+
+                    author.Books.Add(book);
+                }
+
+                foreach (int genreId in command.Genres)
+                {
+                    var genre = await _genreUnitOfWork.GenreDataLayer.GetGenre(genreId);
+
+                    if (genre == null)
+                    {
+                        throw new GenreNotFoundException($"Unable to find genre with id [{genreId}]");
+                    }
+
+                    genre.Books.Add(book);
+                }
+
+                foreach (int seriesId in command.Series)
+                {
+                    var series = await _seriesUnitOfWork.SeriesDataLayer.GetSeries(seriesId);
+
+                    if (series == null)
+                    {
+                        throw new SeriesNotFoundException($"Unable to find series with id [{seriesId}]");
+                    }
+
+                    series.Books.Add(book);
+                }
+
+                book.CoverImage = command.CoverImage;
+                book.CreatedBy = _userService.GetUserId();
+                book.CreatedDate = _dateTimeService.Now;
+                book.Edition = command.Edition;
+                book.EIsbn = command.EISBN;
+                book.FictionTypeId = command.FictionTypeId;
+                book.FormTypeId = command.FormTypeId;
+                book.Isbn = command.ISBN;
+                book.PublicationFormatId = command.PublicationFormatId;
+                book.BusinessId = command.BusinessId;
+                book.Subtitle = command.Subtitle;
+                book.Title = command.Title;
+                book.ModifiedBy = _userService.GetUserId();
+                book.IsDeleted = false;
+                book.ModifiedDate = _dateTimeService.Now;
             }
 
+            var bookRecord = new Domain.BookRecord()
+            {
+                BookId = book.BookId,
+                BusinessId = book.BusinessId,
+                CoverImage = book.CoverImage,
+                CreatedBy = book.CreatedBy,
+                CreatedDate = book.CreatedDate,
+                Edition = book.Edition,
+                EIsbn = book.EIsbn,
+                FictionTypeId = book.FictionTypeId,
+                FormTypeId = book.FormTypeId,
+                Isbn = book.Isbn,
+                PublicationFormatId = book.PublicationFormatId,
+                Subtitle = book.Subtitle,
+                Title = book.Title,
+                IsDeleted = false,
+            };
+
+            await _bookUnitOfWork.BookDataLayer.AddBookRecord(bookRecord);
             await _bookUnitOfWork.Save();
             await _bookUnitOfWork.Commit();
 
             response.BookId = book.BookId;
+
 
             return response;
         }

@@ -58,8 +58,26 @@ namespace ApollosLibrary.Application.Author.Commands.AddAuthorCommand
                 CreatedBy = _userService.GetUserId(),
             };
 
+            await _authorUnitOfWork.Begin();
             await _authorUnitOfWork.AuthorDataLayer.AddAuthor(author);
             await _authorUnitOfWork.Save();
+
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(new Domain.AuthorRecord()
+            {
+                AuthorId = author.AuthorId,
+                CountryId = author.CountryId,
+                CreatedBy = author.CreatedBy,
+                CreatedDate = author.CreatedDate,
+                Description = author.Description,
+                FirstName = author.FirstName,
+                IsDeleted = false,
+                LastName = author.LastName,
+                MiddleName = author.MiddleName,
+                ReportedVersion = false,
+            });
+
+            await _authorUnitOfWork.Save();
+            await _authorUnitOfWork.Commit();
 
             response.AuthorId = author.AuthorId;
 

@@ -36,16 +36,22 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
 
         public async Task<AddReportEntryCommandDto> Handle(AddReportEntryCommand request, CancellationToken cancellationToken)
         {
-            await _moderationUnitOfWork.ModerationDataLayer.AddEntryReport(new Domain.Model.EntryReport()
+            var reportEntry = new Domain.EntryReport()
             {
                 CreatedBy = request.CreatedBy,
                 EntryId = request.EntryId,
                 EntryType = request.EntryType,
                 ReportedBy = _userService.GetUserId(),
                 ReportedDate = _dateTimeService.Now,
-            });
+            };
 
-            return new AddReportEntryCommandDto();
+            await _moderationUnitOfWork.ModerationDataLayer.AddEntryReport(reportEntry);
+            await _moderationUnitOfWork.Save();
+
+            return new AddReportEntryCommandDto()
+            {
+                ReportEntryId = reportEntry.EntryReportId,
+            };
         }
     }
 }

@@ -8,5 +8,6 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
 {
     public class AddReportEntryCommandDto
     {
+        public int ReportEntryId { get; set; }
     }
 }

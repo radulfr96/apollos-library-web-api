@@ -38,12 +38,12 @@ namespace ApollosLibrary.DataLayer
             return await _context.Authors
                 .Include(a => a.Country)
                 .Include(a => a.Books)
-                .FirstOrDefaultAsync(a => a.AuthorId == id);
+                .FirstOrDefaultAsync(a => a.AuthorId == id && !a.IsDeleted);
         }
 
         public async Task<List<Author>> GetAuthors()
         {
-            return await _context.Authors.Include("Country").ToListAsync();
+            return await _context.Authors.Include("Country").Where(a => !a.IsDeleted).ToListAsync();
         }
     }
 }

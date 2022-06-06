@@ -35,7 +35,20 @@ namespace ApollosLibrary.Application.Author.Commands.DeleteAuthorCommand
                 throw new AuthorNotFoundException($"Unable to find author with id [{query.AuthorId}].");
             }
 
-            await _authorUnitOfWork.AuthorDataLayer.DeleteAuthor(author);
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(new Domain.AuthorRecord()
+            {
+                AuthorId = author.AuthorId,
+                CountryId = author.CountryId,
+                CreatedBy = author.CreatedBy,
+                CreatedDate = author.CreatedDate,
+                Description = author.Description,
+                FirstName = author.FirstName,
+                IsDeleted = true,
+                LastName = author.LastName,
+                MiddleName = author.MiddleName,
+                ReportedVersion = false,
+            });
+            author.IsDeleted = true;
             await _authorUnitOfWork.Save();
 
             return response;

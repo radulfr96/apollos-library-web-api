@@ -19,7 +19,7 @@ namespace ApollosLibrary.Domain
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public int? Edition { get; set; }
-
+        public bool IsDeleted { get; set; }
         public int PublicationFormatId { get; set; }
         public PublicationFormat PublicationFormat { get; set; }
 

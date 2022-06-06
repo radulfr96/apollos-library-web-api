@@ -22,7 +22,7 @@ namespace ApollosLibrary.Domain
 
         public string CountryId { get; set; }
         public Country Country { get; set; }
-
+        public bool IsDeleted { get; set; }
         public int BusinessTypeId { get; set; }
         public BusinessType Type { get; set; }
 

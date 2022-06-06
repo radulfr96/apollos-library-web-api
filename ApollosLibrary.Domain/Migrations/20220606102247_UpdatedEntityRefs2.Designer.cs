@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220606102247_UpdatedEntityRefs2")]
+    partial class UpdatedEntityRefs2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,6 +218,8 @@ namespace ApollosLibrary.Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BookRecordId");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("BookRecords");
                 });
@@ -1977,10 +1981,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("16d6fda8-a9a0-4cb4-bd17-86bdd2286554"),
-                            ExpiryDate = new DateTime(2102, 6, 6, 20, 37, 51, 355, DateTimeKind.Local).AddTicks(6459),
+                            SubscriptionId = new Guid("64418bc6-fca6-4a21-bab7-a192de20ec1e"),
+                            ExpiryDate = new DateTime(2102, 6, 6, 20, 22, 34, 0, DateTimeKind.Local).AddTicks(2420),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 6, 20, 37, 51, 355, DateTimeKind.Local).AddTicks(6496),
+                            SubscriptionDate = new DateTime(2022, 6, 6, 20, 22, 34, 0, DateTimeKind.Local).AddTicks(2479),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -2189,6 +2193,15 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("PublicationFormat");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.BookRecord", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Book", null)
+                        .WithMany("BookRecords")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.BusinessType", "Type")
@@ -2361,6 +2374,11 @@ namespace ApollosLibrary.Domain.Migrations
             modelBuilder.Entity("ApollosLibrary.Domain.Author", b =>
                 {
                     b.Navigation("AuthorRecords");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Book", b =>
+                {
+                    b.Navigation("BookRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>

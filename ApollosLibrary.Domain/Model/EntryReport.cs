@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Domain.Model
+namespace ApollosLibrary.Domain
 {
     public class EntryReport
     {
-        public int ReportId { get; set; }
+        public int EntryReportId { get; set; }
         public int EntryId { get; set; }
         public EntryTypeEnum EntryType { get; set; }
         public Guid ReportedBy { get; set; }
