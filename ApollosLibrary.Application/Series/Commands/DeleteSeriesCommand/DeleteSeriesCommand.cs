@@ -35,6 +35,8 @@ namespace ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand
             }
 
             series.IsDeleted = true;
+            series.Books = new List<Domain.Book>();
+
             await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(new Domain.SeriesRecord()
             {
                 CreatedBy = series.CreatedBy,

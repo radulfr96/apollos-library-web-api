@@ -35,6 +35,9 @@ namespace ApollosLibrary.Application.Book.Commands.DeleteBookCommand
             }
 
             book.IsDeleted = true;
+            book.Authors = new List<Domain.Author>();
+            book.Genres = new List<Domain.Genre>();
+            book.Series = new List<Domain.Series>();
 
             await _bookUnitOfWork.BookDataLayer.AddBookRecord(new Domain.BookRecord()
             {

@@ -49,6 +49,7 @@ namespace ApollosLibrary.Application.Author.Commands.DeleteAuthorCommand
                 ReportedVersion = false,
             });
             author.IsDeleted = true;
+            author.Books = new List<Domain.Book>();
             await _authorUnitOfWork.Save();
 
             return response;
