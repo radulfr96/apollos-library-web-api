@@ -234,9 +234,7 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 book.BusinessId = command.BusinessId;
                 book.Subtitle = command.Subtitle;
                 book.Title = command.Title;
-                book.ModifiedBy = _userService.GetUserId();
                 book.IsDeleted = false;
-                book.ModifiedDate = _dateTimeService.Now;
             }
 
             var bookRecord = new Domain.BookRecord()

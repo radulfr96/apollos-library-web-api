@@ -17,6 +17,7 @@ using Xunit;
 using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using ApollosLibrary.Domain.Enums;
+using ApollosLibrary.Application.Common.Exceptions;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -122,6 +123,90 @@ namespace ApollosLibrary.Application.IntegrationTests
             book.Authors.Should().HaveCount(2);
 
             book.Series.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task AddExistingDeletedISBN_UpdateBook()
+        {
+            var userID = Guid.NewGuid();
+
+            var httpContext = new TestHttpContext
+            {
+                User = new TestPrincipal(new Claim[]
+                {
+                    new Claim("userid", userID.ToString()),
+                }),
+            };
+
+            _contextAccessor.HttpContext = httpContext;
+
+            var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
+
+            var command = new AddBookCommand()
+            {
+                ISBN = bookGenerated.Isbn,
+                Subtitle = "Book Two of Legends",
+                Title = "Heir Of Novron",
+                Edition = 8,
+            };
+
+            _context.Books.Add(bookGenerated);
+
+            _context.SaveChanges();
+
+            var result = await _mediatr.Send(command);
+
+            result.BookId.Should().Be(bookGenerated.BookId);
+
+            var updatedBook = _context.Books.FirstOrDefault(b => b.BookId == result.BookId);
+
+            updatedBook.Isbn.Should().BeEquivalentTo(command.ISBN);
+            updatedBook.Title.Should().BeEquivalentTo(command.Title);
+            updatedBook.Subtitle.Should().BeEquivalentTo(command.Subtitle);
+            updatedBook.Edition.Should().Be(command.Edition);
+            updatedBook.IsDeleted.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task AddExistingDeletedEISBN_UpdateBook()
+        {
+            var userID = Guid.NewGuid();
+
+            var httpContext = new TestHttpContext
+            {
+                User = new TestPrincipal(new Claim[]
+                {
+                    new Claim("userid", userID.ToString()),
+                }),
+            };
+
+            _contextAccessor.HttpContext = httpContext;
+
+            var bookGenerated = BookGenerator.GetGenericDigitalBook(userID);
+
+            var command = new AddBookCommand()
+            {
+                EISBN = bookGenerated.EIsbn,
+                Subtitle = "Book Two of Legends",
+                Title = "Heir Of Novron",
+                Edition = 8,
+            };
+
+            _context.Books.Add(bookGenerated);
+
+            _context.SaveChanges();
+
+            var result = await _mediatr.Send(command);
+
+            result.BookId.Should().Be(bookGenerated.BookId);
+
+            var updatedBook = _context.Books.FirstOrDefault(b => b.BookId == result.BookId);
+
+            updatedBook.EIsbn.Should().BeEquivalentTo(command.EISBN);
+            updatedBook.Title.Should().BeEquivalentTo(command.Title);
+            updatedBook.Subtitle.Should().BeEquivalentTo(command.Subtitle);
+            updatedBook.Edition.Should().Be(command.Edition);
+            updatedBook.IsDeleted.Should().BeFalse();
         }
     }
 }

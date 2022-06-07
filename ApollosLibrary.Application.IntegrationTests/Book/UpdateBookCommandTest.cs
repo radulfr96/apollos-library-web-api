@@ -22,7 +22,6 @@ namespace ApollosLibrary.Application.IntegrationTests
     [Collection("IntegrationTestCollection")]
     public class UpdateBookCommandTest : TestBase
     {
-        private readonly IDateTimeService _dateTime;
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -33,7 +32,6 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-            _dateTime = mockDateTimeService.Object;
             services.AddSingleton(mockDateTimeService.Object);
 
             var provider = services.BuildServiceProvider();
@@ -162,8 +160,6 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FictionTypeId = newBookDetails.FictionTypeId,
                 FormTypeId = newBookDetails.FormTypeId,
                 Isbn = newBookDetails.Isbn,
-                ModifiedBy = userID,
-                ModifiedDate = _dateTime.Now,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
                 BusinessId = Business2.BusinessId,
                 Subtitle = newBookDetails.Subtitle,

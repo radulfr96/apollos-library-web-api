@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220606120903_TweaksToStructure")]
+    partial class TweaksToStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,6 +147,12 @@ namespace ApollosLibrary.Domain.Migrations
 
                     b.Property<string>("Isbn")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PublicationFormatId")
                         .HasColumnType("int");
@@ -1999,10 +2007,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("699aca95-5c3b-49bc-a7ea-05fef6b200b1"),
-                            ExpiryDate = new DateTime(2102, 6, 7, 20, 21, 0, 229, DateTimeKind.Local).AddTicks(5529),
+                            SubscriptionId = new Guid("f6f13bbe-78cb-458c-ae75-0aaa3e14223c"),
+                            ExpiryDate = new DateTime(2102, 6, 6, 22, 8, 59, 248, DateTimeKind.Local).AddTicks(3178),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 7, 20, 21, 0, 229, DateTimeKind.Local).AddTicks(5573),
+                            SubscriptionDate = new DateTime(2022, 6, 6, 22, 8, 59, 248, DateTimeKind.Local).AddTicks(3211),
                             SubscriptionTypeId = 1
                         });
                 });

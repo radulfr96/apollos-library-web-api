@@ -198,8 +198,6 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             book.BusinessId = command.BusinessId;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
-            book.ModifiedBy = _userService.GetUserId();
-            book.ModifiedDate = _dateTimeService.Now;
 
             await _bookUnitOfWork.Save();
             await _bookUnitOfWork.Commit();
