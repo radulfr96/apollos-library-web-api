@@ -11,6 +11,7 @@ namespace ApollosLibrary.Domain
 
     public class AuthorRecord
     {
+        [Key]
         public int AuthorRecordId { get; set; }
         public bool ReportedVersion { get; set; }
         public int AuthorId { get; set; }

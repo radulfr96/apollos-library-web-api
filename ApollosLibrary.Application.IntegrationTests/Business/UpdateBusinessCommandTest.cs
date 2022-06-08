@@ -78,9 +78,9 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             await _mediatr.Send(command);
 
-            var Business = _context.Business.FirstOrDefault(p => p.BusinessId == BusinessGenerated.BusinessId);
+            var business = _context.Business.FirstOrDefault(p => p.BusinessId == BusinessGenerated.BusinessId);
 
-            Business.Should().BeEquivalentTo(new Domain.Business()
+            business.Should().BeEquivalentTo(new Domain.Business()
             {
                 City = newBusinessDetails.City,
                 CountryId = newBusinessDetails.CountryId,
@@ -94,7 +94,25 @@ namespace ApollosLibrary.Application.IntegrationTests
                 State = newBusinessDetails.State,
                 StreetAddress = newBusinessDetails.StreetAddress,
                 Website = newBusinessDetails.Website,
-            }, opt => opt.Excluding(f => f.Country).Excluding(f => f.Type));
+            }, opt => opt.Excluding(f => f.Country).Excluding(f => f.Type).Excluding(f => f.BusinessRecords));
+
+            business.BusinessRecords.Last(r => r.BusinessId == business.BusinessId).Should().BeEquivalentTo(new BusinessRecord()
+            {
+                BusinessRecordId = business.BusinessRecords.Last(r => r.BusinessId == business.BusinessId).BusinessRecordId,
+                BusinessId = business.BusinessId,
+                BusinessTypeId = newBusinessDetails.BusinessTypeId,
+                City = newBusinessDetails.City,
+                CountryId = newBusinessDetails.CountryId,
+                CreatedBy = newBusinessDetails.CreatedBy,
+                CreatedDate = business.CreatedDate,
+                IsDeleted = false,
+                Name = newBusinessDetails.Name,
+                Postcode = newBusinessDetails.Postcode,
+                ReportedVersion = false,
+                State = newBusinessDetails.State,
+                StreetAddress = newBusinessDetails.StreetAddress,
+                Website = newBusinessDetails.Website,
+            }, opt => opt.Excluding(f => f.Business));
         }
     }
 }

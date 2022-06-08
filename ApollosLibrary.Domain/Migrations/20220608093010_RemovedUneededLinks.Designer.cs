@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    [Migration("20220601101731_AdjustmentsToSubscriptions")]
-    partial class AdjustmentsToSubscriptions
+    [Migration("20220608093010_RemovedUneededLinks")]
+    partial class RemovedUneededLinks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,23 +47,67 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("AuthorId");
 
                     b.HasIndex("CountryId");
 
                     b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.AuthorRecord", b =>
+                {
+                    b.Property<int>("AuthorRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorRecordId"), 1L, 1);
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CountryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReportedVersion")
+                        .HasColumnType("bit");
+
+                    b.HasKey("AuthorRecordId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("AuthorRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Book", b =>
@@ -98,14 +142,11 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<int>("FormTypeId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Isbn")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("PublicationFormatId")
                         .HasColumnType("int");
@@ -127,6 +168,66 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasIndex("PublicationFormatId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.BookRecord", b =>
+                {
+                    b.Property<int>("BookRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookRecordId"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CoverImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EIsbn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Edition")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FictionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FormTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Isbn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PublicationFormatId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ReportedVersion")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Subtitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BookRecordId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
@@ -152,14 +253,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -183,6 +278,60 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Business");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.BusinessRecord", b =>
+                {
+                    b.Property<int>("BusinessRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BusinessRecordId"), 1L, 1);
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BusinessTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CountryId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReportedVersion")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BusinessRecordId");
+
+                    b.HasIndex("BusinessId");
+
+                    b.ToTable("BusinessRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.BusinessType", b =>
@@ -1473,6 +1622,34 @@ namespace ApollosLibrary.Domain.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.EntryReport", b =>
+                {
+                    b.Property<int>("EntryReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EntryReportId"), 1L, 1);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EntryType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ReportedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReportedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EntryReportId");
+
+                    b.ToTable("EntryReports");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.ErrorCode", b =>
                 {
                     b.Property<int>("ErrorCodeId")
@@ -1735,11 +1912,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -1747,6 +1921,39 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasKey("SeriesId");
 
                     b.ToTable("Series");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.SeriesRecord", b =>
+                {
+                    b.Property<int>("SeriesRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeriesRecordId"), 1L, 1);
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReportedVersion")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeriesRecordId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("SeriesRecords");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
@@ -1757,6 +1964,9 @@ namespace ApollosLibrary.Domain.Migrations
 
                     b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("StripeCustomerId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StripeSubscriptionId")
                         .HasColumnType("nvarchar(max)");
@@ -1779,10 +1989,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("6c12b1da-8b98-4c71-b1fe-df55a7da957a"),
-                            ExpiryDate = new DateTime(2102, 6, 1, 20, 17, 31, 115, DateTimeKind.Local).AddTicks(2644),
+                            SubscriptionId = new Guid("be281799-290c-4885-a5f7-f232ea6340d2"),
+                            ExpiryDate = new DateTime(2102, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5626),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 1, 20, 17, 31, 115, DateTimeKind.Local).AddTicks(2681),
+                            SubscriptionDate = new DateTime(2022, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5656),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -1847,7 +2057,7 @@ namespace ApollosLibrary.Domain.Migrations
                             MaxUsers = 1,
                             MonthlyRate = 10.00m,
                             Purchasable = true,
-                            StripeProductId = "price_1L3eu4HSN4IIrwiZsUfrItzs",
+                            StripeProductId = "prod_LlBGpg7ytim1dy",
                             SubscriptionName = "Individual Subscription"
                         },
                         new
@@ -1941,6 +2151,23 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.AuthorRecord", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Author", "Author")
+                        .WithMany("AuthorRecords")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApollosLibrary.Domain.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Book", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.Business", "Business")
@@ -1974,6 +2201,17 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("PublicationFormat");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.BookRecord", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Book", "Book")
+                        .WithMany("BookRecords")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.BusinessType", "Type")
@@ -1989,6 +2227,17 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.BusinessRecord", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Business", "Business")
+                        .WithMany("BusinessRecords")
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Business");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>
@@ -2040,10 +2289,21 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.SeriesRecord", b =>
+                {
+                    b.HasOne("ApollosLibrary.Domain.Series", "Series")
+                        .WithMany("SeriesRecords")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Series");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
                 {
                     b.HasOne("ApollosLibrary.Domain.SubscriptionType", "SubscriptionType")
-                        .WithMany()
+                        .WithMany("Subscriptions")
                         .HasForeignKey("SubscriptionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2107,6 +2367,21 @@ namespace ApollosLibrary.Domain.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.Author", b =>
+                {
+                    b.Navigation("AuthorRecords");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Book", b =>
+                {
+                    b.Navigation("BookRecords");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
+                {
+                    b.Navigation("BusinessRecords");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Library", b =>
                 {
                     b.Navigation("LibraryEntries");
@@ -2117,9 +2392,19 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Navigation("OrderItems");
                 });
 
+            modelBuilder.Entity("ApollosLibrary.Domain.Series", b =>
+                {
+                    b.Navigation("SeriesRecords");
+                });
+
             modelBuilder.Entity("ApollosLibrary.Domain.Subscription", b =>
                 {
                     b.Navigation("SubscriptionUsers");
+                });
+
+            modelBuilder.Entity("ApollosLibrary.Domain.SubscriptionType", b =>
+                {
+                    b.Navigation("Subscriptions");
                 });
 #pragma warning restore 612, 618
         }

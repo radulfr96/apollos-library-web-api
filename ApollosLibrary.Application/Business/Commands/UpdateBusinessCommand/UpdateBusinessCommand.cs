@@ -28,14 +28,16 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
     {
         private readonly IBusinessUnitOfWork _businessUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
-
+        private readonly IDateTimeService _dateTimeService;
         public UpdateBusinessCommandHandler(
             IBusinessUnitOfWork BusinessUnitOfWork
             , IReferenceUnitOfWork referenceUnitOfWork
+            , IDateTimeService dateTimeService
             )
         {
             _businessUnitOfWork = BusinessUnitOfWork;
             _referenceUnitOfWork = referenceUnitOfWork;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task<UpdateBusinessCommandDto> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
@@ -72,6 +74,7 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
             business.State = command.State;
             business.StreetAddress = command.StreetAddress;
             business.Website = command.Website;
+            business.CreatedDate = _dateTimeService.Now;
 
             await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
             {
@@ -81,7 +84,7 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
                 CountryId = business.CountryId,
                 CreatedBy = business.CreatedBy,
                 CreatedDate = business.CreatedDate,
-                IsDeleted = true,
+                IsDeleted = false,
                 Name = business.Name,
                 Postcode = business.Postcode,
                 State = business.State,

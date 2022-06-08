@@ -89,7 +89,8 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var series = _context.Series.FirstOrDefault(p => p.SeriesId == command.SeriesId);
 
-            series.Should().BeNull();
+            series.Should().NotBeNull();
+            series.IsDeleted.Should().BeTrue();
         }
     }
 }

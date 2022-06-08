@@ -25,6 +25,7 @@ namespace ApollosLibrary.Application.IntegrationTests
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IDateTimeService _dateTimeService;
 
         public UpdateBookCommandTest(TestFixture fixture) : base(fixture)
         {
@@ -32,7 +33,8 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var mockDateTimeService = new Mock<IDateTimeService>();
             mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
-            services.AddSingleton(mockDateTimeService.Object);
+            _dateTimeService = mockDateTimeService.Object;
+            services.AddSingleton(_dateTimeService);
 
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
@@ -58,8 +60,8 @@ namespace ApollosLibrary.Application.IntegrationTests
             var Business1 = BusinessGenerator.GetGenericBusiness("GB", userID);
             _context.Business.Add(Business1);
 
-            var Business2 = BusinessGenerator.GetGenericBusiness("GB", userID);
-            _context.Business.Add(Business2);
+            var business2 = BusinessGenerator.GetGenericBusiness("GB", userID);
+            _context.Business.Add(business2);
 
             _context.SaveChanges();
 
@@ -136,7 +138,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 },
                 ISBN = newBookDetails.Isbn,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
-                BusinessId = Business2.BusinessId,
+                BusinessId = business2.BusinessId,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
                 Series = new List<int>()
@@ -161,7 +163,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FormTypeId = newBookDetails.FormTypeId,
                 Isbn = newBookDetails.Isbn,
                 PublicationFormatId = newBookDetails.PublicationFormatId,
-                BusinessId = Business2.BusinessId,
+                BusinessId = business2.BusinessId,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
             }, opt =>
@@ -171,9 +173,31 @@ namespace ApollosLibrary.Application.IntegrationTests
             .Excluding(f => f.Business)
             .Excluding(f => f.Authors)
             .Excluding(f => f.Genres)
-            .Excluding(f => f.Series));
+            .Excluding(f => f.Series)
+            .Excluding(f => f.BookRecords));
 
-            var bookEntity = _context.Books.Include(b => b.Authors).Include(b => b.Genres).FirstOrDefault(a => a.BookId == bookGenerated.BookId);
+            var bookEntity = _context.Books.Include(b => b.Authors).Include(b => b.Genres).Include(b => b.BookRecords).FirstOrDefault(a => a.BookId == bookGenerated.BookId);
+
+            bookEntity.BookRecords.Last(r => r.BookId == book.BookId).Should().BeEquivalentTo(new BookRecord()
+                {
+                    BookId = book.BookId,
+                    BookRecordId = bookEntity.BookRecords.Last(r => r.BookId == book.BookId).BookRecordId,
+                    BusinessId = business2.BusinessId,
+                    CoverImage = newBookDetails.CoverImage,
+                    CreatedBy = newBookDetails.CreatedBy,
+                    CreatedDate = _dateTimeService.Now,
+                    Edition = newBookDetails.Edition,
+                    EIsbn = newBookDetails.EIsbn,
+                    FictionTypeId = newBookDetails.FictionTypeId,
+                    FormTypeId = newBookDetails.FormTypeId,
+                    Isbn = newBookDetails.Isbn,
+                    IsDeleted = false,
+                    PublicationFormatId = newBookDetails.PublicationFormatId,
+                    ReportedVersion = false,
+                    Subtitle = newBookDetails.Subtitle,
+                    Title = newBookDetails.Title,
+                }, opt => opt.Excluding(f => f.Book));
+
 
             bookEntity.Genres.Should().HaveCount(2);
 

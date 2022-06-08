@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -77,7 +78,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(command);
 
-            var authorRecord = _context.Authors.FirstOrDefault(a => a.AuthorId == author.AuthorId);
+            var authorRecord = _context.Authors.Include(a => a.AuthorRecords).FirstOrDefault(a => a.AuthorId == author.AuthorId);
 
             authorRecord.Should().BeEquivalentTo(new Domain.Author()
             {
@@ -89,7 +90,22 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FirstName = newAuthorDetails.FirstName,
                 LastName = newAuthorDetails.LastName,
                 MiddleName = newAuthorDetails.MiddleName,
-            }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books));
+            }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books).Excluding(f => f.AuthorRecords));
+
+            author.AuthorRecords.Where(a => a.AuthorId == author.AuthorId).First().Should().BeEquivalentTo(new AuthorRecord()
+            {
+                AuthorId = author.AuthorId,
+                AuthorRecordId = author.AuthorRecords.First().AuthorRecordId,
+                CountryId = command.CountryID,
+                CreatedBy = userID,
+                CreatedDate = _dateTime.Now,
+                Description = command.Description,
+                FirstName = command.Firstname,
+                LastName = command.Lastname,
+                IsDeleted = false,
+                MiddleName = command.Middlename,
+                ReportedVersion = false,
+            }, opt => opt.Excluding(f => f.Author).Excluding(f => f.Country));
         }
     }
 }

@@ -141,16 +141,21 @@ namespace ApollosLibrary.Application.IntegrationTests
             _contextAccessor.HttpContext = httpContext;
 
             var bookGenerated = BookGenerator.GetGenericPhysicalBook(userID);
+            bookGenerated.IsDeleted = true;
+            var bookGenerated2 = BookGenerator.GetGenericPhysicalBook(userID);
+
+            _context.Books.Add(bookGenerated);
 
             var command = new AddBookCommand()
             {
+                Edition = bookGenerated2.Edition,
+                FictionTypeId = bookGenerated2.FictionTypeId,
+                FormTypeId = bookGenerated2.FormTypeId,
                 ISBN = bookGenerated.Isbn,
-                Subtitle = "Book Two of Legends",
-                Title = "Heir Of Novron",
-                Edition = 8,
+                PublicationFormatId = bookGenerated2.PublicationFormatId,
+                Subtitle = bookGenerated2.Subtitle,
+                Title = bookGenerated2.Title,
             };
-
-            _context.Books.Add(bookGenerated);
 
             _context.SaveChanges();
 
@@ -183,16 +188,21 @@ namespace ApollosLibrary.Application.IntegrationTests
             _contextAccessor.HttpContext = httpContext;
 
             var bookGenerated = BookGenerator.GetGenericDigitalBook(userID);
+            bookGenerated.IsDeleted = true;
+            var bookGenerated2 = BookGenerator.GetGenericDigitalBook(userID);
+
+            _context.Books.Add(bookGenerated);
 
             var command = new AddBookCommand()
             {
+                Edition = bookGenerated2.Edition,
+                FictionTypeId = bookGenerated2.FictionTypeId,
+                FormTypeId = bookGenerated2.FormTypeId,
                 EISBN = bookGenerated.EIsbn,
-                Subtitle = "Book Two of Legends",
-                Title = "Heir Of Novron",
-                Edition = 8,
+                PublicationFormatId = bookGenerated2.PublicationFormatId,
+                Subtitle = bookGenerated2.Subtitle,
+                Title = bookGenerated2.Title,
             };
-
-            _context.Books.Add(bookGenerated);
 
             _context.SaveChanges();
 

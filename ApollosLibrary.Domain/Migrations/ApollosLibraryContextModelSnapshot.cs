@@ -225,14 +225,6 @@ namespace ApollosLibrary.Domain.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("BusinessId");
-
-                    b.HasIndex("FictionTypeId");
-
-                    b.HasIndex("FormTypeId");
-
-                    b.HasIndex("PublicationFormatId");
-
                     b.ToTable("BookRecords");
                 });
 
@@ -304,7 +296,7 @@ namespace ApollosLibrary.Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CountryId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -336,10 +328,6 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasKey("BusinessRecordId");
 
                     b.HasIndex("BusinessId");
-
-                    b.HasIndex("BusinessTypeId");
-
-                    b.HasIndex("CountryId");
 
                     b.ToTable("BusinessRecords");
                 });
@@ -1999,10 +1987,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("699aca95-5c3b-49bc-a7ea-05fef6b200b1"),
-                            ExpiryDate = new DateTime(2102, 6, 7, 20, 21, 0, 229, DateTimeKind.Local).AddTicks(5529),
+                            SubscriptionId = new Guid("be281799-290c-4885-a5f7-f232ea6340d2"),
+                            ExpiryDate = new DateTime(2102, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5626),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 7, 20, 21, 0, 229, DateTimeKind.Local).AddTicks(5573),
+                            SubscriptionDate = new DateTime(2022, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5656),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -2219,37 +2207,7 @@ namespace ApollosLibrary.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApollosLibrary.Domain.Business", "Business")
-                        .WithMany()
-                        .HasForeignKey("BusinessId");
-
-                    b.HasOne("ApollosLibrary.Domain.FictionType", "FictionType")
-                        .WithMany()
-                        .HasForeignKey("FictionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApollosLibrary.Domain.FormType", "FormType")
-                        .WithMany()
-                        .HasForeignKey("FormTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApollosLibrary.Domain.PublicationFormat", "PublicationFormat")
-                        .WithMany()
-                        .HasForeignKey("PublicationFormatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Book");
-
-                    b.Navigation("Business");
-
-                    b.Navigation("FictionType");
-
-                    b.Navigation("FormType");
-
-                    b.Navigation("PublicationFormat");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.Business", b =>
@@ -2277,21 +2235,7 @@ namespace ApollosLibrary.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApollosLibrary.Domain.BusinessType", "Type")
-                        .WithMany()
-                        .HasForeignKey("BusinessTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApollosLibrary.Domain.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
-
                     b.Navigation("Business");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>

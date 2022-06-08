@@ -21,10 +21,8 @@ namespace ApollosLibrary.Domain
         public string State { get; set; }
 
         public string CountryId { get; set; }
-        public Country Country { get; set; }
         public bool IsDeleted { get; set; }
         public int BusinessTypeId { get; set; }
-        public BusinessType Type { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? CreatedBy { get; set; }
     }

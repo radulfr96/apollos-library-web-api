@@ -38,6 +38,6 @@ namespace ApollosLibrary.Domain
         public ICollection<Author> Authors { get; set; }
         public ICollection<Genre> Genres { get; set; }
         public ICollection<Series> Series { get; set; }
-        public ICollection<BookRecord> BookRecords { get; set; }
+        public ICollection<BookRecord> BookRecords { get; set; } = new List<BookRecord>();
     }
 }

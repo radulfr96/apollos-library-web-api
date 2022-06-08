@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -72,9 +73,9 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(command);
 
-            var Business = _context.Business.FirstOrDefault(p => p.BusinessId == result.BusinessId);
+            var business = _context.Business.Include(b => b.BusinessRecords).FirstOrDefault(p => p.BusinessId == result.BusinessId);
 
-            Business.Should().BeEquivalentTo(new Domain.Business()
+            business.Should().BeEquivalentTo(new Domain.Business()
             {
                 City = businessGenerated.City,
                 CountryId = businessGenerated.CountryId,
@@ -88,7 +89,25 @@ namespace ApollosLibrary.Application.IntegrationTests
                 State = businessGenerated.State,
                 StreetAddress = businessGenerated.StreetAddress,
                 Website = businessGenerated.Website,
-            }, opt => opt.Excluding(f => f.Country).Excluding(f => f.Type));
+            }, opt => opt.Excluding(f => f.Country).Excluding(f => f.Type).Excluding(f => f.BusinessRecords));
+
+            business.BusinessRecords.First().Should().BeEquivalentTo(new BusinessRecord()
+            {
+                BusinessId = business.BusinessId,
+                BusinessRecordId = 1,
+                BusinessTypeId = businessGenerated.BusinessTypeId,
+                City = businessGenerated.City,
+                CountryId = businessGenerated.CountryId,
+                CreatedBy = userID,
+                CreatedDate = _dateTime.Now,
+                IsDeleted = false,
+                Name = businessGenerated.Name,
+                Postcode = businessGenerated.Postcode,
+                ReportedVersion = false,
+                State = businessGenerated.State,
+                StreetAddress = businessGenerated.StreetAddress,
+                Website = businessGenerated.Website,
+            }, opt => opt.Excluding(f => f.Business));
         }
     }
 }

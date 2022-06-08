@@ -164,6 +164,18 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 series.Books.Add(book);
             }
 
+            book.CoverImage = command.CoverImage;
+            book.CreatedBy = _userService.GetUserId();
+            book.CreatedDate = _dateTimeService.Now;
+            book.Edition = command.Edition;
+            book.EIsbn = command.EISBN;
+            book.FictionTypeId = command.FictionTypeId;
+            book.FormTypeId = command.FormTypeId;
+            book.Isbn = command.ISBN;
+            book.PublicationFormatId = command.PublicationFormatId;
+            book.BusinessId = command.BusinessId;
+            book.Subtitle = command.Subtitle;
+            book.Title = command.Title;
 
             var bookRecord = new Domain.BookRecord()
             {
@@ -181,26 +193,8 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 Subtitle = book.Subtitle,
                 Title = book.Title,
             };
-
-            await _bookUnitOfWork.Begin();
             await _bookUnitOfWork.BookDataLayer.AddBookRecord(bookRecord);
             await _bookUnitOfWork.Save();
-
-            book.CoverImage = command.CoverImage;
-            book.CreatedBy = _userService.GetUserId();
-            book.CreatedDate = _dateTimeService.Now;
-            book.Edition = command.Edition;
-            book.EIsbn = command.EISBN;
-            book.FictionTypeId = command.FictionTypeId;
-            book.FormTypeId = command.FormTypeId;
-            book.Isbn = command.ISBN;
-            book.PublicationFormatId = command.PublicationFormatId;
-            book.BusinessId = command.BusinessId;
-            book.Subtitle = command.Subtitle;
-            book.Title = command.Title;
-
-            await _bookUnitOfWork.Save();
-            await _bookUnitOfWork.Commit();
 
             return response;
         }

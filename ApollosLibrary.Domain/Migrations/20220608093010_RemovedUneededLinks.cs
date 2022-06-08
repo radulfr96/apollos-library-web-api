@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApollosLibrary.Domain.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class RemovedUneededLinks : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +32,23 @@ namespace ApollosLibrary.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.CountryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntryReports",
+                columns: table => new
+                {
+                    EntryReportId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EntryId = table.Column<int>(type: "int", nullable: false),
+                    EntryType = table.Column<int>(type: "int", nullable: false),
+                    ReportedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReportedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryReports", x => x.EntryReportId);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,10 +140,9 @@ namespace ApollosLibrary.Domain.Migrations
                     SeriesId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -140,7 +156,12 @@ namespace ApollosLibrary.Domain.Migrations
                     SubscriptionTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SubscriptionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MonthlyRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    MonthlyRate = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    StripeProductId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Purchasable = table.Column<bool>(type: "bit", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    MaxUsers = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -157,11 +178,10 @@ namespace ApollosLibrary.Domain.Migrations
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,11 +207,9 @@ namespace ApollosLibrary.Domain.Migrations
                     State = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     BusinessTypeId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -210,13 +228,40 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SeriesRecords",
+                columns: table => new
+                {
+                    SeriesRecordId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
+                    SeriesId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeriesRecords", x => x.SeriesRecordId);
+                    table.ForeignKey(
+                        name: "FK_SeriesRecords_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "SeriesId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subscriptions",
                 columns: table => new
                 {
                     SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubscriptionTypeId = table.Column<int>(type: "int", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SubscriptionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SubscriptionAdmin = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StripeSubscriptionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StripeCustomerId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -230,6 +275,39 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AuthorRecords",
+                columns: table => new
+                {
+                    AuthorRecordId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorRecords", x => x.AuthorRecordId);
+                    table.ForeignKey(
+                        name: "FK_AuthorRecords_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "AuthorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AuthorRecords_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "CountryId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -240,15 +318,14 @@ namespace ApollosLibrary.Domain.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Edition = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     PublicationFormatId = table.Column<int>(type: "int", nullable: false),
                     FictionTypeId = table.Column<int>(type: "int", nullable: false),
                     FormTypeId = table.Column<int>(type: "int", nullable: false),
                     BusinessId = table.Column<int>(type: "int", nullable: true),
                     CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -279,12 +356,65 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BusinessRecords",
+                columns: table => new
+                {
+                    BusinessRecordId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Postcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CountryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    BusinessTypeId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessRecords", x => x.BusinessRecordId);
+                    table.ForeignKey(
+                        name: "FK_BusinessRecords_Business_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Business",
+                        principalColumn: "BusinessId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Orders_Business_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Business",
+                        principalColumn: "BusinessId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserSubscriptions",
                 columns: table => new
                 {
                     UserSubscrptionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -347,6 +477,39 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookRecords",
+                columns: table => new
+                {
+                    BookRecordId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    Isbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EIsbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Edition = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    PublicationFormatId = table.Column<int>(type: "int", nullable: false),
+                    FictionTypeId = table.Column<int>(type: "int", nullable: false),
+                    FormTypeId = table.Column<int>(type: "int", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: true),
+                    CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookRecords", x => x.BookRecordId);
+                    table.ForeignKey(
+                        name: "FK_BookRecords_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BookSeries",
                 columns: table => new
                 {
@@ -377,7 +540,8 @@ namespace ApollosLibrary.Domain.Migrations
                     EntryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    LibraryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -387,6 +551,40 @@ namespace ApollosLibrary.Domain.Migrations
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LibraryEntries_Libraries_LibraryId",
+                        column: x => x.LibraryId,
+                        principalTable: "Libraries",
+                        principalColumn: "LibraryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -725,18 +923,34 @@ namespace ApollosLibrary.Domain.Migrations
 
             migrationBuilder.InsertData(
                 table: "SubscriptionTypes",
-                columns: new[] { "SubscriptionTypeId", "MonthlyRate", "SubscriptionName" },
+                columns: new[] { "SubscriptionTypeId", "Description", "IsAvailable", "MaxUsers", "MonthlyRate", "Purchasable", "StripeProductId", "SubscriptionName" },
                 values: new object[,]
                 {
-                    { 1, 0.00m, "Staff Member" },
-                    { 2, 10.00m, "Individual Subscription" },
-                    { 3, 30.00m, "Family Subscription" }
+                    { -1, null, true, 1, 0.00m, false, null, "Signed Up" },
+                    { 1, null, true, 1, 0.00m, false, null, "Staff Member" },
+                    { 2, "This subscription is for individuals keeping track of their own library.", true, 1, 10.00m, true, "prod_LlBGpg7ytim1dy", "Individual Subscription" },
+                    { 3, "This subscription is for families keeping track of their own libraries. Each user will have their own library.", false, 5, 30.00m, true, "prod_LlBHeWO1QAe9Dx", "Family Subscription" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Subscriptions",
+                columns: new[] { "SubscriptionId", "ExpiryDate", "StripeCustomerId", "StripeSubscriptionId", "SubscriptionAdmin", "SubscriptionDate", "SubscriptionTypeId" },
+                values: new object[] { new Guid("be281799-290c-4885-a5f7-f232ea6340d2"), new DateTime(2102, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5626), null, null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2022, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5656), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AuthorBook_BooksBookId",
                 table: "AuthorBook",
                 column: "BooksBookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuthorRecords_AuthorId",
+                table: "AuthorRecords",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuthorRecords_CountryId",
+                table: "AuthorRecords",
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Authors_CountryId",
@@ -747,6 +961,11 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "IX_BookGenre_GenresGenreId",
                 table: "BookGenre",
                 column: "GenresGenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookRecords_BookId",
+                table: "BookRecords",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_BusinessId",
@@ -784,9 +1003,39 @@ namespace ApollosLibrary.Domain.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BusinessRecords_BusinessId",
+                table: "BusinessRecords",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LibraryEntries_BookId",
                 table: "LibraryEntries",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibraryEntries_LibraryId",
+                table: "LibraryEntries",
+                column: "LibraryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_BookId",
+                table: "OrderItems",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_BusinessId",
+                table: "Orders",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeriesRecords_SeriesId",
+                table: "SeriesRecords",
+                column: "SeriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_SubscriptionTypeId",
@@ -805,19 +1054,34 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "AuthorBook");
 
             migrationBuilder.DropTable(
+                name: "AuthorRecords");
+
+            migrationBuilder.DropTable(
                 name: "BookGenre");
+
+            migrationBuilder.DropTable(
+                name: "BookRecords");
 
             migrationBuilder.DropTable(
                 name: "BookSeries");
 
             migrationBuilder.DropTable(
+                name: "BusinessRecords");
+
+            migrationBuilder.DropTable(
+                name: "EntryReports");
+
+            migrationBuilder.DropTable(
                 name: "ErrorCodes");
 
             migrationBuilder.DropTable(
-                name: "Libraries");
+                name: "LibraryEntries");
 
             migrationBuilder.DropTable(
-                name: "LibraryEntries");
+                name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "SeriesRecords");
 
             migrationBuilder.DropTable(
                 name: "UserSubscriptions");
@@ -829,16 +1093,19 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "Series");
+                name: "Libraries");
 
             migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Subscriptions");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Business");
+                name: "Series");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
 
             migrationBuilder.DropTable(
                 name: "FictionTypes");
@@ -848,6 +1115,9 @@ namespace ApollosLibrary.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "PublicationFormats");
+
+            migrationBuilder.DropTable(
+                name: "Business");
 
             migrationBuilder.DropTable(
                 name: "SubscriptionTypes");

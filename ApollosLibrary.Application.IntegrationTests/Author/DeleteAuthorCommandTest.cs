@@ -63,7 +63,8 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var authorAfter = _context.Authors.FirstOrDefault(a => a.AuthorId == command.AuthorId);
 
-            authorAfter.Should().BeNull();
+            authorAfter.Should().NotBeNull();
+            authorAfter.IsDeleted.Should().BeTrue();
         }
     }
 }

@@ -134,8 +134,6 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                     Authors = new List<Domain.Author>()
                 };
 
-                await _bookUnitOfWork.Begin();
-
                 await _bookUnitOfWork.BookDataLayer.AddBook(book);
 
                 await _bookUnitOfWork.Save();
@@ -177,7 +175,6 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
                 }
 
                 await _bookUnitOfWork.Save();
-                await _bookUnitOfWork.Commit();
             }
             else
             {

@@ -18,6 +18,7 @@ using ApollosLibrary.Domain;
 using ApollosLibrary.Application.Series.Commands.AddSeriesCommand;
 using Bogus;
 using ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -76,7 +77,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var result = await _mediatr.Send(command);
 
-            var series = _context.Series.FirstOrDefault(p => p.SeriesId == seriesResult.SeriesId);
+            var series = _context.Series.Include(s => s.SeriesRecords).FirstOrDefault(p => p.SeriesId == seriesResult.SeriesId);
 
             series.Should().BeEquivalentTo(new Domain.Series()
             {
@@ -84,7 +85,18 @@ namespace ApollosLibrary.Application.IntegrationTests
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = command.Name,
-            }, opt => opt.Excluding(f => f.Books));
+            }, opt => opt.Excluding(f => f.Books).Excluding(f => f.SeriesRecords));
+
+            series.SeriesRecords.Last(r => r.SeriesId == series.SeriesId).Should().BeEquivalentTo(new SeriesRecord()
+            {
+                CreatedBy = userID,
+                CreatedDate = _dateTime.Now,
+                IsDeleted = false,
+                Name = command.Name,
+                ReportedVersion = false,
+                SeriesId = series.SeriesId,
+                SeriesRecordId = series.SeriesRecords.Last(r => r.SeriesId == series.SeriesId).SeriesRecordId
+            }, opt => opt.Excluding(f => f.Series));
         }
     }
 }

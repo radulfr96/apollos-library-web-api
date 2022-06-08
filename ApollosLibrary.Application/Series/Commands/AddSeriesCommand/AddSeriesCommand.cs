@@ -45,6 +45,7 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
             };
 
             await _seriesUnitOfWork.SeriesDataLayer.AddSeries(series);
+            await _seriesUnitOfWork.Begin();
             await _seriesUnitOfWork.Save();
 
             await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(new SeriesRecord()

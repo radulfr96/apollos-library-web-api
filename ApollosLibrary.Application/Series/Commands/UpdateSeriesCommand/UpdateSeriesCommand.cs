@@ -51,7 +51,7 @@ namespace ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = series.Name,
-                IsDeleted = true,
+                IsDeleted = false,
                 SeriesId = series.SeriesId,
             });
 
