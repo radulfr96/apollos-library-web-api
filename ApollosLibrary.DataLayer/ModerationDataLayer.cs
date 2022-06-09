@@ -1,5 +1,6 @@
 ﻿using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,21 @@ namespace ApollosLibrary.DataLayer
         public async Task AddEntryReport(EntryReport entryReport)
         {
             await _context.EntryReports.AddAsync(entryReport);
+        }
+
+        public async Task<List<EntryReport>> GetEntryReports()
+        {
+            return await _context.EntryReports.ToListAsync();
+        }
+
+        public async Task<List<EntryReport>> GetUsersEntryReports(Guid userId)
+        {
+            return await _context.EntryReports.Where(r => r.ReportedBy == userId).ToListAsync();
+        }
+
+        public async Task<List<EntryReport>> GetReportsOfEntriesByUser(Guid userId)
+        {
+            return await _context.EntryReports.Where(r => r.CreatedBy == userId).ToListAsync();
         }
     }
 }
