@@ -25,7 +25,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetUsersEntryReportsQuer
 
         public async Task<GetUsersEntryReportsQueryDto> Handle(GetUsersEntryReportsQuery request, CancellationToken cancellationToken)
         {
-            var reports = await _moderationUnitOfWork.ModerationDataLayer.GetReportsOfEntriesByUser(request.UserId);
+            var reports = await _moderationUnitOfWork.ModerationDataLayer.GetUsersEntryReports(request.UserId);
 
             return new GetUsersEntryReportsQueryDto()
             {

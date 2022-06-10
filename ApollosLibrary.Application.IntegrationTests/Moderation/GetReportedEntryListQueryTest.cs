@@ -43,7 +43,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
         }
 
         [Fact]
-        public async Task AddReportEntryCommand()
+        public async Task GetReportListEntries()
         {
             var userID = Guid.NewGuid();
 
@@ -104,38 +104,36 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             var result = await _mediatr.Send(command);
 
-            result.EntryReports.Should().BeEquivalentTo(new List<EntryReportListItem>()
+            result.EntryReports.Should().ContainEquivalentOf(new EntryReportListItem()
             {
-                new EntryReportListItem()
-                {
-                    CreatedBy = report1.CreatedBy,
-                    CreatedDate = report1.CreatedDate,
-                    EntryId = report1.EntryId,
-                    EntryType = report1.EntryType,
-                    ReportedBy = report1.ReportedBy,
-                    ReportedDate = report1.ReportedDate,
-                    ReportId = report1.EntryReportId,
-                },
-                new EntryReportListItem()
-                {
-                    CreatedBy = report2.CreatedBy,
-                    CreatedDate = report2.CreatedDate,
-                    EntryId = report2.EntryId,
-                    EntryType = report2.EntryType,
-                    ReportedBy = report2.ReportedBy,
-                    ReportedDate = report2.ReportedDate,
-                    ReportId = report2.EntryReportId,
-                },
-                new EntryReportListItem()
-                {
-                    CreatedBy = report3.CreatedBy,
-                    CreatedDate = report3.CreatedDate,
-                    EntryId = report3.EntryId,
-                    EntryType = report3.EntryType,
-                    ReportedBy = report3.ReportedBy,
-                    ReportedDate = report3.ReportedDate,
-                    ReportId = report3.EntryReportId,
-                },
+                CreatedBy = report1.CreatedBy,
+                CreatedDate = report1.CreatedDate,
+                EntryId = report1.EntryId,
+                EntryType = report1.EntryType,
+                ReportedBy = report1.ReportedBy,
+                ReportedDate = report1.ReportedDate,
+                ReportId = report1.EntryReportId,
+            });
+
+            result.EntryReports.Should().ContainEquivalentOf(new EntryReportListItem()
+            {
+                CreatedBy = report2.CreatedBy,
+                CreatedDate = report2.CreatedDate,
+                EntryId = report2.EntryId,
+                EntryType = report2.EntryType,
+                ReportedBy = report2.ReportedBy,
+                ReportedDate = report2.ReportedDate,
+                ReportId = report2.EntryReportId,
+            });
+            result.EntryReports.Should().ContainEquivalentOf(new EntryReportListItem()
+            {
+                CreatedBy = report3.CreatedBy,
+                CreatedDate = report3.CreatedDate,
+                EntryId = report3.EntryId,
+                EntryType = report3.EntryType,
+                ReportedBy = report3.ReportedBy,
+                ReportedDate = report3.ReportedDate,
+                ReportId = report3.EntryReportId,
             });
         }
     }
