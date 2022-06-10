@@ -41,7 +41,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
         }
 
         [Fact]
-        public async Task AddOrderCommand()
+        public async Task AddReportEntryCommand()
         {
             var userID = Guid.NewGuid();
 
