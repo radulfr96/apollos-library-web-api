@@ -28,6 +28,11 @@ namespace ApollosLibrary.DataLayer
             return await _context.EntryReports.ToListAsync();
         }
 
+        public async Task<EntryReport> GetEntryReport(int entryReportId)
+        {
+            return await _context.EntryReports.FirstOrDefaultAsync(r => r.EntryReportId == entryReportId);
+        }
+
         public async Task<List<EntryReport>> GetUsersEntryReports(Guid userId)
         {
             return await _context.EntryReports.Where(r => r.ReportedBy == userId).ToListAsync();

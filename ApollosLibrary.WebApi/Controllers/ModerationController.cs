@@ -1,4 +1,5 @@
 ﻿using ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand;
+using ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery;
 using ApollosLibrary.Application.Moderation.Queries.GetReportedEntryListQuery;
 using ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUserQuery;
 using ApollosLibrary.Application.Moderation.Queries.GetUsersEntryReportsQuery;
@@ -45,12 +46,27 @@ namespace ApollosLibrary.WebApi.Controllers
             return await _mediatr.Send(new GetReportedEntryListQuery());
         }
 
+
+        /// <summary>
+        /// Used to get report using the id provided for entries
+        /// </summary>
+        /// <param name="entryReportId">The id of the report to retreive</param>
+        /// <returns>The report with the id provided</returns>
+        [HttpGet("{entryReportId}")]
+        public async Task<GetEntryReportQueryDto> GetEntryReports([FromRoute]int entryReportId)
+        {
+            return await _mediatr.Send(new GetEntryReportQuery()
+            {
+                ReportEntryId = entryReportId,
+            });
+        }
+
         /// <summary>
         /// Used to get reports of entries by a particular user
         /// </summary>
         /// <param name="userId">The id of the user</param>
         /// <returns>The reports</returns>
-        [HttpGet("reportedentriesbyuser")]
+        [HttpGet("reportedentriesbyuser/{userId}")]
         public async Task<GetReportsOfEntriesByUserQueryDto> GetReportsOfEntriesByUser([FromRoute] Guid userId)
         {
             return await _mediatr.Send(new GetReportsOfEntriesByUserQuery()
@@ -64,7 +80,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="userId">The id of the user</param>
         /// <returns>The reports</returns>
-        [HttpGet("reportsbyuser")]
+        [HttpGet("reportsbyuser/{userId}")]
         public async Task<GetUsersEntryReportsQueryDto> GetUsersEntryReportsQuery([FromRoute] Guid userId)
         {
             return await _mediatr.Send(new GetUsersEntryReportsQuery()

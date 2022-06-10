@@ -25,6 +25,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<List<EntryReport>> GetEntryReports();
 
         /// <summary>
+        /// Used to get an entry report by its id
+        /// </summary>
+        /// <returns>The entry report to find</returns>
+        Task<EntryReport> GetEntryReport(int entryReportid);
+
+        /// <summary>
         /// Used to get all of the entry reports created by a user
         /// </summary>
         /// <returns>The entry reports</returns>
