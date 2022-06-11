@@ -53,7 +53,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <param name="entryReportId">The id of the report to retreive</param>
         /// <returns>The report with the id provided</returns>
         [HttpGet("{entryReportId}")]
-        public async Task<GetEntryReportQueryDto> GetEntryReports([FromRoute]int entryReportId)
+        public async Task<GetEntryReportQueryDto> GetEntryReport([FromRoute]int entryReportId)
         {
             return await _mediatr.Send(new GetEntryReportQuery()
             {
