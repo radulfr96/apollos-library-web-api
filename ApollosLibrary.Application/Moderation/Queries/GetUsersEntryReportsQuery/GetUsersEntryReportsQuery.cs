@@ -1,4 +1,5 @@
-﻿using ApollosLibrary.UnitOfWork.Contracts;
+﻿using ApollosLibrary.Domain.Enums;
+using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetUsersEntryReportsQuer
                     CreatedBy = r.CreatedBy,
                     CreatedDate = r.CreatedDate,
                     EntryId = r.EntryId,
-                    EntryType = r.EntryType,
+                    EntryTypeId = r.EntryTypeId,
                     ReportedBy = r.ReportedBy,
                     ReportedDate = r.ReportedDate,
                     ReportId = r.EntryReportId,

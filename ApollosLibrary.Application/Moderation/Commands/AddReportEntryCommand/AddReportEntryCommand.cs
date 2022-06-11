@@ -40,7 +40,8 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
             {
                 CreatedBy = request.CreatedBy,
                 EntryId = request.EntryId,
-                EntryType = request.EntryType,
+                EntryTypeId = (int)request.EntryType,
+                EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = _userService.GetUserId(),
                 ReportedDate = _dateTimeService.Now,
             };

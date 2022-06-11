@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApollosLibrary.Domain.Migrations
 {
     [DbContext(typeof(ApollosLibraryContext))]
-    partial class ApollosLibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220611102444_AdjustedIdFields")]
+    partial class AdjustedIdFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1649,11 +1651,14 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<DateTime>("ReportedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TypeEntryReportTypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("EntryReportId");
 
                     b.HasIndex("EntryReportStatusId");
 
-                    b.HasIndex("EntryTypeId");
+                    b.HasIndex("TypeEntryReportTypeId");
 
                     b.ToTable("EntryReports");
                 });
@@ -2068,10 +2073,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("d02c60f2-21a7-44fc-a149-ab9b1cb4c789"),
-                            ExpiryDate = new DateTime(2102, 6, 11, 22, 50, 23, 148, DateTimeKind.Local).AddTicks(1805),
+                            SubscriptionId = new Guid("52eb0d74-a638-499c-8a78-8db14d91d3b2"),
+                            ExpiryDate = new DateTime(2102, 6, 11, 20, 24, 39, 716, DateTimeKind.Local).AddTicks(4729),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 6, 11, 22, 50, 23, 148, DateTimeKind.Local).AddTicks(1899),
+                            SubscriptionDate = new DateTime(2022, 6, 11, 20, 24, 39, 716, DateTimeKind.Local).AddTicks(4761),
                             SubscriptionTypeId = 1
                         });
                 });
@@ -2321,21 +2326,19 @@ namespace ApollosLibrary.Domain.Migrations
 
             modelBuilder.Entity("ApollosLibrary.Domain.EntryReport", b =>
                 {
-                    b.HasOne("ApollosLibrary.Domain.EntryReportStatus", "EntryReportStatus")
+                    b.HasOne("ApollosLibrary.Domain.EntryReportStatus", "Status")
                         .WithMany()
                         .HasForeignKey("EntryReportStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApollosLibrary.Domain.EntryReportType", "EntryType")
+                    b.HasOne("ApollosLibrary.Domain.EntryReportType", "Type")
                         .WithMany()
-                        .HasForeignKey("EntryTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TypeEntryReportTypeId");
 
-                    b.Navigation("EntryReportStatus");
+                    b.Navigation("Status");
 
-                    b.Navigation("EntryType");
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("ApollosLibrary.Domain.LibraryEntry", b =>

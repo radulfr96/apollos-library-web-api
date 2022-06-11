@@ -66,7 +66,8 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = entryUser1,
                 CreatedDate = _dateTimeService.Now,
                 EntryId = new Faker().Random.Int(1),
-                EntryType = new Faker().Random.Enum<EntryTypeEnum>(),
+                EntryTypeId = (int)(new Faker().Random.Enum<EntryTypeEnum>()),
+                EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = entryReportUser1,
                 ReportedDate = _dateTimeService.Now.AddDays(1),
             };
@@ -77,7 +78,8 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = entryUser2,
                 CreatedDate = _dateTimeService.Now,
                 EntryId = new Faker().Random.Int(1),
-                EntryType = new Faker().Random.Enum<EntryTypeEnum>(),
+                EntryTypeId = (int)(new Faker().Random.Enum<EntryTypeEnum>()),
+                EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = entryReportUser2,
                 ReportedDate = _dateTimeService.Now.AddDays(1),
             };
@@ -88,7 +90,8 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = entryUser3,
                 CreatedDate = _dateTimeService.Now,
                 EntryId = new Faker().Random.Int(1),
-                EntryType = new Faker().Random.Enum<EntryTypeEnum>(),
+                EntryTypeId = (int)new Faker().Random.Enum<EntryTypeEnum>(),
+                EntryReportStatusId = (int)EntryReportStatusEnum.Cancelled,
                 ReportedBy = entryReportUser1,
                 ReportedDate = _dateTimeService.Now.AddDays(1),
             };
@@ -109,32 +112,36 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = report1.CreatedBy,
                 CreatedDate = report1.CreatedDate,
                 EntryId = report1.EntryId,
-                EntryType = report1.EntryType,
+                EntryTypeId = report1.EntryTypeId,
+                EntryStatusId = report1.EntryReportStatusId,
                 ReportedBy = report1.ReportedBy,
                 ReportedDate = report1.ReportedDate,
                 ReportId = report1.EntryReportId,
-            });
+            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
 
             result.EntryReports.Should().ContainEquivalentOf(new EntryReportListItem()
             {
                 CreatedBy = report2.CreatedBy,
                 CreatedDate = report2.CreatedDate,
                 EntryId = report2.EntryId,
-                EntryType = report2.EntryType,
+                EntryTypeId = report2.EntryTypeId,
+                EntryStatusId = report2.EntryReportStatusId,
                 ReportedBy = report2.ReportedBy,
                 ReportedDate = report2.ReportedDate,
                 ReportId = report2.EntryReportId,
-            });
-            result.EntryReports.Should().ContainEquivalentOf(new EntryReportListItem()
+            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
+
+            result.EntryReports.Should().NotContainEquivalentOf(new EntryReportListItem()
             {
                 CreatedBy = report3.CreatedBy,
                 CreatedDate = report3.CreatedDate,
                 EntryId = report3.EntryId,
-                EntryType = report3.EntryType,
+                EntryTypeId = report3.EntryTypeId,
+                EntryStatusId = report3.EntryReportStatusId,
                 ReportedBy = report3.ReportedBy,
                 ReportedDate = report3.ReportedDate,
                 ReportId = report3.EntryReportId,
-            });
+            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
         }
     }
 }

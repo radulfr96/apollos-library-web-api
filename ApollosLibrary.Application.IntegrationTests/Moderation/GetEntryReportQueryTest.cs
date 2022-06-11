@@ -57,16 +57,14 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             var entryReportUser1 = Guid.NewGuid();
             var entryUser1 = Guid.NewGuid();
-            var entryReportUser2 = Guid.NewGuid();
-            var entryUser2 = Guid.NewGuid();
-            var entryUser3 = Guid.NewGuid();
 
             var report = new EntryReport()
             {
                 CreatedBy = entryUser1,
                 CreatedDate = _dateTimeService.Now,
                 EntryId = new Faker().Random.Int(1),
-                EntryType = new Faker().Random.Enum<EntryTypeEnum>(),
+                EntryTypeId = (int)new Faker().Random.Enum<EntryTypeEnum>(),
+                EntryReportStatusId = (int)new Faker().Random.Enum<EntryReportStatusEnum>(),
                 ReportedBy = entryReportUser1,
                 ReportedDate = _dateTimeService.Now.AddDays(1),
             };
@@ -88,10 +86,11 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = report.CreatedBy,
                 CreatedDate = report.CreatedDate,
                 EntryId = report.EntryId,
-                EntryType = report.EntryType,
+                EntryTypeId = report.EntryTypeId,
+                EntryReportStatusId = report.EntryReportStatusId,
                 ReportedBy = report.ReportedBy,
                 ReportedDate = report.ReportedDate,
-            });
+            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
         }
     }
 }

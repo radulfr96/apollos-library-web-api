@@ -73,6 +73,49 @@ namespace ApollosLibrary.Domain
                 }
             });
 
+            modelBuilder.Entity<EntryReportStatus>().HasData(new List<EntryReportStatus>()
+            {
+                new EntryReportStatus()
+                {
+                    EntryReportStatusId = 1,
+                    Name = "Open",
+                },
+                new EntryReportStatus()
+                {
+                    EntryReportStatusId = 2,
+                    Name = "Cancelled",
+                },
+                new EntryReportStatus()
+                {
+                    EntryReportStatusId = 3,
+                    Name = "Confirmed",
+                },
+            });
+
+            modelBuilder.Entity<EntryReportType>().HasData(new List<EntryReportType>()
+            {
+                new EntryReportType()
+                {
+                    EntryReportTypeId = 1,
+                    Name = "Business",
+                },
+                new EntryReportType()
+                {
+                    EntryReportTypeId = 2,
+                    Name = "Author",
+                },
+                new EntryReportType()
+                {
+                    EntryReportTypeId = 3,
+                    Name = "Book",
+                },
+                new EntryReportType()
+                {
+                    EntryReportTypeId = 4,
+                    Name = "Series",
+                },
+            });
+
             modelBuilder.Entity<FormType>().HasData(new List<FormType>()
             {
                 new FormType()

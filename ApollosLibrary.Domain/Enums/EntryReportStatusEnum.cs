@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Domain.Enums
 {
-    public enum EntryTypeEnum
+    public enum EntryReportStatusEnum
     {
-        Business = 1,
-        Author = 2,
-        Book = 3,
-        Series = 4,
+        Open = 1,
+        Cancelled = 2,
+        Confirmed = 3,
     }
 }

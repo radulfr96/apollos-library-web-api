@@ -68,15 +68,16 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             var entry = _context.EntryReports.FirstOrDefault(e => e.EntryId == result.ReportEntryId);
 
-            entry.Should().BeEquivalentTo(new Domain.EntryReport()
+            entry.Should().BeEquivalentTo(new EntryReport()
             {
                 CreatedBy = entryCreatedUserId,
                 EntryId = command.EntryId,
-                EntryType = command.EntryType,
+                EntryTypeId = (int)command.EntryType,
+                EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = userID,
                 ReportedDate = _dateTimeService.Now,
                 EntryReportId = result.ReportEntryId,
-            });
+            }, opt => opt.Excluding(f => f.EntryReportStatus).Excluding(f => f.EntryType));
         }
     }
 }

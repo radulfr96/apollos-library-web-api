@@ -1,4 +1,5 @@
-﻿using ApollosLibrary.Application.Common.Exceptions;
+﻿using ApollosLibrary.Domain.Enums;
+using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
 using System;
@@ -38,7 +39,10 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
                 CreatedDate = report.CreatedDate,
                 CreatedBy = report.CreatedBy,
                 EntryId = report.EntryId,
-                EntryType = report.EntryType,
+                EntryTypeId = report.EntryTypeId,
+                EntryType = report.EntryType.Name,
+                EntryReportStatusId = report.EntryReportStatusId,
+                EntryStatus = report.EntryReportStatus.Name,
                 ReportedBy = report.ReportedBy,
                 ReportedDate = report.ReportedDate,
             };
