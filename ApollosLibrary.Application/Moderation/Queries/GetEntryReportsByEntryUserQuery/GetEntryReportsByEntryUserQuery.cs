@@ -8,14 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUserQuery
+namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportsByEntryUserQuery
 {
-    public class GetReportsOfEntriesByUserQuery : IRequest<GetReportsOfEntriesByUserQueryDto>
+    public class GetEntryReportsByEntryUserQuery : IRequest<GetEntryReportsByEntryUserQueryDto>
     {
         public Guid UserId { get; set; }
     }
 
-    public class GetReportsByUserQueryHandler : IRequestHandler<GetReportsOfEntriesByUserQuery, GetReportsOfEntriesByUserQueryDto>
+    public class GetReportsByUserQueryHandler : IRequestHandler<GetEntryReportsByEntryUserQuery, GetEntryReportsByEntryUserQueryDto>
     {
         public readonly IModerationUnitOfWork _moderationUnitOfWork;
 
@@ -24,11 +24,11 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUse
             _moderationUnitOfWork = moderationUnitOfWork;
         }
 
-        public async Task<GetReportsOfEntriesByUserQueryDto> Handle(GetReportsOfEntriesByUserQuery request, CancellationToken cancellationToken)
+        public async Task<GetEntryReportsByEntryUserQueryDto> Handle(GetEntryReportsByEntryUserQuery request, CancellationToken cancellationToken)
         {
             var reports = await _moderationUnitOfWork.ModerationDataLayer.GetReportsOfEntriesByUser(request.UserId);
 
-            return new GetReportsOfEntriesByUserQueryDto()
+            return new GetEntryReportsByEntryUserQueryDto()
             {
                 EntryReports = reports.Select(r => new EntryReportListItem()
                 {
@@ -36,6 +36,9 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUse
                     CreatedDate = r.CreatedDate,
                     EntryId = r.EntryId,
                     EntryTypeId = r.EntryTypeId,
+                    EntryType = r.EntryType.Name,
+                    EntryStatusId = r.EntryReportStatusId,
+                    EntryStatus = r.EntryReportStatus.Name,
                     ReportedBy = r.ReportedBy,
                     ReportedDate = r.ReportedDate,
                     ReportId = r.EntryReportId,

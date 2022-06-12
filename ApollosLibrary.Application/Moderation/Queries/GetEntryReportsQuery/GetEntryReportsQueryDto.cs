@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ApollosLibrary.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUserQuery
+namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportsQuery
 {
-    public class GetReportsOfEntriesByUserQueryDto
+    public class GetEntryReportsQueryDto
     {
         public List<EntryReportListItem> EntryReports { get; set; } = new List<EntryReportListItem>();
     }

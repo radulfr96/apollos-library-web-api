@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Moderation.Queries.GetReportedEntryListQuery
+namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportsQuery
 {
-    public class GetReportedEntryListQuery : IRequest<GetReportedEntryListQueryDto>
+    public class GetEntryReportsQuery : IRequest<GetEntryReportsQueryDto>
     {
     }
 
-    public class GetReportedEntryListQueryHandler : IRequestHandler<GetReportedEntryListQuery, GetReportedEntryListQueryDto>
+    public class GetReportedEntryListQueryHandler : IRequestHandler<GetEntryReportsQuery, GetEntryReportsQueryDto>
     {
         private readonly IModerationUnitOfWork _moderationUnitOfWork;
 
@@ -23,11 +23,11 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetReportedEntryListQuer
             _moderationUnitOfWork = moderationUnitOfWork;
         }
 
-        public async Task<GetReportedEntryListQueryDto> Handle(GetReportedEntryListQuery request, CancellationToken cancellationToken)
+        public async Task<GetEntryReportsQueryDto> Handle(GetEntryReportsQuery request, CancellationToken cancellationToken)
         {
             var reports = await _moderationUnitOfWork.ModerationDataLayer.GetEntryReports();
 
-            return new GetReportedEntryListQueryDto()
+            return new GetEntryReportsQueryDto()
             {
                 EntryReports = reports.Select(r => new EntryReportListItem()
                 {
@@ -35,7 +35,9 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetReportedEntryListQuer
                     CreatedDate = r.CreatedDate,
                     EntryId = r.EntryId,
                     EntryTypeId = r.EntryTypeId,
+                    EntryType = r.EntryType.Name,
                     EntryStatusId = r.EntryReportStatusId,
+                    EntryStatus = r.EntryReportStatus.Name,
                     ReportedBy = r.ReportedBy,
                     ReportedDate = r.ReportedDate,
                     ReportId = r.EntryReportId,

@@ -1,5 +1,5 @@
 ﻿using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand;
+using ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand;
 using ApollosLibrary.Domain;
 using ApollosLibrary.Domain.Enums;
 using FluentAssertions;
@@ -57,7 +57,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             _contextAccessor.HttpContext = httpContext;
 
-            var command = new AddReportEntryCommand()
+            var command = new AddEntryReportCommand()
             {
                 CreatedBy = entryCreatedUserId,
                 EntryId = 1,

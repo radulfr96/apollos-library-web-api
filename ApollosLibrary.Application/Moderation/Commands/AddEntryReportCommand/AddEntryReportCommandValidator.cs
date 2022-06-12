@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
+namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
 {
-    public class AddReportEntryCommandValidator : AbstractValidator<AddReportEntryCommand>
+    public class AddEntryReportCommandValidator : AbstractValidator<AddEntryReportCommand>
     {
-        public AddReportEntryCommandValidator()
+        public AddEntryReportCommandValidator()
         {
             RuleFor(r => r.EntryId).GreaterThan(0);
         }

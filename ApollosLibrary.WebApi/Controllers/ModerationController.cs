@@ -1,7 +1,7 @@
-﻿using ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand;
+﻿using ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand;
 using ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery;
-using ApollosLibrary.Application.Moderation.Queries.GetReportedEntryListQuery;
-using ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUserQuery;
+using ApollosLibrary.Application.Moderation.Queries.GetEntryReportsQuery;
+using ApollosLibrary.Application.Moderation.Queries.GetEntryReportsByEntryUserQuery;
 using ApollosLibrary.Application.Moderation.Queries.GetUsersEntryReportsQuery;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -31,24 +31,24 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <param name="command">The report details</param>
         /// <returns>Response indicating the result</returns>
         [HttpPost("")]
-        public async Task<AddReportEntryCommandDto> AddEntryReport([FromBody] AddReportEntryCommand command)
+        public async Task<AddEntryReportCommandDto> AddEntryReport([FromBody] AddEntryReportCommand command)
         {
             return await _mediatr.Send(command);
         }
 
         /// <summary>
-        /// Used to get reports for entries
+        /// Used to get all entry reports
         /// </summary>
         /// <returns>The reports</returns>
         [HttpGet("")]
-        public async Task<GetReportedEntryListQueryDto> GetEntryReports()
+        public async Task<GetEntryReportsQueryDto> GetEntryReports()
         {
-            return await _mediatr.Send(new GetReportedEntryListQuery());
+            return await _mediatr.Send(new GetEntryReportsQuery());
         }
 
 
         /// <summary>
-        /// Used to get report using the id provided for entries
+        /// Used to get report using the id provided
         /// </summary>
         /// <param name="entryReportId">The id of the report to retreive</param>
         /// <returns>The report with the id provided</returns>
@@ -62,14 +62,14 @@ namespace ApollosLibrary.WebApi.Controllers
         }
 
         /// <summary>
-        /// Used to get reports of entries by a particular user
+        /// Used to get reports of entries by entry user
         /// </summary>
         /// <param name="userId">The id of the user</param>
         /// <returns>The reports</returns>
         [HttpGet("reportedentriesbyuser/{userId}")]
-        public async Task<GetReportsOfEntriesByUserQueryDto> GetReportsOfEntriesByUser([FromRoute] Guid userId)
+        public async Task<GetEntryReportsByEntryUserQueryDto> GetEntryReportsByEntryUser([FromRoute] Guid userId)
         {
-            return await _mediatr.Send(new GetReportsOfEntriesByUserQuery()
+            return await _mediatr.Send(new GetEntryReportsByEntryUserQuery()
             {
                 UserId = userId,
             });

@@ -9,16 +9,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
+namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
 {
-    public class AddReportEntryCommand : IRequest<AddReportEntryCommandDto>
+    public class AddEntryReportCommand : IRequest<AddEntryReportCommandDto>
     {
         public int EntryId { get; set; }
         public EntryTypeEnum EntryType { get; set; }
         public Guid CreatedBy { get; set; }
     }
 
-    public class ReportEntryCommandHandler : IRequestHandler<AddReportEntryCommand, AddReportEntryCommandDto>
+    public class ReportEntryCommandHandler : IRequestHandler<AddEntryReportCommand, AddEntryReportCommandDto>
     {
         private readonly IModerationUnitOfWork _moderationUnitOfWork;
         private readonly IUserService _userService;
@@ -34,7 +34,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
             _dateTimeService = dateTimeService;
         }
 
-        public async Task<AddReportEntryCommandDto> Handle(AddReportEntryCommand request, CancellationToken cancellationToken)
+        public async Task<AddEntryReportCommandDto> Handle(AddEntryReportCommand request, CancellationToken cancellationToken)
         {
             var reportEntry = new Domain.EntryReport()
             {
@@ -49,7 +49,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
             await _moderationUnitOfWork.ModerationDataLayer.AddEntryReport(reportEntry);
             await _moderationUnitOfWork.Save();
 
-            return new AddReportEntryCommandDto()
+            return new AddEntryReportCommandDto()
             {
                 ReportEntryId = reportEntry.EntryReportId,
             };

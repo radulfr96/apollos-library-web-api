@@ -1,6 +1,6 @@
 ﻿using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Moderation.Queries;
-using ApollosLibrary.Application.Moderation.Queries.GetReportedEntryListQuery;
+using ApollosLibrary.Application.Moderation.Queries.GetEntryReportsQuery;
 using ApollosLibrary.Domain;
 using ApollosLibrary.Domain.Enums;
 using Bogus;
@@ -101,7 +101,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             _contextAccessor.HttpContext = httpContext;
 
-            var command = new GetReportedEntryListQuery()
+            var command = new GetEntryReportsQuery()
             {
             };
 

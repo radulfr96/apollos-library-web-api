@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand
+namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
 {
-    public class AddReportEntryCommandDto
+    public class AddEntryReportCommandDto
     {
         public int ReportEntryId { get; set; }
     }

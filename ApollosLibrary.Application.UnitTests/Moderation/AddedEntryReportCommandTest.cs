@@ -1,4 +1,4 @@
-﻿using ApollosLibrary.Application.Moderation.Commands.AddReportEntryCommand;
+﻿using ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using System;
@@ -11,19 +11,19 @@ using Xunit;
 namespace ApollosLibrary.Application.UnitTests.Moderation
 {
     [Collection("UnitTestCollection")]
-    public class AddedReportEntryCommandTest : TestBase
+    public class AddedEntryReportCommandTest : TestBase
     {
-        private readonly AddReportEntryCommandValidator _validator;
+        private readonly AddEntryReportCommandValidator _validator;
 
-        public AddedReportEntryCommandTest(TestFixture fixture) : base(fixture)
+        public AddedEntryReportCommandTest(TestFixture fixture) : base(fixture)
         {
-            _validator = new AddReportEntryCommandValidator();
+            _validator = new AddEntryReportCommandValidator();
         }
 
         [Fact]
         public void EntryIdInvalidValue()
         {
-            var command = new AddReportEntryCommand();
+            var command = new AddEntryReportCommand();
 
             var result = _validator.TestValidate(command);
 

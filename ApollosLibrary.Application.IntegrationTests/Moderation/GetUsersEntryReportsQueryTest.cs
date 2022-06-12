@@ -116,6 +116,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                     CreatedDate = report2.CreatedDate,
                     EntryId = report2.EntryId,
                     EntryTypeId = report2.EntryTypeId,
+                    EntryStatusId = report2.EntryReportStatusId,
                     ReportedBy = report2.ReportedBy,
                     ReportedDate = report2.ReportedDate,
                     ReportId = report2.EntryReportId,
@@ -125,12 +126,13 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                     CreatedBy = report3.CreatedBy,
                     CreatedDate = report3.CreatedDate,
                     EntryId = report3.EntryId,
+                    EntryStatusId = report3.EntryReportStatusId,
                     EntryTypeId = report3.EntryTypeId,
                     ReportedBy = report3.ReportedBy,
                     ReportedDate = report3.ReportedDate,
                     ReportId = report3.EntryReportId,
                 },
-            });
+            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
         }
     }
 }

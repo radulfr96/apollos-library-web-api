@@ -1,6 +1,6 @@
 ﻿using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Moderation.Queries;
-using ApollosLibrary.Application.Moderation.Queries.GetReportsOfEntriesByUserQuery;
+using ApollosLibrary.Application.Moderation.Queries.GetEntryReportsByEntryUserQuery;
 using ApollosLibrary.Domain;
 using ApollosLibrary.Domain.Enums;
 using Bogus;
@@ -100,7 +100,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             _contextAccessor.HttpContext = httpContext;
 
-            var command = new GetReportsOfEntriesByUserQuery()
+            var command = new GetEntryReportsByEntryUserQuery()
             {
                 UserId = entryUser1
             };
@@ -115,6 +115,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                     CreatedDate = report1.CreatedDate,
                     EntryId = report1.EntryId,
                     EntryTypeId = report1.EntryTypeId,
+                    EntryStatusId = report1.EntryReportStatusId,
                     ReportedBy = report1.ReportedBy,
                     ReportedDate = report1.ReportedDate,
                     ReportId = report1.EntryReportId,
@@ -125,11 +126,12 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                     CreatedDate = report3.CreatedDate,
                     EntryId = report3.EntryId,
                     EntryTypeId = report3.EntryTypeId,
+                    EntryStatusId = report3.EntryReportStatusId,
                     ReportedBy = report3.ReportedBy,
                     ReportedDate = report3.ReportedDate,
                     ReportId = report3.EntryReportId,
                 },
-            });
+            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
         }
     }
 }
