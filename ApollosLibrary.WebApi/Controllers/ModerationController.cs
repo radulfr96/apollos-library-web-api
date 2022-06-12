@@ -57,7 +57,7 @@ namespace ApollosLibrary.WebApi.Controllers
         {
             return await _mediatr.Send(new GetEntryReportQuery()
             {
-                ReportEntryId = entryReportId,
+                EntryReportId = entryReportId,
             });
         }
 

@@ -283,10 +283,9 @@ namespace ApollosLibrary.Application.UnitTests
             });
 
             var mockBusinessService = new Mock<IBusinessUnitOfWork>();
-
-            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
-            BusinessDataLayer.Setup(p => p.GetBusiness(It.IsAny<int>())).Returns(Task.FromResult(Business));
-            mockBusinessService.Setup(p => p.BusinessDataLayer).Returns(BusinessDataLayer.Object);
+            var businessDataLayer = new Mock<IBusinessDataLayer>();
+            businessDataLayer.Setup(p => p.GetBusiness(It.IsAny<int>())).Returns(Task.FromResult(Business));
+            mockBusinessService.Setup(p => p.BusinessDataLayer).Returns(businessDataLayer.Object);
             _fixture.ServiceCollection.AddTransient(services =>
             {
                 return mockBusinessService.Object;

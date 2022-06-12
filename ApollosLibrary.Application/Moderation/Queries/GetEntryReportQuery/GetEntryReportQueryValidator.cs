@@ -11,7 +11,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
     {
         public GetEntryReportQueryValidator()
         {
-            RuleFor(q => q.ReportEntryId).GreaterThan(0);
+            RuleFor(q => q.EntryReportId).GreaterThan(0);
         }
     }
 }

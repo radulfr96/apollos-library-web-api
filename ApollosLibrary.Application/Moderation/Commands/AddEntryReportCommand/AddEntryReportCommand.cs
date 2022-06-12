@@ -14,7 +14,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
     public class AddEntryReportCommand : IRequest<AddEntryReportCommandDto>
     {
         public int EntryId { get; set; }
-        public EntryTypeEnum EntryType { get; set; }
+        public EntryReportTypeEnum EntryType { get; set; }
         public Guid CreatedBy { get; set; }
     }
 

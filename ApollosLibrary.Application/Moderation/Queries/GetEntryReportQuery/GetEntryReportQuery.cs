@@ -13,7 +13,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
 {
     public class GetEntryReportQuery : IRequest<GetEntryReportQueryDto>
     {
-        public int ReportEntryId { get; set; }
+        public int EntryReportId { get; set; }
     }
 
     public class GetEntryReportQueryHandler : IRequestHandler<GetEntryReportQuery, GetEntryReportQueryDto>
@@ -27,11 +27,11 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
 
         public async Task<GetEntryReportQueryDto> Handle(GetEntryReportQuery request, CancellationToken cancellationToken)
         {
-            var report = await _moderationUnitOfWork.ModerationDataLayer.GetEntryReport(request.ReportEntryId);
+            var report = await _moderationUnitOfWork.ModerationDataLayer.GetEntryReport(request.EntryReportId);
         
             if (report == null)
             {
-                throw new EntryReportNotFoundException($"Unable to find entry report with id [{request.ReportEntryId}]");
+                throw new EntryReportNotFoundException($"Unable to find entry report with id [{request.EntryReportId}]");
             }
 
             return new GetEntryReportQueryDto()

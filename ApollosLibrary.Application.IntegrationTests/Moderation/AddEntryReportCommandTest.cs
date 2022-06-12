@@ -1,9 +1,7 @@
 ﻿using ApollosLibrary.Application.Interfaces;
-using ApollosLibrary.Application.Moderation.Queries;
-using ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery;
+using ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand;
 using ApollosLibrary.Domain;
 using ApollosLibrary.Domain.Enums;
-using Bogus;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -20,14 +18,14 @@ using Xunit;
 namespace ApollosLibrary.Application.IntegrationTests.Moderation
 {
     [Collection("IntegrationTestCollection")]
-    public class GetEntryReportQueryTest : TestBase
+    public class AddEntryReportCommandTest : TestBase
     {
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IDateTimeService _dateTimeService;
 
-        public GetEntryReportQueryTest(TestFixture fixture) : base(fixture)
+        public AddEntryReportCommandTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 
@@ -43,7 +41,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
         }
 
         [Fact]
-        public async Task GetReportListEntries()
+        public async Task AddReportEntryCommand()
         {
             var userID = Guid.NewGuid();
 
@@ -55,42 +53,31 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 }),
             };
 
-            var entryReportUser1 = Guid.NewGuid();
-            var entryUser1 = Guid.NewGuid();
-
-            var report = new EntryReport()
-            {
-                CreatedBy = entryUser1,
-                CreatedDate = _dateTimeService.Now,
-                EntryId = new Faker().Random.Int(1),
-                EntryTypeId = (int)new Faker().Random.Enum<EntryReportTypeEnum>(),
-                EntryReportStatusId = (int)new Faker().Random.Enum<EntryReportStatusEnum>(),
-                ReportedBy = entryReportUser1,
-                ReportedDate = _dateTimeService.Now.AddDays(1),
-            };
-            _context.EntryReports.Add(report);
-
-            _context.SaveChanges();
+            var entryCreatedUserId = Guid.NewGuid();
 
             _contextAccessor.HttpContext = httpContext;
 
-            var command = new GetEntryReportQuery()
+            var command = new AddEntryReportCommand()
             {
-                EntryReportId = report.EntryReportId,
+                CreatedBy = entryCreatedUserId,
+                EntryId = 1,
+                EntryType = EntryReportTypeEnum.Book,
             };
 
             var result = await _mediatr.Send(command);
 
-            result.Should().BeEquivalentTo(new GetEntryReportQueryDto()
+            var entry = _context.EntryReports.FirstOrDefault(e => e.EntryId == result.ReportEntryId);
+
+            entry.Should().BeEquivalentTo(new EntryReport()
             {
-                CreatedBy = report.CreatedBy,
-                CreatedDate = report.CreatedDate,
-                EntryId = report.EntryId,
-                EntryTypeId = report.EntryTypeId,
-                EntryReportStatusId = report.EntryReportStatusId,
-                ReportedBy = report.ReportedBy,
-                ReportedDate = report.ReportedDate,
-            }, opt => opt.Excluding(f => f.EntryType).Excluding(f => f.EntryStatus));
+                CreatedBy = entryCreatedUserId,
+                EntryId = command.EntryId,
+                EntryTypeId = (int)command.EntryType,
+                EntryReportStatusId = (int)EntryReportStatusEnum.Open,
+                ReportedBy = userID,
+                ReportedDate = _dateTimeService.Now,
+                EntryReportId = result.ReportEntryId,
+            }, opt => opt.Excluding(f => f.EntryReportStatus).Excluding(f => f.EntryType));
         }
     }
 }
