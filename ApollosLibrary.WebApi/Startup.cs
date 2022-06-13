@@ -74,6 +74,7 @@ namespace ApollosLibrary.WebApi
             services.AddTransient<ILibraryUnitOfWork, LibraryUnitOfWork>();
             services.AddTransient<IOrderUnitOfWork, OrderUnitOfWork>();
             services.AddTransient<ISubscriptionUnitOfWork, SubscriptionUnitOfWork>();
+            services.AddTransient<IModerationUnitOfWork, ModerationUnitOfWork>();
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
             services.AddScoped<DbContext, ApollosLibraryContext>();

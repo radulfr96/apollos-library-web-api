@@ -26,7 +26,7 @@ namespace ApollosLibrary.Infrastructure.Services
 
         public string GetUserEmail()
         {
-            return _httpContext.User.Claims.FirstOrDefault(c => c.Type == "username").Value;
+            return _httpContext.User.Claims.FirstOrDefault(c => c.Type == "emailaddress").Value;
         }
     }
 }

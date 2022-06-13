@@ -13,6 +13,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -45,6 +46,7 @@ namespace ApollosLibrary.Application.UnitTests
             ServiceCollection.AddHttpContextAccessor();
 
             ServiceCollection.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
+            ServiceCollection.AddMediatR(typeof(GetEntryReportQuery).GetTypeInfo().Assembly);
         }
     }
 }

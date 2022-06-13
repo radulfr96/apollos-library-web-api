@@ -42,7 +42,7 @@ namespace ApollosLibrary.Application.UnitTests.Moderation
         [Fact]
         public async Task EntryReportNotFound()
         {
-            var command = new GetEntryReportQuery()
+            var query = new GetEntryReportQuery()
             {
                 EntryReportId = new Faker().Random.Int(1),
             };
@@ -59,7 +59,7 @@ namespace ApollosLibrary.Application.UnitTests.Moderation
                 return moderationUnitOfWork.Object;
             });
 
-            Func<Task> act = () => mediator.Send(command);
+            Func<Task> act = () => mediator.Send(query);
             await act.Should().ThrowAsync<EntryReportNotFoundException>();
         }
     }
