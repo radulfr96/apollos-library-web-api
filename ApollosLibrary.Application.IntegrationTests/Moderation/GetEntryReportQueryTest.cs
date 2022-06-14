@@ -63,7 +63,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = entryUser1,
                 CreatedDate = _dateTimeService.Now,
                 EntryId = new Faker().Random.Int(1),
-                EntryTypeId = (int)new Faker().Random.Enum<EntryReportTypeEnum>(),
+                EntryTypeId = (int)new Faker().Random.Enum<EntryTypeEnum>(),
                 EntryReportStatusId = (int)new Faker().Random.Enum<EntryReportStatusEnum>(),
                 ReportedBy = entryReportUser1,
                 ReportedDate = _dateTimeService.Now.AddDays(1),

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.Domain.Enums
 {
-    public enum EntryReportTypeEnum
+    public enum EntryTypeEnum
     {
         Business = 1,
         Author = 2,

@@ -61,7 +61,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = entryCreatedUserId,
                 EntryId = 1,
-                EntryType = EntryReportTypeEnum.Book,
+                EntryType = EntryTypeEnum.Book,
             };
 
             var result = await _mediatr.Send(command);
