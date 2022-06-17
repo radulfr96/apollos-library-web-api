@@ -52,7 +52,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Subscription
                 User = new TestPrincipal(new Claim[]
                 {
                     new Claim("userid", userId.ToString()),
-                    new Claim("username", new Faker().Internet.Email()),
+                    new Claim("emailaddress", new Faker().Internet.Email()),
                 }),
             };
 

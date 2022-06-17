@@ -86,7 +86,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedBy = report.CreatedBy,
                 CreatedDate = report.CreatedDate,
                 EntryId = report.EntryId,
-                EntryTypeId = report.EntryTypeId,
+                EntryTypeId = (EntryTypeEnum)report.EntryTypeId,
                 EntryReportStatusId = report.EntryReportStatusId,
                 ReportedBy = report.ReportedBy,
                 ReportedDate = report.ReportedDate,

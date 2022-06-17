@@ -11,17 +11,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
-using ApollosLibrary.Application.Series.Queries.GetSeriesQuery;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class GetSeriesQueryTest : TestBase
+    public class GetBusinessQueryTest : TestBase
     {
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
-        public GetSeriesQueryTest(TestFixture fixture) : base(fixture)
+        public GetBusinessQueryTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 
@@ -35,29 +34,35 @@ namespace ApollosLibrary.Application.IntegrationTests
         }
 
         [Fact]
-        public async Task GetSeriesQuery()
+        public async Task GetBusinessQuery()
         {
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var seriesGenerated = SeriesGenerator.GetSeries(Guid.NewGuid());
+            var BusinessGenerated = BusinessGenerator.GetGenericBusiness("AU", new Guid());
 
-            _context.Series.Add(seriesGenerated);
+            _context.Business.Add(BusinessGenerated);
             _context.SaveChanges();
 
-            var query = new GetSeriesQuery()
+            var query = new GetBusinessQuery()
             {
-                SeriesId = seriesGenerated.SeriesId,
+                BusinessId = BusinessGenerated.BusinessId,
             };
 
             var result = await _mediatr.Send(query);
 
-            result.Should().BeEquivalentTo(new GetSeriesQueryDto()
+            result.Should().BeEquivalentTo(new GetBusinessQueryDto()
             {
-                Name = seriesGenerated.Name,
-                SeriesId = seriesGenerated.SeriesId,
+                City = BusinessGenerated.City,
+                CountryID = BusinessGenerated.CountryId,
+                Name = BusinessGenerated.Name,
+                Postcode = BusinessGenerated.Postcode,
+                BusinessId = BusinessGenerated.BusinessId,
+                State = BusinessGenerated.State,
+                StreetAddress = BusinessGenerated.StreetAddress,
+                Website = BusinessGenerated.Website,
             });
         }
     }

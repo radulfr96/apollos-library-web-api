@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using ApollosLibrary.Application.Author.Queries.GetAuthorQuery;
 using ApollosLibrary.Application.Common.Exceptions;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.DataLayer.Contracts;
@@ -13,40 +14,40 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using ApollosLibrary.Application.Author.Queries.GetAuthorRecordQuery;
+
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
-    public class GetAuthorRecordQueryTest : TestBase
+    public class GetAuthorQueryTest : TestBase
     {
-        private readonly GetAuthorRecordQueryValidator _validator;
+        private readonly GetAuthorQueryValidator _validator;
 
-        public GetAuthorRecordQueryTest(TestFixture fixture) : base(fixture)
+        public GetAuthorQueryTest(TestFixture fixture) : base(fixture)
         {
-            _validator = new GetAuthorRecordQueryValidator();
+            _validator = new GetAuthorQueryValidator();
         }
 
         [Fact]
         public void AuthorIdInvalidValue()
         {
-            var query = new GetAuthorRecordQuery()
+            var command = new GetAuthorQuery()
             {
-                AuthorRecordId = 0,
+                AuthorId = 0,
             };
 
-            var result = _validator.TestValidate(query);
+            var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(f => f.AuthorRecordId);
+            result.ShouldHaveValidationErrorFor(f => f.AuthorId);
         }
 
         [Fact]
-        public async Task GetAuthorRecord_NotFound()
+        public async Task GetAuthorAuthorNotFound()
         {
-            var query = new GetAuthorRecordQuery()
+            var command = new GetAuthorQuery()
             {
-                AuthorRecordId = 1
+                AuthorId = 1
             };
 
             var mockReferenceDataLayer = new Mock<IReferenceDataLayer>();
@@ -85,8 +86,8 @@ namespace ApollosLibrary.Application.UnitTests
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            Func<Task> act = () => mediator.Send(query);
-            await act.Should().ThrowAsync<AuthorRecordNotFoundException>();
+            Func<Task> act = () => mediator.Send(command);
+            await act.Should().ThrowAsync<AuthorNotFoundException>();
         }
     }
 }

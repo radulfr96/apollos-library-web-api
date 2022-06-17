@@ -46,6 +46,13 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<Book> GetBook(int id);
 
         /// <summary>
+        /// Used to get a book record by its record id
+        /// </summary>
+        /// <param name="recordId">The id of the book record to be found</param>
+        /// <returns>The book record with the record received</returns>
+        Task<BookRecord> GetBookRecord(int recordId);
+
+        /// <summary>
         /// Used to get books
         /// </summary>
         /// <returns>The books</returns>

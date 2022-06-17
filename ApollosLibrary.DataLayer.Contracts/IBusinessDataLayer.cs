@@ -32,6 +32,13 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<Business> GetBusiness(int id);
 
         /// <summary>
+        /// Used to get a business record by its id
+        /// </summary>
+        /// <param name="recordId">The id of the business record to be found</param>
+        /// <returns>The business record with the id received</returns>
+        Task<BusinessRecord> GetBusinessRecord(int recordId);
+
+        /// <summary>
         /// Used to get all Businesss
         /// </summary>
         /// <returns>The list of Businesss</returns>

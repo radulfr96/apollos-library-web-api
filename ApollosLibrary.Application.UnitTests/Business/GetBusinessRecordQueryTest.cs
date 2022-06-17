@@ -1,10 +1,9 @@
-﻿using Bogus;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ApollosLibrary.Application.Common.Exceptions;
-using ApollosLibrary.Application.Genre.Queries.GetGenreQuery;
 using ApollosLibrary.Application.Interfaces;
+using ApollosLibrary.Application.Business.Queries.GetBusinessQuery;
 using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.UnitOfWork.Contracts;
 using System;
@@ -16,39 +15,40 @@ using Xunit;
 using FluentValidation.TestHelper;
 
 using FluentAssertions;
+using ApollosLibrary.Application.Business.Queries.GetBusinessRecordQuery;
 
 namespace ApollosLibrary.Application.UnitTests
 {
     [Collection("UnitTestCollection")]
-    public class GetGenreQueryTest : TestBase
+    public class GetBusinessRecordQueryTest : TestBase
     {
-        private readonly GetGenreQueryValidator _validator;
+        private readonly GetBusinessRecordQueryValidator _validator;
 
-        public GetGenreQueryTest(TestFixture fixture) : base(fixture)
+        public GetBusinessRecordQueryTest(TestFixture fixture) : base(fixture)
         {
-            _validator = new GetGenreQueryValidator();
+            _validator = new GetBusinessRecordQueryValidator();
         }
 
         [Fact]
-        public void GenreIdInvalidValue()
+        public void BusinessIdInvalidValue()
         {
-            var query = new GetGenreQuery()
+            var query = new GetBusinessRecordQuery()
             {
-                GenreId = 0,
+                BusinessRecordId = 0,
             };
 
             var result = _validator.TestValidate(query);
 
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(f => f.GenreId);
+            result.ShouldHaveValidationErrorFor(f => f.BusinessRecordId);
         }
 
         [Fact]
-        public async Task GenreNotFound()
+        public async Task BusinessNotFound()
         {
-            var query = new GetGenreQuery()
+            var query = new GetBusinessRecordQuery()
             {
-                GenreId = 1,
+                BusinessRecordId = 1,
             };
 
             var mockUserService = new Mock<IUserService>();
@@ -63,20 +63,20 @@ namespace ApollosLibrary.Application.UnitTests
                 return mockDateTimeService.Object;
             });
 
-            var genreUnitOfWork = new Mock<IGenreUnitOfWork>();
+            var BusinessUnitOfWork = new Mock<IBusinessUnitOfWork>();
 
-            var genreDataLayer = new Mock<IGenreDataLayer>();
-            genreUnitOfWork.Setup(s => s.GenreDataLayer).Returns(genreDataLayer.Object);
+            var BusinessDataLayer = new Mock<IBusinessDataLayer>();
+            BusinessUnitOfWork.Setup(s => s.BusinessDataLayer).Returns(BusinessDataLayer.Object);
 
             _fixture.ServiceCollection.AddTransient(services =>
             {
-                return genreUnitOfWork.Object;
+                return BusinessUnitOfWork.Object;
             });
 
             var provider = _fixture.ServiceCollection.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await Assert.ThrowsAsync<GenreNotFoundException>(() => mediator.Send(query));
+            await Assert.ThrowsAsync<BusinessRecordNotFoundException>(() => mediator.Send(query));
         }
     }
 }

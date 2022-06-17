@@ -32,6 +32,13 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<Series> GetSeries(int id);
 
         /// <summary>
+        /// Used to get a series record by its id
+        /// </summary>
+        /// <param name="recordId">The id of the series record to be found</param>
+        /// <returns>The series record with the id received</returns>
+        Task<SeriesRecord> GetSeriesRecord(int recordId);
+
+        /// <summary>
         /// Used to get all series
         /// </summary>
         /// <returns>The list of series</returns>

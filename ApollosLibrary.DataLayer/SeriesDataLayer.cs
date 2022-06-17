@@ -40,6 +40,13 @@ namespace ApollosLibrary.DataLayer
                 .FirstOrDefaultAsync(a => a.SeriesId == id && !a.IsDeleted);
         }
 
+        public async Task<SeriesRecord> GetSeriesRecord(int recordId)
+        {
+            return await _context.SeriesRecords
+                .Where(b => b.SeriesRecordId == recordId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<Series>> GetMultiSeries()
         {
             return await _context.Series.Where(a => !a.IsDeleted).ToListAsync();

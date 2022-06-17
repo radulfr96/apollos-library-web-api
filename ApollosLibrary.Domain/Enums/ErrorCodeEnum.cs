@@ -35,6 +35,10 @@ namespace ApollosLibrary.Domain.Enums
         SubscriptionNotFound = 113,
         SubscriptionTypeNotFound = 114,
         EntryReportNotFound = 115,
+        AuthorRecordNotFound = 116,
+        BookRecordNotFound = 117,
+        BusinessRecordNotFound = 118,
+        SeriesRecordNotFound = 119,
 
         // User Forbidden Exception
         UserCannotModifyLibrary = 200,

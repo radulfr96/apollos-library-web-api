@@ -41,6 +41,12 @@ namespace ApollosLibrary.DataLayer
                 .FirstOrDefaultAsync(a => a.AuthorId == id && !a.IsDeleted);
         }
 
+        public async Task<AuthorRecord> GetAuthorRecord(int recordId)
+        {
+            return await _context.AuthorRecords
+                .FirstOrDefaultAsync(a => a.AuthorRecordId == recordId);
+        }
+
         public async Task<List<Author>> GetAuthors()
         {
             return await _context.Authors.Include("Country").Where(a => !a.IsDeleted).ToListAsync();

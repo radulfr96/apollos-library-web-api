@@ -32,6 +32,13 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<Author> GetAuthor(int id);
 
         /// <summary>
+        /// Used to get an author record by its record id
+        /// </summary>
+        /// <param name="recordId">The id of the author record to be found</param>
+        /// <returns>The author record with the id received</returns>
+        Task<AuthorRecord> GetAuthorRecord(int recordId);
+
+        /// <summary>
         /// Used to get all authors
         /// </summary>
         /// <returns>The list of authors</returns>

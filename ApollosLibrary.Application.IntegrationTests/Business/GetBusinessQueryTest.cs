@@ -11,16 +11,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Application.Business.Queries.GetBusinessRecordQuery;
+using System.Collections.Generic;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
     [Collection("IntegrationTestCollection")]
-    public class GetBusinessQueryTest : TestBase
+    public class GetBusinessRecordQueryTest : TestBase
     {
         private readonly ApollosLibraryContext _context;
         private readonly IMediator _mediatr;
 
-        public GetBusinessQueryTest(TestFixture fixture) : base(fixture)
+        public GetBusinessRecordQueryTest(TestFixture fixture) : base(fixture)
         {
             var services = fixture.ServiceCollection;
 
@@ -34,35 +36,55 @@ namespace ApollosLibrary.Application.IntegrationTests
         }
 
         [Fact]
-        public async Task GetBusinessQuery()
+        public async Task GetBusinessRecordQuery()
         {
             Thread.CurrentPrincipal = new TestPrincipal(new Claim[]
             {
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var BusinessGenerated = BusinessGenerator.GetGenericBusiness("AU", new Guid());
+            var businessGenerated = BusinessGenerator.GetGenericBusiness("AU", new Guid());
+            var businessRecord = new BusinessRecord()
+            {
+                BusinessId = businessGenerated.BusinessId,
+                BusinessTypeId = businessGenerated.BusinessTypeId,
+                City = businessGenerated.City,
+                CountryId = businessGenerated.CountryId,
+                CreatedBy = businessGenerated.CreatedBy,
+                CreatedDate = businessGenerated.CreatedDate,
+                IsDeleted = businessGenerated.IsDeleted,
+                Name = businessGenerated.Name,
+                Postcode = businessGenerated.Postcode,
+                ReportedVersion = true,
+                State = businessGenerated.State,
+                StreetAddress = businessGenerated.StreetAddress,
+                Website = businessGenerated.Website,
+            };
 
-            _context.Business.Add(BusinessGenerated);
+            businessGenerated.BusinessRecords = new List<BusinessRecord>()
+            {
+                businessRecord
+            };
+
+            _context.Business.Add(businessGenerated);
             _context.SaveChanges();
 
-            var query = new GetBusinessQuery()
+            var query = new GetBusinessRecordQuery()
             {
-                BusinessId = BusinessGenerated.BusinessId,
+                BusinessRecordId = businessGenerated.BusinessId,
             };
 
             var result = await _mediatr.Send(query);
 
-            result.Should().BeEquivalentTo(new GetBusinessQueryDto()
+            result.Should().BeEquivalentTo(new GetBusinessRecordQueryDto()
             {
-                City = BusinessGenerated.City,
-                CountryID = BusinessGenerated.CountryId,
-                Name = BusinessGenerated.Name,
-                Postcode = BusinessGenerated.Postcode,
-                BusinessId = BusinessGenerated.BusinessId,
-                State = BusinessGenerated.State,
-                StreetAddress = BusinessGenerated.StreetAddress,
-                Website = BusinessGenerated.Website,
+                City = businessGenerated.City,
+                Name = businessGenerated.Name,
+                Postcode = businessGenerated.Postcode,
+                BusinessId = businessGenerated.BusinessId,
+                State = businessGenerated.State,
+                StreetAddress = businessGenerated.StreetAddress,
+                Website = businessGenerated.Website,
             });
         }
     }

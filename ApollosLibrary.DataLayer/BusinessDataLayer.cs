@@ -33,6 +33,13 @@ namespace ApollosLibrary.DataLayer
             return await _context.Business.FirstOrDefaultAsync(b => b.BusinessId == id && !b.IsDeleted);
         }
 
+        public async Task<BusinessRecord> GetBusinessRecord(int recordId)
+        {
+            return await _context.BusinessRecords
+                .Where(b => b.BusinessRecordId == recordId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<Business>> GetBusinesses()
         {
             return await _context.Business.Include(b => b.Country).Include(b => b.Type).Where(b => !b.IsDeleted).ToListAsync();

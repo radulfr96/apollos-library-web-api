@@ -38,6 +38,13 @@ namespace ApollosLibrary.DataLayer
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<BookRecord> GetBookRecord(int recordId)
+        {
+            return await _context.BookRecords
+                .Where(b => b.BookRecordId == recordId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Book> GetBookByeISBN(string eisbn)
         {
             return await _context.Books
