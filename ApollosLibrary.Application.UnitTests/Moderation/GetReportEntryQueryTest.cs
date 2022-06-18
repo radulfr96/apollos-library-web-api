@@ -47,8 +47,6 @@ namespace ApollosLibrary.Application.UnitTests.Moderation
                 EntryReportId = new Faker().Random.Int(1),
             };
 
-            var provider = _fixture.ServiceCollection.BuildServiceProvider();
-            var mediator = provider.GetRequiredService<IMediator>();
 
             var moderationUnitOfWork = new Mock<IModerationUnitOfWork>();
             var moderationDataLayer = new Mock<IModerationDataLayer>();
@@ -58,6 +56,9 @@ namespace ApollosLibrary.Application.UnitTests.Moderation
             {
                 return moderationUnitOfWork.Object;
             });
+
+            var provider = _fixture.ServiceCollection.BuildServiceProvider();
+            var mediator = provider.GetRequiredService<IMediator>();
 
             Func<Task> act = () => mediator.Send(query);
             await act.Should().ThrowAsync<EntryReportNotFoundException>();

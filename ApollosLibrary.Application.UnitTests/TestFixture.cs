@@ -46,7 +46,6 @@ namespace ApollosLibrary.Application.UnitTests
             ServiceCollection.AddHttpContextAccessor();
 
             ServiceCollection.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
-            ServiceCollection.AddMediatR(typeof(GetEntryReportQuery).GetTypeInfo().Assembly);
         }
     }
 }
