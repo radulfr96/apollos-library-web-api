@@ -29,15 +29,19 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
         private readonly IBusinessUnitOfWork _businessUnitOfWork;
         private readonly IReferenceUnitOfWork _referenceUnitOfWork;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IUserService _userService;
+
         public UpdateBusinessCommandHandler(
             IBusinessUnitOfWork BusinessUnitOfWork
             , IReferenceUnitOfWork referenceUnitOfWork
             , IDateTimeService dateTimeService
+            , IUserService userService
             )
         {
             _businessUnitOfWork = BusinessUnitOfWork;
             _referenceUnitOfWork = referenceUnitOfWork;
             _dateTimeService = dateTimeService;
+            _userService = userService;
         }
 
         public async Task<UpdateBusinessCommandDto> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
@@ -65,6 +69,26 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
                 throw new BusinessTypeNotFoundException($"Unable to find BusinessType with code [{command.BusinessTypeId}]");
             }
 
+            var record = new Domain.BusinessRecord()
+            {
+                BusinessId = command.BusinessId,
+                BusinessTypeId = command.BusinessTypeId,
+                City = command.City,
+                CountryId = command.CountryID,
+                CreatedBy = _userService.GetUserId(),
+                CreatedDate = _dateTimeService.Now,
+                IsDeleted = false,
+                Name = command.Name,
+                Postcode = command.Postcode,
+                State = command.State,
+                StreetAddress = command.StreetAddress,
+                Website = command.Website,
+            };
+
+            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(record);
+            await _businessUnitOfWork.Begin();
+            await _businessUnitOfWork.Save();
+
             business.City = command.City;
             business.CountryId = command.CountryID;
             business.BusinessTypeId = command.BusinessTypeId;
@@ -75,23 +99,10 @@ namespace ApollosLibrary.Application.Business.Commands.UpdateBusinessCommand
             business.StreetAddress = command.StreetAddress;
             business.Website = command.Website;
             business.CreatedDate = _dateTimeService.Now;
+            business.VersionId = record.BusinessRecordId;
 
-            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
-            {
-                BusinessId = business.BusinessId,
-                BusinessTypeId = business.BusinessTypeId,
-                City = business.City,
-                CountryId = business.CountryId,
-                CreatedBy = business.CreatedBy,
-                CreatedDate = business.CreatedDate,
-                IsDeleted = false,
-                Name = business.Name,
-                Postcode = business.Postcode,
-                State = business.State,
-                StreetAddress = business.StreetAddress,
-                Website = business.Website,
-            });
             await _businessUnitOfWork.Save();
+            await _businessUnitOfWork.Commit();
 
             return response;
         }

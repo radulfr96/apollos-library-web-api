@@ -254,6 +254,10 @@ namespace ApollosLibrary.Application.Book.Commands.AddBookCommand
 
             await _bookUnitOfWork.BookDataLayer.AddBookRecord(bookRecord);
             await _bookUnitOfWork.Save();
+
+            book.VersionId = bookRecord.BookRecordId;
+
+            await _bookUnitOfWork.Save();
             await _bookUnitOfWork.Commit();
 
             response.BookId = book.BookId;

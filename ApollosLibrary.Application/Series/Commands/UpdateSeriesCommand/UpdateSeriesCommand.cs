@@ -44,18 +44,24 @@ namespace ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand
                 throw new SeriesNotFoundException($"Unable to find series with id [{command.SeriesId}] for update");
             }
 
-            series.Name = command.Name;
-
-            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(new Domain.SeriesRecord()
+            var record = new Domain.SeriesRecord()
             {
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = series.Name,
                 IsDeleted = false,
                 SeriesId = series.SeriesId,
-            });
+            };
+
+            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(record);
+            await _seriesUnitOfWork.Begin();
+            await _seriesUnitOfWork.Save();
+
+            series.Name = command.Name;
+            series.VersionId = record.SeriesRecordId;
 
             await _seriesUnitOfWork.Save();
+            await _seriesUnitOfWork.Commit();
 
             return response;
         }

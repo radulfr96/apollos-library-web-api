@@ -13,7 +13,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
 {
     public class AddEntryReportCommand : IRequest<AddEntryReportCommandDto>
     {
-        public int EntryId { get; set; }
+        public int EntryRecordId { get; set; }
         public EntryTypeEnum EntryType { get; set; }
         public Guid CreatedBy { get; set; }
     }
@@ -39,7 +39,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
             var reportEntry = new Domain.EntryReport()
             {
                 CreatedBy = request.CreatedBy,
-                EntryId = request.EntryId,
+                EntryRecordId = request.EntryRecordId,
                 EntryTypeId = (int)request.EntryType,
                 EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = _userService.GetUserId(),

@@ -11,6 +11,7 @@ namespace ApollosLibrary.Domain
     public class Business
     {
         public int BusinessId { get; set; }
+        public int VersionId { get; set; }
         public string Name { get; set; }
         public string Website { get; set; }
         public string StreetAddress { get; set; }

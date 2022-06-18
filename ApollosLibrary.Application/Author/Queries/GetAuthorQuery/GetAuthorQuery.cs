@@ -37,6 +37,7 @@ namespace ApollosLibrary.Application.Author.Queries.GetAuthorQuery
             }
 
             response.AuthorID = author.AuthorId;
+            response.AuthorRecordID = author.VersionId;
             response.Firstname = author.FirstName;
             response.Description = author.Description;
             response.CountryID = author.CountryId;

@@ -34,12 +34,7 @@ namespace ApollosLibrary.Application.Book.Commands.DeleteBookCommand
                 throw new BookNotFoundException($"Unable to find book with id {command.BookId}");
             }
 
-            book.IsDeleted = true;
-            book.Authors = new List<Domain.Author>();
-            book.Genres = new List<Domain.Genre>();
-            book.Series = new List<Domain.Series>();
-
-            await _bookUnitOfWork.BookDataLayer.AddBookRecord(new Domain.BookRecord()
+            var record = new Domain.BookRecord()
             {
                 BookId = command.BookId,
                 BusinessId = book.BusinessId,
@@ -55,9 +50,21 @@ namespace ApollosLibrary.Application.Book.Commands.DeleteBookCommand
                 PublicationFormatId = book.PublicationFormatId,
                 Subtitle = book.Subtitle,
                 Title = book.Title,
-            });
+            };
+
+            await _bookUnitOfWork.BookDataLayer.AddBookRecord(record);
+
+            await _bookUnitOfWork.Begin();
+            await _bookUnitOfWork.Save();
+
+            book.IsDeleted = true;
+            book.Authors = new List<Domain.Author>();
+            book.Genres = new List<Domain.Genre>();
+            book.Series = new List<Domain.Series>();
+            book.VersionId = record.BookRecordId;
 
             await _bookUnitOfWork.Save();
+            await _bookUnitOfWork.Commit();
 
             return response;
         }

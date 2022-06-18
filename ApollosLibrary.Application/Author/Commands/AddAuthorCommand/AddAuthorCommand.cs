@@ -62,7 +62,7 @@ namespace ApollosLibrary.Application.Author.Commands.AddAuthorCommand
             await _authorUnitOfWork.AuthorDataLayer.AddAuthor(author);
             await _authorUnitOfWork.Save();
 
-            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(new Domain.AuthorRecord()
+            var record = new Domain.AuthorRecord()
             {
                 AuthorId = author.AuthorId,
                 CountryId = author.CountryId,
@@ -74,7 +74,13 @@ namespace ApollosLibrary.Application.Author.Commands.AddAuthorCommand
                 LastName = author.LastName,
                 MiddleName = author.MiddleName,
                 ReportedVersion = false,
-            });
+            };
+
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(record);
+
+            await _authorUnitOfWork.Save();
+
+            author.VersionId = record.AuthorRecordId;
 
             await _authorUnitOfWork.Save();
             await _authorUnitOfWork.Commit();

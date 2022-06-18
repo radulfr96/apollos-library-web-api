@@ -11,6 +11,7 @@ namespace ApollosLibrary.Domain
     public class Series
     {
         public int SeriesId { get; set; }
+        public int VersionId { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -34,18 +34,26 @@ namespace ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand
                 throw new SeriesNotFoundException($"Unable to find series with id {command.SeriesId}");
             }
 
-            series.IsDeleted = true;
-            series.Books = new List<Domain.Book>();
-
-            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(new Domain.SeriesRecord()
+            var record = new Domain.SeriesRecord()
             {
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = series.Name,
                 IsDeleted = true,
                 SeriesId = series.SeriesId,
-            });
+            };
+
+            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(record);
+
+            await _seriesUnitOfWork.Begin();
             await _seriesUnitOfWork.Save();
+
+            series.IsDeleted = true;
+            series.VersionId = record.SeriesRecordId;
+            series.Books = new List<Domain.Book>();
+
+            await _seriesUnitOfWork.Save();
+            await _seriesUnitOfWork.Commit();
 
             return response;
         }

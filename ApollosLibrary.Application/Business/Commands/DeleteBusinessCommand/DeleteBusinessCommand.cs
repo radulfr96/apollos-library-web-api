@@ -35,19 +35,7 @@ namespace ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand
                 throw new BusinessNotFoundException($"Unable to find Business with id {command.BusinessId}");
             }
 
-            business.IsDeleted = true;
-            business.Name = "Deleted";
-            business.City = "Deleted";
-            business.Postcode = "0000";
-            business.State = "Deleted";
-            business.StreetAddress = "Deleted";
-            business.Website = "";
-            business.CountryId = "AU";
-
-            await _businessUnitOfWork.Begin();
-            await _businessUnitOfWork.Save();
-
-            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
+            var record = new Domain.BusinessRecord()
             {
                 BusinessId = business.BusinessId,
                 BusinessTypeId = business.BusinessTypeId,
@@ -61,7 +49,21 @@ namespace ApollosLibrary.Application.Business.Commands.DeleteBusinessCommand
                 State = business.State,
                 StreetAddress = business.StreetAddress,
                 Website = business.Website,
-            });
+            };
+
+            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(record);
+            await _businessUnitOfWork.Begin();
+            await _businessUnitOfWork.Save();
+
+            business.IsDeleted = true;
+            business.Name = "Deleted";
+            business.City = "Deleted";
+            business.Postcode = "0000";
+            business.State = "Deleted";
+            business.StreetAddress = "Deleted";
+            business.Website = "";
+            business.CountryId = "AU";
+            business.VersionId = record.BusinessRecordId;
 
             await _businessUnitOfWork.Save();
             await _businessUnitOfWork.Commit();

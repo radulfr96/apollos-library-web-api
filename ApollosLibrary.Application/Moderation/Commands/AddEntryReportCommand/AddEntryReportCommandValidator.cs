@@ -11,7 +11,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.AddEntryReportCommand
     {
         public AddEntryReportCommandValidator()
         {
-            RuleFor(r => r.EntryId).GreaterThan(0);
+            RuleFor(r => r.EntryRecordId).GreaterThan(0);
         }
     }
 }

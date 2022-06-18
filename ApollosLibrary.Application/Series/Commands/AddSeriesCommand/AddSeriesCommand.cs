@@ -48,14 +48,20 @@ namespace ApollosLibrary.Application.Series.Commands.AddSeriesCommand
             await _seriesUnitOfWork.Begin();
             await _seriesUnitOfWork.Save();
 
-            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(new SeriesRecord()
+            var record = new SeriesRecord()
             {
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = series.Name,
                 IsDeleted = false,
                 SeriesId = series.SeriesId,
-            });
+            };
+
+            await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(record);
+
+            await _seriesUnitOfWork.Save();
+
+            series.VersionId = record.SeriesRecordId;
 
             await _seriesUnitOfWork.Save();
             await _seriesUnitOfWork.Commit();

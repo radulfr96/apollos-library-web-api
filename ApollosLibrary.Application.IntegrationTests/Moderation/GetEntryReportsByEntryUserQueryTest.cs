@@ -113,7 +113,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 {
                     CreatedBy = report1.CreatedBy,
                     CreatedDate = report1.CreatedDate,
-                    EntryId = report1.EntryId,
+                    EntryRecordId = report1.EntryRecordId,
                     EntryTypeId = report1.EntryTypeId,
                     EntryStatusId = report1.EntryReportStatusId,
                     ReportedBy = report1.ReportedBy,
@@ -124,7 +124,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 {
                     CreatedBy = report3.CreatedBy,
                     CreatedDate = report3.CreatedDate,
-                    EntryId = report3.EntryId,
+                    EntryRecordId = report3.EntryRecordId,
                     EntryTypeId = report3.EntryTypeId,
                     EntryStatusId = report3.EntryReportStatusId,
                     ReportedBy = report3.ReportedBy,

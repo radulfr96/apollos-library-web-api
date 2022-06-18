@@ -14,6 +14,7 @@ namespace ApollosLibrary.Domain
     {
         [Key]
         public int BookId { get; set; }
+        public int VersionId { get; set; }
         public string Isbn { get; set; }
         public string EIsbn { get; set; }
         public string Title { get; set; }

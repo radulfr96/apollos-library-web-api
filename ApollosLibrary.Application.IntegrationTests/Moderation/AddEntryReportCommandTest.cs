@@ -60,7 +60,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             var command = new AddEntryReportCommand()
             {
                 CreatedBy = entryCreatedUserId,
-                EntryId = 1,
+                EntryRecordId = 1,
                 EntryType = EntryTypeEnum.Book,
             };
 
@@ -71,13 +71,16 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             entry.Should().BeEquivalentTo(new EntryReport()
             {
                 CreatedBy = entryCreatedUserId,
-                EntryId = command.EntryId,
+                EntryRecordId = command.EntryRecordId,
                 EntryTypeId = (int)command.EntryType,
                 EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = userID,
                 ReportedDate = _dateTimeService.Now,
                 EntryReportId = result.ReportEntryId,
-            }, opt => opt.Excluding(f => f.EntryReportStatus).Excluding(f => f.EntryType));
+            }, opt => opt
+            .Excluding(f => f.EntryReportStatus)
+            .Excluding(f => f.EntryType)
+            .Excluding(f => f.EntryId));
         }
     }
 }

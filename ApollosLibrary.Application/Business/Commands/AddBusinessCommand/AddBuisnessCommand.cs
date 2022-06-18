@@ -60,7 +60,6 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
                 throw new BusinessTypeNotFoundException($"Unable to find BusinessType with code [{command.BusinessTypeId}]");
             }
 
-            await _businessUnitOfWork.Begin();
 
             var business = new Domain.Business()
             {
@@ -77,9 +76,10 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
                 Name = command.Name,
             };
             await _businessUnitOfWork.BusinessDataLayer.AddBusiness(business);
+            await _businessUnitOfWork.Begin();
             await _businessUnitOfWork.Save();
 
-            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(new Domain.BusinessRecord()
+            var record = new Domain.BusinessRecord()
             {
                 BusinessId = business.BusinessId,
                 BusinessTypeId = business.BusinessTypeId,
@@ -93,7 +93,13 @@ namespace ApollosLibrary.Application.Business.Commands.AddBusinessCommand
                 State = business.State,
                 StreetAddress = business.StreetAddress,
                 Website = business.Website,
-            });
+            };
+
+            await _businessUnitOfWork.BusinessDataLayer.AddBusinessRecord(record);
+
+            await _businessUnitOfWork.Save();
+
+            business.VersionId = record.BusinessRecordId;
 
             await _businessUnitOfWork.Save();
             await _businessUnitOfWork.Commit();

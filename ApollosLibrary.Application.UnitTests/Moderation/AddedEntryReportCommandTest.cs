@@ -28,7 +28,7 @@ namespace ApollosLibrary.Application.UnitTests.Moderation
             var result = _validator.TestValidate(command);
 
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(f => f.EntryId);
+            result.ShouldHaveValidationErrorFor(f => f.EntryRecordId);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ApollosLibrary.Application.Moderation.Queries
     public class EntryReportListItem
     {
         public int ReportId { get; set; }
-        public int EntryId { get; set; }
+        public int EntryRecordId { get; set; }
         public int EntryTypeId { get; set; }
         public string EntryType { get; set; }
         public int EntryStatusId { get; set; }

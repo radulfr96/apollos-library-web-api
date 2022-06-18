@@ -33,7 +33,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportsQuery
                 {
                     CreatedBy = r.CreatedBy,
                     CreatedDate = r.CreatedDate,
-                    EntryId = r.EntryId,
+                    EntryRecordId = r.EntryRecordId,
                     EntryTypeId = r.EntryTypeId,
                     EntryType = r.EntryType.Name,
                     EntryStatusId = r.EntryReportStatusId,

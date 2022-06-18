@@ -164,6 +164,28 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
                 series.Books.Add(book);
             }
 
+            var bookRecord = new Domain.BookRecord()
+            {
+                BookId = command.BookId,
+                BusinessId = command.BusinessId,
+                CoverImage = command.CoverImage,
+                CreatedBy = _userService.GetUserId(),
+                CreatedDate = _dateTimeService.Now,
+                Edition = command.Edition,
+                EIsbn = command.EISBN,
+                FictionTypeId = command.FictionTypeId,
+                FormTypeId = command.FormTypeId,
+                Isbn = command.ISBN,
+                PublicationFormatId = command.PublicationFormatId,
+                Subtitle = command.Subtitle,
+                Title = command.Title,
+            };
+
+            await _bookUnitOfWork.BookDataLayer.AddBookRecord(bookRecord);
+
+            await _bookUnitOfWork.Begin();
+            await _bookUnitOfWork.Save();
+
             book.CoverImage = command.CoverImage;
             book.CreatedBy = _userService.GetUserId();
             book.CreatedDate = _dateTimeService.Now;
@@ -176,25 +198,10 @@ namespace ApollosLibrary.Application.Book.Commands.UpdateBookCommand
             book.BusinessId = command.BusinessId;
             book.Subtitle = command.Subtitle;
             book.Title = command.Title;
+            book.VersionId = bookRecord.BookRecordId;
 
-            var bookRecord = new Domain.BookRecord()
-            {
-                BookId = command.BookId,
-                BusinessId = book.BusinessId,
-                CoverImage = book.CoverImage,
-                CreatedBy = book.CreatedBy,
-                CreatedDate = book.CreatedDate,
-                Edition = book.Edition,
-                EIsbn = book.EIsbn,
-                FictionTypeId = book.FictionTypeId,
-                FormTypeId = book.FormTypeId,
-                Isbn = book.Isbn,
-                PublicationFormatId = book.PublicationFormatId,
-                Subtitle = book.Subtitle,
-                Title = book.Title,
-            };
-            await _bookUnitOfWork.BookDataLayer.AddBookRecord(bookRecord);
             await _bookUnitOfWork.Save();
+            await _bookUnitOfWork.Commit();
 
             return response;
         }

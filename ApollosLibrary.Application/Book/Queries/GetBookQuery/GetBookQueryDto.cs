@@ -9,6 +9,7 @@ namespace ApollosLibrary.Application.Book.Queries.GetBookQuery
     public class GetBookQueryDto
     {
         public int BookId { get; set; }
+        public int BookRecordId { get; set; }
         public string ISBN { get; set; }
         public string EISBN { get; set; }
         public string Title { get; set; }
