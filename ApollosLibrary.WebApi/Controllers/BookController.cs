@@ -14,6 +14,7 @@ using ApollosLibrary.Application.Book.Queries.GetBookQuery;
 using ApollosLibrary.Application.Book.Queries.GetBooksQuery;
 using ApollosLibrary.Application.Book.Commands.DeleteBookCommand;
 using ApollosLibrary.WebApi.Filters;
+using ApollosLibrary.Application.Book.Queries.GetBookRecordQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -53,6 +54,20 @@ namespace ApollosLibrary.WebApi.Controllers
             return await _mediator.Send(new GetBookQuery()
             {
                 BookId = id,
+            });
+        }
+
+        /// <summary>
+        /// Used to get a specific book record
+        /// </summary>
+        /// <param name="recordId">the id of the book record to be retreived</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("bookrecord/{recordId}")]
+        public async Task<GetBookRecordQueryDto> GetBookRecord([FromRoute] int recordId)
+        {
+            return await _mediator.Send(new GetBookRecordQuery()
+            {
+                BookRecordId = recordId,
             });
         }
 
