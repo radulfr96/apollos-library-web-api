@@ -36,6 +36,7 @@ namespace ApollosLibrary.Application.Moderation.Commands.UpdateEntryReportComman
             }
 
             entryReport.EntryReportStatusId = (int)command.EntryReportStatus;
+            await _moderationUnitOfWork.Save();
 
             return new UpdateEntryReportCommandDto();
         }

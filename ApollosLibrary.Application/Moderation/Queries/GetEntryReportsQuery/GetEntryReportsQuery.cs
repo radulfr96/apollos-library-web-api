@@ -29,7 +29,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportsQuery
 
             return new GetEntryReportsQueryDto()
             {
-                EntryReports = reports.Select(r => new EntryReportListItem()
+                EntryReports = reports.Where(r => r.EntryReportStatusId == (int)EntryReportStatusEnum.Open).Select(r => new EntryReportListItem()
                 {
                     CreatedBy = r.CreatedBy,
                     CreatedDate = r.CreatedDate,

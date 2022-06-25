@@ -65,7 +65,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="recordId">the id of the series record to be retreived</param>
         /// <returns>Response that indicates the result</returns>
-        [HttpGet("{recordId}")]
+        [HttpGet("seriesrecord/{recordId}")]
         public async Task<GetSeriesRecordQueryDto> GetSeriesRecord([FromRoute] int recordId)
         {
             return await _mediator.Send(new GetSeriesRecordQuery() { SeriesRecordId = recordId });

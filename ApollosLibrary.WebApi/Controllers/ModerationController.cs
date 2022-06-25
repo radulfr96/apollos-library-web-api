@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
+using ApollosLibrary.Application.Moderation.Commands.UpdateEntryReportCommand;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -32,6 +33,17 @@ namespace ApollosLibrary.WebApi.Controllers
         /// <returns>Response indicating the result</returns>
         [HttpPost("")]
         public async Task<AddEntryReportCommandDto> AddEntryReport([FromBody] AddEntryReportCommand command)
+        {
+            return await _mediatr.Send(command);
+        }
+
+        /// <summary>
+        /// Used to update an entry report
+        /// </summary>
+        /// <param name="command">The report details</param>
+        /// <returns>Response indicating the result</returns>
+        [HttpPut("")]
+        public async Task<UpdateEntryReportCommandDto> UpdateEntryReport([FromBody] UpdateEntryReportCommand command)
         {
             return await _mediatr.Send(command);
         }
