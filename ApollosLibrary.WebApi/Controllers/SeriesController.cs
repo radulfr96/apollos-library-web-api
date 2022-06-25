@@ -3,6 +3,7 @@ using ApollosLibrary.Application.Series.Commands.DeleteSeriesCommand;
 using ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand;
 using ApollosLibrary.Application.Series.Queries.GetMultiSeriesQuery;
 using ApollosLibrary.Application.Series.Queries.GetSeriesQuery;
+using ApollosLibrary.Application.Series.Queries.GetSeriesRecordQuery;
 using ApollosLibrary.WebApi.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -57,6 +58,17 @@ namespace ApollosLibrary.WebApi.Controllers
         public async Task<GetSeriesQueryDto> GetSeries([FromRoute] int id)
         {
             return await _mediator.Send(new GetSeriesQuery() { SeriesId = id });
+        }
+
+        /// <summary>
+        /// Used to get a specific series record
+        /// </summary>
+        /// <param name="recordId">the id of the series record to be retreived</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("{recordId}")]
+        public async Task<GetSeriesRecordQueryDto> GetSeriesRecord([FromRoute] int recordId)
+        {
+            return await _mediator.Send(new GetSeriesRecordQuery() { SeriesRecordId = recordId });
         }
 
         /// <summary>

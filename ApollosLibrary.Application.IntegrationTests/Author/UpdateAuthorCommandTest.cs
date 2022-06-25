@@ -90,6 +90,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FirstName = newAuthorDetails.FirstName,
                 LastName = newAuthorDetails.LastName,
                 MiddleName = newAuthorDetails.MiddleName,
+                VersionId = author.AuthorRecords.Last().AuthorRecordId,
             }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books).Excluding(f => f.AuthorRecords));
 
             author.AuthorRecords.Where(a => a.AuthorId == author.AuthorId).First().Should().BeEquivalentTo(new AuthorRecord()

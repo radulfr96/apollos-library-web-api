@@ -89,6 +89,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 State = businessGenerated.State,
                 StreetAddress = businessGenerated.StreetAddress,
                 Website = businessGenerated.Website,
+                VersionId = business.BusinessRecords.Last().BusinessRecordId,
             }, opt => opt.Excluding(f => f.Country).Excluding(f => f.Type).Excluding(f => f.BusinessRecords));
 
             business.BusinessRecords.First().Should().BeEquivalentTo(new BusinessRecord()

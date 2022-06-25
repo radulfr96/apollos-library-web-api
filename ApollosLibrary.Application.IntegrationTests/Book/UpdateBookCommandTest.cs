@@ -166,6 +166,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 BusinessId = business2.BusinessId,
                 Subtitle = newBookDetails.Subtitle,
                 Title = newBookDetails.Title,
+                VersionId = book.BookRecords.Last().BookRecordId,
             }, opt =>
             opt.Excluding(f => f.FictionType)
             .Excluding(f => f.FormType)

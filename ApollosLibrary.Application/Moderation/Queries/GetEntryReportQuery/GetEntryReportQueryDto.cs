@@ -9,7 +9,7 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
 {
     public class GetEntryReportQueryDto
     {
-        public int EntryId { get; set; }
+        public int EntryRecordId { get; set; }
         public EntryTypeEnum EntryTypeId { get; set; }
         public string EntryType { get; set; }
         public int EntryReportStatusId { get; set; }

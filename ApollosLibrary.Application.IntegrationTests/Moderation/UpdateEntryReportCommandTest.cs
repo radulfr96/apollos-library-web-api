@@ -66,7 +66,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
                 CreatedDate = _dateTimeService.Now,
                 ReportedBy = Guid.NewGuid(),
                 ReportedDate = _dateTimeService.Now.AddDays(1),
-                EntryId = _faker.Random.Int(1),
+                EntryRecordId = _faker.Random.Int(1),
                 EntryReportStatusId = (int)_faker.Random.Enum<EntryReportStatusEnum>(),
                 EntryTypeId = (int)_faker.Random.Enum<EntryTypeEnum>(),
             };
@@ -88,7 +88,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = entryReport.CreatedBy,
                 CreatedDate = entryReport.CreatedDate,
-                EntryId = entryReport.EntryId,
+                EntryRecordId = entryReport.EntryRecordId,
                 EntryTypeId = entryReport.EntryTypeId,
                 EntryReportStatusId = (int)EntryReportStatusEnum.Confirmed,
                 ReportedBy = entryReport.ReportedBy,

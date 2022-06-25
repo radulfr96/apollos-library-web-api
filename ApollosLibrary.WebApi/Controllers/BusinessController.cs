@@ -15,6 +15,7 @@ using ApollosLibrary.Application.Business.Queries.GetBusinessQuery;
 using ApollosLibrary.Application.Business.Queries.GetBusinesssQuery;
 using ApollosLibrary.WebApi.Filters;
 using ApollosLibrary.Domain.Enums;
+using ApollosLibrary.Application.Business.Queries.GetBusinessRecordQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -88,6 +89,17 @@ namespace ApollosLibrary.WebApi.Controllers
         public async Task<GetBusinessQueryDto> GetBusiness([FromRoute] int id)
         {
             return await _mediator.Send(new GetBusinessQuery() { BusinessId = id });
+        }
+
+        /// <summary>
+        /// Used to get a specific business record
+        /// </summary>
+        /// <param name="recordId">the id of the business record to be retreived</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("businessrecord/{recordId}")]
+        public async Task<GetBusinessRecordQueryDto> GetBusinessRecord([FromRoute] int recordId)
+        {
+            return await _mediator.Send(new GetBusinessRecordQuery() { BusinessRecordId = recordId });
         }
 
         /// <summary>

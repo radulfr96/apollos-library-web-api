@@ -46,11 +46,11 @@ namespace ApollosLibrary.Application.Series.Commands.UpdateSeriesCommand
 
             var record = new Domain.SeriesRecord()
             {
-                CreatedBy = series.CreatedBy,
-                CreatedDate = series.CreatedDate,
-                Name = series.Name,
+                CreatedBy = _userService.GetUserId(),
+                CreatedDate = _dateTimeService.Now,
+                Name = command.Name,
                 IsDeleted = false,
-                SeriesId = series.SeriesId,
+                SeriesId = command.SeriesId,
             };
 
             await _seriesUnitOfWork.SeriesDataLayer.AddSeriesRecord(record);

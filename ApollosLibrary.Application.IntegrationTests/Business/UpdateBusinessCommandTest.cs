@@ -56,9 +56,30 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             _contextAccessor.HttpContext = httpContext;
 
-            var BusinessGenerated = BusinessGenerator.GetGenericBusiness("AU", userID);
+            var businessGenerated = BusinessGenerator.GetGenericBusiness("AU", userID);
+            _context.Business.Add(businessGenerated);
+            _context.SaveChanges();
 
-            _context.Business.Add(BusinessGenerated);
+            var record = new BusinessRecord()
+            {
+                BusinessId = businessGenerated.BusinessId,
+                BusinessTypeId = businessGenerated.BusinessTypeId,
+                City = businessGenerated.City,
+                CountryId = businessGenerated.CountryId,
+                CreatedBy = businessGenerated.CreatedBy,
+                CreatedDate = businessGenerated.CreatedDate,
+                IsDeleted = businessGenerated.IsDeleted,
+                Name = businessGenerated.Name,
+                Postcode = businessGenerated.Postcode,
+                ReportedVersion = false,
+                State = businessGenerated.State,
+                StreetAddress = businessGenerated.StreetAddress,
+                Website = businessGenerated.Website,
+            };
+            _context.BusinessRecords.Add(record);
+            _context.SaveChanges();
+
+            businessGenerated.VersionId = record.BusinessRecordId;
             _context.SaveChanges();
 
             var newBusinessDetails = BusinessGenerator.GetGenericBusiness("US", userID);
@@ -69,7 +90,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 CountryID = newBusinessDetails.CountryId,
                 Name = newBusinessDetails.Name,
                 Postcode = newBusinessDetails.Postcode,
-                BusinessId = BusinessGenerated.BusinessId,
+                BusinessId = businessGenerated.BusinessId,
                 BusinessTypeId = newBusinessDetails.BusinessTypeId,
                 State = newBusinessDetails.State,
                 StreetAddress = newBusinessDetails.StreetAddress,
@@ -78,22 +99,23 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             await _mediatr.Send(command);
 
-            var business = _context.Business.FirstOrDefault(p => p.BusinessId == BusinessGenerated.BusinessId);
+            var business = _context.Business.FirstOrDefault(p => p.BusinessId == businessGenerated.BusinessId);
 
             business.Should().BeEquivalentTo(new Domain.Business()
             {
                 City = newBusinessDetails.City,
                 CountryId = newBusinessDetails.CountryId,
                 CreatedBy = userID,
-                CreatedDate = BusinessGenerated.CreatedDate,
+                CreatedDate = businessGenerated.CreatedDate,
                 BusinessTypeId = newBusinessDetails.BusinessTypeId,
                 IsDeleted = false,
                 Name = newBusinessDetails.Name,
                 Postcode = newBusinessDetails.Postcode,
-                BusinessId = BusinessGenerated.BusinessId,
+                BusinessId = businessGenerated.BusinessId,
                 State = newBusinessDetails.State,
                 StreetAddress = newBusinessDetails.StreetAddress,
                 Website = newBusinessDetails.Website,
+                VersionId = business.BusinessRecords.Last(r => r.BusinessId == business.BusinessId).BusinessRecordId,
             }, opt => opt.Excluding(f => f.Country).Excluding(f => f.Type).Excluding(f => f.BusinessRecords));
 
             business.BusinessRecords.Last(r => r.BusinessId == business.BusinessId).Should().BeEquivalentTo(new BusinessRecord()

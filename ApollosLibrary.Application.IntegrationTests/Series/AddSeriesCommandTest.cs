@@ -31,6 +31,10 @@ namespace ApollosLibrary.Application.IntegrationTests
         {
             var services = fixture.ServiceCollection;
 
+            var mockDateTimeService = new Mock<IDateTimeService>();
+            mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
+            services.AddSingleton(mockDateTimeService.Object);
+
             var provider = services.BuildServiceProvider();
             _mediatr = provider.GetRequiredService<IMediator>();
             _context = provider.GetRequiredService<ApollosLibraryContext>();
@@ -86,12 +90,13 @@ namespace ApollosLibrary.Application.IntegrationTests
                CreatedBy = series.CreatedBy,
                CreatedDate = series.CreatedDate,
                Name = series.Name,
+               VersionId = series.SeriesRecords.Last().SeriesRecordId
             }, opt => opt.Excluding(f => f.SeriesRecords));
 
-            series.SeriesRecords.First().Should().BeEquivalentTo(new SeriesRecord()
+            series.SeriesRecords.Last().Should().BeEquivalentTo(new SeriesRecord()
             {
                 SeriesId = series.SeriesId,
-                SeriesRecordId = series.SeriesRecords.First().SeriesRecordId,
+                SeriesRecordId = series.SeriesRecords.Last().SeriesRecordId,
                 CreatedBy = userID,
                 CreatedDate = series.CreatedDate,
                 IsDeleted = false,

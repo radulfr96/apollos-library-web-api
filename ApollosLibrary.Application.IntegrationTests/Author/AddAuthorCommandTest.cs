@@ -83,6 +83,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 FirstName = command.Firstname,
                 LastName = command.Lastname,
                 MiddleName = command.Middlename,
+                VersionId = author.AuthorRecords.Last().AuthorRecordId,
             }, opt => opt.Excluding(a => a.Country).Excluding(a => a.Books).Excluding(f => f.AuthorRecords));
 
             author.AuthorRecords.First().Should().BeEquivalentTo(new AuthorRecord()

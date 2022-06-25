@@ -85,9 +85,10 @@ namespace ApollosLibrary.Application.IntegrationTests
                 CreatedBy = series.CreatedBy,
                 CreatedDate = series.CreatedDate,
                 Name = command.Name,
+                VersionId = series.SeriesRecords.Last().SeriesRecordId
             }, opt => opt.Excluding(f => f.Books).Excluding(f => f.SeriesRecords));
 
-            series.SeriesRecords.Last(r => r.SeriesId == series.SeriesId).Should().BeEquivalentTo(new SeriesRecord()
+            series.SeriesRecords.First(r => r.SeriesRecordId == series.VersionId).Should().BeEquivalentTo(new SeriesRecord()
             {
                 CreatedBy = userID,
                 CreatedDate = _dateTime.Now,
@@ -95,7 +96,7 @@ namespace ApollosLibrary.Application.IntegrationTests
                 Name = command.Name,
                 ReportedVersion = false,
                 SeriesId = series.SeriesId,
-                SeriesRecordId = series.SeriesRecords.Last(r => r.SeriesId == series.SeriesId).SeriesRecordId
+                SeriesRecordId = series.VersionId
             }, opt => opt.Excluding(f => f.Series));
         }
     }

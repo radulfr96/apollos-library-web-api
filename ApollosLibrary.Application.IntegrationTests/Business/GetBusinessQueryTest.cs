@@ -71,7 +71,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             var query = new GetBusinessRecordQuery()
             {
-                BusinessRecordId = businessGenerated.BusinessId,
+                BusinessRecordId = businessRecord.BusinessRecordId,
             };
 
             var result = await _mediatr.Send(query);

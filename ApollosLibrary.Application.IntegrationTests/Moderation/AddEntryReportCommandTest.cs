@@ -66,7 +66,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
 
             var result = await _mediatr.Send(command);
 
-            var entry = _context.EntryReports.FirstOrDefault(e => e.EntryId == result.ReportEntryId);
+            var entry = _context.EntryReports.FirstOrDefault(e => e.EntryRecordId == result.ReportEntryId);
 
             entry.Should().BeEquivalentTo(new EntryReport()
             {
@@ -80,7 +80,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             }, opt => opt
             .Excluding(f => f.EntryReportStatus)
             .Excluding(f => f.EntryType)
-            .Excluding(f => f.EntryId));
+            .Excluding(f => f.EntryRecordId));
         }
     }
 }

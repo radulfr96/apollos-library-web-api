@@ -14,6 +14,7 @@ using ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand;
 using ApollosLibrary.Application.Author.Queries.GetAuthorQuery;
 using ApollosLibrary.Application.Author.Queries.GetAuthorsQuery;
 using ApollosLibrary.WebApi.Filters;
+using ApollosLibrary.Application.Author.Queries.GetAuthorRecordQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -61,6 +62,17 @@ namespace ApollosLibrary.WebApi.Controllers
         public async Task<GetAuthorQueryDto> GetAuthor([FromRoute] int id)
         {
             return await _mediator.Send(new GetAuthorQuery() { AuthorId = id });
+        }
+
+        /// <summary>
+        /// Used to get a specific author record
+        /// </summary>
+        /// <param name="recordId">the id of the author record to be retreived</param>
+        /// <returns>Response that indicates the result</returns>
+        [HttpGet("authorrecord/{recordId}")]
+        public async Task<GetAuthorRecordQueryDto> GetAuthorRecord([FromRoute] int recordId)
+        {
+            return await _mediator.Send(new GetAuthorRecordQuery() { AuthorRecordId = recordId });
         }
 
         /// <summary>

@@ -62,7 +62,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = entryUser1,
                 CreatedDate = _dateTimeService.Now,
-                EntryId = new Faker().Random.Int(1),
+                EntryRecordId = new Faker().Random.Int(1),
                 EntryTypeId = (int)new Faker().Random.Enum<EntryTypeEnum>(),
                 EntryReportStatusId = (int)new Faker().Random.Enum<EntryReportStatusEnum>(),
                 ReportedBy = entryReportUser1,
@@ -85,7 +85,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = report.CreatedBy,
                 CreatedDate = report.CreatedDate,
-                EntryId = report.EntryId,
+                EntryRecordId = report.EntryRecordId,
                 EntryTypeId = (EntryTypeEnum)report.EntryTypeId,
                 EntryReportStatusId = report.EntryReportStatusId,
                 ReportedBy = report.ReportedBy,

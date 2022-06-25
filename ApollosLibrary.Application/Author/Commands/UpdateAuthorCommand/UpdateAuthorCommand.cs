@@ -60,12 +60,13 @@ namespace ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand
                 CountryId = command.CountryID,
                 CreatedBy = _userService.GetUserId(),
                 CreatedDate = _dateTimeService.Now,
-                Description = author.Description,
+                Description = command.Description,
                 FirstName = command.Firstname,
                 LastName = command.Lastname,
                 MiddleName = command.Middlename,
             };
 
+            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(authorRecord);
             await _authorUnitOfWork.Begin();
             await _authorUnitOfWork.Save();
 
@@ -77,8 +78,6 @@ namespace ApollosLibrary.Application.Author.Commands.UpdateAuthorCommand
             author.CreatedDate = _dateTimeService.Now;
             author.CreatedBy = _userService.GetUserId();
             author.VersionId = authorRecord.AuthorRecordId;
-
-            await _authorUnitOfWork.AuthorDataLayer.AddAuthorRecord(authorRecord);
 
             await _authorUnitOfWork.Save();
             await _authorUnitOfWork.Commit();

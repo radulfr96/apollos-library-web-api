@@ -65,7 +65,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = entryUser1,
                 CreatedDate = _dateTimeService.Now,
-                EntryId = new Faker().Random.Int(1),
+                EntryRecordId = new Faker().Random.Int(1),
                 EntryTypeId = (int)(new Faker().Random.Enum<EntryTypeEnum>()),
                 EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = entryReportUser1,
@@ -77,7 +77,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = entryUser2,
                 CreatedDate = _dateTimeService.Now,
-                EntryId = new Faker().Random.Int(1),
+                EntryRecordId = new Faker().Random.Int(1),
                 EntryTypeId = (int)(new Faker().Random.Enum<EntryTypeEnum>()),
                 EntryReportStatusId = (int)EntryReportStatusEnum.Open,
                 ReportedBy = entryReportUser2,
@@ -89,7 +89,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Moderation
             {
                 CreatedBy = entryUser3,
                 CreatedDate = _dateTimeService.Now,
-                EntryId = new Faker().Random.Int(1),
+                EntryRecordId = new Faker().Random.Int(1),
                 EntryTypeId = (int)new Faker().Random.Enum<EntryTypeEnum>(),
                 EntryReportStatusId = (int)EntryReportStatusEnum.Cancelled,
                 ReportedBy = entryReportUser1,
