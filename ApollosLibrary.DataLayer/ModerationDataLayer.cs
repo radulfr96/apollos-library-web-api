@@ -1,5 +1,6 @@
 ﻿using ApollosLibrary.DataLayer.Contracts;
 using ApollosLibrary.Domain;
+using ApollosLibrary.Domain.DTOs;
 using ApollosLibrary.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,6 +32,38 @@ namespace ApollosLibrary.DataLayer
                 .Include(r => r.EntryType)
                 .Where(r => r.EntryReportStatusId != (int)EntryReportStatusEnum.Cancelled)
                 .ToListAsync();
+        }
+
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            var usersCreatedReports = await _context.EntryReports.Select(s => new UserDTO()
+            {
+                UserID = s.ReportedBy,
+            })
+            .Distinct()
+            .ToListAsync();
+
+            var usersWithReportedEntries = await _context.EntryReports.Select(s => new UserDTO()
+            {
+                UserID = s.CreatedBy,
+            })
+            .Distinct()
+            .ToListAsync();
+
+            var users = usersCreatedReports.UnionBy(usersWithReportedEntries, f => f.UserID);
+
+            foreach (var user in users)
+            {
+                user.ReportsByUser = _context.EntryReports
+                    .Where(er => er.ReportedBy == user.UserID)
+                    .Count();
+
+                user.ReportsOfUser = _context.EntryReports
+                    .Where(er => er.CreatedBy == user.UserID)
+                    .Count();
+            }
+
+            return usersCreatedReports;
         }
 
         public async Task<EntryReport> GetEntryReport(int entryReportId)

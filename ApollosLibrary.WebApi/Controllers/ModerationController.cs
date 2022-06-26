@@ -58,6 +58,15 @@ namespace ApollosLibrary.WebApi.Controllers
             return await _mediatr.Send(new GetEntryReportsQuery());
         }
 
+        /// <summary>
+        /// Used to get all users with either reports or or reported entries
+        /// </summary>
+        /// <returns>The reports</returns>
+        [HttpGet("users")]
+        public async Task<GetEntryReportsQueryDto> GetUsers()
+        {
+            return await _mediatr.Send(new GetEntryReportsQuery());
+        }
 
         /// <summary>
         /// Used to get report using the id provided

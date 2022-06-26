@@ -1,4 +1,5 @@
 ﻿using ApollosLibrary.Domain;
+using ApollosLibrary.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,12 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// </summary>
         /// <returns>The entry reports</returns>
         Task<List<EntryReport>> GetEntryReports();
+
+        /// <summary>
+        /// Used to get users and their counts for reports and reported entries
+        /// </summary>
+        /// <returns>The user list</returns>
+        Task<List<UserDTO>> GetUsers();
 
         /// <summary>
         /// Used to get an entry report by its id
