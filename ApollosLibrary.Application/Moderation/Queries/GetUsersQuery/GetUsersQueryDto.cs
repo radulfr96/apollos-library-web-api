@@ -6,6 +6,6 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetUsersQuery
 {
     public class GetUsersQueryDto
     {
-        public List<UserDTO> UserDTOs = new List<UserDTO>();
+        public List<UserDTO> Users { get; set; } = new List<UserDTO>();
     }
 }

@@ -22,9 +22,12 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetUsersQuery
             _moderationUnitOfWork = moderationUnitOfWork;
         }
 
-        public Task<GetUsersQueryDto> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        public async Task<GetUsersQueryDto> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return new GetUsersQueryDto()
+            {
+                Users = await _moderationUnitOfWork.ModerationDataLayer.GetUsers(),
+            };
         }
     }
 }

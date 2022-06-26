@@ -63,7 +63,7 @@ namespace ApollosLibrary.DataLayer
                     .Count();
             }
 
-            return usersCreatedReports;
+            return users.ToList();
         }
 
         public async Task<EntryReport> GetEntryReport(int entryReportId)

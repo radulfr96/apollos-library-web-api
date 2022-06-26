@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 using ApollosLibrary.Application.Moderation.Commands.UpdateEntryReportCommand;
+using ApollosLibrary.Application.Moderation.Queries.GetUsersQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -63,9 +64,9 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <returns>The reports</returns>
         [HttpGet("users")]
-        public async Task<GetEntryReportsQueryDto> GetUsers()
+        public async Task<GetUsersQueryDto> GetUsers()
         {
-            return await _mediatr.Send(new GetEntryReportsQuery());
+            return await _mediatr.Send(new GetUsersQuery());
         }
 
         /// <summary>
