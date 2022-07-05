@@ -16,5 +16,6 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinessQuery
         public string State { get; set; }
         public string CountryID { get; set; }
         public string Website { get; set; }
+        public Guid CreatedBy { get; set; }
     }
 }

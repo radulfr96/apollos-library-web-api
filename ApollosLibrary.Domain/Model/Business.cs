@@ -26,7 +26,7 @@ namespace ApollosLibrary.Domain
         public BusinessType Type { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
-        public Guid? CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
         public ICollection<BusinessRecord> BusinessRecords { get; set; }
     }
 }

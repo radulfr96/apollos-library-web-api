@@ -28,21 +28,22 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinessQuery
         {
             var response = new GetBusinessQueryDto();
 
-            var Business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(query.BusinessId);
+            var business = await _BusinessUnitOfWork.BusinessDataLayer.GetBusiness(query.BusinessId);
 
-            if (Business == null)
+            if (business == null)
             {
                 throw new BusinessNotFoundException($"Unable to find Business with id [{query.BusinessId}]");
             }
 
-            response.City = Business.City;
-            response.CountryID = Business.CountryId;
-            response.Name = Business.Name;
-            response.Postcode = Business.Postcode;
-            response.BusinessId = Business.BusinessId;
-            response.State = Business.State;
-            response.StreetAddress = Business.StreetAddress;
-            response.Website = Business.Website;
+            response.City = business.City;
+            response.CountryID = business.CountryId;
+            response.Name = business.Name;
+            response.Postcode = business.Postcode;
+            response.BusinessId = business.BusinessId;
+            response.State = business.State;
+            response.StreetAddress = business.StreetAddress;
+            response.Website = business.Website;
+            response.CreatedBy = business.CreatedBy;
 
             return response;
         }

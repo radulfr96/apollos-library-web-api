@@ -15,5 +15,6 @@ namespace ApollosLibrary.Application.Author.Queries.GetAuthorQuery
         public string Lastname { get; set; }
         public string CountryID { get; set; }
         public string Description { get; set; }
+        public Guid CreatedBy { get; set; }
     }
 }

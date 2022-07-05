@@ -37,6 +37,7 @@ namespace ApollosLibrary.Application.Series.Queries.GetSeriesQuery
 
             response.SeriesId = series.SeriesId;
             response.Name = series.Name;
+            response.CreatedBy = series.CreatedBy;
             return response;
         }
     }

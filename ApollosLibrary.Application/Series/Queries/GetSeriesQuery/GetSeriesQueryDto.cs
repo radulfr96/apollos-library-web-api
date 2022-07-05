@@ -10,5 +10,6 @@ namespace ApollosLibrary.Application.Series.Queries.GetSeriesQuery
     {
         public int SeriesId { get; set; }
         public string Name { get; set; }
+        public Guid CreatedBy { get; set; }
     }
 }

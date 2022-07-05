@@ -43,6 +43,7 @@ namespace ApollosLibrary.Application.Author.Queries.GetAuthorQuery
             response.CountryID = author.CountryId;
             response.Lastname = author.LastName;
             response.Middlename = author.MiddleName;
+            response.CreatedBy = author.CreatedBy;
 
             return response;
         }
