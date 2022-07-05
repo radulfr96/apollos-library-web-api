@@ -35,6 +35,7 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinessQuery
                 throw new BusinessNotFoundException($"Unable to find Business with id [{query.BusinessId}]");
             }
 
+            response.BusinessRecordId = business.VersionId;
             response.City = business.City;
             response.CountryID = business.CountryId;
             response.Name = business.Name;

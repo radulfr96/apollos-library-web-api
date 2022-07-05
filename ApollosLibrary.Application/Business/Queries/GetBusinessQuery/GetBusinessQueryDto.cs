@@ -9,6 +9,7 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinessQuery
     public class GetBusinessQueryDto
     {
         public int BusinessId { get; set; }
+        public int BusinessRecordId { get; set; }
         public string Name { get; set; }
         public string StreetAddress { get; set; }
         public string City { get; set; }

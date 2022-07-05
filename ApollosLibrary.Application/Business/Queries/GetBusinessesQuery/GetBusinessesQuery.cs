@@ -17,25 +17,25 @@ namespace ApollosLibrary.Application.Business.Queries.GetBusinesssQuery
 
     public class GetBusinessQueryHandler : IRequestHandler<GetBusinesssQuery, GetBusinesssQueryDto>
     {
-        private readonly IBusinessUnitOfWork _BusinessUnitOfWork;
+        private readonly IBusinessUnitOfWork _businessUnitOfWork;
 
-        public GetBusinessQueryHandler(IBusinessUnitOfWork BusinessUnitOfWork)
+        public GetBusinessQueryHandler(IBusinessUnitOfWork businessUnitOfWork)
         {
-            _BusinessUnitOfWork = BusinessUnitOfWork;
+            _businessUnitOfWork = businessUnitOfWork;
         }
 
         public async Task<GetBusinesssQueryDto> Handle(GetBusinesssQuery query, CancellationToken cancellationToken)
         {
             var response = new GetBusinesssQueryDto();
 
-            var Businesss = await _BusinessUnitOfWork.BusinessDataLayer.GetBusinesses();
+            var businesss = await _businessUnitOfWork.BusinessDataLayer.GetBusinesses();
 
-            if (Businesss.Count == 0)
+            if (businesss.Count == 0)
             {
                 return response;
             }
 
-            response.Businesses = Businesss
+            response.Businesses = businesss
                 .Where(b => !query.BusinessType.HasValue || (int)query.BusinessType.Value == b.BusinessTypeId)
                 .Select(b => new BusinessListItemDTO()
                 {
