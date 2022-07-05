@@ -42,7 +42,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             services.AddDbContext<ApollosLibraryContext>(opt =>
             {
-                opt.UseSqlServer(conn);
+                opt.UseNpgsql(conn);
             });
 
             services.AddHttpContextAccessor();

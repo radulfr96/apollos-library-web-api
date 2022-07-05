@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace ApollosLibrary.Domain.Migrations
 {
-    public partial class RemovedUneededLinks : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,9 +14,9 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "BusinessTypes",
                 columns: table => new
                 {
-                    BusinessTypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    BusinessTypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,8 +27,8 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CountryId = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,29 +36,38 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntryReports",
+                name: "EntryReportStatus",
                 columns: table => new
                 {
-                    EntryReportId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EntryId = table.Column<int>(type: "int", nullable: false),
-                    EntryType = table.Column<int>(type: "int", nullable: false),
-                    ReportedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReportedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    EntryReportStatusId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntryReports", x => x.EntryReportId);
+                    table.PrimaryKey("PK_EntryReportStatus", x => x.EntryReportStatusId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntryReportType",
+                columns: table => new
+                {
+                    EntryReportTypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryReportType", x => x.EntryReportTypeId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ErrorCodes",
                 columns: table => new
                 {
-                    ErrorCodeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ErrorCodeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Message = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,9 +78,9 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "FictionTypes",
                 columns: table => new
                 {
-                    TypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,9 +91,9 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "FormTypes",
                 columns: table => new
                 {
-                    TypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,13 +104,13 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Genres",
                 columns: table => new
                 {
-                    GenreId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    GenreId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -111,9 +121,9 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Libraries",
                 columns: table => new
                 {
-                    LibraryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    LibraryId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,9 +134,9 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "PublicationFormats",
                 columns: table => new
                 {
-                    TypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    TypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,12 +147,13 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Series",
                 columns: table => new
                 {
-                    SeriesId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    SeriesId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VersionId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,15 +164,15 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "SubscriptionTypes",
                 columns: table => new
                 {
-                    SubscriptionTypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubscriptionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MonthlyRate = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    StripeProductId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Purchasable = table.Column<bool>(type: "bit", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
-                    MaxUsers = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SubscriptionTypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SubscriptionName = table.Column<string>(type: "text", nullable: true),
+                    MonthlyRate = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    StripeProductId = table.Column<string>(type: "text", nullable: true),
+                    Purchasable = table.Column<bool>(type: "boolean", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
+                    MaxUsers = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -172,16 +183,17 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    AuthorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AuthorId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VersionId = table.Column<int>(type: "integer", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    MiddleName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CountryId = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,19 +209,20 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Business",
                 columns: table => new
                 {
-                    BusinessId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Postcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    BusinessTypeId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    BusinessId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VersionId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Website = table.Column<string>(type: "text", nullable: true),
+                    StreetAddress = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Postcode = table.Column<string>(type: "text", nullable: true),
+                    State = table.Column<string>(type: "text", nullable: true),
+                    CountryId = table.Column<string>(type: "text", nullable: true),
+                    BusinessTypeId = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,17 +241,48 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EntryReports",
+                columns: table => new
+                {
+                    EntryReportId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EntryRecordId = table.Column<int>(type: "integer", nullable: false),
+                    EntryTypeId = table.Column<int>(type: "integer", nullable: false),
+                    EntryReportStatusId = table.Column<int>(type: "integer", nullable: false),
+                    ReportedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReportedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryReports", x => x.EntryReportId);
+                    table.ForeignKey(
+                        name: "FK_EntryReports_EntryReportStatus_EntryReportStatusId",
+                        column: x => x.EntryReportStatusId,
+                        principalTable: "EntryReportStatus",
+                        principalColumn: "EntryReportStatusId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EntryReports_EntryReportType_EntryTypeId",
+                        column: x => x.EntryTypeId,
+                        principalTable: "EntryReportType",
+                        principalColumn: "EntryReportTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SeriesRecords",
                 columns: table => new
                 {
-                    SeriesRecordId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
-                    SeriesId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    SeriesRecordId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReportedVersion = table.Column<bool>(type: "boolean", nullable: false),
+                    SeriesId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -255,13 +299,13 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Subscriptions",
                 columns: table => new
                 {
-                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubscriptionTypeId = table.Column<int>(type: "int", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SubscriptionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SubscriptionAdmin = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StripeSubscriptionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StripeCustomerId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SubscriptionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubscriptionTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    SubscriptionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SubscriptionAdmin = table.Column<Guid>(type: "uuid", nullable: false),
+                    StripeSubscriptionId = table.Column<string>(type: "text", nullable: true),
+                    StripeCustomerId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -278,18 +322,18 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "AuthorRecords",
                 columns: table => new
                 {
-                    AuthorRecordId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AuthorRecordId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReportedVersion = table.Column<bool>(type: "boolean", nullable: false),
+                    AuthorId = table.Column<int>(type: "integer", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    MiddleName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CountryId = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -311,21 +355,22 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Isbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EIsbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Edition = table.Column<int>(type: "int", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    PublicationFormatId = table.Column<int>(type: "int", nullable: false),
-                    FictionTypeId = table.Column<int>(type: "int", nullable: false),
-                    FormTypeId = table.Column<int>(type: "int", nullable: false),
-                    BusinessId = table.Column<int>(type: "int", nullable: true),
-                    CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    BookId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VersionId = table.Column<int>(type: "integer", nullable: false),
+                    Isbn = table.Column<string>(type: "text", nullable: true),
+                    EIsbn = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Subtitle = table.Column<string>(type: "text", nullable: true),
+                    Edition = table.Column<int>(type: "integer", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    PublicationFormatId = table.Column<int>(type: "integer", nullable: false),
+                    FictionTypeId = table.Column<int>(type: "integer", nullable: false),
+                    FormTypeId = table.Column<int>(type: "integer", nullable: false),
+                    BusinessId = table.Column<int>(type: "integer", nullable: true),
+                    CoverImage = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -359,21 +404,21 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "BusinessRecords",
                 columns: table => new
                 {
-                    BusinessRecordId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
-                    BusinessId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Postcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    BusinessTypeId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    BusinessRecordId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReportedVersion = table.Column<bool>(type: "boolean", nullable: false),
+                    BusinessId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Website = table.Column<string>(type: "text", nullable: true),
+                    StreetAddress = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Postcode = table.Column<string>(type: "text", nullable: true),
+                    State = table.Column<string>(type: "text", nullable: true),
+                    CountryId = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    BusinessTypeId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -390,11 +435,11 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    OrderId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BusinessId = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BusinessId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -411,11 +456,11 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "UserSubscriptions",
                 columns: table => new
                 {
-                    UserSubscrptionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserSubscrptionId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    SubscriptionId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -432,8 +477,8 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "AuthorBook",
                 columns: table => new
                 {
-                    AuthorsAuthorId = table.Column<int>(type: "int", nullable: false),
-                    BooksBookId = table.Column<int>(type: "int", nullable: false)
+                    AuthorsAuthorId = table.Column<int>(type: "integer", nullable: false),
+                    BooksBookId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -456,8 +501,8 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "BookGenre",
                 columns: table => new
                 {
-                    BooksBookId = table.Column<int>(type: "int", nullable: false),
-                    GenresGenreId = table.Column<int>(type: "int", nullable: false)
+                    BooksBookId = table.Column<int>(type: "integer", nullable: false),
+                    GenresGenreId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -480,23 +525,23 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "BookRecords",
                 columns: table => new
                 {
-                    BookRecordId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReportedVersion = table.Column<bool>(type: "bit", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    Isbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EIsbn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Edition = table.Column<int>(type: "int", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    PublicationFormatId = table.Column<int>(type: "int", nullable: false),
-                    FictionTypeId = table.Column<int>(type: "int", nullable: false),
-                    FormTypeId = table.Column<int>(type: "int", nullable: false),
-                    BusinessId = table.Column<int>(type: "int", nullable: true),
-                    CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    BookRecordId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ReportedVersion = table.Column<bool>(type: "boolean", nullable: false),
+                    BookId = table.Column<int>(type: "integer", nullable: false),
+                    Isbn = table.Column<string>(type: "text", nullable: true),
+                    EIsbn = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Subtitle = table.Column<string>(type: "text", nullable: true),
+                    Edition = table.Column<int>(type: "integer", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    PublicationFormatId = table.Column<int>(type: "integer", nullable: false),
+                    FictionTypeId = table.Column<int>(type: "integer", nullable: false),
+                    FormTypeId = table.Column<int>(type: "integer", nullable: false),
+                    BusinessId = table.Column<int>(type: "integer", nullable: true),
+                    CoverImage = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -513,8 +558,8 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "BookSeries",
                 columns: table => new
                 {
-                    BooksBookId = table.Column<int>(type: "int", nullable: false),
-                    SeriesId = table.Column<int>(type: "int", nullable: false)
+                    BooksBookId = table.Column<int>(type: "integer", nullable: false),
+                    SeriesId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -537,11 +582,11 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "LibraryEntries",
                 columns: table => new
                 {
-                    EntryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    LibraryId = table.Column<int>(type: "int", nullable: false)
+                    EntryId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BookId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    LibraryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -564,12 +609,12 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    OrderItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false)
+                    OrderItemId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BookId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    OrderId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -641,14 +686,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "BZ", "Belize" },
                     { "CA", "Canada" },
                     { "CC", "Cocos (Keeling) Islands" },
-                    { "CD", "Congo, the Democratic Republic of the" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "CountryId", "Name" },
-                values: new object[,]
-                {
+                    { "CD", "Congo, the Democratic Republic of the" },
                     { "CF", "Central African Republic" },
                     { "CG", "Congo" },
                     { "CH", "Switzerland" },
@@ -690,14 +728,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "GE", "Georgia" },
                     { "GF", "French Guiana" },
                     { "GG", "Guernsey" },
-                    { "GH", "Ghana" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "CountryId", "Name" },
-                values: new object[,]
-                {
+                    { "GH", "Ghana" },
                     { "GI", "Gibraltar" },
                     { "GL", "Greenland" },
                     { "GM", "Gambia" },
@@ -739,14 +770,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "KP", "Korea, Democratic People's Republic of" },
                     { "KR", "Korea, Republic of" },
                     { "KW", "Kuwait" },
-                    { "KY", "Cayman Islands" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "CountryId", "Name" },
-                values: new object[,]
-                {
+                    { "KY", "Cayman Islands" },
                     { "KZ", "Kazakhstan" },
                     { "LA", "Lao People's Democratic Republic" },
                     { "LB", "Lebanon" },
@@ -788,14 +812,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "NF", "Norfolk Island" },
                     { "NG", "Nigeria" },
                     { "NI", "Nicaragua" },
-                    { "NL", "Netherlands" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "CountryId", "Name" },
-                values: new object[,]
-                {
+                    { "NL", "Netherlands" },
                     { "NO", "Norway" },
                     { "NP", "Nepal" },
                     { "NR", "Nauru" },
@@ -837,14 +854,7 @@ namespace ApollosLibrary.Domain.Migrations
                     { "SN", "Senegal" },
                     { "SO", "Somalia" },
                     { "SR", "Suriname" },
-                    { "SS", "South Sudan" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "CountryId", "Name" },
-                values: new object[,]
-                {
+                    { "SS", "South Sudan" },
                     { "ST", "Sao Tome and Principe" },
                     { "SV", "El Salvador" },
                     { "SX", "Sint Maarten (Dutch part)" },
@@ -889,14 +899,34 @@ namespace ApollosLibrary.Domain.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "FictionTypes",
-                columns: new[] { "TypeId", "Name" },
-                values: new object[] { 1, "Non-Fiction" });
+                table: "EntryReportStatus",
+                columns: new[] { "EntryReportStatusId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Open" },
+                    { 2, "Cancelled" },
+                    { 3, "Confirmed" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EntryReportType",
+                columns: new[] { "EntryReportTypeId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Business" },
+                    { 2, "Author" },
+                    { 3, "Book" },
+                    { 4, "Series" }
+                });
 
             migrationBuilder.InsertData(
                 table: "FictionTypes",
                 columns: new[] { "TypeId", "Name" },
-                values: new object[] { 2, "Fiction" });
+                values: new object[,]
+                {
+                    { 1, "Non-Fiction" },
+                    { 2, "Fiction" }
+                });
 
             migrationBuilder.InsertData(
                 table: "FormTypes",
@@ -935,7 +965,7 @@ namespace ApollosLibrary.Domain.Migrations
             migrationBuilder.InsertData(
                 table: "Subscriptions",
                 columns: new[] { "SubscriptionId", "ExpiryDate", "StripeCustomerId", "StripeSubscriptionId", "SubscriptionAdmin", "SubscriptionDate", "SubscriptionTypeId" },
-                values: new object[] { new Guid("be281799-290c-4885-a5f7-f232ea6340d2"), new DateTime(2102, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5626), null, null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2022, 6, 8, 19, 30, 8, 461, DateTimeKind.Local).AddTicks(5656), 1 });
+                values: new object[] { new Guid("78c18a1d-e5c5-4821-a13f-0bd18a9b8c2d"), new DateTime(2102, 7, 5, 22, 38, 28, 155, DateTimeKind.Local).AddTicks(7614), null, null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2022, 7, 5, 22, 38, 28, 155, DateTimeKind.Local).AddTicks(7651), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AuthorBook_BooksBookId",
@@ -1006,6 +1036,16 @@ namespace ApollosLibrary.Domain.Migrations
                 name: "IX_BusinessRecords_BusinessId",
                 table: "BusinessRecords",
                 column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryReports_EntryReportStatusId",
+                table: "EntryReports",
+                column: "EntryReportStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryReports_EntryTypeId",
+                table: "EntryReports",
+                column: "EntryTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LibraryEntries_BookId",
@@ -1091,6 +1131,12 @@ namespace ApollosLibrary.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "EntryReportStatus");
+
+            migrationBuilder.DropTable(
+                name: "EntryReportType");
 
             migrationBuilder.DropTable(
                 name: "Libraries");
