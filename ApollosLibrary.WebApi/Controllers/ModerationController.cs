@@ -11,6 +11,7 @@ using System;
 using System.Threading.Tasks;
 using ApollosLibrary.Application.Moderation.Commands.UpdateEntryReportCommand;
 using ApollosLibrary.Application.Moderation.Queries.GetUsersQuery;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -43,6 +44,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="command">The report details</param>
         /// <returns>Response indicating the result</returns>
+        [Authorize(Roles = "administrator,moderator")]
         [HttpPut("")]
         public async Task<UpdateEntryReportCommandDto> UpdateEntryReport([FromBody] UpdateEntryReportCommand command)
         {
@@ -53,6 +55,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get all entry reports
         /// </summary>
         /// <returns>The reports</returns>
+        [Authorize(Roles = "administrator,moderator")]
         [HttpGet("")]
         public async Task<GetEntryReportsQueryDto> GetEntryReports()
         {
@@ -63,6 +66,8 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get all users with either reports or or reported entries
         /// </summary>
         /// <returns>The reports</returns>
+        
+        [Authorize(Roles = "administrator,moderator")]
         [HttpGet("users")]
         public async Task<GetUsersQueryDto> GetUsers()
         {
@@ -74,6 +79,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="entryReportId">The id of the report to retreive</param>
         /// <returns>The report with the id provided</returns>
+        [Authorize(Roles = "administrator,moderator")]
         [HttpGet("{entryReportId}")]
         public async Task<GetEntryReportQueryDto> GetEntryReport([FromRoute]int entryReportId)
         {
@@ -88,6 +94,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="userId">The id of the user</param>
         /// <returns>The reports</returns>
+        [Authorize(Roles = "administrator,moderator")]
         [HttpGet("reportedentriesbyuser/{userId}")]
         public async Task<GetEntryReportsByEntryUserQueryDto> GetEntryReportsByEntryUser([FromRoute] Guid userId)
         {
@@ -102,6 +109,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// </summary>
         /// <param name="userId">The id of the user</param>
         /// <returns>The reports</returns>
+        [Authorize(Roles = "administrator,moderator")]
         [HttpGet("reportsbyuser/{userId}")]
         public async Task<GetUsersEntryReportsQueryDto> GetUsersEntryReportsQuery([FromRoute] Guid userId)
         {
