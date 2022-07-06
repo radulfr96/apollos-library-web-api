@@ -2,6 +2,7 @@
 using ApollosLibrary.Domain;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
+using NodaTime;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace ApollosLibrary.Application.Subscriptions.Commands.StripeSubCreatedComm
 
             if (request.StripeSubscription.CancelAtPeriodEnd)
             {
-                sub.Subscription.ExpiryDate = request.StripeSubscription.CurrentPeriodEnd;
+                sub.Subscription.ExpiryDate = LocalDateTime.FromDateTime(request.StripeSubscription.CurrentPeriodEnd);
             }
 
             var subTypes = await _subscriptionUnitOfWork.SubscriptionDataLayer.GetSubscriptionTypes(true);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,9 @@ namespace ApollosLibrary.Domain
     {
         public int GenreId { get; set; }
         public string Name { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
         public Guid? CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public LocalDateTime? ModifiedDate { get; set; }
         public Guid? ModifiedBy { get; set; }
         public ICollection<Book> Books { get; set; }
     }

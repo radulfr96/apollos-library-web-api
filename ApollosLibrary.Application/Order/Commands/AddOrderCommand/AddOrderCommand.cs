@@ -3,6 +3,7 @@ using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Domain.Enums;
 using ApollosLibrary.UnitOfWork.Contracts;
 using MediatR;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ApollosLibrary.Application.Order.Commands.AddOrderCommand
     public class AddOrderCommand : IRequest<AddOrderCommandDto>
     {
         public int BusinessId { get; set; }
-        public DateTime OrderDate { get; set; }
+        public LocalDateTime OrderDate { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
     }
 

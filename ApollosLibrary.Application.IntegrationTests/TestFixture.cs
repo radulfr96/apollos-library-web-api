@@ -19,6 +19,7 @@ using Respawn;
 using Microsoft.AspNetCore.Http;
 using Respawn.Graph;
 using ApollosLibrary.Domain;
+using Npgsql;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -42,7 +43,7 @@ namespace ApollosLibrary.Application.IntegrationTests
 
             services.AddDbContext<ApollosLibraryContext>(opt =>
             {
-                opt.UseNpgsql(conn);
+                opt.UseNpgsql(conn, o => o.UseNodaTime());
             });
 
             services.AddHttpContextAccessor();

@@ -1,4 +1,5 @@
 ﻿using ApollosLibrary.Domain.Enums;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery
         public string SubscriptionName { get; set; }
         public string StripeCustomerId { get; set; }
         public string Email { get; set; }
-        public DateTime JoinDate { get; set; }
-        public DateTime? Expiry { get; set; }
+        public LocalDateTime JoinDate { get; set; }
+        public LocalDateTime? Expiry { get; set; }
         public bool SubscriptionAdmin { get; set; }
         public List<SubscriptionUserDTO> SubscriptionUsers { get; set; } = new List<SubscriptionUserDTO>();
     }

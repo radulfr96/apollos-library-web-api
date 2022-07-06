@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -297,11 +298,14 @@ namespace ApollosLibrary.Domain
 
             var subscriptionId = Guid.NewGuid();
 
+            var clock = SystemClock.Instance;
+            var instance = clock.GetCurrentInstant();
+
             modelBuilder.Entity<Subscription>().HasData(new Subscription()
             {
                 SubscriptionTypeId = 1,
-                ExpiryDate = DateTime.Now.AddYears(80),
-                SubscriptionDate = DateTime.Now,
+                ExpiryDate =  instance.InUtc().Plus(Duration.FromDays(10 * 365)).LocalDateTime,
+                SubscriptionDate = instance.InUtc().LocalDateTime,
                 SubscriptionId = subscriptionId,
             });
         }

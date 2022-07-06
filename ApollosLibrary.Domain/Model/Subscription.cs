@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,8 @@ namespace ApollosLibrary.Domain
         public Guid SubscriptionId { get; set; }
         public int SubscriptionTypeId { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
-        public DateTime? ExpiryDate { get; set; }
-        public DateTime SubscriptionDate { get; set; }
+        public LocalDateTime? ExpiryDate { get; set; }
+        public LocalDateTime SubscriptionDate { get; set; }
         public Guid SubscriptionAdmin { get; set; }
         public string StripeSubscriptionId { get; set; }
         public string StripeCustomerId { get; set; }

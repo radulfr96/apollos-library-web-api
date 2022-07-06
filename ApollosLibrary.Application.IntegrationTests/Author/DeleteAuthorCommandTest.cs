@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
 using FluentAssertions;
+using NodaTime;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -40,7 +41,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             {
                 CountryId = "AU",
                 CreatedBy = new Guid(),
-                CreatedDate = new DateTime(2021, 02, 07),
+                CreatedDate = LocalDateTime.FromDateTime(new DateTime(2021, 02, 07)),
                 Description = _faker.Lorem.Sentence(),
                 FirstName = _faker.Name.FirstName(),
                 LastName = _faker.Name.LastName(),

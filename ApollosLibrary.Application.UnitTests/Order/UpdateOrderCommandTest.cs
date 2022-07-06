@@ -11,6 +11,7 @@ using FluentValidation.TestHelper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
         public UpdateOrderCommandTest(TestFixture fixture) : base(fixture)
         {
             var dateTimeService = new Mock<IDateTimeService>();
-            dateTimeService.Setup(s => s.Now).Returns(new DateTime(2022, 05, 11, 21, 32, 00));
+            dateTimeService.Setup(s => s.Now).Returns(LocalDateTime.FromDateTime(new DateTime(2022, 05, 11, 21, 32, 00)));
             _dateTimeService = dateTimeService.Object;
 
             _validator = new UpdateOrderCommandValidator(_dateTimeService);
@@ -71,7 +72,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(1),
+                OrderDate = _dateTimeService.Now.PlusHours(24),
             };
 
             var result = _validator.TestValidate(command);
@@ -87,7 +88,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
             };
 
             var result = _validator.TestValidate(command);
@@ -103,7 +104,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()
@@ -126,7 +127,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()
@@ -150,7 +151,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()
@@ -175,7 +176,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()
@@ -240,7 +241,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()
@@ -313,7 +314,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()
@@ -391,7 +392,7 @@ namespace ApollosLibrary.Application.UnitTests.Order
             {
                 OrderId = 1,
                 BusinessId = 1,
-                OrderDate = _dateTimeService.Now.AddDays(-2),
+                OrderDate = _dateTimeService.Now.PlusHours(-48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()

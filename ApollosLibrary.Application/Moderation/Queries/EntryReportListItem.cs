@@ -1,4 +1,5 @@
 ﻿using System;
+using NodaTime;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,8 @@ namespace ApollosLibrary.Application.Moderation.Queries
         public int EntryStatusId { get; set; }
         public string EntryStatus { get; set; }
         public Guid ReportedBy { get; set; }
-        public DateTime ReportedDate { get; set; }
+        public LocalDateTime ReportedDate { get; set; }
         public Guid CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
 
             return new Faker<Domain.Series>()
                 .RuleFor(b => b.CreatedBy, createBy)
-                .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
+                .RuleFor(a => a.CreatedDate, f => LocalDateTime.FromDateTime(f.Date.Recent()))
                 .RuleFor(b => b.Name, f => f.Name.Random.AlphaNumeric(8))
                 .Generate();
         }
@@ -26,7 +27,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
 
             return new Faker<Domain.Series>()
                 .RuleFor(b => b.CreatedBy, createBy)
-                .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
+                .RuleFor(a => a.CreatedDate, f => LocalDateTime.FromDateTime(f.Date.Recent()))
                 .RuleFor(b => b.Name, f => f.Name.Random.AlphaNumeric(8))
                 .Generate();
         }

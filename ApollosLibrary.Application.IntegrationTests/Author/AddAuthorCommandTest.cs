@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -34,7 +35,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             var services = fixture.ServiceCollection;
 
             var mockDateTimeService = new Mock<IDateTimeService>();
-            mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
+            mockDateTimeService.Setup(d => d.Now).Returns(LocalDateTime.FromDateTime(new DateTime(2021, 02, 07)));
             _dateTime = mockDateTimeService.Object;
             services.AddSingleton(mockDateTimeService.Object);
 

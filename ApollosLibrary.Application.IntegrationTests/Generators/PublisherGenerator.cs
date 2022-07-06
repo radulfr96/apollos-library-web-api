@@ -1,6 +1,7 @@
 ﻿
 using ApollosLibrary.Domain.Enums;
 using Bogus;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
                 .RuleFor(p => p.CountryId, countryId)
                 .RuleFor(p => p.BusinessTypeId, f => (int)f.Random.Enum<BusinessTypeEnum>())
                 .RuleFor(p => p.CreatedBy, userId)
-                .RuleFor(p => p.CreatedDate, f => f.Date.Recent())
+                .RuleFor(a => a.CreatedDate, f => LocalDateTime.FromDateTime(f.Date.Recent()))
                 .RuleFor(p => p.IsDeleted, false)
                 .RuleFor(p => p.Name, f => f.Company.CompanyName())
                 .RuleFor(p => p.Postcode, f => f.Address.ZipCode())

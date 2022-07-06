@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -34,7 +35,7 @@ namespace ApollosLibrary.Domain
         public int? BusinessId { get; set; }
         public Business Business { get; set; }
         public string CoverImage { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
         public ICollection<Author> Authors { get; set; }
         public ICollection<Genre> Genres { get; set; }

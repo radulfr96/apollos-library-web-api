@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace ApollosLibrary.Domain
         public string CountryId { get; set; }
         public Country Country { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
     }
 }

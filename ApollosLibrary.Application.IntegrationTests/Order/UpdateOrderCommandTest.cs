@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             var services = fixture.ServiceCollection;
 
             var mockDateTimeService = new Mock<IDateTimeService>();
-            mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
+            mockDateTimeService.Setup(d => d.Now).Returns(LocalDateTime.FromDateTime(new DateTime(2021, 02, 07)));
             services.AddSingleton(mockDateTimeService.Object);
             _dateTimeService = mockDateTimeService.Object;
 
@@ -115,7 +116,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Order
             {
                 OrderId = order.OrderId,
                 BusinessId = business2.BusinessId,
-                OrderDate = _dateTimeService.Now.AddDays(2),
+                OrderDate = _dateTimeService.Now.PlusHours(48),
                 OrderItems = new List<OrderItemDTO>()
                 {
                     new OrderItemDTO()

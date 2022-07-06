@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace ApollosLibrary.Domain
     {
         [Key]
         public int OrderId { get; set; }
-        public DateTime OrderDate { get; set; }
+        public LocalDateTime OrderDate { get; set; }
         public Guid UserId { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 

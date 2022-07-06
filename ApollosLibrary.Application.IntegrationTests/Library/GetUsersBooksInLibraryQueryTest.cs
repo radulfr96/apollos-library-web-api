@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Library
             var services = fixture.ServiceCollection;
 
             var mockDateTimeService = new Mock<IDateTimeService>();
-            mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
+            mockDateTimeService.Setup(d => d.Now).Returns(LocalDateTime.FromDateTime(new DateTime(2021, 02, 07)));
             services.AddSingleton(mockDateTimeService.Object);
             _dateTimeService = mockDateTimeService.Object;
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ApollosLibrary.Domain.Enums;
+using NodaTime;
 
 namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
 {
@@ -15,8 +16,8 @@ namespace ApollosLibrary.Application.Moderation.Queries.GetEntryReportQuery
         public int EntryReportStatusId { get; set; }
         public string EntryStatus { get; set; }
         public Guid ReportedBy { get; set; }
-        public DateTime ReportedDate { get; set; }
+        public LocalDateTime ReportedDate { get; set; }
         public Guid CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
     }
 }

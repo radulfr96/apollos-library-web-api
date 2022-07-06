@@ -35,6 +35,7 @@ using NLog;
 using ApollosLibrary.Domain;
 using System.IO;
 using Stripe;
+using Npgsql;
 
 namespace ApollosLibrary.WebApi
 {
@@ -59,7 +60,7 @@ namespace ApollosLibrary.WebApi
             services.AddScoped<ApiExceptionFilterAttribute>();
             services.AddScoped<SubscriptionFilterAttribute>();
 
-            services.AddDbContext<ApollosLibraryContext>(options => options.UseNpgsql(Configuration.GetSection("ConnectionString").Value));
+            services.AddDbContext<ApollosLibraryContext>(options => options.UseNpgsql(Configuration.GetSection("ConnectionString").Value, o => o.UseNodaTime()));
 
             services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
 

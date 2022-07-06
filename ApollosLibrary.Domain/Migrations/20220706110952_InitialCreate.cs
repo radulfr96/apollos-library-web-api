@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -107,9 +108,9 @@ namespace ApollosLibrary.Domain.Migrations
                     GenreId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ModifiedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: true),
                     ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -152,7 +153,7 @@ namespace ApollosLibrary.Domain.Migrations
                     VersionId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -192,7 +193,7 @@ namespace ApollosLibrary.Domain.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CountryId = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -221,7 +222,7 @@ namespace ApollosLibrary.Domain.Migrations
                     CountryId = table.Column<string>(type: "text", nullable: true),
                     BusinessTypeId = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -250,9 +251,9 @@ namespace ApollosLibrary.Domain.Migrations
                     EntryTypeId = table.Column<int>(type: "integer", nullable: false),
                     EntryReportStatusId = table.Column<int>(type: "integer", nullable: false),
                     ReportedBy = table.Column<Guid>(type: "uuid", nullable: false),
-                    ReportedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReportedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -281,7 +282,7 @@ namespace ApollosLibrary.Domain.Migrations
                     SeriesId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -301,8 +302,8 @@ namespace ApollosLibrary.Domain.Migrations
                 {
                     SubscriptionId = table.Column<Guid>(type: "uuid", nullable: false),
                     SubscriptionTypeId = table.Column<int>(type: "integer", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    SubscriptionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExpiryDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: true),
+                    SubscriptionDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     SubscriptionAdmin = table.Column<Guid>(type: "uuid", nullable: false),
                     StripeSubscriptionId = table.Column<string>(type: "text", nullable: true),
                     StripeCustomerId = table.Column<string>(type: "text", nullable: true)
@@ -332,7 +333,7 @@ namespace ApollosLibrary.Domain.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CountryId = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -369,7 +370,7 @@ namespace ApollosLibrary.Domain.Migrations
                     FormTypeId = table.Column<int>(type: "integer", nullable: false),
                     BusinessId = table.Column<int>(type: "integer", nullable: true),
                     CoverImage = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -417,7 +418,7 @@ namespace ApollosLibrary.Domain.Migrations
                     CountryId = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     BusinessTypeId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -437,7 +438,7 @@ namespace ApollosLibrary.Domain.Migrations
                 {
                     OrderId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OrderDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     BusinessId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -540,7 +541,7 @@ namespace ApollosLibrary.Domain.Migrations
                     FormTypeId = table.Column<int>(type: "integer", nullable: false),
                     BusinessId = table.Column<int>(type: "integer", nullable: true),
                     CoverImage = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<LocalDateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -965,7 +966,7 @@ namespace ApollosLibrary.Domain.Migrations
             migrationBuilder.InsertData(
                 table: "Subscriptions",
                 columns: new[] { "SubscriptionId", "ExpiryDate", "StripeCustomerId", "StripeSubscriptionId", "SubscriptionAdmin", "SubscriptionDate", "SubscriptionTypeId" },
-                values: new object[] { new Guid("78c18a1d-e5c5-4821-a13f-0bd18a9b8c2d"), new DateTime(2102, 7, 5, 22, 38, 28, 155, DateTimeKind.Local).AddTicks(7614), null, null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2022, 7, 5, 22, 38, 28, 155, DateTimeKind.Local).AddTicks(7651), 1 });
+                values: new object[] { new Guid("24e79f69-c680-47d4-acd0-97dcfe82c3d3"), new NodaTime.LocalDateTime(2032, 7, 3, 11, 9, 50).PlusNanoseconds(746660100L), null, null, new Guid("00000000-0000-0000-0000-000000000000"), new NodaTime.LocalDateTime(2022, 7, 6, 11, 9, 50).PlusNanoseconds(746660100L), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AuthorBook_BooksBookId",

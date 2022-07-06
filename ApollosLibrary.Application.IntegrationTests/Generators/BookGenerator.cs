@@ -1,6 +1,6 @@
 ﻿using ApollosLibrary.Domain.Enums;
 using Bogus;
-
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
         {
             return new Faker<Domain.Book>()
                 .RuleFor(b => b.CreatedBy, createdBy)
-                .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
+                .RuleFor(a => a.CreatedDate, f => LocalDateTime.FromDateTime(f.Date.Recent()))
                 .RuleFor(b => b.Edition, f => f.Random.Int(1, 100))
                 .RuleFor(b => b.FictionTypeId, f => (int)f.Random.Enum<FictionTypeEnum>())
                 .RuleFor(b => b.FormTypeId, f => (int)f.Random.Enum<FormTypeEnum>())
@@ -30,7 +30,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
         {
             return new Faker<Domain.Book>()
                 .RuleFor(b => b.CreatedBy, createdBy)
-                .RuleFor(b => b.CreatedDate, f => f.Date.Recent())
+                .RuleFor(a => a.CreatedDate, f => LocalDateTime.FromDateTime(f.Date.Recent()))
                 .RuleFor(b => b.Edition, f => f.Random.Int(1, 100))
                 .RuleFor(b => b.FictionTypeId, f => (int)f.Random.Enum<FictionTypeEnum>())
                 .RuleFor(b => b.FormTypeId, f => (int)f.Random.Enum<FormTypeEnum>())

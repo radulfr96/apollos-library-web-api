@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace ApollosLibrary.Domain
         public int VersionId { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
         public ICollection<Book> Books { get; set; }
         public ICollection<SeriesRecord> SeriesRecords { get; set; }

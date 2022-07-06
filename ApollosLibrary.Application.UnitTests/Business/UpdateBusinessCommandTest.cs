@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
 using FluentAssertions;
+using NodaTime;
 
 namespace ApollosLibrary.Application.UnitTests
 {
@@ -231,7 +232,7 @@ namespace ApollosLibrary.Application.UnitTests
         {
             var Business = new Domain.Business()
             {
-                CreatedDate = new DateTime(2021, 02, 07),
+                CreatedDate = LocalDateTime.FromDateTime(new DateTime(2021, 02, 07)),
                 IsDeleted = false,
                 City = "Melbourne",
                 CountryId = "AU",

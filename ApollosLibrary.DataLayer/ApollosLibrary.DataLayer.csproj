@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NodaTime" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ApollosLibrary.DataLayer.Contracts\ApollosLibrary.DataLayer.Contracts.csproj" />
     <ProjectReference Include="..\ApollosLibrary.Domain\ApollosLibrary.Domain.csproj" />
   </ItemGroup>

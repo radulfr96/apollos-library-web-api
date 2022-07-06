@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xunit;
 using ApollosLibrary.Domain;
 using ApollosLibrary.Application.Series.Queries.GetSeriesQuery;
+using NodaTime;
 
 namespace ApollosLibrary.Application.IntegrationTests
 {
@@ -26,7 +27,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             var services = fixture.ServiceCollection;
 
             var mockDateTimeService = new Mock<IDateTimeService>();
-            mockDateTimeService.Setup(d => d.Now).Returns(new DateTime(2021, 02, 07));
+            mockDateTimeService.Setup(d => d.Now).Returns(LocalDateTime.FromDateTime(new DateTime(2021, 02, 07)));
             services.AddSingleton(mockDateTimeService.Object);
 
             var provider = services.BuildServiceProvider();
@@ -42,7 +43,9 @@ namespace ApollosLibrary.Application.IntegrationTests
                 new Claim(ClaimTypes.Sid, "1"),
             });
 
-            var seriesGenerated = SeriesGenerator.GetSeries(Guid.NewGuid());
+            var userId = Guid.NewGuid();
+
+            var seriesGenerated = SeriesGenerator.GetSeries(userId);
 
             _context.Series.Add(seriesGenerated);
             _context.SaveChanges();
@@ -58,6 +61,7 @@ namespace ApollosLibrary.Application.IntegrationTests
             {
                 Name = seriesGenerated.Name,
                 SeriesId = seriesGenerated.SeriesId,
+                CreatedBy = userId,
             });
         }
     }

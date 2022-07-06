@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace ApollosLibrary.Domain
         public string CountryId { get; set; }
         public bool IsDeleted { get; set; }
         public int BusinessTypeId { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
         public Guid? CreatedBy { get; set; }
     }
 }

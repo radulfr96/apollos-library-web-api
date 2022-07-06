@@ -4,6 +4,7 @@ using ApollosLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -36,8 +37,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -81,8 +82,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -128,8 +129,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EIsbn")
                         .HasColumnType("text");
@@ -194,8 +195,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EIsbn")
                         .HasColumnType("text");
@@ -254,8 +255,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -310,8 +311,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -1640,8 +1641,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EntryRecordId")
                         .HasColumnType("integer");
@@ -1655,8 +1656,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("ReportedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ReportedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("ReportedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("EntryReportId");
 
@@ -1841,14 +1842,14 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime?>("ModifiedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -1911,8 +1912,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<int>("BusinessId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("OrderDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -1997,8 +1998,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -2025,8 +2026,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -2053,8 +2054,8 @@ namespace ApollosLibrary.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime?>("ExpiryDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("StripeCustomerId")
                         .HasColumnType("text");
@@ -2065,8 +2066,8 @@ namespace ApollosLibrary.Domain.Migrations
                     b.Property<Guid>("SubscriptionAdmin")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("SubscriptionDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<LocalDateTime>("SubscriptionDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SubscriptionTypeId")
                         .HasColumnType("integer");
@@ -2080,10 +2081,10 @@ namespace ApollosLibrary.Domain.Migrations
                     b.HasData(
                         new
                         {
-                            SubscriptionId = new Guid("78c18a1d-e5c5-4821-a13f-0bd18a9b8c2d"),
-                            ExpiryDate = new DateTime(2102, 7, 5, 22, 38, 28, 155, DateTimeKind.Local).AddTicks(7614),
+                            SubscriptionId = new Guid("24e79f69-c680-47d4-acd0-97dcfe82c3d3"),
+                            ExpiryDate = new NodaTime.LocalDateTime(2032, 7, 3, 11, 9, 50).PlusNanoseconds(746660100L),
                             SubscriptionAdmin = new Guid("00000000-0000-0000-0000-000000000000"),
-                            SubscriptionDate = new DateTime(2022, 7, 5, 22, 38, 28, 155, DateTimeKind.Local).AddTicks(7651),
+                            SubscriptionDate = new NodaTime.LocalDateTime(2022, 7, 6, 11, 9, 50).PlusNanoseconds(746660100L),
                             SubscriptionTypeId = 1
                         });
                 });

@@ -1,4 +1,6 @@
-﻿namespace ApollosLibrary.Domain
+﻿using NodaTime;
+
+namespace ApollosLibrary.Domain
 {
     # nullable disable
     public class EntryReport
@@ -12,8 +14,8 @@
         public EntryReportStatus EntryReportStatus { get; set; }
         
         public Guid ReportedBy { get; set; }
-        public DateTime ReportedDate { get; set; }
+        public LocalDateTime ReportedDate { get; set; }
         public Guid CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public LocalDateTime CreatedDate { get; set; }
     }
 }

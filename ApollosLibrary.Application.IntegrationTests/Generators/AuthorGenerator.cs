@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace ApollosLibrary.Application.IntegrationTests.Generators
             return new Faker<Domain.Author>()
                 .RuleFor(a => a.CountryId, countryId)
                 .RuleFor(a => a.CreatedBy, userId)
-                .RuleFor(a => a.CreatedDate, f => f.Date.Recent())
+                .RuleFor(a => a.CreatedDate, f =>  LocalDateTime.FromDateTime(f.Date.Recent()))
                 .RuleFor(a => a.Description, f => f.Lorem.Sentence())
                 .RuleFor(a => a.FirstName, f => f.Name.FirstName())
                 .RuleFor(a => a.LastName, f => f.Name.LastName())
