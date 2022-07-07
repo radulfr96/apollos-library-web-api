@@ -27,7 +27,6 @@ using ApollosLibrary.Application.Book.Queries.GetBookQuery;
 using ApollosLibrary.Application.Common.Behaviour;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Infrastructure.Services;
-
 using ApollosLibrary.UnitOfWork;
 using ApollosLibrary.UnitOfWork.Contracts;
 using ApollosLibrary.WebApi.Filters;
