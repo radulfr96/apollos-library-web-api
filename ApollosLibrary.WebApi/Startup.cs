@@ -35,6 +35,7 @@ using ApollosLibrary.Domain;
 using System.IO;
 using Stripe;
 using Npgsql;
+using NodaTime;
 
 namespace ApollosLibrary.WebApi
 {
@@ -78,6 +79,10 @@ namespace ApollosLibrary.WebApi
             services.AddTransient<IUserService,UserService>();
             services.AddTransient<IDateTimeService, DateTimeService>();
             services.AddScoped<DbContext, ApollosLibraryContext>();
+            services.AddScoped<IClock>(c =>
+            {
+                return NodaTime.SystemClock.Instance;
+            });
 
             services.AddSwaggerGen(c =>
             {
