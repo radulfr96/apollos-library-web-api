@@ -27,6 +27,7 @@ namespace ApollosLibrary.WebApi
                     logging.ClearProviders();
                     logging.SetMinimumLevel(LogLevel.Trace);
                 })
+                .ConfigureWebHost(o => o.CaptureStartupErrors(true))
                 .UseNLog();  // NLog: Setup NLog for Dependency injection
     }
 }
