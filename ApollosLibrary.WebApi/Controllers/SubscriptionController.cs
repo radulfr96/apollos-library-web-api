@@ -159,7 +159,7 @@ namespace ApollosLibrary.WebApi.Controllers
             // If you are testing with the CLI, find the secret by running 'stripe listen'
             // If you are using an endpoint defined with the API or dashboard, look in your webhook settings
             // at https://dashboard.stripe.com/webhooks
-            string endpointSecret = _config.GetSection("Stripe").GetSection("EndpointSecret").Value;
+            string endpointSecret = _config.GetSection("Stripe_EndpointSecret").Value;
 
             var customerService = new CustomerService();
             try

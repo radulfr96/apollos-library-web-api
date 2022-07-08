@@ -114,7 +114,7 @@ namespace ApollosLibrary.WebApi
 
             services.AddControllers();
 
-            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe").GetSection("APIKey").Value;
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe_APIKey").Value;
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());
 
             services.AddAuthentication("Bearer")
