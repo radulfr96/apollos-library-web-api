@@ -14,6 +14,7 @@ using Microsoft.Build.Framework;
 using ApollosLibrary.Application.Interfaces;
 using ApollosLibrary.Application.Subscriptions.Commands.StripeSubCreatedCommand;
 using ApollosLibrary.Application.Subscriptions.Queries.GetSubscriptionQuery;
+using ApollosLibrary.Application.Subscriptions.Queries.GetCustomerPortalQuery;
 
 namespace ApollosLibrary.WebApi.Controllers
 {
@@ -150,6 +151,12 @@ namespace ApollosLibrary.WebApi.Controllers
             };
         }
 
+        [HttpPost("billing")]
+        public async Task<GetCustomerPortalQueryDto> OpenCustomerPortal()
+        {
+            return await _mediatr.Send(new GetCustomerPortalQuery());
+        }
+
         [AllowAnonymous]
         [HttpPost("webhook")]
         public async Task<IActionResult> StripeWebhook()
@@ -190,7 +197,8 @@ namespace ApollosLibrary.WebApi.Controllers
                         StripeSubscription = subscription,
                     });
                 }
-                else if (stripeEvent.Type == Events.CustomerSubscriptionUpdated)
+                else if (stripeEvent.Type == Events.CustomerSubscriptionUpdated
+                    || stripeEvent.Type == Events.SubscriptionScheduleCanceled)
                 {
                     var subscription = stripeEvent.Data.Object as Subscription;
                     subscription.Customer = customerService.Get(subscription.CustomerId);
