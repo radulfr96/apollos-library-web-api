@@ -120,7 +120,7 @@ namespace ApollosLibrary.WebApi
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "https://localhost:5001";
+                options.Authority = Configuration.GetRequiredSection("IDPURL").Value;
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
