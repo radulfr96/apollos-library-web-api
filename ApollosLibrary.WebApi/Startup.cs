@@ -36,8 +36,6 @@ using System.IO;
 using Stripe;
 using Npgsql;
 using NodaTime;
-using Newtonsoft.Json;
-using NodaTime.Serialization.JsonNet;
 using NodaTime.Serialization.SystemTextJson;
 
 namespace ApollosLibrary.WebApi
