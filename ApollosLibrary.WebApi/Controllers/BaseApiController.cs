@@ -18,7 +18,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// </summary>
     [Authorize]
     [ApiController]
-    [ServiceFilter(typeof(ApiExceptionFilterAttribute))]
+    [ApiExceptionFilter]
     public class BaseApiController : ControllerBase
     {
         protected readonly Logger _logger = LogManager.GetCurrentClassLogger();

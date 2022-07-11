@@ -36,6 +36,7 @@ using System.IO;
 using Stripe;
 using Npgsql;
 using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
 
 namespace ApollosLibrary.WebApi
 {
@@ -112,7 +113,8 @@ namespace ApollosLibrary.WebApi
                 c.IncludeXmlComments(filePath);
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe_APIKey").Value;
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());
