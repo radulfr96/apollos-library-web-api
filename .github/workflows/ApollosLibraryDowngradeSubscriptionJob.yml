@@ -9,8 +9,9 @@ on:
 env:
   WEBJOB_NAME: DowngradeSubscriptionJob
   AZURE_APP_NAME: ApollosLibraryCom
+  AZURE_WEBAPP_PACKAGE_PATH: ApollosLibrary.DowngradeSubscriptionJob/publish
   WORKING_DIRECTORY: ApollosLibrary.DowngradeSubscriptionJob
-  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.ApollosLibraryWebAPI_d5ab }}
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.APOLLOS_LIBRARY_WEBJOB }}
   CONFIGURATION: Release
   DOTNET_VERSION: '6.0.x'
 
@@ -43,4 +44,4 @@ jobs:
       with: 
         app-name: ${{ env.AZURE_APP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: './publish'
+        package: env.AZURE_WEBAPP_PACKAGE_PATH
