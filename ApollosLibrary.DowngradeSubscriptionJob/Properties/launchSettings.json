@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ApollosLibrary.DowngradeSubscriptionJob": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

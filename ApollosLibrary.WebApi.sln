@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApollosLibrary.Application.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApollosLibrary.Domain", "ApollosLibrary.Domain\ApollosLibrary.Domain.csproj", "{10CD9980-5A7F-4557-8494-903892A29544}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApollosLibrary.DowngradeSubscriptionJob", "ApollosLibrary.DowngradeSubscriptionJob\ApollosLibrary.DowngradeSubscriptionJob.csproj", "{E26A54BC-754B-4A50-BE6A-6D23CA4EC682}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{524F2703-C3D9-4868-ADFF-8717E68D50BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,9 +73,16 @@ Global
 		{10CD9980-5A7F-4557-8494-903892A29544}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10CD9980-5A7F-4557-8494-903892A29544}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10CD9980-5A7F-4557-8494-903892A29544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E26A54BC-754B-4A50-BE6A-6D23CA4EC682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26A54BC-754B-4A50-BE6A-6D23CA4EC682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26A54BC-754B-4A50-BE6A-6D23CA4EC682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26A54BC-754B-4A50-BE6A-6D23CA4EC682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E26A54BC-754B-4A50-BE6A-6D23CA4EC682} = {524F2703-C3D9-4868-ADFF-8717E68D50BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD182F80-540D-45E4-BBC3-2ADF6C52B1DC}
