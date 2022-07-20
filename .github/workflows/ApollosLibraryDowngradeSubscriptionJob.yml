@@ -1,40 +1,43 @@
-name: Build and deploy .NET Core app to Linux WebApp ApollosLibraryWebAPI
+name: Deploy Downgrade Subscriptions WebJob
+
 on:
+  workflow_dispatch:
+
   push:
-    branches:
-    - master
+    branches: [ master ]
+
 env:
-  AZURE_WEBAPP_NAME: ApollosLibraryWebAPI
-  AZURE_WEBAPP_PACKAGE_PATH: ApollosLibrary.WebApi/publish
+  WEBJOB_NAME: DowngradeSubscriptionJob
+  AZURE_APP_NAME: ApollosLibraryCom
+  WORKING_DIRECTORY: ApollosLibrary.WebApi
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.ApollosLibraryWebAPI_d5ab }}
   CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: ApollosLibrary.WebApi
+  DOTNET_VERSION: '6.0.x'
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
+    # Checkout the repo
     - uses: actions/checkout@v2
+
+    # Setup .NET Core SDK
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-    - name: Build
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: dotnet build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
-    - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Deploy to Azure WebApp
+
+    - name: dotnet publish
+      run: |
+        dotnet publish -c Release -o './publish/App_Data/Jobs/Continuous/${{ env.WEBJOB_NAME }}' ${{ env.WORKING_DIRECTORY }}
+
+    - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }}
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      with: 
+        app-name: ${{ env.AZURE_APP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: './publish'
