@@ -43,6 +43,7 @@ namespace ApollosLibrary.Domain
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<EntryReport> EntryReports { get; set; }
+        public DbSet<UserBudgetSetting> UserBudgetSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

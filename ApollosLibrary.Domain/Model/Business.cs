@@ -19,10 +19,8 @@ namespace ApollosLibrary.Domain
         public string City { get; set; }
         public string Postcode { get; set; }
         public string State { get; set; }
-
         public string CountryId { get; set; }
         public Country Country { get; set; }
-
         public int BusinessTypeId { get; set; }
         public BusinessType Type { get; set; }
         public bool IsDeleted { get; set; }

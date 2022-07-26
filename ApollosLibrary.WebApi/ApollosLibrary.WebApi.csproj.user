@@ -9,7 +9,7 @@
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <ActiveDebugProfile>MyLibrary.Services</ActiveDebugProfile>
+    <ActiveDebugProfile>Docker</ActiveDebugProfile>
     <ShowAllFiles>true</ShowAllFiles>
     <NameOfLastUsedPublishProfile>D:\Projects\apollos-library-web-api\.github\workflows\ApollosLibraryWebAPI.yml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
