@@ -7,6 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+COPY ["NuGet.Config", "."]
 COPY ["ApollosLibrary.WebApi/ApollosLibrary.WebApi.csproj", "ApollosLibrary.WebApi/"]
 COPY ["ApollosLibrary.Domain/ApollosLibrary.Domain.csproj", "ApollosLibrary.Domain/"]
 COPY ["ApollosLibrary.Infrastructure/ApollosLibrary.Infrastructure.csproj", "ApollosLibrary.Infrastructure/"]
