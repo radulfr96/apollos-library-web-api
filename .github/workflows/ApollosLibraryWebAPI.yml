@@ -1,34 +1,40 @@
-# Your workflow name.
-name: Deploy to heroku.
-
-# Run workflow on every push to master branch.
+name: Build and deploy .NET Core app to Linux WebApp ApollosLibraryWebAPI
 on:
   push:
-    branches: [master]
-
-# Your workflows jobs.
+    branches:
+    - master
+env:
+  AZURE_WEBAPP_NAME: ApollosLibraryWebAPI
+  AZURE_WEBAPP_PACKAGE_PATH: ApollosLibrary.WebApi/publish
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.ApollosLibraryWebAPI_d5ab }}
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 6.0.x
+  WORKING_DIRECTORY: ApollosLibrary.WebApi
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Check-out your repository.
-      - name: Checkout
-        uses: actions/checkout@v2
-
-
-### ⬇ IMPORTANT PART ⬇ ###
-
-      - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
-        uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
-        with:
-          email: ${{ secrets.HEROKU_EMAIL }}
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          dockerfile_directory: ./
-          dockerfile_name: ApollosLibrary.WebApi/Dockerfile
-          docker_options: "--no-cache"
-          process_type: web
-          
-   
-          
-### ⬆ IMPORTANT PART ⬆ ###
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - name: Restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+    - name: Build
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test
+      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+    - name: Publish
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+    - name: Deploy to Azure WebApp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }}
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
