@@ -27,5 +27,10 @@ namespace ApollosLibrary.DataLayer
         {
             return await _context.UserBudgetSettings.FirstOrDefaultAsync(u => u.UserId == userId && u.Year == year);
         }
+
+        public async Task AddUserBudgetSetting(UserBudgetSetting setting)
+        {
+            await _context.UserBudgetSettings.AddAsync(setting);
+        }
     }
 }

@@ -23,5 +23,11 @@ namespace ApollosLibrary.DataLayer.Contracts
         /// <param name="year">The year for the settings desired</param>
         /// <returns>The settings for the user and year</returns>
         Task<UserBudgetSetting> GetUserBudgetSetting(Guid userId, int year);
+
+        /// <summary>
+        /// Used to add a user setting
+        /// </summary>
+        /// <param name="setting">The new setting to be saved</param>
+        Task AddUserBudgetSetting(UserBudgetSetting setting);
     }
 }

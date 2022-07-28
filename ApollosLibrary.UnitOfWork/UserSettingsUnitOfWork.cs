@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ApollosLibrary.UnitOfWork
 {
-    public class UserSettingsUnitOfWork : IUserSettingsUnitOfWork
+    public class UserSettingsUnitOfWork : IUserSettingsUnitOfWork, IDisposable
     {
         private readonly ApollosLibraryContext _dbContext;
         private IDbContextTransaction _transaction;

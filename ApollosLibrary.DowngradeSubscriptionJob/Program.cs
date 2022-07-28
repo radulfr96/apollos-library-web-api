@@ -42,7 +42,12 @@ namespace ApollosLibrary.DowngradeSubscriptionJob
             {
                 var jobHost = host.Services.GetRequiredService(typeof(IJobHost)) as JobHost;
                 await host.StartAsync();
-                await jobHost.CallAsync("Run");
+
+                if (jobHost != null)
+                {
+                    await jobHost.CallAsync("Run");
+                }
+
                 await host.StopAsync();
             }
         }
