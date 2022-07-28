@@ -1,5 +1,6 @@
 ﻿using ApollosLibrary.Application.UserSettings.Commands.GetUserBudgetSettingsCommand;
 using ApollosLibrary.Application.UserSettings.Queries.GetUserBudgetSettingsQuery;
+using ApollosLibrary.WebApi.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace ApollosLibrary.WebApi.Controllers
     /// <summary>
     /// Used to manage a users settings
     /// </summary>
+    [ServiceFilter(typeof(SubscriptionFilterAttribute))]
     [Route("api/[controller]")]
     public class UserSettingsController : BaseApiController
     {
