@@ -103,6 +103,11 @@ namespace ApollosLibrary.Application.IntegrationTests
                 return new ModerationUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
             });
 
+            services.AddSingleton<IUserSettingsUnitOfWork>(p =>
+            {
+                return new UserSettingsUnitOfWork(p.GetRequiredService<ApollosLibraryContext>());
+            });
+
             services.AddHttpContextAccessor();
 
             services.AddMediatR(typeof(AddAuthorCommand).GetTypeInfo().Assembly);
