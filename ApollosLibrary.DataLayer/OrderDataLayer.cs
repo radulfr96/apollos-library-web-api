@@ -45,6 +45,14 @@ namespace ApollosLibrary.DataLayer
                 .ToListAsync();
         }
 
+        public async Task<List<Order>> GetOrdersByYear(Guid userId, int year)
+        {
+            return await _context.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.UserId == userId && o.OrderDate.Year == year)
+                .ToListAsync();
+        }
+
         public async Task DeleteOrderItems(int orderId)
         {
             var order = (await _context.Orders.Include(b => b.OrderItems).FirstOrDefaultAsync(b => b.OrderId == orderId));

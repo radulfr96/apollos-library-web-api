@@ -32,6 +32,14 @@ namespace ApollosLibrary.DataLayer.Contracts
         Task<List<Order>> GetOrders(Guid userId);
 
         /// <summary>
+        /// Used to get all orders for a user for a year
+        /// </summary>
+        /// <param name="userId">The id of the user whose orders needed</param>
+        /// <param name="year">The year of the orders</param>
+        /// <returns>The list of orders</returns>
+        Task<List<Order>> GetOrdersByYear(Guid userId, int year);
+
+        /// <summary>
         /// Used to remove an order from the database
         /// </summary>
         /// <param name="order">The order to be deleted</param>

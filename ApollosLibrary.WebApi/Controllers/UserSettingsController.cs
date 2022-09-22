@@ -36,7 +36,7 @@ namespace ApollosLibrary.WebApi.Controllers
         /// Used to get user budget setting
         /// </summary>
         /// <returns>Response that indicates the result</returns>
-        [HttpGet("")]
+        [HttpGet("budgetsetting")]
         public async Task<GetUserBudgetSettingCommandDto> GetUserBudgetSetting()
         {
             return await _mediatr.Send(new GetUserBudgetSettingCommand());
