@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.UserSettings.Queries.GetUserBudgetProgressQuery
+namespace ApollosLibrary.Application.Dashboard.Queries.GetUserBudgetProgressQuery
 {
-    public class GetUserBudgetProgressQueryResponse
+    public class GetUserBudgetReportQueryResponse
     {
         public decimal MontlhyBudget { get; set; }
         public List<Amount> Amounts { get; set; } = new List<Amount>()

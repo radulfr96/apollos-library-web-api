@@ -9,14 +9,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApollosLibrary.Application.UserSettings.Queries.GetUserBudgetProgressQuery
+namespace ApollosLibrary.Application.Dashboard.Queries.GetUserBudgetProgressQuery
 {
-    public class GetUserBudgetProgressQuery : IRequest<GetUserBudgetProgressQueryResponse>
+    public class GetUserBudgetReportQuery : IRequest<GetUserBudgetReportQueryResponse>
     {
         public int Year { get; set; }
     }
 
-    public class GetUserBudgetProgressQueryHandler : IRequestHandler<GetUserBudgetProgressQuery, GetUserBudgetProgressQueryResponse>
+    public class GetUserBudgetProgressQueryHandler : IRequestHandler<GetUserBudgetReportQuery, GetUserBudgetReportQueryResponse>
     {
         private readonly IUserService _userService;
         private readonly IOrderUnitOfWork _orderUnitOfWork;
@@ -33,14 +33,14 @@ namespace ApollosLibrary.Application.UserSettings.Queries.GetUserBudgetProgressQ
             _userSettingsUnitOfWork = userSettingsUnitOfWork;
         }
 
-        public async Task<GetUserBudgetProgressQueryResponse> Handle(GetUserBudgetProgressQuery request, CancellationToken cancellationToken)
+        public async Task<GetUserBudgetReportQueryResponse> Handle(GetUserBudgetReportQuery request, CancellationToken cancellationToken)
         {
             var yearlyBudget = await _userSettingsUnitOfWork.UserSettingsDataLayer
                                     .GetUserBudgetSetting(_userService.GetUserId(), request.Year);
 
-            var response = new GetUserBudgetProgressQueryResponse()
+            var response = new GetUserBudgetReportQueryResponse()
             {
-                MontlhyBudget = yearlyBudget.YearlyBudget / 12,
+                MontlhyBudget = yearlyBudget == null ? 0 : Math.Round(yearlyBudget.YearlyBudget / 12, 2),
             };
 
             var orders = await _orderUnitOfWork.OrderDataLayer.GetOrdersByYear(_userService.GetUserId(), request.Year);
