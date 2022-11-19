@@ -37,6 +37,7 @@ using Stripe;
 using Npgsql;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
+using Microsoft.Extensions.Azure;
 
 namespace ApollosLibrary.WebApi
 {
@@ -61,7 +62,7 @@ namespace ApollosLibrary.WebApi
             services.AddScoped<ApiExceptionFilterAttribute>();
             services.AddScoped<SubscriptionFilterAttribute>();
 
-            services.AddDbContext<ApollosLibraryContext>(options => options.UseNpgsql(Configuration.GetSection("ConnectionString").Value, o => o.UseNodaTime()));
+            services.AddDbContext<ApollosLibraryContext>(options => options.UseNpgsql(Configuration["db-main"], o => o.UseNodaTime()));
 
             services.AddMediatR(typeof(GetBookQuery).GetTypeInfo().Assembly);
 
@@ -117,8 +118,7 @@ namespace ApollosLibrary.WebApi
             services.AddControllers()
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb));
 
-            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe_APIKey").Value;
-            var key = Encoding.ASCII.GetBytes(Configuration.GetValue(typeof(string), "TokenKey").ToString());
+            StripeConfiguration.ApiKey = Configuration["stripe-secret"];
 
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
