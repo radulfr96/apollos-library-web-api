@@ -28,5 +28,12 @@ jobs:
     - name: Azure Container Registry Build
       uses: Azure/acr-build@v1
       with:
-        dockerfile: ./Dockerfile
+          service_principal: ${{ secrets.service_principal }}
+          service_principal_password: ${{ secrets.service_principal_password }}
+          tenant: ${{ secrets.tenant }}
+          registry: ${{ secrets.registry }}
+          repository: ${{ secrets.repository }}
+          image: webapi
+          dockerfile: ./Dockerfile
+          branch: main     
       
